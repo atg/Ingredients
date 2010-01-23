@@ -7,22 +7,11 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <IngredientsKit/IngredientsKit.h>
 
-@interface Ingredients_AppDelegate : NSObject 
+@interface Ingredients_AppDelegate : NSObject<NSApplicationDelegate>
 {
-    NSWindow *window;
-    
-    NSPersistentStoreCoordinator *persistentStoreCoordinator;
-    NSManagedObjectModel *managedObjectModel;
-    NSManagedObjectContext *managedObjectContext;
+	IBOutlet IGKApplicationDelegate *kitController;
 }
-
-@property (nonatomic, retain) IBOutlet NSWindow *window;
-
-@property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
-@property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
-
-- (IBAction)saveAction:sender;
 
 @end
