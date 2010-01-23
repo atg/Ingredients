@@ -1,0 +1,1 @@
+Ingredients is a documentation viewer for Cocoa. Everything of note is contained in IngredientsKit.framework.
