@@ -7,6 +7,7 @@
 //
 
 #import "IGKWindowController.h"
+#import "IGKApplicationDelegate.h"
 
 
 @implementation IGKWindowController
@@ -16,6 +17,12 @@
 - (NSString *)windowNibName
 {
 	return @"CHDocumentationBrowser";
+}
+
+- (void)windowDidLoad
+{
+	currentModeIndex = CHDocumentationBrowserUIMode_NeedsSetup;
+	[self setMode:CHDocumentationBrowserUIMode_TwoUp];
 }
 
 - (void)close
