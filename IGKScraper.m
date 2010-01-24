@@ -7,7 +7,15 @@
 //
 
 #import "IGKScraper.h"
+#import "RegexKitLite.h"
 
+@interface IGKScraper ()
+
+//Extract data out of a file and insert it into the managed object context.
+//Returns YES on success (defined as the insertion of a record), NO on failure
+- (BOOL)extractPath:(NSString *)extractPath;
+
+@end
 
 @implementation IGKScraper
 
@@ -35,6 +43,7 @@
 	
 	NSTimeInterval sint = [NSDate timeIntervalSinceReferenceDate];	
 	unsigned count = 0;
+	NSMutableArray *extractPaths = [[NSMutableArray alloc] initWithCapacity:1000];
 	for (NSString *subpath in subpaths)
 	{
 		//Ignore non-html files
@@ -67,8 +76,8 @@
 			continue;
 		if ([pathset member:@"gcc"])
 			continue;
-		if ([pathset member:@"Introduction"])
-			continue;
+		//if ([pathset member:@"Introduction"])
+		//	continue;
 		if ([pathset member:@"qa"])
 			continue;
 		if ([pathset member:@"samplecode"])
@@ -93,11 +102,47 @@
 		
 		count++;
 		
+		[extractPaths addObject:[urlpath stringByAppendingPathComponent:subpath]];
 		//NSLog(@"%@", subpath);
 	}
 	printf("\n");
 	NSLog(@"---\n\nSearch %u files. Time %lf", count, [NSDate timeIntervalSinceReferenceDate] - sint);
 	NSLog(@"===");
+	
+	sint = [NSDate timeIntervalSinceReferenceDate];
+	
+	unsigned failureCount = 0;
+	for (NSString *extractPath in extractPaths)
+	{
+		BOOL success = [self extractPath:extractPath];
+		if (!success)
+			failureCount++;
+		//if (failureCount > 50)
+		//	break;
+	}
+	
+	printf("\n");
+	NSLog(@"---\n\n %u files failed to parse. Time %lf", failureCount, [NSDate timeIntervalSinceReferenceDate] - sint);
+	NSLog(@"===");
+}
+
+- (BOOL)extractPath:(NSString *)extractPath
+{
+	//Let's try to extract the class's name (assuming it is a class of course)
+	NSString *regex_className = @"<a name=\"//apple_ref/occ/cl/([a-zA-Z_][a-zA-Z0-9_]*)";
+	
+	NSError *error = nil;
+	NSString *contents = [NSString stringWithContentsOfFile:extractPath encoding:NSUTF8StringEncoding error:&error];
+	if (error || !contents)
+		return NO;
+	
+	NSArray *className_captures = [contents captureComponentsMatchedByRegex:regex_className];
+	if ([className_captures count] <= 1)
+		return NO;
+	
+	NSLog(@"%@", [className_captures objectAtIndex:1]);
+	
+	return YES;
 }
 
 @end
