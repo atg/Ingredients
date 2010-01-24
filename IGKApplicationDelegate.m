@@ -8,7 +8,7 @@
 
 #import "IGKApplicationDelegate.h"
 #import "IGKWindowController.h"
-
+#import "IGKScraper.h"
 
 @implementation IGKApplicationDelegate
 
@@ -19,6 +19,11 @@
 		windowControllers = [[NSMutableArray alloc] init];
 		
 		[self newWindow:nil];
+		
+		NSString *dpath = @"/Developer/Documentation/DocSets/com.apple.adc.documentation.AppleSnowLeopard.CoreReference.docset";
+		IGKScraper *scraper = [[IGKScraper alloc] initWithDocsetURL:[NSURL fileURLWithPath:dpath]//@"/Developer/Platforms/iPhoneOS.platform/Developer/Documentation/DocSets/com.apple.adc.documentation.AppleiPhone3_1.iPhoneLibrary.docset/"]//@"/Developer/Documentation/DocSets/com.apple.adc.documentation.AppleSnowLeopard.CoreReference.docset"]
+											   managedObjectContext:[self managedObjectContext]];
+		[scraper search];
 	}
 	
 	return self;
