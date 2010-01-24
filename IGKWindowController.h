@@ -8,9 +8,13 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class IGKApplicationDelegate;
 
-@interface IGKWindowController : NSWindowController {
-
+@interface IGKWindowController : NSWindowController
+{
+	IGKApplicationDelegate *appDelegate;
 }
+
+@property (assign) IGKApplicationDelegate *appDelegate;
 
 @end

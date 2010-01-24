@@ -7,17 +7,50 @@
 //
 
 #import "IGKApplicationDelegate.h"
+#import "IGKWindowController.h"
 
 
 @implementation IGKApplicationDelegate
 
+- (id)init
+{
+	if (self = [super init])
+	{
+		windowControllers = [[NSMutableArray alloc] init];
+		
+		[self newWindow:nil];
+	}
+	
+	return self;
+}
+
+- (BOOL)hasMultipleWindowControllers
+{
+	return YES;
+}
+
 - (IBAction)showWindow:(id)sender
 {
+	if ([self hasMultipleWindowControllers] && ![windowControllers count])
+	{
+		[self newWindow:sender];
+		return;
+	}
 	
+	[[windowControllers lastObject] showWindow:sender];
 }
 - (IBAction)newWindow:(id)sender
 {
+	if (![self hasMultipleWindowControllers] && [windowControllers count])
+	{
+		[self showWindow:sender];
+		return;
+	}
 	
+	IGKWindowController *windowController = [[IGKWindowController alloc] init];
+	windowController.appDelegate = self;
+	[windowControllers addObject:windowController];
+	[windowController showWindow:sender];
 }
 
 #pragma mark Core Data Nonsense

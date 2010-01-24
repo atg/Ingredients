@@ -11,9 +11,19 @@
 
 @implementation IGKWindowController
 
+@synthesize appDelegate;
+
 - (NSString *)windowNibName
 {
 	return @"CHDocumentationBrowser";
+}
+
+- (void)close
+{
+	if ([appDelegate hasMultipleWindowControllers])
+		[[appDelegate windowControllers] removeObject:self];
+	
+	[super close];
 }
 
 @end

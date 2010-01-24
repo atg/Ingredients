@@ -11,12 +11,14 @@
 
 @interface IGKApplicationDelegate : NSObject
 {
-	NSWindow *window;
+	NSMutableArray *windowControllers;
 	
 	NSPersistentStoreCoordinator *persistentStoreCoordinator;
 	NSManagedObjectModel *managedObjectModel;
 	NSManagedObjectContext *managedObjectContext;
 }
+
+- (BOOL)hasMultipleWindowControllers;
 
 - (IBAction)showWindow:(id)sender;
 - (IBAction)newWindow:(id)sender;
