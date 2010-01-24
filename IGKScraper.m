@@ -129,7 +129,7 @@
 - (BOOL)extractPath:(NSString *)extractPath
 {
 	//Let's try to extract the class's name (assuming it is a class of course)
-	NSString *regex_className = @"<a name=\"//apple_ref/occ/cl/([a-zA-Z_][a-zA-Z0-9_]*)";
+	NSString *regex_className = @"<a name=\"//apple_ref/occ/([a-z_]+)/([a-zA-Z_][a-zA-Z0-9_]*)";
 	
 	NSError *error = nil;
 	NSString *contents = [NSString stringWithContentsOfFile:extractPath encoding:NSUTF8StringEncoding error:&error];
@@ -137,10 +137,13 @@
 		return NO;
 	
 	NSArray *className_captures = [contents captureComponentsMatchedByRegex:regex_className];
-	if ([className_captures count] <= 1)
+	if ([className_captures count] <= 2)
 		return NO;
 	
-	NSLog(@"%@", [className_captures objectAtIndex:1]);
+	NSString *type = [className_captures objectAtIndex:1];
+	NSString *name = [className_captures objectAtIndex:2];
+	
+	NSLog(@"%@ - %@", type, name);
 	
 	return YES;
 }
