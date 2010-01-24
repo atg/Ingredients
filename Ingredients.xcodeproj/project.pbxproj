@@ -17,6 +17,8 @@
 		756F9DE3110BB59100E6F291 /* BWToolkitFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 756F9DAC110BB55100E6F291 /* BWToolkitFramework.framework */; };
 		756F9DFD110BB71700E6F291 /* IngredientsKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 756F9DFC110BB71700E6F291 /* IngredientsKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		756F9E00110BB74600E6F291 /* IngredientsKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 756F9D2F110BA72F00E6F291 /* IngredientsKit.framework */; };
+		756F9E0C110BB79100E6F291 /* IGKWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 756F9E0A110BB79100E6F291 /* IGKWindowController.h */; };
+		756F9E0D110BB79100E6F291 /* IGKWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 756F9E0B110BB79100E6F291 /* IGKWindowController.m */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -51,6 +53,8 @@
 		756F9D80110BB44600E6F291 /* IGKApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKApplicationDelegate.m; sourceTree = "<group>"; };
 		756F9DAC110BB55100E6F291 /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BWToolkitFramework.framework; sourceTree = "<group>"; };
 		756F9DFC110BB71700E6F291 /* IngredientsKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IngredientsKit.h; sourceTree = "<group>"; };
+		756F9E0A110BB79100E6F291 /* IGKWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKWindowController.h; sourceTree = "<group>"; };
+		756F9E0B110BB79100E6F291 /* IGKWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKWindowController.m; sourceTree = "<group>"; };
 		770B37EC0679A11B001EADE2 /* Ingredients_DataModel.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Ingredients_DataModel.xcdatamodel; sourceTree = "<group>"; };
 		77C82804067257F0000B614F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		77C8280B06725ACE000B614F /* Ingredients_AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ingredients_AppDelegate.h; sourceTree = "<group>"; };
@@ -84,6 +88,8 @@
 			children = (
 				756F9D7F110BB44600E6F291 /* IGKApplicationDelegate.h */,
 				756F9D80110BB44600E6F291 /* IGKApplicationDelegate.m */,
+				756F9E0A110BB79100E6F291 /* IGKWindowController.h */,
+				756F9E0B110BB79100E6F291 /* IGKWindowController.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -203,6 +209,7 @@
 			files = (
 				756F9D81110BB44600E6F291 /* IGKApplicationDelegate.h in Headers */,
 				756F9DFD110BB71700E6F291 /* IngredientsKit.h in Headers */,
+				756F9E0C110BB79100E6F291 /* IGKWindowController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,6 +299,7 @@
 				756F9D37110BA73C00E6F291 /* Ingredients_DataModel.xcdatamodel in Sources */,
 				756F9D38110BA74300E6F291 /* Ingredients_AppDelegate.m in Sources */,
 				756F9D82110BB44600E6F291 /* IGKApplicationDelegate.m in Sources */,
+				756F9E0D110BB79100E6F291 /* IGKWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
