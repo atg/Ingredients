@@ -168,7 +168,6 @@
 	if ([abstract length] == 0)
 	{
 		NSLog(@"ZERO - %@ - %@ - %@", type, name, extractPath);
-//	NSLog(@"%@ - %@ - %@", type, name, extractPath);
 	}
 	else
 	{

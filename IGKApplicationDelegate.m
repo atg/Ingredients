@@ -16,6 +16,17 @@
 {
 	if (self = [super init])
 	{
+#ifndef NDEBUG
+		if (NSRunAlertPanel(@"Start Over(ish)?", @"Should I clear out the cache and acct prefs?", @"Clear", @"Keep", nil)) {
+						
+			NSString *appSupportPath = [@"~/Library/Application Support/Ingredients/" stringByExpandingTildeInPath];			
+			[[NSFileManager defaultManager] removeItemAtPath:appSupportPath error:nil];
+			
+			NSString *prefsPath = [@"~/Library/Preferences/net.fileability.ingredients" stringByExpandingTildeInPath];			
+			[[NSFileManager defaultManager] removeItemAtPath:prefsPath error:nil];
+		}
+#endif
+		
 		windowControllers = [[NSMutableArray alloc] init];
 		
 		[self newWindow:nil];
