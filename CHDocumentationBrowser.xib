@@ -2,7 +2,7 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1060</int>
-		<string key="IBDocument.SystemVersion">10C2234</string>
+		<string key="IBDocument.SystemVersion">10C540</string>
 		<string key="IBDocument.InterfaceBuilderVersion">740</string>
 		<string key="IBDocument.AppKitVersion">1038.25</string>
 		<string key="IBDocument.HIToolboxVersion">458.00</string>
@@ -18,14 +18,17 @@
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<string>740</string>
 				<string>740</string>
-				<string>1.2.2</string>
+				<string>1.2.5</string>
 			</object>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="190"/>
+			<integer value="1"/>
+			<integer value="63"/>
 			<integer value="40"/>
-			<integer value="283"/>
-			<integer value="232"/>
+			<integer value="19"/>
+			<integer value="83"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -85,6 +88,7 @@
 								<int key="NSvFlags">268</int>
 								<string key="NSFrame">{{0, 14}, {104, 25}}</string>
 								<reference key="NSSuperview"/>
+								<reference key="NSWindow"/>
 								<bool key="NSEnabled">YES</bool>
 								<object class="NSSegmentedCell" key="NSCell" id="205944538">
 									<int key="NSCellFlags">67239424</int>
@@ -174,7 +178,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="BWCustomView" id="467360731">
 								<reference key="NSNextResponder" ref="883370765"/>
-								<int key="NSvFlags">258</int>
+								<int key="NSvFlags">256</int>
 								<object class="NSMutableArray" key="NSSubviews">
 									<bool key="EncodedWithXMLCoder">YES</bool>
 									<object class="BWSplitView" id="741133956">
@@ -185,9 +189,8 @@
 											<object class="BWCustomView" id="187526841">
 												<reference key="NSNextResponder" ref="741133956"/>
 												<int key="NSvFlags">272</int>
-												<string key="NSFrameSize">{200, 459}</string>
+												<string key="NSFrameSize">{200, 460}</string>
 												<reference key="NSSuperview" ref="741133956"/>
-												<reference key="NSWindow"/>
 												<string key="NSClassName">NSView</string>
 											</object>
 											<object class="BWCustomView" id="165810080">
@@ -195,13 +198,11 @@
 												<int key="NSvFlags">256</int>
 												<string key="NSFrame">{{0, 469}, {200, 133}}</string>
 												<reference key="NSSuperview" ref="741133956"/>
-												<reference key="NSWindow"/>
 												<string key="NSClassName">NSView</string>
 											</object>
 										</object>
 										<string key="NSFrameSize">{200, 602}</string>
 										<reference key="NSSuperview" ref="467360731"/>
-										<reference key="NSWindow"/>
 										<object class="NSColor" key="BWSVColor" id="239672116">
 											<int key="NSColorSpace">3</int>
 											<bytes key="NSWhite">MAA</bytes>
@@ -235,7 +236,6 @@
 								</object>
 								<string key="NSFrameSize">{200, 602}</string>
 								<reference key="NSSuperview" ref="883370765"/>
-								<reference key="NSWindow"/>
 								<string key="NSClassName">NSView</string>
 							</object>
 							<object class="BWCustomView" id="885798329">
@@ -243,13 +243,11 @@
 								<int key="NSvFlags">258</int>
 								<string key="NSFrame">{{201, 0}, {555, 602}}</string>
 								<reference key="NSSuperview" ref="883370765"/>
-								<reference key="NSWindow"/>
 								<string key="NSClassName">NSView</string>
 							</object>
 						</object>
 						<string key="NSFrameSize">{756, 602}</string>
 						<reference key="NSSuperview" ref="4605457"/>
-						<reference key="NSWindow"/>
 						<bool key="NSIsVertical">YES</bool>
 						<int key="NSDividerStyle">2</int>
 						<reference key="BWSVColor" ref="239672116"/>
@@ -282,10 +280,9 @@
 				</object>
 				<string key="NSFrameSize">{756, 602}</string>
 				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 			</object>
 			<object class="NSCustomView" id="2016783">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1423,11 +1420,13 @@
 						<bool key="BWGBHasTopBorder">NO</bool>
 						<bool key="BWGBHasBottomBorder">YES</bool>
 						<bool key="BWGBHasGradient">YES</bool>
+						<bool key="BWGBHasFillColor">NO</bool>
 						<float key="BWGBTopInsetAlpha">0.30000001192092896</float>
 						<float key="BWGBBottomInsetAlpha">0.0</float>
 					</object>
 				</object>
 				<string key="NSFrameSize">{635, 466}</string>
+				<reference key="NSSuperview"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomView" id="495249127">
@@ -1461,6 +1460,7 @@
 						</object>
 						<string key="NSFrameSize">{635, 426}</string>
 						<reference key="NSSuperview" ref="495249127"/>
+						<reference key="NSNextKeyView"/>
 						<string key="FrameName"/>
 						<string key="GroupName"/>
 						<object class="WebPreferences" key="Preferences">
@@ -1650,6 +1650,7 @@
 						<bool key="BWGBHasTopBorder">NO</bool>
 						<bool key="BWGBHasBottomBorder">YES</bool>
 						<bool key="BWGBHasGradient">YES</bool>
+						<bool key="BWGBHasFillColor">NO</bool>
 						<float key="BWGBTopInsetAlpha">0.30000001192092896</float>
 						<float key="BWGBBottomInsetAlpha">0.0</float>
 					</object>
@@ -1894,6 +1895,7 @@
 						<bool key="BWGBHasTopBorder">NO</bool>
 						<bool key="BWGBHasBottomBorder">YES</bool>
 						<bool key="BWGBHasGradient">YES</bool>
+						<bool key="BWGBHasFillColor">NO</bool>
 						<float key="BWGBTopInsetAlpha">0.30000001192092896</float>
 						<float key="BWGBBottomInsetAlpha">0.0</float>
 					</object>
@@ -1922,7 +1924,6 @@
 										<int key="NSvFlags">4352</int>
 										<string key="NSFrameSize">{247, 404}</string>
 										<reference key="NSSuperview" ref="544312922"/>
-										<reference key="NSWindow"/>
 										<bool key="NSEnabled">YES</bool>
 										<object class="_NSCornerView" key="NSCornerView">
 											<nil key="NSNextResponder"/>
@@ -2013,7 +2014,6 @@
 								</object>
 								<string key="NSFrameSize">{247, 404}</string>
 								<reference key="NSSuperview" ref="1024229046"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="852244401"/>
 								<reference key="NSDocView" ref="852244401"/>
 								<reference key="NSBGColor" ref="936577122"/>
@@ -2024,7 +2024,6 @@
 								<int key="NSvFlags">-2147483392</int>
 								<string key="NSFrame">{{224, 17}, {15, 102}}</string>
 								<reference key="NSSuperview" ref="1024229046"/>
-								<reference key="NSWindow"/>
 								<reference key="NSTarget" ref="1024229046"/>
 								<string key="NSAction">_doScroller:</string>
 								<double key="NSPercent">0.99264705181121826</double>
@@ -2034,7 +2033,6 @@
 								<int key="NSvFlags">-2147483392</int>
 								<string key="NSFrame">{{1, 69}, {128, 15}}</string>
 								<reference key="NSSuperview" ref="1024229046"/>
-								<reference key="NSWindow"/>
 								<int key="NSsFlags">1</int>
 								<reference key="NSTarget" ref="1024229046"/>
 								<string key="NSAction">_doScroller:</string>
@@ -2043,7 +2041,6 @@
 						</object>
 						<string key="NSFrameSize">{247, 404}</string>
 						<reference key="NSSuperview" ref="309459769"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="544312922"/>
 						<int key="NSsFlags">560</int>
 						<reference key="NSVScroller" ref="1028071391"/>
@@ -2054,7 +2051,6 @@
 				</object>
 				<string key="NSFrameSize">{247, 404}</string>
 				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSArrayController" id="992220792">
@@ -3039,9 +3035,9 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>{{548, 545}, {756, 602}}</string>
+					<string>{{548, 371}, {756, 602}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{548, 545}, {756, 602}}</string>
+					<string>{{548, 371}, {756, 602}}</string>
 					<boolean value="NO"/>
 					<string>{196, 240}</string>
 					<string>{{202, 428}, {480, 270}}</string>
@@ -3082,12 +3078,12 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{618, 985}, {616, 162}}</string>
+					<string>{{618, 973}, {616, 0}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="2"/>
-					<string>{{1046, 817}, {635, 466}}</string>
+					<string>{{1045, 540}, {635, 466}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.brandonwalkin.BWToolkit</string>
@@ -3095,7 +3091,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.apple.WebKitIBPlugin</string>
-					<string>{{1847, 292}, {247, 404}}</string>
+					<string>{{1433, 292}, {247, 404}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

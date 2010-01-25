@@ -79,13 +79,23 @@
 		// two-up -> browser
 		if (modeIndex == CHDocumentationBrowserUIMode_BrowserOnly)
 		{
-			
+			CGFloat leftWidth = [sideSearchView frame].size.width;
+						
+			NSRect newFrame = [twoPaneSplitView frame];
+			newFrame.origin.x = 0.0 - leftWidth - 1;
+			newFrame.size.width = [contentView frame].size.width + leftWidth + 1;
+			[twoPaneSplitView setEnabled:NO];
+
+			[[twoPaneSplitView animator] setFrame:newFrame];		
 		}
 		
 		// two-up -> search
 		else if (modeIndex == CHDocumentationBrowserUIMode_AdvancedSearch)
 		{
-			
+			[twoPaneView removeFromSuperview];
+
+			[searchView setFrame:[contentView bounds]];
+			[contentView addSubview:searchView];
 		}
 	}
 	else if (currentModeIndex == CHDocumentationBrowserUIMode_BrowserOnly)
@@ -93,13 +103,16 @@
 		// browser -> two-up
 		if (modeIndex == CHDocumentationBrowserUIMode_TwoUp)
 		{
-			
+			[[twoPaneSplitView animator] setFrame:[contentView frame]];	
 		}
 		
 		// browser -> search
 		else if (modeIndex == CHDocumentationBrowserUIMode_AdvancedSearch)
 		{
+			[twoPaneView removeFromSuperview];
 			
+			[searchView setFrame:[contentView bounds]];
+			[contentView addSubview:searchView];
 		}
 	}
 	else if (currentModeIndex == CHDocumentationBrowserUIMode_AdvancedSearch)
@@ -107,13 +120,29 @@
 		// search -> two-up
 		if (modeIndex == CHDocumentationBrowserUIMode_TwoUp)
 		{
+			[searchView removeFromSuperview];
 			
+			[twoPaneView setFrame:[contentView bounds]];
+			[contentView addSubview:twoPaneView];
+			
+			[twoPaneSplitView setFrame:[contentView frame]];	
 		}
 		
 		// search -> browser
 		else if (modeIndex == CHDocumentationBrowserUIMode_BrowserOnly)
 		{
+			[searchView removeFromSuperview];
 			
+			[twoPaneView setFrame:[contentView bounds]];
+			[contentView addSubview:twoPaneView];
+			
+			CGFloat leftWidth = [sideSearchView frame].size.width;
+			NSRect newFrame = [twoPaneSplitView frame];
+			newFrame.origin.x = 0.0 - leftWidth - 1;
+			newFrame.size.width = [contentView frame].size.width + leftWidth + 1;
+			[twoPaneSplitView setEnabled:NO];
+			
+			[twoPaneSplitView setFrame:newFrame];
 		}
 	}
 	else if (currentModeIndex == CHDocumentationBrowserUIMode_NeedsSetup)
@@ -164,6 +193,8 @@
 			[contentView addSubview:searchView];
 		}
 	}
+	
+	currentModeIndex = modeIndex; 
 }
 
 - (IBAction)executeSearch:(id)sender
