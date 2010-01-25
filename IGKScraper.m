@@ -14,6 +14,10 @@
 //Extract data out of a file and insert it into the managed object context.
 //Returns YES on success (defined as the insertion of a record), NO on failure
 - (BOOL)extractPath:(NSString *)extractPath;
+- (NSManagedObject *)addRecordNamed:(NSString *)recordName
+							 ofType:(NSString *)recordType
+							   desc:(NSString *)recordDesc
+						 sourcePath:(NSString *)recordPath;
 
 @end
 
@@ -31,6 +35,24 @@
 }
 
 - (void)search
+{
+	//TODO: Use GCD to make this an actual background search
+	[self backgroundSearch];
+	
+	[ctx save:nil];
+	[ctx reset];
+	
+	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+	[fetch setEntity:[NSEntityDescription entityForName:@"DocRecord" inManagedObjectContext:ctx]];
+	[fetch setResultType:NSManagedObjectResultType];
+	[fetch setSortDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
+	for (NSManagedObject *obj in [ctx executeFetchRequest:fetch error:nil])
+	{
+		NSLog(@"Managed object = %@", [obj valueForKey:@"name"]);
+	}
+	
+}
+- (void)backgroundSearch
 {
 	NSFileManager *manager = [NSFileManager defaultManager];
 	NSLog(@"Started");
@@ -120,10 +142,26 @@
 		//if (failureCount > 50)
 		//	break;
 	}
-	
+		
 	printf("\n");
 	NSLog(@"---\n\n %u files failed to parse. Time %lf", failureCount, [NSDate timeIntervalSinceReferenceDate] - sint);
 	NSLog(@"===");
+}
+
+- (NSManagedObject *)addRecordNamed:(NSString *)recordName
+						 entityName:(NSString *)entityName
+							   desc:(NSString *)recordDesc
+						 sourcePath:(NSString *)recordPath
+{
+	NSEntityDescription *ed = [NSEntityDescription entityForName:entityName inManagedObjectContext:ctx];
+	
+	NSManagedObject *newRecord = [[NSManagedObject alloc] initWithEntity:ed insertIntoManagedObjectContext:ctx];
+	
+	[newRecord setValue:recordName forKey:@"name"];
+	[newRecord setValue:recordDesc forKey:@"overview"];
+	[newRecord setValue:recordPath forKey:@"documentPath"];
+	
+	return newRecord;
 }
 
 - (BOOL)extractPath:(NSString *)extractPath
@@ -138,7 +176,7 @@
 	//Parse the item's name and kind
 	NSString *regex_className = @"<a name=\"//apple_ref/occ/([a-z_]+)/([a-zA-Z_][a-zA-Z0-9_]*)";
 	NSArray *className_captures = [contents captureComponentsMatchedByRegex:regex_className];
-	if ([className_captures count] <= 2)
+	if ([className_captures count] < 3)
 		return NO;
 	
 	NSString *type = [className_captures objectAtIndex:1];
@@ -153,6 +191,24 @@
 		binding - bindings listing
 	 */
 	
+	NSString *entityName = nil;
+	if ([type isEqual:@"cl"] || [type isEqual:@"instm"])
+		entityName = @"ObjCClass";
+	
+	else if ([type isEqual:@"cat"])
+		entityName = @"ObjCCategory";
+	
+	else if ([type isEqual:@"intf"] || [type isEqual:@"intfm"])
+		entityName = @"ObjCProtocol";
+	
+	// TODO: Add support for binding listings
+	// else if ([type isEqual:@"binding"])
+	//     entityName = @"ObjCBindingsListing";
+	
+	//If we don't understand the entity name, bail
+	if (!entityName)
+		return NO;
+	
 	//Parse the abstract
 	NSString *regex_abstract = @"<a name=\"[^\"]+\" title=\"Overview\"></a>[ \\t\\n]*<h2[^>]+>Overview</h2>(.+?)((<a name=\"[^\"]+\" title=\"[^\"]+\"></a>[ \\t\\n]*<h2 class=\"jump\">)|(<div id=\"pageNavigationLinks\"))"; //@"<div [^>]*id=\"Overview_section\"[^>]*>(.+)</div>\\s*<a name=";
 	NSArray *abstract_captures = [contents captureComponentsMatchedByRegex:regex_abstract
@@ -160,7 +216,7 @@
 																	 range:NSMakeRange(0, [contents length])
 																	 error:nil];
 	NSString *abstract = nil;
-	if ([abstract_captures count] > 1)
+	if ([abstract_captures count] >= 2)
 		abstract = [abstract_captures objectAtIndex:1];
 	
 	//Deprecation appendicies and bindings listings have no abstract
@@ -168,11 +224,14 @@
 	if ([abstract length] == 0)
 	{
 		NSLog(@"ZERO - %@ - %@ - %@", type, name, extractPath);
+		abstract = @"";
 	}
 	else
 	{
 		NSLog(@"%@ - %@ - %u", type, name, [abstract length]);
 	}
+	
+	[self addRecordNamed:name entityName:entityName desc:abstract sourcePath:extractPath];
 	
 	return YES;
 }

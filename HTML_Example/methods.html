@@ -1,0 +1,65 @@
+<!doctype html>
+
+<html>
+	<head>
+		<title>NSString Methods</title>
+		
+		<link rel="stylesheet" href="main.css" type="text/css" media="screen" charset="utf-8">
+		
+		<meta charset="utf-8">
+	</head>
+	<body>
+		
+		<div id="methods">
+			
+			<div class="method">
+			
+			<h2>getCString:maxLength:encoding:</h2>
+			
+			<p class="description">Converts the receiver’s content to a given encoding and stores them in a buffer.</p>
+			
+			<p class="prototype"><code>- (BOOL)getCString:(char *)buffer maxLength:(NSUInteger)maxBufferCount encoding:(NSStringEncoding)encoding</code></p>
+			
+			<div class="in-out-vals">	
+				<p class="parameter"><strong>buffer</strong> Upon return, contains the converted C-string plus the NULL termination byte. The buffer must include room for maxBufferCount bytes.</p>
+				
+				<p class="parameter"><strong>maxBufferCount</strong> The maximum number of bytes in the string to return in buffer (including the NULL termination byte).</p>
+				
+				<p class="parameter"><strong>encoding</strong> The encoding for the returned C string.</p>
+				
+				<p class="returns"><strong>Returns</strong> YES if the operation was successful, otherwise NO. Returns NO if conversion is not possible due to encoding errors or if buffer is too small.</p>
+			</div>
+			<hr>
+			
+			<div class="discussion">
+				<p>Note that in the treatment of the <code>maxBufferCount</code> argument, this method differs from the deprecated <code>getCString:maxLength:</code> method which it replaces. (The buffer should include room for <code>maxBufferCount</code> bytes; this number should accommodate the expected size of the return value plus the NULL termination byte, which this method adds.)</p>
+				
+				<p>You can use <code>canBeConvertedToEncoding:</code> to check whether a string can be losslessly converted to encoding. If it can’t, you can use <code>dataUsingEncoding:allowLossyConversion:</code> to get a C-string representation using encoding, allowing some loss of information (note that the data returned by <code>dataUsingEncoding:allowLossyConversion:</code> is not a strict C-string since it does not have a NULL terminator).</p>			
+			</div>
+			
+			<hr>
+			
+			<div class="info availability">
+			  <h3>Availability</h3>
+			  <p>Available in Mac OS X v10.4 and later.</p>
+			</div>
+			
+			<div class="info something">
+			  <h3>Something Else</h3>
+			  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			  </p>
+			</div>
+			
+			<div class="seealso">
+				<strong>See Also</strong>
+				<ul>
+					<li><code><a href="#" class="stealth">- cStringUsingEncoding:</a></code></li>
+					<li><code><a href="#" class="stealth">- canBeConvertedToEncoding:</a></code></li>
+					<li><code><a href="#" class="stealth">- UTF8String</a></code></li>
+				</ul>
+			</div>		
+		</div>
+	</div>
+		
+	</body>
+</html>

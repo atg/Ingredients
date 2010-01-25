@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		756F9D37110BA73C00E6F291 /* Ingredients_DataModel.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 770B37EC0679A11B001EADE2 /* Ingredients_DataModel.xcdatamodel */; };
 		756F9D38110BA74300E6F291 /* Ingredients_AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C8280C06725ACE000B614F /* Ingredients_AppDelegate.m */; };
 		756F9D4E110BA94500E6F291 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		756F9D78110BB40C00E6F291 /* CHDocumentationBrowser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 756F9D77110BB40C00E6F291 /* CHDocumentationBrowser.xib */; };
@@ -29,6 +28,7 @@
 		75F67031110CCD31005F299C /* RegexKitLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F6702F110CCD31005F299C /* RegexKitLite.h */; };
 		75F67032110CCD31005F299C /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F67030110CCD31005F299C /* RegexKitLite.m */; };
 		75F67044110CD033005F299C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 75F67043110CD033005F299C /* libicucore.dylib */; };
+		75F671D8110DE8E2005F299C /* Ingredients_DataModel.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 770B37EC0679A11B001EADE2 /* Ingredients_DataModel.xcdatamodel */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -337,7 +337,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				756F9D37110BA73C00E6F291 /* Ingredients_DataModel.xcdatamodel in Sources */,
 				756F9D38110BA74300E6F291 /* Ingredients_AppDelegate.m in Sources */,
 				756F9D82110BB44600E6F291 /* IGKApplicationDelegate.m in Sources */,
 				756F9E0D110BB79100E6F291 /* IGKWindowController.m in Sources */,
@@ -352,6 +351,7 @@
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				756F9FB5110BEB5600E6F291 /* CHLeftSplitView.m in Sources */,
+				75F671D8110DE8E2005F299C /* Ingredients_DataModel.xcdatamodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

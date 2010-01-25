@@ -1,0 +1,179 @@
+body
+{
+	padding: 20px;
+	margin: 0;
+	font: 14px "Arial", "Lucida Grande", Arial, Helvetica, Geneva, sans-serif;
+	color: #323232;
+	line-height: 1.4em;
+}
+
+code
+{
+	font-family: "Menlo", "Monaco", mono;
+}
+
+/* @group My Group */
+
+#description
+{
+	padding: 0;
+	margin: 0;
+	
+	margin-top: -15px;
+	margin-bottom: -15px;
+}
+#description p
+{
+	padding: 0;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+#description code
+{
+	font-size: 11px;
+}
+
+#description a
+{
+	text-decoration: none;
+	color: #0049b8;
+}
+#description a:visited
+{
+	text-decoration: none;
+}
+#description a:hover
+{
+	text-decoration: underline;
+}
+#description a:active
+{
+	text-decoration: none;
+
+	color: white;
+	
+
+	background-color: #7d9dca;
+	-webkit-border-radius: 4px;
+	
+	padding: 2px 4px;
+	margin: 2px -4px;
+	text-shadow: rgba(0,0,0,0.3) 0 1px 0;
+}
+
+/* @end */
+
+/* @group Methods */
+
+#methods
+{
+	padding: 0;
+	margin: 0;
+}
+#methods h2
+{
+	padding: 0;
+	margin: 0;
+	
+	font-family: "Menlo";
+	letter-spacing: -1px;
+	
+	font-size: 21px;
+	text-transform: none;
+	text-align: center;
+}
+#methods .info h3
+{
+	padding: 0;
+	margin: 0;
+	font-size: 14px;
+}
+#methods .info p
+{
+	margin-top: 0;
+	padding-left: 20px;
+}
+
+#methods .discussion
+{
+}
+#methods .discussion code
+{
+	font-size: 12px;
+}
+#methods .prototype
+{
+	font-size: 12px;
+	border-bottom: 1px solid #e5e5e5;
+	border-top: 1px solid #e5e5e5;
+	background-color: #f7f7f7;
+	padding: 4px 11px 3px;
+	
+	color: #3f3f3f;
+}
+#methods .in-out-vals
+{
+	padding-left: 20px;
+}
+#methods .in-out-vals .parameter strong
+{
+	font-weight: normal;
+	font-style: italic;
+	font-family: "Menlo", "Monaco", mono;
+	display: block;
+}
+
+#methods .in-out-vals .returns strong
+{
+	/* 	font-family: "Menlo", "Monaco", mono; */
+	display: block;
+}
+#methods hr
+{
+	border-right-style: none;
+	border-left-style: none;
+	border-top: 1px solid #d8d8d8;
+	border-bottom: 1px none #e5e5e5;
+	margin-bottom: 14px;
+}
+#methods .seealso ul
+{
+	list-style-type: none;
+	padding-left: 20px;
+	margin: 0;
+}
+#methods .seealso code
+{
+	font-size: 12px;
+}
+#methods a.stealth
+{
+	color: inherit;
+	text-decoration: none;
+}
+#methods a.stealth:visited
+{
+	color: inherit;
+	text-decoration: none;
+}
+#methods a.stealth:hover
+{
+	color: inherit;
+	text-decoration: underline;
+}
+#methods a.stealth:active
+{
+	text-decoration: none;
+
+	color: white;
+	
+
+	background-color: #7d9dca;
+	-webkit-border-radius: 4px;
+	
+	padding: 2px 4px;
+	margin: 2px -4px;
+	text-shadow: rgba(0,0,0,0.3) 0 1px 0;
+}
+
+/* @end */

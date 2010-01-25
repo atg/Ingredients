@@ -37,7 +37,7 @@
 		NSString *dpath = ippath;
 		
 		IGKScraper *scraper = [[IGKScraper alloc] initWithDocsetURL:[NSURL fileURLWithPath:dpath]//@"/Developer/Platforms/iPhoneOS.platform/Developer/Documentation/DocSets/com.apple.adc.documentation.AppleiPhone3_1.iPhoneLibrary.docset/"]//@"/Developer/Documentation/DocSets/com.apple.adc.documentation.AppleSnowLeopard.CoreReference.docset"]
-											   managedObjectContext:[self managedObjectContext]];
+											   managedObjectContext:[self backgroundManagedObjectContext]];
 		[scraper search];
 	}
 	
@@ -100,7 +100,7 @@
     if (managedObjectModel) return managedObjectModel;
 	
     managedObjectModel = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];    
-    return managedObjectModel;
+	return managedObjectModel;
 }
 
 
@@ -154,9 +154,10 @@
  bound to the persistent store coordinator for the application.) 
  */
 
-- (NSManagedObjectContext *) managedObjectContext {
+- (NSManagedObjectContext *)managedObjectContext {
 	
-    if (managedObjectContext) return managedObjectContext;
+    if (managedObjectContext)
+		return managedObjectContext;
 	
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (!coordinator) {
@@ -168,9 +169,27 @@
         return nil;
     }
     managedObjectContext = [[NSManagedObjectContext alloc] init];
-    [managedObjectContext setPersistentStoreCoordinator: coordinator];
+    [managedObjectContext setPersistentStoreCoordinator:coordinator];
 	
     return managedObjectContext;
+}
+
+//A managed object context to use for background operations
+- (NSManagedObjectContext *)backgroundManagedObjectContext {
+	
+    if (backgroundManagedObjectContext)
+		return backgroundManagedObjectContext;
+	
+    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+	if (!coordinator)
+	{
+        return nil;
+    }
+	
+    backgroundManagedObjectContext = [[NSManagedObjectContext alloc] init];
+    [backgroundManagedObjectContext setPersistentStoreCoordinator:coordinator];
+	
+    return backgroundManagedObjectContext;
 }
 
 /**
