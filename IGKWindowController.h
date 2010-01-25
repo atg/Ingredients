@@ -43,6 +43,9 @@ typedef enum {
 	IBOutlet NSView *sideSearchView;
 	IBOutlet NSSearchField *sideSearchViewField;
 	IBOutlet NSOutlineView *sideSearchViewResults;
+	IBOutlet NSArrayController *sideSearchArrayController;
+	// // Additional stuff
+	NSMutableArray *sideSearchResults;
 	
 	//Contents
 	IBOutlet NSView *tableOfContentsView;
@@ -66,5 +69,8 @@ typedef enum {
 }
 
 @property (assign) IGKApplicationDelegate *appDelegate;
+
+
+- (IBAction)executeSearch:(id)sender;
 
 @end
