@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C7C02E6110E000800412666 /* XBNewSourceListCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C7C02E4110E000800412666 /* XBNewSourceListCell.h */; };
+		0C7C02E7110E000800412666 /* XBNewSourceListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7C02E5110E000800412666 /* XBNewSourceListCell.m */; };
+		0C7C02ED110E006000412666 /* CHSymbolButtonImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C7C02EB110E006000412666 /* CHSymbolButtonImage.h */; };
+		0C7C02EE110E006000412666 /* CHSymbolButtonImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7C02EC110E006000412666 /* CHSymbolButtonImage.m */; };
 		756F9D38110BA74300E6F291 /* Ingredients_AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C8280C06725ACE000B614F /* Ingredients_AppDelegate.m */; };
 		756F9D4E110BA94500E6F291 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		756F9D78110BB40C00E6F291 /* CHDocumentationBrowser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 756F9D77110BB40C00E6F291 /* CHDocumentationBrowser.xib */; };
@@ -50,6 +54,10 @@
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		0C7C02E4110E000800412666 /* XBNewSourceListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBNewSourceListCell.h; sourceTree = "<group>"; };
+		0C7C02E5110E000800412666 /* XBNewSourceListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBNewSourceListCell.m; sourceTree = "<group>"; };
+		0C7C02EB110E006000412666 /* CHSymbolButtonImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHSymbolButtonImage.h; sourceTree = "<group>"; };
+		0C7C02EC110E006000412666 /* CHSymbolButtonImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHSymbolButtonImage.m; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -108,6 +116,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0C7C02EB110E006000412666 /* CHSymbolButtonImage.h */,
+				0C7C02EC110E006000412666 /* CHSymbolButtonImage.m */,
 				756F9D7F110BB44600E6F291 /* IGKApplicationDelegate.h */,
 				756F9D80110BB44600E6F291 /* IGKApplicationDelegate.m */,
 				756F9E0A110BB79100E6F291 /* IGKWindowController.h */,
@@ -115,8 +125,18 @@
 				756F9F9F110BEA8D00E6F291 /* CHLeftSplitVIew.h */,
 				756F9FA0110BEA8D00E6F291 /* CHLeftSplitView.m */,
 				756F9FF6110C803D00E6F291 /* Scraping */,
+				0C7C02E3110DFFF300412666 /* Views & Cells */,
 			);
 			name = Classes;
+			sourceTree = "<group>";
+		};
+		0C7C02E3110DFFF300412666 /* Views & Cells */ = {
+			isa = PBXGroup;
+			children = (
+				0C7C02E4110E000800412666 /* XBNewSourceListCell.h */,
+				0C7C02E5110E000800412666 /* XBNewSourceListCell.m */,
+			);
+			name = "Views & Cells";
 			sourceTree = "<group>";
 		};
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
@@ -251,6 +271,8 @@
 				756F9FA1110BEA8D00E6F291 /* CHLeftSplitVIew.h in Headers */,
 				756F9FFB110C805C00E6F291 /* IGKScraper.h in Headers */,
 				75F67031110CCD31005F299C /* RegexKitLite.h in Headers */,
+				0C7C02E6110E000800412666 /* XBNewSourceListCell.h in Headers */,
+				0C7C02ED110E006000412666 /* CHSymbolButtonImage.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -342,6 +364,8 @@
 				756F9E0D110BB79100E6F291 /* IGKWindowController.m in Sources */,
 				756F9FFC110C805C00E6F291 /* IGKScraper.m in Sources */,
 				75F67032110CCD31005F299C /* RegexKitLite.m in Sources */,
+				0C7C02E7110E000800412666 /* XBNewSourceListCell.m in Sources */,
+				0C7C02EE110E006000412666 /* CHSymbolButtonImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
