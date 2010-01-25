@@ -17,6 +17,7 @@
 - (NSString *)windowNibName
 {
 	return @"CHDocumentationBrowser";
+	sideSearchResults = [[NSMutableArray alloc] init];
 }
 
 - (void)windowDidLoad
@@ -24,21 +25,10 @@
 	currentModeIndex = CHDocumentationBrowserUIMode_NeedsSetup;
 	[self setMode:CHDocumentationBrowserUIMode_TwoUp];
 	
-	// Populate with fake data for now... also, doing it with a timer so that the store its ready
-	// It's a dumbass way to do it but it's just for testing so...it'll do!
 	
-	[self performSelector:@selector(addDummyData) 
-			   withObject:nil 
-			   afterDelay:1.0];
 }
 
 
-- (void)addDummyData
-{
-	
-	NSManagedObjectContext *moc = [[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext];
-	NSLog(@"MOC: %@", moc);
-}
 
 - (void)close
 {
@@ -146,6 +136,27 @@
 			[contentView addSubview:searchView];
 		}
 	}
+}
+
+- (IBAction)executeSearch:(id)sender
+{
+	[self executeSideSearch:[sender stringValue]];
+	
+}
+
+
+- (void)executeSideSearch:(NSString *)query
+{
+	if([query length] > 0)
+	{
+		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"%K CONTAINS[cd] %@", @"name", query];
+		NSLog(@"Pred: %@", fetchPredicate);
+		[sideSearchArrayController setFilterPredicate:fetchPredicate];
+	}
+	else {
+		[sideSearchArrayController setFilterPredicate:nil];
+	}
+
 }
 
 
