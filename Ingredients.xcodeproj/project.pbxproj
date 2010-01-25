@@ -33,6 +33,8 @@
 		75F67032110CCD31005F299C /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F67030110CCD31005F299C /* RegexKitLite.m */; };
 		75F67044110CD033005F299C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 75F67043110CD033005F299C /* libicucore.dylib */; };
 		75F671D8110DE8E2005F299C /* Ingredients_DataModel.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 770B37EC0679A11B001EADE2 /* Ingredients_DataModel.xcdatamodel */; };
+		75F672AB110E254A005F299C /* IGKDocRecordManagedObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F672A9110E254A005F299C /* IGKDocRecordManagedObject.h */; };
+		75F672AC110E254A005F299C /* IGKDocRecordManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F672AA110E254A005F299C /* IGKDocRecordManagedObject.m */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -81,6 +83,8 @@
 		75F6702F110CCD31005F299C /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
 		75F67030110CCD31005F299C /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		75F67043110CD033005F299C /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		75F672A9110E254A005F299C /* IGKDocRecordManagedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKDocRecordManagedObject.h; sourceTree = "<group>"; };
+		75F672AA110E254A005F299C /* IGKDocRecordManagedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKDocRecordManagedObject.m; sourceTree = "<group>"; };
 		770B37EC0679A11B001EADE2 /* Ingredients_DataModel.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Ingredients_DataModel.xcdatamodel; sourceTree = "<group>"; };
 		77C82804067257F0000B614F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		77C8280B06725ACE000B614F /* Ingredients_AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ingredients_AppDelegate.h; sourceTree = "<group>"; };
@@ -254,6 +258,8 @@
 			isa = PBXGroup;
 			children = (
 				770B37EC0679A11B001EADE2 /* Ingredients_DataModel.xcdatamodel */,
+				75F672A9110E254A005F299C /* IGKDocRecordManagedObject.h */,
+				75F672AA110E254A005F299C /* IGKDocRecordManagedObject.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -273,6 +279,7 @@
 				75F67031110CCD31005F299C /* RegexKitLite.h in Headers */,
 				0C7C02E6110E000800412666 /* XBNewSourceListCell.h in Headers */,
 				0C7C02ED110E006000412666 /* CHSymbolButtonImage.h in Headers */,
+				75F672AB110E254A005F299C /* IGKDocRecordManagedObject.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,6 +373,7 @@
 				75F67032110CCD31005F299C /* RegexKitLite.m in Sources */,
 				0C7C02E7110E000800412666 /* XBNewSourceListCell.m in Sources */,
 				0C7C02EE110E006000412666 /* CHSymbolButtonImage.m in Sources */,
+				75F672AC110E254A005F299C /* IGKDocRecordManagedObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

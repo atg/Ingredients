@@ -30,6 +30,23 @@
 		windowControllers = [[NSMutableArray alloc] init];
 		
 		[self newWindow:nil];
+		/*
+		
+		NSMutableArray *docsetPaths = [[NSMutableArray alloc] init];
+		
+		//Add the default documentation
+		[self addDocsetsInPath:[[self developerDirectory] stringByAppendingPathComponent:@"/Documentation/DocSets/"]
+					   toArray:docsetURLs];
+		
+		NSString *platformsPath = [[self developerDirectory] stringByAppendingPathComponent:@"/Platforms/"];
+		NSError *error = nil;
+		NSArray *platforms = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:platformsPath error:&error];
+		if (!error)
+		{
+			
+		}
+		*/
+		//NSArray *docsetURLs = [NSArray arrayWithObjects:[developerDirectory stringByAppendingPathComponent:@"/Documentation/DocSets/"], [developerDirectory stringByAppendingPathComponent:@"/Documentation/DocSets/"], nil]; 
 		
 		NSString *ippath = @"/Developer/Platforms/iPhoneOS.platform/Developer/Documentation/DocSets/com.apple.adc.documentation.AppleiPhone3_1.iPhoneLibrary.docset/";
 		NSString *mpath = @"/Developer/Documentation/DocSets/com.apple.adc.documentation.AppleSnowLeopard.CoreReference.docset";
@@ -42,6 +59,12 @@
 	}
 	
 	return self;
+}
+
+
+- (NSString *)developerDirectory
+{
+	return @"/Developer/";
 }
 
 - (BOOL)hasMultipleWindowControllers
