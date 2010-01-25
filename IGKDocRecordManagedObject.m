@@ -7,7 +7,7 @@
 //
 
 #import "IGKDocRecordManagedObject.h"
-
+#import "CHSymbolButtonImage.h"
 
 @interface IGKDocRecordManagedObject ()
 
@@ -30,7 +30,16 @@
 {
 	NSString *entityName = [[self entity] name];
 	
-	//Get from CHSymbolButtonImage
+	NSInteger index = isSelected ? 1 : 0;
+	
+	
+	if([entityName isEqual:@"ObjCClass"])
+		return [[CHSymbolButtonImage symbolImageWithMask:CHSymbolButtonObjcClass] objectAtIndex:index];
+	else if([entityName isEqual:@"ObjCCategory"])
+		return [[CHSymbolButtonImage symbolImageWithMask:CHSymbolButtonObjcCategory] objectAtIndex:index];
+	else if([entityName isEqual:@"ObjCProtocol"])
+		return [[CHSymbolButtonImage symbolImageWithMask:CHSymbolButtonObjcProtocol] objectAtIndex:index];
+	
 	
 	return nil;
 }
