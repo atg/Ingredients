@@ -13,11 +13,12 @@
 
 @interface IGKScraper : NSObject
 {
+	NSURL *docsetURL;
 	NSURL *url;
 	NSManagedObjectContext *ctx;
 }
 
-- (id)initWithDocsetURL:(NSURL *)docsetURL managedObjectContext:(NSManagedObjectContext *)moc;
+- (id)initWithDocsetURL:(NSURL *)theDocsetURL managedObjectContext:(NSManagedObjectContext *)moc;
 - (void)search;
 
 @end

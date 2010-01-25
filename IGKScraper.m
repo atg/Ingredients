@@ -23,10 +23,11 @@
 
 @implementation IGKScraper
 
-- (id)initWithDocsetURL:(NSURL *)docsetURL managedObjectContext:(NSManagedObjectContext *)moc
+- (id)initWithDocsetURL:(NSURL *)theDocsetURL managedObjectContext:(NSManagedObjectContext *)moc
 {
 	if (self = [super init])
 	{
+		docsetURL = [theDocsetURL copy];
 		url = [docsetURL URLByAppendingPathComponent:@"Contents/Resources/Documents/documentation"];
 		ctx = moc;
 	}
@@ -36,11 +37,66 @@
 
 - (void)search
 {
+	//Get the info.plist
+	NSDictionary *infoPlist = [[NSDictionary alloc] initWithContentsOfURL:[docsetURL URLByAppendingPathComponent:@"Contents/info.plist"]];
+	NSString *bundleIdentifier = [infoPlist objectForKey:@"CFBundleIdentifier"];
+	NSString *version = [infoPlist objectForKey:@"CFBundleVersion"];
+	if (bundleIdentifier && version)
+	{
+		//Find out if we've already parsed
+		NSPredicate *countPredicate = [NSPredicate predicateWithFormat:@"bundleIdentifier == %@ and version == %@", bundleIdentifier, version];
+		
+		NSError *error = nil;
+		NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+		[fetch setEntity:[NSEntityDescription entityForName:@"Docset" inManagedObjectContext:ctx]];
+		[fetch setPredicate:countPredicate];
+		NSUInteger recordCount = [ctx countForFetchRequest:fetch error:&error];
+		if (!error && recordCount > 0)
+		{
+			//There's already some records - don't parse
+			NSLog(@"Docset already exists: %@ / %@", version, bundleIdentifier);
+			return;
+		}
+	}
+	
+	
+	//*** Create a docset object ***
+	NSEntityDescription *docsetEntity = [NSEntityDescription entityForName:@"Docset" inManagedObjectContext:ctx];
+	
+	NSManagedObject *docset = [[NSManagedObject alloc] initWithEntity:docsetEntity insertIntoManagedObjectContext:ctx];
+	
+	if (bundleIdentifier)
+		[docset setValue:bundleIdentifier forKey:@"bundleIdentifier"];
+	if (version)
+		[docset setValue:version forKey:@"version"];
+	
+	if ([infoPlist objectForKey:@"DocSetDescription"])
+		[docset setValue:[infoPlist objectForKey:@"DocSetDescription"] forKey:@"docsetDescription"];
+	if ([infoPlist objectForKey:@"DocSetFeedName"])
+		[docset setValue:[infoPlist objectForKey:@"DocSetFeedName"] forKey:@"feedName"];
+	if ([infoPlist objectForKey:@"DocSetFeedURL"])
+		[docset setValue:[infoPlist objectForKey:@"DocSetFeedURL"] forKey:@"feedURL"];
+	if ([infoPlist objectForKey:@"DocSetPlatformFamily"])
+		[docset setValue:[infoPlist objectForKey:@"DocSetPlatformFamily"] forKey:@"platformFamily"];
+	if ([infoPlist objectForKey:@"DocSetPlatformVersion"])
+		[docset setValue:[infoPlist objectForKey:@"DocSetPlatformVersion"] forKey:@"platformVersion"];
+	if ([infoPlist objectForKey:@"DocSetFallbackURL"])
+		[docset setValue:[infoPlist objectForKey:@"DocSetFallbackURL"] forKey:@"fallbackURL"];
+	
+	[docset setValue:[docsetURL absoluteString] forKey:@"url"];
+	
+	
+	
+	//*** Do the actual parsing ***
 	//TODO: Use GCD to make this an actual background search
 	[self backgroundSearch];
 	
+	
 	[ctx save:nil];
 	[ctx reset];
+	
+#ifndef NDEBUG
+	//*** Show and tell ***
 	
 	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
 	[fetch setEntity:[NSEntityDescription entityForName:@"DocRecord" inManagedObjectContext:ctx]];
@@ -50,7 +106,7 @@
 	{
 		NSLog(@"Managed object = %@", [obj valueForKey:@"name"]);
 	}
-	
+#endif
 }
 - (void)backgroundSearch
 {
@@ -201,9 +257,8 @@
 	else if ([type isEqual:@"intf"] || [type isEqual:@"intfm"])
 		entityName = @"ObjCProtocol";
 	
-	// TODO: Add support for binding listings
-	// else if ([type isEqual:@"binding"])
-	//     entityName = @"ObjCBindingsListing";
+	else if ([type isEqual:@"binding"])
+	    entityName = @"ObjCBindingsListing";
 	
 	//If we don't understand the entity name, bail
 	if (!entityName)
