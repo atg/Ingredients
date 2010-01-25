@@ -32,7 +32,7 @@
 	[self setSideFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
 	
 	sideSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES comparator:^NSComparisonResult (id a, id b) {
-		NSLog(@"Called with: %@, Q: %@", a, sideSearchQuery);
+		//NSLog(@"Called with: %@, Q: %@", a, sideSearchQuery);
 		if([sideSearchQuery length] == 0)
 			return NSOrderedAscending;
 		
