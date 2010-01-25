@@ -29,7 +29,8 @@
 	
 	
 	sideSearchResults = [[NSMutableArray alloc] init];
-	sideFilterPredicate = nil;
+	[self setSideFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
+	
 	sideSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES comparator:^NSComparisonResult (id a, id b) {
 		NSLog(@"Called with: %@, Q: %@", a, sideSearchQuery);
 		if([sideSearchQuery length] == 0)
@@ -183,7 +184,7 @@
 		[self setSideFilterPredicate:fetchPredicate];
 	}
 	else {
-		[self setSideFilterPredicate:nil];
+		[self setSideFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
 	}
 
 }
