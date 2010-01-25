@@ -13,17 +13,44 @@
 @implementation IGKWindowController
 
 @synthesize appDelegate;
+@synthesize sideFilterPredicate;
 
 - (NSString *)windowNibName
 {
 	return @"CHDocumentationBrowser";
-	sideSearchResults = [[NSMutableArray alloc] init];
+	
 }
 
 - (void)windowDidLoad
 {
 	currentModeIndex = CHDocumentationBrowserUIMode_NeedsSetup;
 	[self setMode:CHDocumentationBrowserUIMode_TwoUp];
+	sideSearchQuery = @"";
+	
+	
+	sideSearchResults = [[NSMutableArray alloc] init];
+	sideFilterPredicate = nil;
+	sideSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES comparator:^NSComparisonResult (id a, id b) {
+		NSLog(@"Called with: %@, Q: %@", a, sideSearchQuery);
+		if([sideSearchQuery length] == 0)
+			return NSOrderedAscending;
+		
+		NSInteger qLength = [sideSearchQuery length];
+		NSInteger aLength = [a length];
+		NSInteger bLength = [b length];
+		
+		NSInteger l1 = abs(aLength - qLength);
+		NSInteger l2 = abs(bLength - qLength);
+		
+		if (l1 == l2)
+			return [a localizedCompare:b];
+		else if(l1 < l2)
+			return NSOrderedAscending;
+		
+		return NSOrderedDescending;
+		
+	}];
+	[sideSearchArrayController setSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];
 	
 	
 }
@@ -147,14 +174,16 @@
 
 - (void)executeSideSearch:(NSString *)query
 {
+	sideSearchQuery = query;
+	
 	if([query length] > 0)
 	{
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"%K CONTAINS[cd] %@", @"name", query];
 		NSLog(@"Pred: %@", fetchPredicate);
-		[sideSearchArrayController setFilterPredicate:fetchPredicate];
+		[self setSideFilterPredicate:fetchPredicate];
 	}
 	else {
-		[sideSearchArrayController setFilterPredicate:nil];
+		[self setSideFilterPredicate:nil];
 	}
 
 }
