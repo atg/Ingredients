@@ -17,7 +17,7 @@
 	if (self = [super init])
 	{
 #ifndef NDEBUG
-		if (NSRunAlertPanel(@"Start Over(ish)?", @"Should I clear out the cache and acct prefs?", @"Clear", @"Keep", nil)) {
+		if (NSRunAlertPanel(@"Start Over(ish)?", @"Should I clear out the app support folder and preferences?", @"Clear", @"Keep", nil)) {
 						
 			NSString *appSupportPath = [@"~/Library/Application Support/Ingredients/" stringByExpandingTildeInPath];			
 			[[NSFileManager defaultManager] removeItemAtPath:appSupportPath error:nil];
