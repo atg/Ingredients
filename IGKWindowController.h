@@ -75,5 +75,6 @@ typedef enum {
 @property (assign) NSPredicate *sideFilterPredicate;
 
 - (IBAction)executeSearch:(id)sender;
+- (IBAction)changeViewMode:(id)sender;
 
 @end

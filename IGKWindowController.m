@@ -172,6 +172,18 @@
 	
 }
 
+- (IBAction)changeViewMode:(id)sender
+{
+	
+	NSInteger selectedSegment = [sender selectedSegment];
+	if(selectedSegment == 0)
+		[self setMode:CHDocumentationBrowserUIMode_TwoUp];
+	else if(selectedSegment == 1)
+		[self setMode:CHDocumentationBrowserUIMode_AdvancedSearch];
+	else if(selectedSegment == 2)
+		[self setMode:CHDocumentationBrowserUIMode_BrowserOnly];
+}
+
 
 - (void)executeSideSearch:(NSString *)query
 {
