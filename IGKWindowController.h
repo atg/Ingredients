@@ -60,6 +60,11 @@ typedef enum {
 	IBOutlet NSPredicateEditor *searchViewPredicateEditor;
 	IBOutlet NSTableView *searchViewTable;
 	
+	NSPredicate *advancedSearchPredicate;
+	
+	
+	// Other
+	
 	IBOutlet NSArrayController *objectsController;
 	
 	//temp
@@ -73,6 +78,7 @@ typedef enum {
 
 @property (assign) IGKApplicationDelegate *appDelegate;
 @property (assign) NSPredicate *sideFilterPredicate;
+@property (assign) NSPredicate *advancedFilterPredicate;
 
 - (IBAction)executeSearch:(id)sender;
 - (IBAction)changeViewMode:(id)sender;
