@@ -14,6 +14,8 @@
 
 @synthesize appDelegate;
 @synthesize sideFilterPredicate;
+@synthesize advancedFilterPredicate;
+
 
 - (NSString *)windowNibName
 {
@@ -30,6 +32,7 @@
 	
 	sideSearchResults = [[NSMutableArray alloc] init];
 	[self setSideFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
+	[self setAdvancedFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
 	
 	sideSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES comparator:^NSComparisonResult (id a, id b) {
 		//NSLog(@"Called with: %@, Q: %@", a, sideSearchQuery);
@@ -53,6 +56,7 @@
 	}];
 	[sideSearchArrayController setSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];
 	
+	[searchViewPredicateEditor addRow:nil];
 	
 }
 
