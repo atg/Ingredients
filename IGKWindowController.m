@@ -8,7 +8,7 @@
 
 #import "IGKWindowController.h"
 #import "IGKApplicationDelegate.h"
-
+#import "IGKHTMLGenerator.h"
 
 @implementation IGKWindowController
 
@@ -235,6 +235,29 @@
 	}
 
 }
+
+
+#pragma mark -
+#pragma mark Table View Delegate 
+
+- (void)tableViewSelectionDidChange:(NSNotification *)aNotification
+{
+	if([[aNotification object] isEqual:sideSearchViewResults])
+	{
+		IGKHTMLGenerator *generator = [[IGKHTMLGenerator alloc] init];
+		[generator setContext:[[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext]];
+		[generator setManagedObject:[[sideSearchArrayController selectedObjects] objectAtIndex:0]];
+		[generator setDisplayType:IGKHTMLDisplayType_All];
+		
+		
+		
+		[[browserWebView mainFrame] loadHTMLString:[generator html]
+										   baseURL:[[NSBundle mainBundle] resourceURL]];
+		
+		NSLog(@"Selection changed: %@", [generator html]);
+	}
+}
+
 
 
 @end

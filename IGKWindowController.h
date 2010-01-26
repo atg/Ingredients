@@ -42,7 +42,7 @@ typedef enum {
 	//Side Search
 	IBOutlet NSView *sideSearchView;
 	IBOutlet NSSearchField *sideSearchViewField;
-	IBOutlet NSOutlineView *sideSearchViewResults;
+	IBOutlet NSTableView *sideSearchViewResults;
 	IBOutlet NSArrayController *sideSearchArrayController;
 	// // Additional stuff
 	NSMutableArray *sideSearchResults;
