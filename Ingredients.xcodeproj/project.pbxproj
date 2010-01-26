@@ -29,6 +29,8 @@
 		756F9FB5110BEB5600E6F291 /* CHLeftSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 756F9FA0110BEA8D00E6F291 /* CHLeftSplitView.m */; };
 		756F9FFB110C805C00E6F291 /* IGKScraper.h in Headers */ = {isa = PBXBuildFile; fileRef = 756F9FF9110C805C00E6F291 /* IGKScraper.h */; };
 		756F9FFC110C805C00E6F291 /* IGKScraper.m in Sources */ = {isa = PBXBuildFile; fileRef = 756F9FFA110C805C00E6F291 /* IGKScraper.m */; };
+		75C9FE90110F53E400C9B51C /* IGKHTMLGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C9FE8E110F53E400C9B51C /* IGKHTMLGenerator.h */; };
+		75C9FE91110F53E400C9B51C /* IGKHTMLGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C9FE8F110F53E400C9B51C /* IGKHTMLGenerator.m */; };
 		75F67031110CCD31005F299C /* RegexKitLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F6702F110CCD31005F299C /* RegexKitLite.h */; };
 		75F67032110CCD31005F299C /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F67030110CCD31005F299C /* RegexKitLite.m */; };
 		75F67044110CD033005F299C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 75F67043110CD033005F299C /* libicucore.dylib */; };
@@ -80,6 +82,8 @@
 		756F9FA0110BEA8D00E6F291 /* CHLeftSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHLeftSplitView.m; sourceTree = "<group>"; };
 		756F9FF9110C805C00E6F291 /* IGKScraper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKScraper.h; sourceTree = "<group>"; };
 		756F9FFA110C805C00E6F291 /* IGKScraper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKScraper.m; sourceTree = "<group>"; };
+		75C9FE8E110F53E400C9B51C /* IGKHTMLGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKHTMLGenerator.h; sourceTree = "<group>"; };
+		75C9FE8F110F53E400C9B51C /* IGKHTMLGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKHTMLGenerator.m; sourceTree = "<group>"; };
 		75F6702F110CCD31005F299C /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
 		75F67030110CCD31005F299C /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		75F67043110CD033005F299C /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
@@ -139,6 +143,8 @@
 			children = (
 				0C7C02E4110E000800412666 /* XBNewSourceListCell.h */,
 				0C7C02E5110E000800412666 /* XBNewSourceListCell.m */,
+				75C9FE8E110F53E400C9B51C /* IGKHTMLGenerator.h */,
+				75C9FE8F110F53E400C9B51C /* IGKHTMLGenerator.m */,
 			);
 			name = "Views & Cells";
 			sourceTree = "<group>";
@@ -280,6 +286,7 @@
 				0C7C02E6110E000800412666 /* XBNewSourceListCell.h in Headers */,
 				0C7C02ED110E006000412666 /* CHSymbolButtonImage.h in Headers */,
 				75F672AB110E254A005F299C /* IGKDocRecordManagedObject.h in Headers */,
+				75C9FE90110F53E400C9B51C /* IGKHTMLGenerator.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,6 +381,7 @@
 				0C7C02E7110E000800412666 /* XBNewSourceListCell.m in Sources */,
 				0C7C02EE110E006000412666 /* CHSymbolButtonImage.m in Sources */,
 				75F672AC110E254A005F299C /* IGKDocRecordManagedObject.m in Sources */,
+				75C9FE91110F53E400C9B51C /* IGKHTMLGenerator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
