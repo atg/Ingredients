@@ -251,10 +251,11 @@
 		
 		
 		
-		[[browserWebView mainFrame] loadHTMLString:[generator html]
+		NSString *html = [generator html];
+		[[browserWebView mainFrame] loadHTMLString:html
 										   baseURL:[[NSBundle mainBundle] resourceURL]];
 		
-		NSLog(@"Selection changed: %@", [generator html]);
+		NSLog(@"Selection changed: %@", html);
 	}
 }
 

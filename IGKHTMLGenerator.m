@@ -51,7 +51,7 @@
 {
 	NSMutableString *outputString = [[NSMutableString alloc] init];
 	
-	[outputString appendString:@"<!doctype html>\n<html>\n<head>\n<title>%@</title>\n<meta charset='utf-8'>\n</head>\n<body>\n"];
+	[outputString appendString:@"<!doctype html>\n<html>\n<head>\n<meta charset='utf-8'>\n<title>%@</title>\n<link rel='stylesheet' href='main.css' type='text/css' media='screen'>\n</head>\n<body>\n"];
 	
 	return outputString;
 }
@@ -78,19 +78,19 @@
 	
 	//Append the main content
 	if (displayType == IGKHTMLDisplayType_All)
-		return [self html_all];
+		[outputString appendString:[self html_all]];
 	else if (displayType == IGKHTMLDisplayType_Overview)
-		return [self html_overview];
+		[outputString appendString:[self html_overview]];
 	else if (displayType == IGKHTMLDisplayType_Tasks)
-		return [self html_tasks];
+		[outputString appendString:[self html_tasks]];
 	else if (displayType == IGKHTMLDisplayType_Properties)
-		return [self html_properties];
+		[outputString appendString:[self html_properties]];
 	else if (displayType == IGKHTMLDisplayType_Methods)
-		return [self html_methods];
+		[outputString appendString:[self html_methods]];
 	else if (displayType == IGKHTMLDisplayType_Notifications)
-		return [self html_notifications];
+		[outputString appendString:[self html_notifications]];
 	else if (displayType == IGKHTMLDisplayType_Delegate)
-		return [self html_delegate];
+		[outputString appendString:[self html_delegate]];
 	
 	//Append a footer
 	[outputString appendString:[self footer]];
