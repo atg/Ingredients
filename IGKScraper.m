@@ -8,12 +8,13 @@
 
 #import "IGKScraper.h"
 #import "RegexKitLite.h"
+#import "IGKDocRecordManagedObject.h"
 
 @interface IGKScraper ()
 
 //Extract data out of a file and insert it into the managed object context.
 //Returns YES on success (defined as the insertion of a record), NO on failure
-- (BOOL)extractPath:(NSString *)extractPath;
+- (BOOL)extractPath:(NSString *)extractPath docset:(NSManagedObject *)docset;
 - (NSManagedObject *)addRecordNamed:(NSString *)recordName
 							 ofType:(NSString *)recordType
 							   desc:(NSString *)recordDesc
@@ -63,7 +64,7 @@
 	//*** Create a docset object ***
 	NSEntityDescription *docsetEntity = [NSEntityDescription entityForName:@"Docset" inManagedObjectContext:ctx];
 	
-	NSManagedObject *docset = [[NSManagedObject alloc] initWithEntity:docsetEntity insertIntoManagedObjectContext:ctx];
+	NSManagedObject *docset = [[IGKDocRecordManagedObject alloc] initWithEntity:docsetEntity insertIntoManagedObjectContext:ctx];
 	
 	if (bundleIdentifier)
 		[docset setValue:bundleIdentifier forKey:@"bundleIdentifier"];
@@ -91,7 +92,7 @@
 	//TODO: Use GCD to make this an actual background search
 	//dispatch_async(dispatch_get_global_queue(0, 0), ^{
 		
-		[self backgroundSearch];
+	[self backgroundSearch:docset];
 		
 	//	dispatch_async(dispatch_get_main_queue(), ^{
 			[ctx save:nil];
@@ -115,7 +116,7 @@
 	 */
 #endif
 }
-- (void)backgroundSearch
+- (void)backgroundSearch:(NSManagedObject *)docset
 {
 	NSFileManager *manager = [NSFileManager defaultManager];
 	NSLog(@"Started");
@@ -199,7 +200,7 @@
 	unsigned failureCount = 0;
 	for (NSString *extractPath in extractPaths)
 	{
-		BOOL success = [self extractPath:extractPath];
+		BOOL success = [self extractPath:extractPath docset:docset];
 		if (!success)
 			failureCount++;
 		//if (failureCount > 50)
@@ -218,7 +219,7 @@
 {
 	NSEntityDescription *ed = [NSEntityDescription entityForName:entityName inManagedObjectContext:ctx];
 	
-	NSManagedObject *newRecord = [[NSManagedObject alloc] initWithEntity:ed insertIntoManagedObjectContext:ctx];
+	NSManagedObject *newRecord = [[IGKDocRecordManagedObject alloc] initWithEntity:ed insertIntoManagedObjectContext:ctx];
 	
 	[newRecord setValue:recordName forKey:@"name"];
 	[newRecord setValue:recordDesc forKey:@"overview"];
@@ -227,7 +228,7 @@
 	return newRecord;
 }
 
-- (BOOL)extractPath:(NSString *)extractPath
+- (BOOL)extractPath:(NSString *)extractPath docset:(NSManagedObject *)docset
 {
 	//Let's try to extract the class's name (assuming it is a class of course)	
 	NSError *error = nil;
@@ -294,6 +295,7 @@
 	}
 	
 	NSManagedObject *obj = [self addRecordNamed:name entityName:entityName desc:abstract sourcePath:extractPath];
+	[obj setValue:docset forKey:@"docset"];
 	
 	NSString *regex_instanceMethodBlock = @"<h2 class=\"jump\">\\s*Instance Methods\\s*</h2>(.+?)(<h2 class=\"jump\">|<p class=\"content_text\" lang=\"en\" dir=\"ltr\">)";
 	NSString *instanceMethodMatch = [contents stringByMatching:regex_instanceMethodBlock
@@ -316,14 +318,15 @@
 			if (methodName == nil)
 				continue;
 			
-			NSManagedObject *newMethod = [[NSManagedObject alloc] initWithEntity:methodEntity insertIntoManagedObjectContext:ctx];
+			IGKDocRecordManagedObject *newMethod = [[IGKDocRecordManagedObject alloc] initWithEntity:methodEntity insertIntoManagedObjectContext:ctx];
 			
 			//Method abstract
 			NSString *methodAbstract = [method stringByMatching:@"</h3>\\s*<p class=\"spaceabove\">([^<>]+)</p>" capture:1];
 			
 			[newMethod setValue:methodName forKey:@"name"];
 			[newMethod setValue:obj forKey:@"container"];
-			
+			[newMethod setValue:docset forKey:@"docset"];
+
 			if ([methodAbstract length])
 				[newMethod setValue:methodAbstract forKey:@"overview"];
 		}
