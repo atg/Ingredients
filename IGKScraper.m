@@ -89,15 +89,21 @@
 	
 	//*** Do the actual parsing ***
 	//TODO: Use GCD to make this an actual background search
-	[self backgroundSearch];
+	//dispatch_async(dispatch_get_global_queue(0, 0), ^{
+		
+		[self backgroundSearch];
+		
+	//	dispatch_async(dispatch_get_main_queue(), ^{
+			[ctx save:nil];
+			[ctx reset];
+	//	});
+	//});
 	
-	
-	[ctx save:nil];
-	[ctx reset];
 	
 #ifndef NDEBUG
 	//*** Show and tell ***
 	
+	/*
 	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
 	[fetch setEntity:[NSEntityDescription entityForName:@"DocRecord" inManagedObjectContext:ctx]];
 	[fetch setResultType:NSManagedObjectResultType];
@@ -106,6 +112,7 @@
 	{
 		NSLog(@"Managed object = %@", [obj valueForKey:@"name"]);
 	}
+	 */
 #endif
 }
 - (void)backgroundSearch
@@ -278,15 +285,50 @@
 	
 	if ([abstract length] == 0)
 	{
-		NSLog(@"ZERO - %@ - %@ - %@", type, name, extractPath);
+		//NSLog(@"ZERO - %@ - %@ - %@", type, name, extractPath);
 		abstract = @"";
 	}
 	else
 	{
-		NSLog(@"%@ - %@ - %u", type, name, [abstract length]);
+		//NSLog(@"%@ - %@ - %u", type, name, [abstract length]);
 	}
 	
-	[self addRecordNamed:name entityName:entityName desc:abstract sourcePath:extractPath];
+	NSManagedObject *obj = [self addRecordNamed:name entityName:entityName desc:abstract sourcePath:extractPath];
+	
+	NSString *regex_instanceMethodBlock = @"<h2 class=\"jump\">\\s*Instance Methods\\s*</h2>(.+?)(<h2 class=\"jump\">|<p class=\"content_text\" lang=\"en\" dir=\"ltr\">)";
+	NSString *instanceMethodMatch = [contents stringByMatching:regex_instanceMethodBlock
+													   options:(RKLDotAll|RKLCaseless)
+													   inRange:NSMakeRange(0, [contents length])
+													   capture:0
+														 error:nil];
+	
+	if ([instanceMethodMatch length])
+	{
+		NSEntityDescription *methodEntity = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:ctx];
+		
+		NSString *regex_instanceMethod = [NSString stringWithFormat:@"<a name=\"//apple_ref/occ/instm/%@/([a-zA-Z0-9_$:]+)\" title=\"([a-zA-Z0-9_$:]+)\">", name];
+		NSArray *methods = [instanceMethodMatch componentsSeparatedByRegex:regex_instanceMethod];
+		
+		for (NSString *method in methods)
+		{			
+			//Method name
+			NSString *methodName = [method stringByMatching:@"<h3 class=\"jump instanceMethod\">([^<>]+)</h3>" capture:1];
+			if (methodName == nil)
+				continue;
+			
+			NSManagedObject *newMethod = [[NSManagedObject alloc] initWithEntity:methodEntity insertIntoManagedObjectContext:ctx];
+			
+			//Method abstract
+			NSString *methodAbstract = [method stringByMatching:@"</h3>\\s*<p class=\"spaceabove\">([^<>]+)</p>" capture:1];
+			
+			[newMethod setValue:methodName forKey:@"name"];
+			[newMethod setValue:obj forKey:@"container"];
+			
+			if ([methodAbstract length])
+				[newMethod setValue:methodAbstract forKey:@"overview"];
+		}
+	}
+	
 	
 	return YES;
 }
