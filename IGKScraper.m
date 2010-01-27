@@ -323,9 +323,13 @@
 			//Method abstract
 			NSString *methodAbstract = [method stringByMatching:@"</h3>\\s*<p class=\"spaceabove\">([^<>]+)</p>" capture:1];
 			
+			//Method Signature
+			NSString *methodSignature = [method stringByMatching:@"<p class=\"spaceabovemethod\">(.+?)</p>" capture:1];
+			
 			[newMethod setValue:methodName forKey:@"name"];
 			[newMethod setValue:obj forKey:@"container"];
 			[newMethod setValue:docset forKey:@"docset"];
+			[newMethod setValue:methodSignature forKey:@"signature"];
 
 			if ([methodAbstract length])
 				[newMethod setValue:methodAbstract forKey:@"overview"];

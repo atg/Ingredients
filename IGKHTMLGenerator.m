@@ -137,7 +137,26 @@
 {
 	NSMutableString *outputString = [[NSMutableString alloc] init];
 	
-	[outputString appendString:@"METHODS"];
+	[outputString appendString:@"<div id='methods'>"];
+	
+	NSFetchRequest *methodsFetch = [[NSFetchRequest alloc] init];
+	[methodsFetch setEntity:[NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:context]];
+	[methodsFetch setPredicate:[NSPredicate predicateWithFormat:@"container=%@", managedObject]];
+	[methodsFetch setSortDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
+	
+	NSError *error = nil;
+	NSArray *methods = [context executeFetchRequest:methodsFetch error:&error];
+	for (NSManagedObject *object in methods)
+	{
+		[outputString appendFormat:@"\t<div class='method'>\n"];
+		[outputString appendFormat:@"\t\t<h2>%@</h2>\n", [self escape:[object valueForKey:@"name"]]];
+		[outputString appendFormat:@"\t\t<p class='description'>%@</p>\n", [object valueForKey:@"overview"]];
+		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [object valueForKey:@"signature"]];
+		
+		[outputString appendFormat:@"\t</div>\n\n"];
+	}
+	
+	[outputString appendString:@"</div>"];
 	
 	return outputString;
 }
