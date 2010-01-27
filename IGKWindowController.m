@@ -265,6 +265,7 @@
 		
 		[self setSideFilterPredicate:fetchPredicate];
 		
+		
 		if([sideSearchViewResults numberOfRows] > 0)
 		{
 			
