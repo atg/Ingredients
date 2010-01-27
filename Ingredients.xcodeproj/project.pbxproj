@@ -29,6 +29,9 @@
 		756F9FB5110BEB5600E6F291 /* CHLeftSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 756F9FA0110BEA8D00E6F291 /* CHLeftSplitView.m */; };
 		756F9FFB110C805C00E6F291 /* IGKScraper.h in Headers */ = {isa = PBXBuildFile; fileRef = 756F9FF9110C805C00E6F291 /* IGKScraper.h */; };
 		756F9FFC110C805C00E6F291 /* IGKScraper.m in Sources */ = {isa = PBXBuildFile; fileRef = 756F9FFA110C805C00E6F291 /* IGKScraper.m */; };
+		75B534FA111076C000560848 /* View_AdvSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F7111076C000560848 /* View_AdvSearchTemplate.png */; };
+		75B534FB111076C000560848 /* View_NoSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F8111076C000560848 /* View_NoSearchTemplate.png */; };
+		75B534FC111076C000560848 /* View_SideSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F9111076C000560848 /* View_SideSearchTemplate.png */; };
 		75C9FE90110F53E400C9B51C /* IGKHTMLGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C9FE8E110F53E400C9B51C /* IGKHTMLGenerator.h */; };
 		75C9FE91110F53E400C9B51C /* IGKHTMLGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C9FE8F110F53E400C9B51C /* IGKHTMLGenerator.m */; };
 		75C9FF05110F868300C9B51C /* main.css in Resources */ = {isa = PBXBuildFile; fileRef = 75C9FF03110F868300C9B51C /* main.css */; };
@@ -83,6 +86,9 @@
 		756F9FA0110BEA8D00E6F291 /* CHLeftSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHLeftSplitView.m; sourceTree = "<group>"; };
 		756F9FF9110C805C00E6F291 /* IGKScraper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKScraper.h; sourceTree = "<group>"; };
 		756F9FFA110C805C00E6F291 /* IGKScraper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKScraper.m; sourceTree = "<group>"; };
+		75B534F7111076C000560848 /* View_AdvSearchTemplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = View_AdvSearchTemplate.png; path = Images/View_AdvSearchTemplate.png; sourceTree = "<group>"; };
+		75B534F8111076C000560848 /* View_NoSearchTemplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = View_NoSearchTemplate.png; path = Images/View_NoSearchTemplate.png; sourceTree = "<group>"; };
+		75B534F9111076C000560848 /* View_SideSearchTemplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = View_SideSearchTemplate.png; path = Images/View_SideSearchTemplate.png; sourceTree = "<group>"; };
 		75C9FE8E110F53E400C9B51C /* IGKHTMLGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKHTMLGenerator.h; sourceTree = "<group>"; };
 		75C9FE8F110F53E400C9B51C /* IGKHTMLGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKHTMLGenerator.m; sourceTree = "<group>"; };
 		75C9FF03110F868300C9B51C /* main.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = main.css; path = HTML_Example/main.css; sourceTree = "<group>"; };
@@ -209,6 +215,10 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				75B534F6111076C000560848 /* Images */,
+				75B534F7111076C000560848 /* View_AdvSearchTemplate.png */,
+				75B534F8111076C000560848 /* View_NoSearchTemplate.png */,
+				75B534F9111076C000560848 /* View_SideSearchTemplate.png */,
 				8D1107310486CEB800E47090 /* Ingredients-Info.plist */,
 				756F9D30110BA72F00E6F291 /* IngredientsKit-Info.plist */,
 				756F9D77110BB40C00E6F291 /* CHDocumentationBrowser.xib */,
@@ -261,6 +271,13 @@
 				756F9FFA110C805C00E6F291 /* IGKScraper.m */,
 			);
 			name = Scraping;
+			sourceTree = "<group>";
+		};
+		75B534F6111076C000560848 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Images;
 			sourceTree = "<group>";
 		};
 		7756732906782D8800D1FEB8 /* Models */ = {
@@ -367,6 +384,9 @@
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				756F9D7C110BB42300E6F291 /* MainMenu.xib in Resources */,
 				75C9FF05110F868300C9B51C /* main.css in Resources */,
+				75B534FA111076C000560848 /* View_AdvSearchTemplate.png in Resources */,
+				75B534FB111076C000560848 /* View_NoSearchTemplate.png in Resources */,
+				75B534FC111076C000560848 /* View_SideSearchTemplate.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

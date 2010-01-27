@@ -77,7 +77,7 @@
 	//If we're already in this mode, bail
 	if (modeIndex == currentModeIndex)
 		return;
-	
+		
 	if (currentModeIndex == CHDocumentationBrowserUIMode_TwoUp)
 	{
 		// two-up -> browser
@@ -198,7 +198,9 @@
 		}
 	}
 	
-	currentModeIndex = modeIndex; 
+	[self willChangeValueForKey:@"ui_currentModeIndex"];
+	currentModeIndex = modeIndex;
+	[self didChangeValueForKey:@"ui_currentModeIndex"];
 }
 
 - (IBAction)executeSearch:(id)sender
@@ -207,18 +209,38 @@
 	
 }
 
+- (IBAction)changeViewModeTagged:(id)sender
+{	
+	NSInteger selectedSegment = [sender tag];
+	if (selectedSegment == 0)
+		[self setMode:CHDocumentationBrowserUIMode_BrowserOnly];
+	else if(selectedSegment == 1)
+		[self setMode:CHDocumentationBrowserUIMode_TwoUp];
+	else if(selectedSegment == 2)
+		[self setMode:CHDocumentationBrowserUIMode_AdvancedSearch];
+}
+/*
 - (IBAction)changeViewMode:(id)sender
-{
-	
+{	
 	NSInteger selectedSegment = [sender selectedSegment];
 	if(selectedSegment == 0)
-		[self setMode:CHDocumentationBrowserUIMode_TwoUp];
-	else if(selectedSegment == 1)
-		[self setMode:CHDocumentationBrowserUIMode_AdvancedSearch];
-	else if(selectedSegment == 2)
 		[self setMode:CHDocumentationBrowserUIMode_BrowserOnly];
-}
+	else if(selectedSegment == 1)
+		[self setMode:CHDocumentationBrowserUIMode_TwoUp];
+	else if(selectedSegment == 2)
+		[self setMode:CHDocumentationBrowserUIMode_AdvancedSearch];
+}*/
 
+@dynamic ui_currentModeIndex;
+
+- (void)setUi_currentModeIndex:(NSNumber *)n
+{
+	[self setMode:[n intValue]];
+}
+- (NSNumber *)ui_currentModeIndex
+{
+	return [NSNumber numberWithInt:currentModeIndex];
+}
 
 - (void)executeSideSearch:(NSString *)query
 {

@@ -13,10 +13,11 @@
 
 typedef enum {
 	
-	CHDocumentationBrowserUIMode_NeedsSetup=0,
-	CHDocumentationBrowserUIMode_TwoUp,
-	CHDocumentationBrowserUIMode_BrowserOnly,
-	CHDocumentationBrowserUIMode_AdvancedSearch
+	CHDocumentationBrowserUIMode_BrowserOnly=0,
+	CHDocumentationBrowserUIMode_TwoUp=1,
+	CHDocumentationBrowserUIMode_AdvancedSearch=2,
+	
+	CHDocumentationBrowserUIMode_NeedsSetup=20
 	
 } CHDocumentationBrowserUIMode;
 
@@ -80,7 +81,10 @@ typedef enum {
 @property (assign) NSPredicate *sideFilterPredicate;
 @property (assign) NSPredicate *advancedFilterPredicate;
 
+@property (assign) NSNumber *ui_currentModeIndex;
+
 - (IBAction)executeSearch:(id)sender;
+- (IBAction)changeViewModeTagged:(id)sender;
 - (IBAction)changeViewMode:(id)sender;
 
 @end
