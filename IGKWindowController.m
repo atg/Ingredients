@@ -257,8 +257,15 @@
 	if([query length] > 0)
 	{
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"%K CONTAINS[cd] %@", @"name", query];
-		NSLog(@"Pred: %@", fetchPredicate);
+		
 		[self setSideFilterPredicate:fetchPredicate];
+		
+		if([sideSearchViewResults numberOfRows] > 0)
+		{
+			
+			[sideSearchViewResults selectRowIndexes:[NSIndexSet indexSetWithIndex:0] 
+							   byExtendingSelection:NO];
+		}
 	}
 	else {
 		[self setSideFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
@@ -285,7 +292,6 @@
 		[[browserWebView mainFrame] loadHTMLString:html
 										   baseURL:[[NSBundle mainBundle] resourceURL]];
 		
-		NSLog(@"Selection changed: %@", html);
 	}
 }
 

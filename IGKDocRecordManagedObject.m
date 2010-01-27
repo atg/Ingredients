@@ -39,6 +39,8 @@
 		return [[CHSymbolButtonImage symbolImageWithMask:CHSymbolButtonObjcCategory] objectAtIndex:index];
 	else if([entityName isEqual:@"ObjCProtocol"])
 		return [[CHSymbolButtonImage symbolImageWithMask:CHSymbolButtonObjcProtocol] objectAtIndex:index];
+	else if([entityName isEqual:@"ObjCMethod"])
+		return [[CHSymbolButtonImage symbolImageWithMask:CHSymbolButtonObjcMethod] objectAtIndex:index];
 	
 	
 	return nil;
