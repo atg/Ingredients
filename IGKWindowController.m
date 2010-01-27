@@ -219,6 +219,14 @@
 	else if(selectedSegment == 2)
 		[self setMode:CHDocumentationBrowserUIMode_AdvancedSearch];
 }
+- (IBAction)backForward:(id)sender
+{
+	NSInteger selectedSegment = [sender selectedSegment];
+	if(selectedSegment == 0)
+		[browserWebView goBack:nil];
+	else if(selectedSegment == 1)
+		[browserWebView goForward:nil];
+}
 /*
 - (IBAction)changeViewMode:(id)sender
 {	

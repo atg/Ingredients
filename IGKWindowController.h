@@ -85,6 +85,7 @@ typedef enum {
 
 - (IBAction)executeSearch:(id)sender;
 - (IBAction)changeViewModeTagged:(id)sender;
+- (IBAction)backForward:(id)sender;
 - (IBAction)changeViewMode:(id)sender;
 
 @end
