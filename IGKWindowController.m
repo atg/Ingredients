@@ -209,6 +209,11 @@
 	
 }
 
+- (IBAction)executeAdvancedSearch:(id)sender
+{
+	
+}
+
 - (IBAction)changeViewModeTagged:(id)sender
 {	
 	NSInteger selectedSegment = [sender tag];
@@ -271,6 +276,14 @@
 		[self setSideFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
 	}
 
+}
+
+
+- (void)setAdvancedFilterPredicate:(NSPredicate *)pred
+{
+	advancedSearchPredicate = pred;
+	
+	NSLog(@"Pred changed...");
 }
 
 

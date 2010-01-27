@@ -84,6 +84,7 @@ typedef enum {
 @property (assign) NSNumber *ui_currentModeIndex;
 
 - (IBAction)executeSearch:(id)sender;
+- (IBAction)executeAdvancedSearch:(id)sender;
 - (IBAction)changeViewModeTagged:(id)sender;
 - (IBAction)backForward:(id)sender;
 - (IBAction)changeViewMode:(id)sender;
