@@ -325,6 +325,7 @@
 			
 			//Method Signature
 			NSString *methodSignature = [method stringByMatching:@"<p class=\"spaceabovemethod\">(.+?)</p>" capture:1];
+			methodSignature = [methodSignature stringByReplacingOccurrencesOfRegex:@"<a\\s+[^>]+>(.+?)</a>" withString:@"\\1"];
 			
 			[newMethod setValue:methodName forKey:@"name"];
 			[newMethod setValue:obj forKey:@"container"];
