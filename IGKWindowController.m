@@ -257,7 +257,10 @@
 
 - (void)executeSideSearch:(NSString *)query
 {
+	
 	sideSearchQuery = query;
+	
+	NSLog(@"Called with: %@", sideSearchQuery);
 	
 	if([query length] > 0)
 	{
@@ -275,6 +278,7 @@
 	}
 	else {
 		[self setSideFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
+		[sideSearchViewResults deselectAll:nil];
 	}
 
 }
@@ -295,6 +299,10 @@
 {
 	if([[aNotification object] isEqual:sideSearchViewResults])
 	{
+		
+		if ([[sideSearchArrayController selectedObjects] count] == 0)
+			return;
+		
 		IGKHTMLGenerator *generator = [[IGKHTMLGenerator alloc] init];
 		[generator setContext:[[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext]];
 		[generator setManagedObject:[[sideSearchArrayController selectedObjects] objectAtIndex:0]];
