@@ -116,7 +116,9 @@
 	[outputString appendString:@"<div id='overview'>"];
 	
 	[outputString appendFormat:@"<h1>%@</h1>", [self escape:[managedObject valueForKey:@"name"]]];
-	[outputString appendString:[managedObject valueForKey:@"overview"]];	
+	
+	if ([managedObject valueForKey:@"overview"])
+		[outputString appendString:[managedObject valueForKey:@"overview"]];	
 	
 	[outputString appendString:@"</div>"];
 	return outputString;
@@ -149,9 +151,15 @@
 	for (NSManagedObject *object in methods)
 	{
 		[outputString appendFormat:@"\t<div class='method'>\n"];
-		[outputString appendFormat:@"\t\t<h2>%@</h2>\n", [self escape:[object valueForKey:@"name"]]];
-		[outputString appendFormat:@"\t\t<p class='description'>%@</p>\n", [object valueForKey:@"overview"]];
-		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [object valueForKey:@"signature"]];
+		
+		if ([object valueForKey:@"name"])
+			[outputString appendFormat:@"\t\t<h2>%@</h2>\n", [self escape:[object valueForKey:@"name"]]];
+		
+		if ([object valueForKey:@"overview"])
+			[outputString appendFormat:@"\t\t<p class='description'>%@</p>\n", [object valueForKey:@"overview"]];
+		
+		if ([object valueForKey:@"signature"])
+			[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [object valueForKey:@"signature"]];
 		
 		[outputString appendFormat:@"\t</div>\n\n"];
 	}
