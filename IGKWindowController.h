@@ -75,6 +75,8 @@ typedef enum {
 	BOOL awaken;
 	
 	int currentModeIndex;
+	
+	BOOL shouldIndex;
 }
 
 @property (assign) IGKApplicationDelegate *appDelegate;
@@ -82,6 +84,8 @@ typedef enum {
 @property (assign) NSPredicate *advancedFilterPredicate;
 
 @property (assign) NSNumber *ui_currentModeIndex;
+
+@property (assign) BOOL shouldIndex;
 
 - (IBAction)executeSearch:(id)sender;
 - (IBAction)executeAdvancedSearch:(id)sender;

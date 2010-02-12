@@ -26,6 +26,7 @@
 
 - (IBAction)showWindow:(id)sender;
 - (IBAction)newWindow:(id)sender;
+- (void)newWindowIsIndexing:(BOOL)isIndexing;
 
 - (NSString *)developerDirectory;
 

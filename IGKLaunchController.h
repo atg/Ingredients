@@ -29,8 +29,11 @@
 
 @property (assign) IGKApplicationDelegate *appController;
 
-- (void)launch;
+- (BOOL)launch;
 
 - (double)fraction;
+
+- (void)reportPathCount:(NSUInteger)pathCount;
+- (void)reportPath;
 
 @end

@@ -11,6 +11,355 @@
 #import "IGKDocRecordManagedObject.h"
 #import "IGKLaunchController.h"
 
+
+@interface IGKScraper ()
+
+- (NSUInteger)backgroundSearch:(NSManagedObject *)docset;
+
+- (BOOL)extractPath:(NSString *)extractPath docset:(NSManagedObject *)docset;
+- (NSManagedObject *)addRecordNamed:(NSString *)recordName entityName:(NSString *)entityName desc:(NSString *)recordDesc sourcePath:(NSString *)recordPath;
+
+@end
+
+@implementation IGKScraper
+
+- (id)initWithDocsetURL:(NSURL *)theDocsetURL managedObjectContext:(NSManagedObjectContext *)moc launchController:(IGKLaunchController*)lc dbQueue:(dispatch_queue_t)dbq
+{
+	if (self = [super init])
+	{
+		docsetURL = [theDocsetURL copy];
+		url = [docsetURL URLByAppendingPathComponent:@"Contents/Resources/Documents/documentation"];
+		ctx = moc;
+		
+		launchController = lc;
+		dbQueue = dbq;
+	}
+	
+	return self;
+}
+
+- (BOOL)findPaths
+{
+	//Get the info.plist
+	NSDictionary *infoPlist = [[NSDictionary alloc] initWithContentsOfURL:[docsetURL URLByAppendingPathComponent:@"Contents/info.plist"]];
+	NSString *bundleIdentifier = [infoPlist objectForKey:@"CFBundleIdentifier"];
+	
+	//Reject Xcode documentation
+	if ([bundleIdentifier isEqual:@"com.apple.adc.documentation.AppleXcode.DeveloperTools"])
+		return NO;
+	
+	NSString *version = [infoPlist objectForKey:@"CFBundleVersion"];
+	if (bundleIdentifier && version)
+	{
+		//Find out if we've already parsed
+		NSPredicate *countPredicate = [NSPredicate predicateWithFormat:@"bundleIdentifier == %@ and version == %@", bundleIdentifier, version];
+		
+		NSError *error = nil;
+		NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+		[fetch setEntity:[NSEntityDescription entityForName:@"Docset" inManagedObjectContext:ctx]];
+		[fetch setPredicate:countPredicate];
+		NSUInteger recordCount = [ctx countForFetchRequest:fetch error:&error];
+		if (!error && recordCount > 0)
+		{
+			//There's already some records - don't parse
+			NSLog(@"Docset already exists: %@ / %@", version, bundleIdentifier);
+			return NO;
+		}
+	}
+	
+	
+	//*** Create a docset object ***
+	NSEntityDescription *docsetEntity = [NSEntityDescription entityForName:@"Docset" inManagedObjectContext:ctx];
+	
+	NSManagedObject *docset = [[IGKDocRecordManagedObject alloc] initWithEntity:docsetEntity insertIntoManagedObjectContext:ctx];
+	
+	if (bundleIdentifier)
+		[docset setValue:bundleIdentifier forKey:@"bundleIdentifier"];
+	if (version)
+		[docset setValue:version forKey:@"version"];
+	
+	if ([infoPlist objectForKey:@"DocSetDescription"])
+		[docset setValue:[infoPlist objectForKey:@"DocSetDescription"] forKey:@"docsetDescription"];
+	if ([infoPlist objectForKey:@"DocSetFeedName"])
+		[docset setValue:[infoPlist objectForKey:@"DocSetFeedName"] forKey:@"feedName"];
+	if ([infoPlist objectForKey:@"DocSetFeedURL"])
+		[docset setValue:[infoPlist objectForKey:@"DocSetFeedURL"] forKey:@"feedURL"];
+	if ([infoPlist objectForKey:@"DocSetPlatformFamily"])
+		[docset setValue:[infoPlist objectForKey:@"DocSetPlatformFamily"] forKey:@"platformFamily"];
+	if ([infoPlist objectForKey:@"DocSetPlatformVersion"])
+		[docset setValue:[infoPlist objectForKey:@"DocSetPlatformVersion"] forKey:@"platformVersion"];
+	if ([infoPlist objectForKey:@"DocSetFallbackURL"])
+		[docset setValue:[infoPlist objectForKey:@"DocSetFallbackURL"] forKey:@"fallbackURL"];
+	
+	[docset setValue:[docsetURL absoluteString] forKey:@"url"];
+	
+	
+	scraperDocset = docset;
+	paths = [[NSMutableArray alloc] init];
+	//pathsCount = [self backgroundSearch:docset];
+	
+	return YES;
+}
+- (void)findPathCount
+{
+	dispatch_async(dispatch_get_global_queue(0, 0), ^{
+		
+		pathsCount = [self backgroundSearch:scraperDocset];
+		
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[launchController reportPathCount:pathsCount];
+		});
+	});
+}
+
+- (NSUInteger)backgroundSearch:(NSManagedObject *)docset
+{
+	NSFileManager *manager = [NSFileManager defaultManager];
+	
+	NSString *urlpath = [url path];
+	NSError *error = nil;
+	NSArray *subpaths = [manager subpathsOfDirectoryAtPath:[url path] error:&error];
+	if (error)
+		return 0;
+	
+	unsigned count = 0;
+	for (NSString *subpath in subpaths)
+	{
+		//Ignore non-html files
+		if (![[subpath pathExtension] isEqual:@"html"])
+			continue;
+		
+		//Paths to exclude are added in order from most common to least common
+		NSString *lastPathComponent = [subpath lastPathComponent];
+		if ([lastPathComponent isEqual:@"toc.html"] ||
+			[lastPathComponent isEqual:@"History.html"] ||
+			[lastPathComponent isEqual:@"index_of_book.html"] ||
+			[lastPathComponent isEqual:@"RevisionHistory.html"] ||
+			[lastPathComponent isEqual:@"revision_history.html"] ||
+			[subpath isLike:@"*RefUpdate/*"])
+		{
+			continue;
+		}
+		
+		
+		NSArray *pathcomps = [subpath pathComponents];
+		NSSet *pathset = [NSSet setWithArray:pathcomps];
+		if ([pathset member:@"Conceptual"] ||
+			[pathset member:@"History"] ||
+			[pathset member:@"DeveloperTools"] ||
+			[pathset member:@"gcc"] ||
+			[pathset member:@"qa"] ||
+			[pathset member:@"samplecode"] ||
+			[pathset member:@"gdb"] ||
+			[pathset member:@"SafariWebContent"] ||
+			[pathset member:@"FoundationRefUpdate"])
+		{
+			continue;
+		}
+		
+		
+		//If the path ends with index.html and Reference/Reference.html already exists, ignore
+		//This is because some index.html files _should_ be parsed, but if a Reference/Reference.html exists, then it should not
+		if ([lastPathComponent isEqual:@"index.html"])
+		{
+			NSString *dir = [urlpath stringByAppendingPathComponent:[subpath stringByDeletingLastPathComponent]];
+			if ([manager fileExistsAtPath:[dir stringByAppendingPathComponent:@"Reference/Reference.html"]])
+				continue;
+			if ([manager fileExistsAtPath:[dir stringByAppendingPathComponent:@"CompositePage.html"]])
+				continue;
+		}
+		
+		count++;
+		
+		[paths addObject:[urlpath stringByAppendingPathComponent:subpath]];
+	}
+	
+	return [paths count];
+}
+- (void)index
+{
+	dispatch_async(dispatch_get_global_queue(0, 0), ^{
+		for (NSString *extractPath in paths)
+		{
+			[self extractPath:extractPath docset:scraperDocset];
+			pathsCounter += 1;
+			
+			dispatch_async(dispatch_get_main_queue(), ^{
+				[launchController reportPath];
+			});
+		}
+	});
+}
+
+- (BOOL)extractPath:(NSString *)extractPath docset:(NSManagedObject *)docset
+{	
+	//Let's try to extract the class's name (assuming it is a class of course)	
+	NSError *error = nil;
+	NSString *contents = [NSString stringWithContentsOfFile:extractPath encoding:NSUTF8StringEncoding error:&error];
+	if (error || !contents)
+	{
+		return NO;
+	}
+	
+	
+	//Parse the item's name and kind
+	NSString *regex_className = @"<a name=\"//apple_ref/occ/([a-z_]+)/([a-zA-Z_][a-zA-Z0-9_]*)";
+	NSArray *className_captures = [contents captureComponentsMatchedByRegex:regex_className];
+	if ([className_captures count] < 3)
+	{
+		return NO;
+	}
+	
+	NSString *type = [className_captures objectAtIndex:1];
+	NSString *name = [className_captures objectAtIndex:2];
+	
+	/* Common types
+	 cl		 - class
+	 intf	 - protocol
+	 instm	 - 
+	 intfm	 - 
+	 cat	 - category
+	 binding - bindings listing
+	 */
+	
+	NSString *entityName = nil;
+	if ([type isEqual:@"cl"] || [type isEqual:@"instm"])
+		entityName = @"ObjCClass";
+	
+	else if ([type isEqual:@"cat"])
+		entityName = @"ObjCCategory";
+	
+	else if ([type isEqual:@"intf"] || [type isEqual:@"intfm"])
+		entityName = @"ObjCProtocol";
+	
+	else if ([type isEqual:@"binding"])
+	    entityName = @"ObjCBindingsListing";
+	
+	//If we don't understand the entity name, bail
+	if (!entityName)
+		return NO;
+	
+	//NSLog(@">> %@ %@ %@", name, entityName, extractPath);
+	
+	NSString *linkRegex = @"//apple_ref/((occ/(instm|clm)/[a-zA-Z_:][a-zA-Z0-9:_]*/([a-zA-Z:_][a-zA-Z0-9:_]*))|(tdef|econst)/([a-zA-Z:_][a-zA-Z0-9:_]*))";
+	
+	/* The interesting captures are 3 & 4, and 5 & 6 */
+	NSArray *items = [contents arrayOfCaptureComponentsMatchedByRegex:linkRegex];
+	
+	
+	dispatch_sync(dbQueue, ^{
+		
+		NSEntityDescription *methodEntity = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:ctx];
+		NSEntityDescription *typedefEntity = [NSEntityDescription entityForName:@"CTypedef" inManagedObjectContext:ctx];
+		
+		NSManagedObject *obj = [self addRecordNamed:name entityName:entityName desc:@"" sourcePath:extractPath];
+		[obj setValue:docset forKey:@"docset"];
+		
+		for (NSArray *captures in items)
+		{
+			if ([captures count] > 4)
+			{
+				NSString *itemType = [captures objectAtIndex:3];
+				NSString *itemName = [captures objectAtIndex:4];
+				
+				if ([itemType length] && [itemName length])
+				{
+					//Method
+					BOOL isInstanceMethod = [itemType isEqual:@"instm"];
+					
+					IGKDocRecordManagedObject *newMethod = [[IGKDocRecordManagedObject alloc] initWithEntity:methodEntity insertIntoManagedObjectContext:ctx];
+					
+					[newMethod setValue:itemName forKey:@"name"];
+					[newMethod setValue:obj forKey:@"container"];
+					[newMethod setValue:docset forKey:@"docset"];
+					[newMethod setValue:[NSNumber numberWithBool:isInstanceMethod] forKey:@"isInstanceMethod"];
+					
+					continue;
+				}
+			}
+			
+			if ([captures count] > 6)
+			{
+				NSString *itemType = [captures objectAtIndex:5];
+				NSString *itemName = [captures objectAtIndex:6];
+				
+				if ([itemType length] && [itemName length])
+				{
+					if ([itemType isEqual:@"tdef"])
+					{
+						IGKDocRecordManagedObject *newTypedef = [[IGKDocRecordManagedObject alloc] initWithEntity:typedefEntity insertIntoManagedObjectContext:ctx];
+						
+						[newTypedef setValue:itemName forKey:@"name"];
+						[newTypedef setValue:docset forKey:@"docset"];
+					}				
+					
+					continue;
+				}
+			}
+		}
+	
+	});
+		
+	return YES;
+}
+
+- (NSManagedObject *)addRecordNamed:(NSString *)recordName entityName:(NSString *)entityName desc:(NSString *)recordDesc sourcePath:(NSString *)recordPath
+{
+	NSEntityDescription *ed = [NSEntityDescription entityForName:entityName inManagedObjectContext:ctx];
+	
+	NSManagedObject *newRecord = [[IGKDocRecordManagedObject alloc] initWithEntity:ed insertIntoManagedObjectContext:ctx];
+	
+	[newRecord setValue:recordName forKey:@"name"];
+	[newRecord setValue:recordDesc forKey:@"overview"];
+	[newRecord setValue:recordPath forKey:@"documentPath"];
+	
+	return newRecord;
+}
+
+@end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#pragma mark Trash
+//Some code I'm saving in case I need it later
+
+#if 0
+
+#pragma mark -- Boyers-Moore
+
 //Surprisingly, -[NSString isLike:] is the bottleneck. We make our own.
 
 
@@ -85,360 +434,10 @@ void IGKFreeStringChars(const unichar *string)
 	free((void *)string);
 }
 
-@interface IGKScraper ()
-
-//Extract data out of a file and insert it into the managed object context.
-- (BOOL)extractPath:(NSString *)extractPath docset:(NSManagedObject *)docset;
-- (NSManagedObject *)addRecordNamed:(NSString *)recordName
-							 ofType:(NSString *)recordType
-							   desc:(NSString *)recordDesc
-						 sourcePath:(NSString *)recordPath;
-
-@end
-
-@implementation IGKScraper
-
-- (id)initWithDocsetURL:(NSURL *)theDocsetURL managedObjectContext:(NSManagedObjectContext *)moc launchController:(IGKLaunchController*)lc dbQueue:(dispatch_queue_t)dbq
-{
-	if (self = [super init])
-	{
-		docsetURL = [theDocsetURL copy];
-		url = [docsetURL URLByAppendingPathComponent:@"Contents/Resources/Documents/documentation"];
-		ctx = moc;
-		
-		launchController = lc;
-		dbQueue = dbq;
-	}
-	
-	return self;
-}
-
-- (NSInteger)findPaths
-{
-	//Get the info.plist
-	NSDictionary *infoPlist = [[NSDictionary alloc] initWithContentsOfURL:[docsetURL URLByAppendingPathComponent:@"Contents/info.plist"]];
-	NSString *bundleIdentifier = [infoPlist objectForKey:@"CFBundleIdentifier"];
-	NSString *version = [infoPlist objectForKey:@"CFBundleVersion"];
-	if (bundleIdentifier && version)
-	{
-		//Find out if we've already parsed
-		NSPredicate *countPredicate = [NSPredicate predicateWithFormat:@"bundleIdentifier == %@ and version == %@", bundleIdentifier, version];
-		
-		NSError *error = nil;
-		NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
-		[fetch setEntity:[NSEntityDescription entityForName:@"Docset" inManagedObjectContext:ctx]];
-		[fetch setPredicate:countPredicate];
-		NSUInteger recordCount = [ctx countForFetchRequest:fetch error:&error];
-		if (!error && recordCount > 0)
-		{
-			//There's already some records - don't parse
-			NSLog(@"Docset already exists: %@ / %@", version, bundleIdentifier);
-			return NO;
-		}
-	}
-	
-	
-	//*** Create a docset object ***
-	NSEntityDescription *docsetEntity = [NSEntityDescription entityForName:@"Docset" inManagedObjectContext:ctx];
-	
-	NSManagedObject *docset = [[IGKDocRecordManagedObject alloc] initWithEntity:docsetEntity insertIntoManagedObjectContext:ctx];
-	
-	if (bundleIdentifier)
-		[docset setValue:bundleIdentifier forKey:@"bundleIdentifier"];
-	if (version)
-		[docset setValue:version forKey:@"version"];
-	
-	if ([infoPlist objectForKey:@"DocSetDescription"])
-		[docset setValue:[infoPlist objectForKey:@"DocSetDescription"] forKey:@"docsetDescription"];
-	if ([infoPlist objectForKey:@"DocSetFeedName"])
-		[docset setValue:[infoPlist objectForKey:@"DocSetFeedName"] forKey:@"feedName"];
-	if ([infoPlist objectForKey:@"DocSetFeedURL"])
-		[docset setValue:[infoPlist objectForKey:@"DocSetFeedURL"] forKey:@"feedURL"];
-	if ([infoPlist objectForKey:@"DocSetPlatformFamily"])
-		[docset setValue:[infoPlist objectForKey:@"DocSetPlatformFamily"] forKey:@"platformFamily"];
-	if ([infoPlist objectForKey:@"DocSetPlatformVersion"])
-		[docset setValue:[infoPlist objectForKey:@"DocSetPlatformVersion"] forKey:@"platformVersion"];
-	if ([infoPlist objectForKey:@"DocSetFallbackURL"])
-		[docset setValue:[infoPlist objectForKey:@"DocSetFallbackURL"] forKey:@"fallbackURL"];
-	
-	[docset setValue:[docsetURL absoluteString] forKey:@"url"];
-	
-	
-	
-	//*** Do the actual parsing ***
-	//TODO: Use GCD to make this an actual background search
-	//[self backgroundSearch:docset];
-	
-#if 0
-	__block NSUInteger numPaths = 0;
-	dispatch_async(dispatch_get_global_queue(0, 0), ^{
-		
-		pathsCount = [self backgroundSearch:docset];
-
-		dispatch_async(dispatch_get_main_queue(), ^{
-			[launchController reportPathCount:pathsCount];
-		});
-		/*	
-		dispatch_async(dispatch_get_main_queue(), ^{
-			[ctx save:nil];
-			[ctx reset];
-		});
-	 */
-	});
-	
-#endif
-	
-	scraperDocset = docset;
-	paths = [[NSMutableArray alloc] init];
-	pathsCount = [self backgroundSearch:docset];
-	
-	return [paths count];
-}
-- (NSUInteger)backgroundSearch:(NSManagedObject *)docset
-{
-	NSFileManager *manager = [NSFileManager defaultManager];
-	//NSLog(@"Started");
-	//NSLog(@"---");
-	NSString *urlpath = [url path];
-	NSError *error = nil;
-	NSArray *subpaths = [manager subpathsOfDirectoryAtPath:[url path] error:&error];
-	if (error)
-		return 0;
-	
-	NSTimeInterval sint = [NSDate timeIntervalSinceReferenceDate];	
-	unsigned count = 0;
-	NSMutableArray *extractPaths = [[NSMutableArray alloc] initWithCapacity:1000];
-	for (NSString *subpath in subpaths)
-	{
-		//Ignore non-html files
-		if (![[subpath pathExtension] isEqual:@"html"])
-			continue;
-		
-		//Paths to exclude are added in order from most common to least common
-		NSString *lastPathComponent = [subpath lastPathComponent];
-		if ([lastPathComponent isEqual:@"toc.html"])
-			continue;
-		if ([lastPathComponent isEqual:@"History.html"])
-			continue;
-		if ([lastPathComponent isEqual:@"index_of_book.html"])
-			continue;
-		if ([lastPathComponent isEqual:@"RevisionHistory.html"])
-			continue;
-		if ([lastPathComponent isEqual:@"revision_history.html"])
-			continue;
-		if ([subpath isLike:@"*RefUpdate/*"])
-			continue;
-		
-		NSArray *pathcomps = [subpath pathComponents];
-		NSSet *pathset = [NSSet setWithArray:pathcomps];
-		if ([pathset member:@"Conceptual"])
-			continue;
-		if ([pathset member:@"History"])
-			continue;
-		if ([pathset member:@"DeveloperTools"])
-			continue;
-		if ([pathset member:@"gcc"])
-			continue;
-		if ([pathset member:@"qa"])
-			continue;
-		if ([pathset member:@"samplecode"])
-			continue;
-		if ([pathset member:@"gdb"])
-			continue;
-		if ([pathset member:@"SafariWebContent"])
-			continue;
-		if ([pathset member:@"FoundationRefUpdate"])
-			continue;
-		
-		//If the path ends with index.html and Reference/Reference.html already exists, ignore
-		//This is because some index.html files _should_ be parsed, but if a Reference/Reference.html exists, then it should not
-		if ([lastPathComponent isEqual:@"index.html"])
-		{
-			NSString *dir = [urlpath stringByAppendingPathComponent:[subpath stringByDeletingLastPathComponent]];
-			if ([manager fileExistsAtPath:[dir stringByAppendingPathComponent:@"Reference/Reference.html"]])
-				continue;
-			if ([manager fileExistsAtPath:[dir stringByAppendingPathComponent:@"CompositePage.html"]])
-				continue;
-		}
-		
-		count++;
-		
-		[paths addObject:[urlpath stringByAppendingPathComponent:subpath]];
-	}
-	//printf("\n");
-	//NSLog(@"---\n\nSearch %u files. Time %lf", count, [NSDate timeIntervalSinceReferenceDate] - sint);
-	//NSLog(@"===");
-	
-#if 0
-	sint = [NSDate timeIntervalSinceReferenceDate];
-	
-	unsigned failureCount = 0;
-	dispatch_async(dispatch_get_global_queue(0, 0), ^{
-		for (NSString *extractPath in extractPaths)
-		{
-			[self extractPath:extractPath docset:docset];
-			pathsCounter += 1;
-			
-			[launchController reportPath];
-			
-			//if ((pathsCounter % 3) == 0)
-			//	NSLog(@"pathsCounter = %d", pathsCounter);
-		}
-	});
-#endif
-	//printf("\n");
-	//NSLog(@"---\n\n %u files failed to parse. Time %lf", failureCount, [NSDate timeIntervalSinceReferenceDate] - sint);
-	//NSLog(@"===");
-	
-	return [paths count];
-}
-- (void)index
-{
-	dispatch_async(dispatch_get_global_queue(0, 0), ^{
-		for (NSString *extractPath in paths)
-		{
-			[self extractPath:extractPath docset:scraperDocset];
-			pathsCounter += 1;
-			
-			dispatch_async(dispatch_get_global_queue(0, 0), ^{
-				[launchController reportPath];
-			});
-		}
-	});
-}
-
-- (NSManagedObject *)addRecordNamed:(NSString *)recordName
-						 entityName:(NSString *)entityName
-							   desc:(NSString *)recordDesc
-						 sourcePath:(NSString *)recordPath
-{
-	NSEntityDescription *ed = [NSEntityDescription entityForName:entityName inManagedObjectContext:ctx];
-	
-	NSManagedObject *newRecord = [[IGKDocRecordManagedObject alloc] initWithEntity:ed insertIntoManagedObjectContext:ctx];
-	
-	[newRecord setValue:recordName forKey:@"name"];
-	[newRecord setValue:recordDesc forKey:@"overview"];
-	[newRecord setValue:recordPath forKey:@"documentPath"];
-	
-	return newRecord;
-}
 
 
-- (BOOL)extractPath:(NSString *)extractPath docset:(NSManagedObject *)docset
-{	
-	//Let's try to extract the class's name (assuming it is a class of course)	
-	NSError *error = nil;
-	NSString *contents = [NSString stringWithContentsOfFile:extractPath encoding:NSUTF8StringEncoding error:&error];
-	if (error || !contents)
-	{
-		return NO;
-	}
-	
-	
-	//Parse the item's name and kind
-	NSString *regex_className = @"<a name=\"//apple_ref/occ/([a-z_]+)/([a-zA-Z_][a-zA-Z0-9_]*)";
-	NSArray *className_captures = [contents captureComponentsMatchedByRegex:regex_className];
-	if ([className_captures count] < 3)
-	{
-		return NO;
-	}
-	
-	NSString *type = [className_captures objectAtIndex:1];
-	NSString *name = [className_captures objectAtIndex:2];
-	
-	/* Common types
-	 cl		- class
-	 intf	- protocol
-	 instm	- 
-	 intfm	- 
-	 cat		- category
-	 binding - bindings listing
-	 */
-	
-	NSString *entityName = nil;
-	if ([type isEqual:@"cl"] || [type isEqual:@"instm"])
-		entityName = @"ObjCClass";
-	
-	else if ([type isEqual:@"cat"])
-		entityName = @"ObjCCategory";
-	
-	else if ([type isEqual:@"intf"] || [type isEqual:@"intfm"])
-		entityName = @"ObjCProtocol";
-	
-	else if ([type isEqual:@"binding"])
-	    entityName = @"ObjCBindingsListing";
-	
-	//If we don't understand the entity name, bail
-	if (!entityName)
-		return NO;
-	
-	//NSLog(@">> %@ %@ %@", name, entityName, extractPath);
-	
-	NSString *linkRegex = @"//apple_ref/((occ/(instm|clm)/[a-zA-Z_:][a-zA-Z0-9:_]*/([a-zA-Z:_][a-zA-Z0-9:_]*))|(tdef|econst)/([a-zA-Z:_][a-zA-Z0-9:_]*))";
-	
-	/* The interesting captures are 3 & 4, and 5 & 6 */
-	NSArray *items = [contents arrayOfCaptureComponentsMatchedByRegex:linkRegex];
-	
-	
-	dispatch_sync(dbQueue, ^{
-		
-		NSEntityDescription *methodEntity = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:ctx];
-		NSEntityDescription *typedefEntity = [NSEntityDescription entityForName:@"CTypedef" inManagedObjectContext:ctx];
-		
-		NSManagedObject *obj = [self addRecordNamed:name entityName:entityName desc:@"" sourcePath:extractPath];
-		[obj setValue:docset forKey:@"docset"];
-		
-		for (NSArray *captures in items)
-		{
-			if ([captures count] > 4)
-			{
-				NSString *itemType = [captures objectAtIndex:3];
-				NSString *itemName = [captures objectAtIndex:4];
-				
-				if ([itemType length] && [itemName length])
-				{
-					//Method
-					BOOL isInstanceMethod = [itemType isEqual:@"instm"];
-					
-					IGKDocRecordManagedObject *newMethod = [[IGKDocRecordManagedObject alloc] initWithEntity:methodEntity insertIntoManagedObjectContext:ctx];
-					//NSLog(@"METHOD %@", itemName);
-					[newMethod setValue:itemName forKey:@"name"];
-					[newMethod setValue:obj forKey:@"container"];
-					[newMethod setValue:docset forKey:@"docset"];
-					[newMethod setValue:[NSNumber numberWithBool:isInstanceMethod] forKey:@"isInstanceMethod"];
-					
-					continue;
-				}
-			}
-			
-			if ([captures count] > 6)
-			{
-				NSString *itemType = [captures objectAtIndex:5];
-				NSString *itemName = [captures objectAtIndex:6];
-				
-				if ([itemType length] && [itemName length])
-				{
-					if ([itemType isEqual:@"tdef"])
-					{
-						IGKDocRecordManagedObject *newTypedef = [[IGKDocRecordManagedObject alloc] initWithEntity:typedefEntity insertIntoManagedObjectContext:ctx];
-						
-						NSLog(@"TYPEDEF %@", itemName);
+#pragma mark -- NSXMLDocument Indexing
 
-						[newTypedef setValue:itemName forKey:@"name"];
-						[newTypedef setValue:docset forKey:@"docset"];
-					}				
-					
-					continue;
-				}
-			}
-		}
-	
-	});
-		
-	return YES;
-}
-
-#if 0
 - (void)extractPath:(NSString *)extractPath docset:(NSManagedObject *)docset
 {
 	NSURL *fileurl = [NSURL fileURLWithPath:extractPath];
@@ -449,7 +448,7 @@ void IGKFreeStringChars(const unichar *string)
 		return;
 	
 	NSEntityDescription *methodEntity = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:ctx];
-		
+	
 	NSArray *methodNodes = [[doc rootElement] nodesForXPath:@"//a" error:&err];
 	
 #if 0
@@ -460,7 +459,6 @@ void IGKFreeStringChars(const unichar *string)
 	const unichar *macro_c = IGKStringToChars(@"/c/macro");
 #endif
 	
-	//NSLog(@"\t 0 > %d", [methodNodes count]);
 	NSSet *containersSet = [[NSMutableSet alloc] init];
 	for (NSXMLNode *a in methodNodes)
 	{
@@ -491,7 +489,7 @@ void IGKFreeStringChars(const unichar *string)
 		}
 		
 	}
-
+	
 #if 0
 	IGKFreeStringChars(instm_c);
 	IGKFreeStringChars(clm_c);
@@ -518,13 +516,13 @@ void IGKFreeStringChars(const unichar *string)
 	}
 	
 	//NSLog(@"\t 1");
-
+	
 	dispatch_async(dbQueue, ^{
 		
 		//More parsing, database stuff
 		
 		//NSManagedObject *obj = [self addRecordNamed:name entityName:entityName desc:abstract sourcePath:extractPath];
-
+		
 		for (NSArray *arr in methods)
 		{
 			NSString *name = nil;
@@ -594,19 +592,19 @@ void IGKFreeStringChars(const unichar *string)
 	NSString *entityName = nil;
 	if ([type isEqual:@"cl"] || [type isEqual:@"instm"])
 		entityName = @"ObjCClass";
-	
-	else if ([type isEqual:@"cat"])
-		entityName = @"ObjCCategory";
-	
-	else if ([type isEqual:@"intf"] || [type isEqual:@"intfm"])
-		entityName = @"ObjCProtocol";
-	
-	else if ([type isEqual:@"binding"])
-	    entityName = @"ObjCBindingsListing";
-	
-	//If we don't understand the entity name, bail
-	if (!entityName)
-		return NO;
+		
+		else if ([type isEqual:@"cat"])
+			entityName = @"ObjCCategory";
+			
+			else if ([type isEqual:@"intf"] || [type isEqual:@"intfm"])
+				entityName = @"ObjCProtocol";
+				
+				else if ([type isEqual:@"binding"])
+					entityName = @"ObjCBindingsListing";
+					
+					//If we don't understand the entity name, bail
+					if (!entityName)
+						return NO;
 	
 	//Parse the abstract
 	NSString *regex_abstract = @"<a name=\"[^\"]+\" title=\"Overview\"></a>[ \\t\\n]*<h2[^>]+>Overview</h2>(.+?)((<a name=\"[^\"]+\" title=\"[^\"]+\"></a>[ \\t\\n]*<h2 class=\"jump\">)|(<div id=\"pageNavigationLinks\"))"; //@"<div [^>]*id=\"Overview_section\"[^>]*>(.+)</div>\\s*<a name=";
@@ -617,12 +615,12 @@ void IGKFreeStringChars(const unichar *string)
 	NSString *abstract = nil;
 	if ([abstract_captures count] >= 2)
 		abstract = [abstract_captures objectAtIndex:1];
-	
-	//Deprecation appendicies and bindings listings have no abstract	
-	if ([abstract length] == 0)
-	{
-		abstract = @"";
-	}
+		
+		//Deprecation appendicies and bindings listings have no abstract	
+		if ([abstract length] == 0)
+		{
+			abstract = @"";
+		}
 	
 	NSManagedObject *obj = [self addRecordNamed:name entityName:entityName desc:abstract sourcePath:extractPath];
 	[obj setValue:docset forKey:@"docset"];
@@ -661,7 +659,7 @@ void IGKFreeStringChars(const unichar *string)
 			[newMethod setValue:obj forKey:@"container"];
 			[newMethod setValue:docset forKey:@"docset"];
 			[newMethod setValue:methodSignature forKey:@"signature"];
-
+			
 			if ([methodAbstract length])
 				[newMethod setValue:methodAbstract forKey:@"overview"];
 		}
@@ -671,7 +669,8 @@ void IGKFreeStringChars(const unichar *string)
 	return YES;
 }
 
-#endif
+
+#pragma mark -- NSXMLDocument Indexing Helper Methods
 
 - (void)createMethodNamed:(NSString *)name description:(NSString *)description prototype:(NSString *)prototype methodEntity:(NSEntityDescription *)methodEntity parent:(NSManagedObject*)parent docset:(NSManagedObject*)docset
 {
@@ -727,4 +726,6 @@ void IGKFreeStringChars(const unichar *string)
 	return nil;
 }
 
-@end
+
+
+#endif

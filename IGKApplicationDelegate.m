@@ -27,13 +27,17 @@
 			[[NSFileManager defaultManager] removeItemAtPath:prefsPath error:nil];
 		}
 #endif
+		
+		//Load core data
+		[self managedObjectContext];
 				
 		launchController = [[IGKLaunchController alloc] init];
 		launchController.appController = self;
-		[launchController launch];
 		
 		windowControllers = [[NSMutableArray alloc] init];
-		[self newWindow:nil];
+		
+		BOOL isIndexing = [launchController launch];
+		[self newWindowIsIndexing:isIndexing];
 	}
 	
 	return self;
@@ -59,18 +63,26 @@
 	
 	[[windowControllers lastObject] showWindow:sender];
 }
+
 - (IBAction)newWindow:(id)sender
+{
+	[self newWindowIsIndexing:NO];
+}
+- (void)newWindowIsIndexing:(BOOL)isIndexing
 {
 	if (![self hasMultipleWindowControllers] && [windowControllers count])
 	{
-		[self showWindow:sender];
+		[self showWindow:nil];
 		return;
 	}
 	
 	IGKWindowController *windowController = [[IGKWindowController alloc] init];
 	windowController.appDelegate = self;
 	[windowControllers addObject:windowController];
-	[windowController showWindow:sender];
+	
+	if (isIndexing)
+		windowController.shouldIndex = YES;
+	[windowController showWindow:nil];
 }
 
 #pragma mark Core Data Nonsense

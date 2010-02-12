@@ -22,7 +22,7 @@
 
 @synthesize appController;
 
-- (void)launch
+- (BOOL)launch
 {	
 	NSMutableArray *docsetPaths = [[NSMutableArray alloc] init];
 	
@@ -44,41 +44,47 @@
 						   toArray:docsetPaths];
 		}
 	}
-	
-	NSLog(@"docsetPaths = %@", docsetPaths);
-	
-	dbQueue = dispatch_get_main_queue();//dispatch_queue_create(NULL, NULL);
+		
+	dbQueue = dispatch_get_main_queue();
 	
 	totalPathsCount = 0;
 	
 	scrapers = [[NSMutableArray alloc] init];
 	
+	
+	BOOL areValidScrapers = NO;
 	for (NSString *docsetPath in docsetPaths)
 	{
 		IGKScraper *scraper = [[IGKScraper alloc] initWithDocsetURL:[NSURL fileURLWithPath:docsetPath]
 											   managedObjectContext:[appController backgroundManagedObjectContext]
 												   launchController:self
 															dbQueue:dbQueue];
-		
-		NSInteger scraperPaths = [scraper findPaths];
-		
-		totalPathsCount += scraperPaths;
-		
-		if (scraperPaths)
+		if ([scraper findPaths])
+		{
+			areValidScrapers = YES;
+			pathReportsExpected++;
 			[scrapers addObject:scraper];
-		//if ([scraper findPaths])
-		//	pathReportsExpected += 1;
+		}
 	}
 	
-	for (NSString *scraper in scrapers)
+	//If there's nothing to scrape
+	if (areValidScrapers == NO || ![scrapers count])
 	{
-		[scraper index];
+		return NO;
 	}
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"IGKWillIndexedPaths" object:self];
+	
+	for (IGKScraper *scraper in scrapers)
+	{
+		[scraper findPathCount];
+	}
+	
+	return YES;
 }
 
 - (void)reportPathCount:(NSUInteger)pathCount
 {
-	return;
 	pathReportsReceived += 1;
 	totalPathsCount += pathCount;
 	
@@ -90,6 +96,10 @@
 	
 	//Otherwise send the path count
 	NSLog(@"## Total number of paths: %d", totalPathsCount);
+	for (IGKScraper *scraper in scrapers)
+	{
+		[scraper index];
+	}
 }
 
 //This will be called from the main thread

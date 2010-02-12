@@ -2,7 +2,7 @@
 <head>
     <title>Tic-Tac-Toe</title>
     
-    <link rel="stylesheet" href="style.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="tictactoe_style.css" type="text/css" media="screen">
     
     <script type="text/javascript" charset="utf-8">
     
@@ -48,11 +48,19 @@
     }
     
     
+    function alertWithInfobox(str) {
+        var infobox = document.getElementById("infobox");
+        
+        infobox.style.display = 'block';
+        infobox.innerHTML = str;
+    }
+    
     function cc(e, n) {
         
         if (bitboard[e.id] != 0)
         {
-            alert("You can't play that move!");
+            alertWithInfobox("You can't play that move!");
+            //alert("You can't play that move!");
             return;
         }
         
@@ -73,7 +81,7 @@
 		
         //Someone won
         detectWin();
-        alert("It's a draw");
+        alertWithInfobox("It's a draw");
         return false;
     }
     
@@ -202,10 +210,10 @@
         }
         
         if (a == 2) {
-            alert("The computer won :(");
+            alertWithInfobox("The computer won :(");
         }
         else {
-            alert("You won :)");
+            alertWithInfobox("You won :)");
         }
                 
         return true;
@@ -234,61 +242,6 @@
         
     </script>
 	
-	<style>
-	body {
-		font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-		padding-left: 24px;
-		
-		font-size: 120%;
-	}
-
-	h1 {
-		margin: 0;
-	}
-
-	#board td {
-	   color: white;
-	   text-align: center;
-		
-		display: block;
-		width: 45px;
-		height: 45px;
-		
-		font-size: 35px;
-		
-		font-family: "Helvetica Neue";
-		font-weight: bold;
-		text-shadow: rgba(0,0,0,0.3) 0 1px 0;
-	}
-
-	.a, .b, .d, .e, .g, .h {
-		border-right: 1px solid #bfbfbf;
-	}
-	.a, .b, .c, .d, .e, .f {
-		border-bottom: 1px solid #bfbfbf;
-	}
-
-
-	#board {
-		padding: 20px;
-		border-left: 1px solid rgba(0,0,0,0.1);
-		border-top: 1px solid rgba(0,0,0,0.1);
-		
-		-webkit-border-radius: 10px;
-		background-color: #d7d7d7;
-		padding: 10px;
-		width: 145px;
-	}
-	#board table {
-		border-collapse: collapse;
-	}
-
-	#score {
-		width: 20px;
-		margin: 0;	
-	}
-	</style>
-
 </head>
 
 <body>
@@ -299,29 +252,33 @@
     
     <p>How about a quick game of tic-tac-toe while you wait?</p>
     
+	<div id="infobox" style="display: none;">This is some info text</div>
+	
     <div id="game">
-        <div id="board">
-            <table>
-                <tbody>
-                <tr>
-                    <td id="0" class="a" onClick="cc(this, 1)"></td>
-                    <td id="1" class="b" onClick="cc(this, 2)"></td>
-                    <td id="2" class="c" onClick="cc(this, 3)"></td>
-                </tr>                          
+        <div id="boardcontainer">
+            <div id="board">
+                <table>
+                    <tbody>
+                    <tr>
+                        <td id="0" class="a" onClick="cc(this, 1)"></td>
+                        <td id="1" class="b" onClick="cc(this, 2)"></td>
+                        <td id="2" class="c" onClick="cc(this, 3)"></td>
+                    </tr>                          
                                            
-                <tr>                           
-                    <td id="3" class="d" onClick="cc(this, 4)"></td>
-                    <td id="4" class="e" onClick="cc(this, 5)"></td>
-                    <td id="5" class="f" onClick="cc(this, 6)"></td>
-                </tr>                          
+                    <tr>                           
+                        <td id="3" class="d" onClick="cc(this, 4)"></td>
+                        <td id="4" class="e" onClick="cc(this, 5)"></td>
+                        <td id="5" class="f" onClick="cc(this, 6)"></td>
+                    </tr>                          
                                            
-                <tr>                           
-                    <td id="6" class="g" onClick="cc(this, 7)"></td>
-                    <td id="7" class="h" onClick="cc(this, 8)"></td>
-                    <td id="8" class="i" onClick="cc(this, 9)"></td>
-                </tr>
-                </tbody>
-            </table>
+                    <tr>                           
+                        <td id="6" class="g" onClick="cc(this, 7)"></td>
+                        <td id="7" class="h" onClick="cc(this, 8)"></td>
+                        <td id="8" class="i" onClick="cc(this, 9)"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div id="score">
             <h2>Score</h2>

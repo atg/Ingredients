@@ -29,6 +29,9 @@
 }
 
 - (id)initWithDocsetURL:(NSURL *)theDocsetURL managedObjectContext:(NSManagedObjectContext *)moc launchController:(IGKLaunchController*)lc dbQueue:(dispatch_queue_t)dbq;
-- (NSInteger)findPaths;
+
+- (void)findPathCount;
+- (BOOL)findPaths;
+- (void)index;
 
 @end

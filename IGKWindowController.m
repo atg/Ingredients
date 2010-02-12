@@ -16,6 +16,7 @@
 @synthesize appDelegate;
 @synthesize sideFilterPredicate;
 @synthesize advancedFilterPredicate;
+@synthesize shouldIndex;
 
 - (id) init
 {
@@ -43,12 +44,12 @@
 	[self setMode:CHDocumentationBrowserUIMode_TwoUp];
 	sideSearchQuery = @"";
 	
-	
-	[self startIndexing];
-		
 	sideSearchResults = [[NSMutableArray alloc] init];
 	[self setSideFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
 	[self setAdvancedFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
+	
+	if (shouldIndex)
+		[self startIndexing];
 	
 	sideSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES comparator:^NSComparisonResult (id a, id b) {
 		//NSLog(@"Called with: %@, Q: %@", a, sideSearchQuery);
@@ -301,7 +302,7 @@
 
 - (void)startIndexing
 {
-	
+	NSLog(@"Start indexing");
 	wallpaperView = [[IGKSourceListWallpaperView alloc] initWithFrame:[[[twoPaneSplitView subviews] objectAtIndex:0] bounds]];
 	[wallpaperView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
 	[[[twoPaneSplitView subviews] objectAtIndex:0] addSubview:wallpaperView];

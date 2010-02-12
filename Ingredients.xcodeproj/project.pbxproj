@@ -11,6 +11,7 @@
 		0C7C02E7110E000800412666 /* XBNewSourceListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7C02E5110E000800412666 /* XBNewSourceListCell.m */; };
 		0C7C02ED110E006000412666 /* CHSymbolButtonImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C7C02EB110E006000412666 /* CHSymbolButtonImage.h */; };
 		0C7C02EE110E006000412666 /* CHSymbolButtonImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7C02EC110E006000412666 /* CHSymbolButtonImage.m */; };
+		751E45D61125E6CE00CD544A /* tictactoe_style.css in Resources */ = {isa = PBXBuildFile; fileRef = 751E45D51125E6CE00CD544A /* tictactoe_style.css */; };
 		755F427E112323C600AA16F5 /* tictactoe.html in Resources */ = {isa = PBXBuildFile; fileRef = 755F427D112323C600AA16F5 /* tictactoe.html */; };
 		755F42AF112326E700AA16F5 /* sourcelist_indexing_wallpaper.png in Resources */ = {isa = PBXBuildFile; fileRef = 755F42AE112326E700AA16F5 /* sourcelist_indexing_wallpaper.png */; };
 		755F42CA1123283A00AA16F5 /* IGKSourceListWallpaperView.m in Sources */ = {isa = PBXBuildFile; fileRef = 755F42B31123270700AA16F5 /* IGKSourceListWallpaperView.m */; };
@@ -78,6 +79,7 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		2F7446980DB6B7EA00F9684A /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Ingredients_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ingredients_Prefix.pch; sourceTree = "<group>"; };
+		751E45D51125E6CE00CD544A /* tictactoe_style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = tictactoe_style.css; sourceTree = "<group>"; };
 		755F427D112323C600AA16F5 /* tictactoe.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = tictactoe.html; sourceTree = "<group>"; };
 		755F42AE112326E700AA16F5 /* sourcelist_indexing_wallpaper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sourcelist_indexing_wallpaper.png; path = Images/sourcelist_indexing_wallpaper.png; sourceTree = "<group>"; };
 		755F42B21123270700AA16F5 /* IGKSourceListWallpaperView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKSourceListWallpaperView.h; sourceTree = "<group>"; };
@@ -243,6 +245,7 @@
 				75B534F9111076C000560848 /* View_SideSearchTemplate.png */,
 				755F42AE112326E700AA16F5 /* sourcelist_indexing_wallpaper.png */,
 				755F427D112323C600AA16F5 /* tictactoe.html */,
+				751E45D51125E6CE00CD544A /* tictactoe_style.css */,
 				8D1107310486CEB800E47090 /* Ingredients-Info.plist */,
 				756F9D30110BA72F00E6F291 /* IngredientsKit-Info.plist */,
 				756F9D77110BB40C00E6F291 /* CHDocumentationBrowser.xib */,
@@ -415,6 +418,7 @@
 				75B534FC111076C000560848 /* View_SideSearchTemplate.png in Resources */,
 				755F427E112323C600AA16F5 /* tictactoe.html in Resources */,
 				755F42AF112326E700AA16F5 /* sourcelist_indexing_wallpaper.png in Resources */,
+				751E45D61125E6CE00CD544A /* tictactoe_style.css in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -535,6 +539,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_GC = required;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
