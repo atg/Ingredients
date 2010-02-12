@@ -10,6 +10,7 @@
 #import <WebKit/WebKit.h>
 
 @class IGKApplicationDelegate;
+@class IGKSourceListWallpaperView;
 
 typedef enum {
 	
@@ -45,7 +46,7 @@ typedef enum {
 	IBOutlet NSSearchField *sideSearchViewField;
 	IBOutlet NSTableView *sideSearchViewResults;
 	IBOutlet NSArrayController *sideSearchArrayController;
-	// // Additional stuff
+	// Additional stuff
 	NSMutableArray *sideSearchResults;
 	NSPredicate *sideFilterPredicate;
 	NSSortDescriptor *sideSortDescriptor;
@@ -63,12 +64,11 @@ typedef enum {
 	
 	NSPredicate *advancedSearchPredicate;
 	
-	
 	// Other
-	
 	IBOutlet NSArrayController *objectsController;
+	IGKSourceListWallpaperView *wallpaperView;
 	
-	//temp
+	// Temp
 	IBOutlet NSTableView *temporaryTable;
 	
 	

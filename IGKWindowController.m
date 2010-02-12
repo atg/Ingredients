@@ -9,6 +9,7 @@
 #import "IGKWindowController.h"
 #import "IGKApplicationDelegate.h"
 #import "IGKHTMLGenerator.h"
+#import "IGKSourceListWallpaperView.h"
 
 @implementation IGKWindowController
 
@@ -16,6 +17,19 @@
 @synthesize sideFilterPredicate;
 @synthesize advancedFilterPredicate;
 
+- (id) init
+{
+	self = [super init];
+	if (self != nil) {
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(indexedAllPaths:) name:@"IGKHasIndexedAllPaths" object:nil];
+
+	}
+	return self;
+}
+- (void)indexedAllPaths:(NSNotification *)notif
+{
+	[self stopIndexing];
+}
 
 - (NSString *)windowNibName
 {
@@ -30,6 +44,8 @@
 	sideSearchQuery = @"";
 	
 	
+	[self startIndexing];
+		
 	sideSearchResults = [[NSMutableArray alloc] init];
 	[self setSideFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
 	[self setAdvancedFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
@@ -206,7 +222,6 @@
 - (IBAction)executeSearch:(id)sender
 {
 	[self executeSideSearch:[sender stringValue]];
-	
 }
 
 - (IBAction)executeAdvancedSearch:(id)sender
@@ -284,6 +299,30 @@
 }
 
 
+- (void)startIndexing
+{
+	
+	wallpaperView = [[IGKSourceListWallpaperView alloc] initWithFrame:[[[twoPaneSplitView subviews] objectAtIndex:0] bounds]];
+	[wallpaperView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+	[[[twoPaneSplitView subviews] objectAtIndex:0] addSubview:wallpaperView];
+	
+	[sideSearchViewField setEnabled:NO];
+	[sideSearchViewField setEditable:NO];
+	
+	[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:
+											 [NSURL fileURLWithPath:
+											  [[NSBundle mainBundle] pathForResource:@"tictactoe" ofType:@"html"]
+											  ]
+											 ]];
+}
+- (void)stopIndexing
+{
+	[wallpaperView removeFromSuperview];
+	
+	[sideSearchViewField setEnabled:YES];
+	[sideSearchViewField setEditable:YES];
+}
+
 - (void)setAdvancedFilterPredicate:(NSPredicate *)pred
 {
 	advancedSearchPredicate = pred;
@@ -301,7 +340,14 @@
 	{
 		
 		if ([[sideSearchArrayController selectedObjects] count] == 0)
+		{
+			[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:
+													 [NSURL fileURLWithPath:
+													  [[NSBundle mainBundle] pathForResource:@"no_selection" ofType:@"html"]
+													  ]
+													 ]];
 			return;
+		}
 		
 		IGKHTMLGenerator *generator = [[IGKHTMLGenerator alloc] init];
 		[generator setContext:[[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext]];

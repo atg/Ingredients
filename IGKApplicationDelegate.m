@@ -8,20 +8,15 @@
 
 #import "IGKApplicationDelegate.h"
 #import "IGKWindowController.h"
-#import "IGKScraper.h"
+#import "IGKLaunchController.h"
 
-@interface IGKApplicationDelegate ()
-
-- (void)addDocsetsInPath:(NSString *)docsets toArray:(NSMutableArray *)docsetPaths;
-
-@end
 
 @implementation IGKApplicationDelegate
 
 - (id)init
 {
 	if (self = [super init])
-	{
+	{		
 #ifndef NDEBUG
 		if (NSRunAlertPanel(@"Start Over(ish)?", @"Should I clear out the app support folder and preferences?", @"Clear", @"Keep", nil)) {
 						
@@ -32,74 +27,16 @@
 			[[NSFileManager defaultManager] removeItemAtPath:prefsPath error:nil];
 		}
 #endif
+				
+		launchController = [[IGKLaunchController alloc] init];
+		launchController.appController = self;
+		[launchController launch];
 		
 		windowControllers = [[NSMutableArray alloc] init];
-		
 		[self newWindow:nil];
-		
-		
-		
-		NSMutableArray *docsetPaths = [[NSMutableArray alloc] init];
-		
-		//Add the default documentation
-		[self addDocsetsInPath:[[self developerDirectory] stringByAppendingPathComponent:@"/Documentation/DocSets/"]
-					   toArray:docsetPaths];
-		
-		NSString *platformsPath = [[self developerDirectory] stringByAppendingPathComponent:@"/Platforms/"];
-		NSError *error = nil;
-		NSArray *platforms = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:platformsPath error:&error];
-		if (!error)
-		{
-			for (NSString *platform in platforms)
-			{
-				NSString *platformPath = [platformsPath stringByAppendingPathComponent:platform];
-				NSString *platformDocsetsPath = [platformPath stringByAppendingPathComponent:@"/Developer/Documentation/DocSets"];
-				
-				[self addDocsetsInPath:platformDocsetsPath
-							   toArray:docsetPaths];
-			}
-		}
-		
-		//NSArray *docsetURLs = [NSArray arrayWithObjects:[developerDirectory stringByAppendingPathComponent:@"/Documentation/DocSets/"], [developerDirectory stringByAppendingPathComponent:@"/Documentation/DocSets/"], nil]; 
-		
-		NSLog(@"docsetPaths = %@", docsetPaths);
-		
-		//NSString *ippath = @"/Developer/Platforms/iPhoneOS.platform/Developer/Documentation/DocSets/com.apple.adc.documentation.AppleiPhone3_1.iPhoneLibrary.docset/";
-		//NSString *mpath = @"/Developer/Documentation/DocSets/com.apple.adc.documentation.AppleSnowLeopard.CoreReference.docset";
-		
-		//NSString *dpath = ippath;
-		
-		for (NSString *docsetPath in docsetPaths)
-		{
-			IGKScraper *scraper = [[IGKScraper alloc] initWithDocsetURL:[NSURL fileURLWithPath:docsetPath]
-												   managedObjectContext:[self backgroundManagedObjectContext]];
-			[scraper search];
-		}
-		
-		
 	}
 	
 	return self;
-}
-
-
-- (void)addDocsetsInPath:(NSString *)docsets toArray:(NSMutableArray *)docsetPaths
-{
-	NSError *error = nil;
-	NSArray *paths = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docsets error:&error];
-	if (error)
-		return;
-	for (NSString *path in paths)
-	{
-		if ([path isEqual:@"com.apple.ADC_Reference_Library.DeveloperTools.docset"])
-			continue;
-		
-		path = [docsets stringByAppendingPathComponent:path];
-		if (![path length] || ![[path pathExtension] isEqual:@"docset"])
-			continue;
-		
-		[docsetPaths addObject:path];
-	}
 }
 
 - (NSString *)developerDirectory

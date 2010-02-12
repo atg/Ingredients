@@ -9,11 +9,85 @@
 #import "IGKScraper.h"
 #import "RegexKitLite.h"
 #import "IGKDocRecordManagedObject.h"
+#import "IGKLaunchController.h"
+
+//Surprisingly, -[NSString isLike:] is the bottleneck. We make our own.
+
+
+//Oh look - some code from wikipedia. I hope it works
+
+const unichar * IGKStringToChars(NSString *string)
+{
+	unichar *chars = (unichar *)malloc([string length] * sizeof(unichar));
+	
+	return chars;
+}
+const unichar * IGKStringToCharsWithLength(NSString *string, size_t length)
+{
+	unichar *chars = (unichar *)malloc(length * sizeof(unichar));
+	
+	return chars;
+}
+BOOL IGKStringIsLike(const unichar *needle, size_t nlen, const unichar *haystack, size_t hlen)
+{
+    size_t scan = 0;
+    size_t bad_char_skip[USHRT_MAX + 1]; /* Officially called:
+                                          * bad character shift */
+	
+    /* Sanity checks on the parameters */
+    if (nlen <= 0 || !haystack || !needle)
+        return NO;
+	
+    /* ---- Preprocess ---- */
+    /* Initialize the table to default value */
+    /* When a character is encountered that does not occur
+     * in the needle, we can safely skip ahead for the whole
+     * length of the needle.
+     */
+    for (scan = 0; scan <= USHRT_MAX; scan = scan + 1)
+        bad_char_skip[scan] = nlen;
+	
+    /* C arrays have the first byte at [0], therefore:
+     * [nlen - 1] is the last byte of the array. */
+    size_t last = nlen - 1;
+	
+    /* Then populate it with the analysis of the needle */
+    for (scan = 0; scan < last; scan = scan + 1)
+        bad_char_skip[needle[scan]] = last - scan;
+	
+    /* ---- Do the matching ---- */
+	
+    /* Search the haystack, while the needle can still be within it. */
+    while (hlen >= nlen)
+    {
+        /* scan from the end of the needle */
+        for (scan = last; haystack[scan] == needle[scan]; scan = scan - 1)
+            if (scan == 0) /* If the first byte matches, we've found it. */
+                return YES;
+		
+        /* otherwise, we need to skip some bytes and start again. 
+		 Note that here we are getting the skip value based on the last byte
+		 of needle, no matter where we didn't match. So if needle is: "abcd"
+		 then we are skipping based on 'd' and that value will be 4, and
+		 for "abcdd" we again skip on 'd' but the value will be only 1.
+		 The alternative of pretending that the mismatched character was 
+		 the last character is slower in the normal case (Eg. finding 
+		 "abcd" in "...azcd..." gives 4 by using 'd' but only 
+		 4-2==2 using 'z'. */
+        hlen     -= bad_char_skip[haystack[last]];
+        haystack += bad_char_skip[haystack[last]];
+    }
+	
+    return NO;
+}
+void IGKFreeStringChars(const unichar *string)
+{
+	free((void *)string);
+}
 
 @interface IGKScraper ()
 
 //Extract data out of a file and insert it into the managed object context.
-//Returns YES on success (defined as the insertion of a record), NO on failure
 - (BOOL)extractPath:(NSString *)extractPath docset:(NSManagedObject *)docset;
 - (NSManagedObject *)addRecordNamed:(NSString *)recordName
 							 ofType:(NSString *)recordType
@@ -24,19 +98,22 @@
 
 @implementation IGKScraper
 
-- (id)initWithDocsetURL:(NSURL *)theDocsetURL managedObjectContext:(NSManagedObjectContext *)moc
+- (id)initWithDocsetURL:(NSURL *)theDocsetURL managedObjectContext:(NSManagedObjectContext *)moc launchController:(IGKLaunchController*)lc dbQueue:(dispatch_queue_t)dbq
 {
 	if (self = [super init])
 	{
 		docsetURL = [theDocsetURL copy];
 		url = [docsetURL URLByAppendingPathComponent:@"Contents/Resources/Documents/documentation"];
 		ctx = moc;
+		
+		launchController = lc;
+		dbQueue = dbq;
 	}
 	
 	return self;
 }
 
-- (void)search
+- (NSInteger)findPaths
 {
 	//Get the info.plist
 	NSDictionary *infoPlist = [[NSDictionary alloc] initWithContentsOfURL:[docsetURL URLByAppendingPathComponent:@"Contents/info.plist"]];
@@ -56,7 +133,7 @@
 		{
 			//There's already some records - don't parse
 			NSLog(@"Docset already exists: %@ / %@", version, bundleIdentifier);
-			return;
+			return NO;
 		}
 	}
 	
@@ -90,42 +167,43 @@
 	
 	//*** Do the actual parsing ***
 	//TODO: Use GCD to make this an actual background search
-	//dispatch_async(dispatch_get_global_queue(0, 0), ^{
+	//[self backgroundSearch:docset];
+	
+#if 0
+	__block NSUInteger numPaths = 0;
+	dispatch_async(dispatch_get_global_queue(0, 0), ^{
 		
-	[self backgroundSearch:docset];
-		
-	//	dispatch_async(dispatch_get_main_queue(), ^{
+		pathsCount = [self backgroundSearch:docset];
+
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[launchController reportPathCount:pathsCount];
+		});
+		/*	
+		dispatch_async(dispatch_get_main_queue(), ^{
 			[ctx save:nil];
 			[ctx reset];
-	//	});
-	//});
-	
-	
-#ifndef NDEBUG
-	//*** Show and tell ***
-	
-	/*
-	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
-	[fetch setEntity:[NSEntityDescription entityForName:@"DocRecord" inManagedObjectContext:ctx]];
-	[fetch setResultType:NSManagedObjectResultType];
-	[fetch setSortDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
-	for (NSManagedObject *obj in [ctx executeFetchRequest:fetch error:nil])
-	{
-		NSLog(@"Managed object = %@", [obj valueForKey:@"name"]);
-	}
+		});
 	 */
+	});
+	
 #endif
+	
+	scraperDocset = docset;
+	paths = [[NSMutableArray alloc] init];
+	pathsCount = [self backgroundSearch:docset];
+	
+	return [paths count];
 }
-- (void)backgroundSearch:(NSManagedObject *)docset
+- (NSUInteger)backgroundSearch:(NSManagedObject *)docset
 {
 	NSFileManager *manager = [NSFileManager defaultManager];
-	NSLog(@"Started");
-	NSLog(@"---");
+	//NSLog(@"Started");
+	//NSLog(@"---");
 	NSString *urlpath = [url path];
 	NSError *error = nil;
 	NSArray *subpaths = [manager subpathsOfDirectoryAtPath:[url path] error:&error];
 	if (error)
-		return;
+		return 0;
 	
 	NSTimeInterval sint = [NSDate timeIntervalSinceReferenceDate];	
 	unsigned count = 0;
@@ -137,7 +215,6 @@
 			continue;
 		
 		//Paths to exclude are added in order from most common to least common
-		
 		NSString *lastPathComponent = [subpath lastPathComponent];
 		if ([lastPathComponent isEqual:@"toc.html"])
 			continue;
@@ -162,8 +239,6 @@
 			continue;
 		if ([pathset member:@"gcc"])
 			continue;
-		//if ([pathset member:@"Introduction"])
-		//	continue;
 		if ([pathset member:@"qa"])
 			continue;
 		if ([pathset member:@"samplecode"])
@@ -188,28 +263,48 @@
 		
 		count++;
 		
-		[extractPaths addObject:[urlpath stringByAppendingPathComponent:subpath]];
-		//NSLog(@"%@", subpath);
+		[paths addObject:[urlpath stringByAppendingPathComponent:subpath]];
 	}
-	printf("\n");
-	NSLog(@"---\n\nSearch %u files. Time %lf", count, [NSDate timeIntervalSinceReferenceDate] - sint);
-	NSLog(@"===");
+	//printf("\n");
+	//NSLog(@"---\n\nSearch %u files. Time %lf", count, [NSDate timeIntervalSinceReferenceDate] - sint);
+	//NSLog(@"===");
 	
+#if 0
 	sint = [NSDate timeIntervalSinceReferenceDate];
 	
 	unsigned failureCount = 0;
-	for (NSString *extractPath in extractPaths)
-	{
-		BOOL success = [self extractPath:extractPath docset:docset];
-		if (!success)
-			failureCount++;
-		//if (failureCount > 50)
-		//	break;
-	}
-		
-	printf("\n");
-	NSLog(@"---\n\n %u files failed to parse. Time %lf", failureCount, [NSDate timeIntervalSinceReferenceDate] - sint);
-	NSLog(@"===");
+	dispatch_async(dispatch_get_global_queue(0, 0), ^{
+		for (NSString *extractPath in extractPaths)
+		{
+			[self extractPath:extractPath docset:docset];
+			pathsCounter += 1;
+			
+			[launchController reportPath];
+			
+			//if ((pathsCounter % 3) == 0)
+			//	NSLog(@"pathsCounter = %d", pathsCounter);
+		}
+	});
+#endif
+	//printf("\n");
+	//NSLog(@"---\n\n %u files failed to parse. Time %lf", failureCount, [NSDate timeIntervalSinceReferenceDate] - sint);
+	//NSLog(@"===");
+	
+	return [paths count];
+}
+- (void)index
+{
+	dispatch_async(dispatch_get_global_queue(0, 0), ^{
+		for (NSString *extractPath in paths)
+		{
+			[self extractPath:extractPath docset:scraperDocset];
+			pathsCounter += 1;
+			
+			dispatch_async(dispatch_get_global_queue(0, 0), ^{
+				[launchController reportPath];
+			});
+		}
+	});
 }
 
 - (NSManagedObject *)addRecordNamed:(NSString *)recordName
@@ -228,8 +323,175 @@
 	return newRecord;
 }
 
+
 - (BOOL)extractPath:(NSString *)extractPath docset:(NSManagedObject *)docset
+{	
+	//Let's try to extract the class's name (assuming it is a class of course)	
+	NSError *error = nil;
+	NSString *contents = [NSString stringWithContentsOfFile:extractPath encoding:NSUTF8StringEncoding error:&error];
+	if (error || !contents)
+	{
+		//NSLog(@"Extraction failed");
+		return NO;
+		
+	}
+	
+	
+	//Parse the item's name and kind
+	NSString *regex_className = @"<a name=\"//apple_ref/occ/([a-z_]+)/([a-zA-Z_][a-zA-Z0-9_]*)";
+	NSArray *className_captures = [contents captureComponentsMatchedByRegex:regex_className];
+	if ([className_captures count] < 3)
+	{
+		//NSLog(@"Extraction failed 2");
+		return NO;
+		
+	}
+	
+	NSString *type = [className_captures objectAtIndex:1];
+	NSString *name = [className_captures objectAtIndex:2];
+	
+	/* Common types
+	 cl		- class
+	 intf	- protocol
+	 instm	- 
+	 intfm	- 
+	 cat		- category
+	 binding - bindings listing
+	 */
+	
+	NSLog(@"name / type >> %@ / %@", name, type);
+	
+	return YES;
+}
+
+#if 0
+- (void)extractPath:(NSString *)extractPath docset:(NSManagedObject *)docset
 {
+	NSURL *fileurl = [NSURL fileURLWithPath:extractPath];
+	
+	NSError *err = nil;
+	NSXMLDocument *doc = [[NSXMLDocument alloc] initWithContentsOfURL:fileurl options:NSXMLDocumentTidyHTML error:&err];
+	if (!doc)
+		return;
+	
+	NSEntityDescription *methodEntity = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:ctx];
+		
+	NSArray *methodNodes = [[doc rootElement] nodesForXPath:@"//a" error:&err];
+	
+#if 0
+	const unichar *instm_c = IGKStringToChars(@"instm");
+	const unichar *clm_c = IGKStringToChars(@"clm");
+	const unichar *func_c = IGKStringToChars(@"/c/func");
+	const unichar *tdef_c = IGKStringToChars(@"/c/tdef");
+	const unichar *macro_c = IGKStringToChars(@"/c/macro");
+#endif
+	
+	//NSLog(@"\t 0 > %d", [methodNodes count]);
+	NSSet *containersSet = [[NSMutableSet alloc] init];
+	for (NSXMLNode *a in methodNodes)
+	{
+		if (![a isKindOfClass:[NSXMLElement class]])
+			continue;
+		
+		NSString *name = [[a attributeForName:@"name"] stringValue];
+		if (name)
+		{
+#if 0
+			size_t namelen = [name length];
+			const unichar *namechars = IGKStringToCharsWithLength(name, namelen);
+			
+			
+			//if (![name isLike:@"*instm*"] && ![name isLike:@"*clm*"] && ![name isLike:@"*/c/func*"] && ![name isLike:@"*/c/tdef*"]  && ![name isLike:@"*/c/macro*"])
+			if (IGKStringIsLike(instm_c, 5, namechars, namelen) ||
+				IGKStringIsLike(clm_c, 3, namechars, namelen) ||
+				IGKStringIsLike(func_c, 7, namechars, namelen) ||
+				IGKStringIsLike(tdef_c, 7, namechars, namelen) ||
+				IGKStringIsLike(macro_c, 8, namechars, namelen)) //Yeah entering lengths like this is really error prone
+			{
+				
+			}
+			
+			IGKFreeStringChars(namechars);
+#endif
+			[containersSet addObject:[a parent]];
+		}
+		
+	}
+
+#if 0
+	IGKFreeStringChars(instm_c);
+	IGKFreeStringChars(clm_c);
+	IGKFreeStringChars(func_c);
+	IGKFreeStringChars(tdef_c);
+	IGKFreeStringChars(macro_c);
+#endif
+	
+	
+	NSMutableArray *methods = [[NSMutableArray alloc] init];
+	for (NSXMLNode *container in containersSet)
+	{
+		NSArray *arr = [self splitArray:[container children] byBlock:^BOOL(id a) {
+			if (![a isKindOfClass:[NSXMLElement class]])
+				return NO;
+			
+			NSXMLNode *el = [a attributeForName:@"name"];
+			if ([[el stringValue] isLike:@"*instm*"])
+				return YES;
+			return NO;
+		}];
+		
+		[methods addObjectsFromArray:arr];
+	}
+	
+	//NSLog(@"\t 1");
+
+	dispatch_async(dbQueue, ^{
+		
+		//More parsing, database stuff
+		
+		//NSManagedObject *obj = [self addRecordNamed:name entityName:entityName desc:abstract sourcePath:extractPath];
+
+		for (NSArray *arr in methods)
+		{
+			NSString *name = nil;
+			NSMutableString *description = nil;
+			NSString *prototype = nil;
+			
+			for (NSXMLElement *n in arr)
+			{
+				if (![n isKindOfClass:[NSXMLElement class]])
+					continue;
+				
+				if ([[n name] isEqual:@"h3"])
+				{
+					[self createMethodNamed:name description:description prototype:prototype methodEntity:methodEntity parent:nil docset:docset];
+					
+					description = [[NSMutableString alloc] init];
+					prototype = nil;
+					name = [n stringValue];
+					continue;
+				}
+				
+				if ([[n name] isEqual:@"p"])
+				{
+					if ([[[n attributeForName:@"class"] stringValue] isEqual:@"spaceabovemethod"])
+					{
+						prototype = [n stringValue];
+					}
+					else
+					{
+						[description appendFormat:@"<p>%@</p>", [n stringValue]];
+					}
+				}
+			}
+			
+			[self createMethodNamed:name description:description prototype:prototype methodEntity:methodEntity parent:nil docset:docset];
+		}
+		
+	});
+	
+	return;
+	
 	//Let's try to extract the class's name (assuming it is a class of course)	
 	NSError *error = nil;
 	NSString *contents = [NSString stringWithContentsOfFile:extractPath encoding:NSUTF8StringEncoding error:&error];
@@ -282,16 +544,10 @@
 	if ([abstract_captures count] >= 2)
 		abstract = [abstract_captures objectAtIndex:1];
 	
-	//Deprecation appendicies and bindings listings have no abstract
-	
+	//Deprecation appendicies and bindings listings have no abstract	
 	if ([abstract length] == 0)
 	{
-		//NSLog(@"ZERO - %@ - %@ - %@", type, name, extractPath);
 		abstract = @"";
-	}
-	else
-	{
-		//NSLog(@"%@ - %@ - %u", type, name, [abstract length]);
 	}
 	
 	NSManagedObject *obj = [self addRecordNamed:name entityName:entityName desc:abstract sourcePath:extractPath];
@@ -339,6 +595,62 @@
 	
 	
 	return YES;
+}
+
+#endif
+
+- (void)createMethodNamed:(NSString *)name description:(NSString *)description prototype:(NSString *)prototype methodEntity:(NSEntityDescription *)methodEntity parent:(NSManagedObject*)parent docset:(NSManagedObject*)docset
+{
+	if (name == nil)
+		return;
+	
+	//NSLog(@"createMethodNamed = %@", name);
+	IGKDocRecordManagedObject *newMethod = [[IGKDocRecordManagedObject alloc] initWithEntity:methodEntity insertIntoManagedObjectContext:ctx];
+	
+	[newMethod setValue:name forKey:@"name"];
+	
+	if ([description length])
+		[newMethod setValue:description forKey:@"overview"];
+	
+	[newMethod setValue:prototype forKey:@"signature"];
+	
+	[newMethod setValue:parent forKey:@"container"];
+	[newMethod setValue:docset forKey:@"docset"];
+}
+
+- (NSArray *)splitArray:(NSArray *)array byBlock:(BOOL (^)(id a))block
+{
+	NSMutableArray *arrays = [[NSMutableArray alloc] init];
+	
+	NSMutableArray *currentArray = [[NSMutableArray alloc] init];
+	[arrays addObject:currentArray];
+	
+	for (id a in array)
+	{
+		if (block(a))
+		{
+			currentArray = [[NSMutableArray alloc] init];
+			[arrays addObject:currentArray];
+		}
+		else
+		{
+			[currentArray addObject:a];
+		}
+	}
+	
+	return arrays;
+}
+- (NSArray *)array:(NSArray *)array findObjectByBlock:(BOOL (^)(id a))block
+{	
+	for (id a in array)
+	{
+		if (block(a))
+		{
+			return a;
+		}
+	}
+	
+	return nil;
 }
 
 @end

@@ -8,10 +8,13 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class IGKLaunchController;
 
 @interface IGKApplicationDelegate : NSObject
 {
 	NSMutableArray *windowControllers;
+	
+	IGKLaunchController *launchController;
 	
 	NSPersistentStoreCoordinator *persistentStoreCoordinator;
 	NSManagedObjectModel *managedObjectModel;
@@ -24,6 +27,7 @@
 - (IBAction)showWindow:(id)sender;
 - (IBAction)newWindow:(id)sender;
 
+- (NSString *)developerDirectory;
 
 // Core Data Nonsense
 

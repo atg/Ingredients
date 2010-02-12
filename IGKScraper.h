@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class IGKLaunchController;
 
 //A scraper takes a .docset and populates a core data database
 
@@ -16,9 +17,18 @@
 	NSURL *docsetURL;
 	NSURL *url;
 	NSManagedObjectContext *ctx;
+	
+	IGKLaunchController *launchController;
+	dispatch_queue_t dbQueue;
+	
+	NSUInteger pathsCount;
+	NSUInteger pathsCounter;
+	
+	NSMutableArray *paths;
+	NSManagedObject *scraperDocset;
 }
 
-- (id)initWithDocsetURL:(NSURL *)theDocsetURL managedObjectContext:(NSManagedObjectContext *)moc;
-- (void)search;
+- (id)initWithDocsetURL:(NSURL *)theDocsetURL managedObjectContext:(NSManagedObjectContext *)moc launchController:(IGKLaunchController*)lc dbQueue:(dispatch_queue_t)dbq;
+- (NSInteger)findPaths;
 
 @end
