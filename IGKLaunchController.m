@@ -47,7 +47,7 @@
 	
 	NSLog(@"docsetPaths = %@", docsetPaths);
 	
-	dbQueue = dispatch_queue_create(NULL, NULL);
+	dbQueue = dispatch_get_main_queue();//dispatch_queue_create(NULL, NULL);
 	
 	totalPathsCount = 0;
 	
@@ -74,10 +74,6 @@
 	{
 		[scraper index];
 	}
-	
-	
-	//[ctx save:nil];
-	//[ctx reset];
 }
 
 - (void)reportPathCount:(NSUInteger)pathCount
@@ -95,12 +91,20 @@
 	//Otherwise send the path count
 	NSLog(@"## Total number of paths: %d", totalPathsCount);
 }
+
+//This will be called from the main thread
 - (void)reportPath
 {
 	pathsCounter++;
 	
 	if (pathsCounter >= totalPathsCount)
 	{
+		NSLog(@"Saving %@", [appController backgroundManagedObjectContext]);
+		
+		//Save our changes
+		[[appController backgroundManagedObjectContext] save:nil];
+		[[appController backgroundManagedObjectContext] reset];
+		
 		//All paths have been reported
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"IGKHasIndexedAllPaths" object:self];
 	}
@@ -111,9 +115,7 @@
 		//There's around 200 pixels in the progress bar. We only want to send a notification for each one
 		if ((pathsCounter % ((totalPathsCount / 100) ?: 1)) == 0)
 		{
-			dispatch_async(dispatch_get_global_queue(0, 0), ^{
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"IGKHasIndexedNewPaths" object:self];
-			});
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"IGKHasIndexedNewPaths" object:self];
 		}
 	}
 }

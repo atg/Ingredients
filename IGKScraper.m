@@ -331,9 +331,7 @@ void IGKFreeStringChars(const unichar *string)
 	NSString *contents = [NSString stringWithContentsOfFile:extractPath encoding:NSUTF8StringEncoding error:&error];
 	if (error || !contents)
 	{
-		//NSLog(@"Extraction failed");
 		return NO;
-		
 	}
 	
 	
@@ -342,9 +340,7 @@ void IGKFreeStringChars(const unichar *string)
 	NSArray *className_captures = [contents captureComponentsMatchedByRegex:regex_className];
 	if ([className_captures count] < 3)
 	{
-		//NSLog(@"Extraction failed 2");
 		return NO;
-		
 	}
 	
 	NSString *type = [className_captures objectAtIndex:1];
@@ -359,8 +355,86 @@ void IGKFreeStringChars(const unichar *string)
 	 binding - bindings listing
 	 */
 	
-	NSLog(@"name / type >> %@ / %@", name, type);
+	NSString *entityName = nil;
+	if ([type isEqual:@"cl"] || [type isEqual:@"instm"])
+		entityName = @"ObjCClass";
 	
+	else if ([type isEqual:@"cat"])
+		entityName = @"ObjCCategory";
+	
+	else if ([type isEqual:@"intf"] || [type isEqual:@"intfm"])
+		entityName = @"ObjCProtocol";
+	
+	else if ([type isEqual:@"binding"])
+	    entityName = @"ObjCBindingsListing";
+	
+	//If we don't understand the entity name, bail
+	if (!entityName)
+		return NO;
+	
+	//NSLog(@">> %@ %@ %@", name, entityName, extractPath);
+	
+	NSString *linkRegex = @"//apple_ref/((occ/(instm|clm)/[a-zA-Z_:][a-zA-Z0-9:_]*/([a-zA-Z:_][a-zA-Z0-9:_]*))|(tdef|econst)/([a-zA-Z:_][a-zA-Z0-9:_]*))";
+	
+	/* The interesting captures are 3 & 4, and 5 & 6 */
+	NSArray *items = [contents arrayOfCaptureComponentsMatchedByRegex:linkRegex];
+	
+	
+	dispatch_sync(dbQueue, ^{
+		
+		NSEntityDescription *methodEntity = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:ctx];
+		NSEntityDescription *typedefEntity = [NSEntityDescription entityForName:@"CTypedef" inManagedObjectContext:ctx];
+		
+		NSManagedObject *obj = [self addRecordNamed:name entityName:entityName desc:@"" sourcePath:extractPath];
+		[obj setValue:docset forKey:@"docset"];
+		
+		for (NSArray *captures in items)
+		{
+			if ([captures count] > 4)
+			{
+				NSString *itemType = [captures objectAtIndex:3];
+				NSString *itemName = [captures objectAtIndex:4];
+				
+				if ([itemType length] && [itemName length])
+				{
+					//Method
+					BOOL isInstanceMethod = [itemType isEqual:@"instm"];
+					
+					IGKDocRecordManagedObject *newMethod = [[IGKDocRecordManagedObject alloc] initWithEntity:methodEntity insertIntoManagedObjectContext:ctx];
+					//NSLog(@"METHOD %@", itemName);
+					[newMethod setValue:itemName forKey:@"name"];
+					[newMethod setValue:obj forKey:@"container"];
+					[newMethod setValue:docset forKey:@"docset"];
+					[newMethod setValue:[NSNumber numberWithBool:isInstanceMethod] forKey:@"isInstanceMethod"];
+					
+					continue;
+				}
+			}
+			
+			if ([captures count] > 6)
+			{
+				NSString *itemType = [captures objectAtIndex:5];
+				NSString *itemName = [captures objectAtIndex:6];
+				
+				if ([itemType length] && [itemName length])
+				{
+					if ([itemType isEqual:@"tdef"])
+					{
+						IGKDocRecordManagedObject *newTypedef = [[IGKDocRecordManagedObject alloc] initWithEntity:typedefEntity insertIntoManagedObjectContext:ctx];
+						
+						NSLog(@"TYPEDEF %@", itemName);
+
+						[newTypedef setValue:itemName forKey:@"name"];
+						[newTypedef setValue:docset forKey:@"docset"];
+					}				
+					
+					continue;
+				}
+			}
+		}
+	
+	});
+		
 	return YES;
 }
 
@@ -509,12 +583,12 @@ void IGKFreeStringChars(const unichar *string)
 	NSString *name = [className_captures objectAtIndex:2];
 	
 	/* Common types
-		cl		- class
-		intf	- protocol
-		instm	- old/deprecated classes
-		intfm	- old/deprecated protocols
-		cat		- category
-		binding - bindings listing
+	 cl		- class
+	 intf	- protocol
+	 instm	- old/deprecated classes
+	 intfm	- old/deprecated protocols
+	 cat		- category
+	 binding - bindings listing
 	 */
 	
 	NSString *entityName = nil;

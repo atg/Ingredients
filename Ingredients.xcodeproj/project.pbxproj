@@ -148,16 +148,10 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				0C7C02EB110E006000412666 /* CHSymbolButtonImage.h */,
-				0C7C02EC110E006000412666 /* CHSymbolButtonImage.m */,
 				756F9D7F110BB44600E6F291 /* IGKApplicationDelegate.h */,
 				756F9D80110BB44600E6F291 /* IGKApplicationDelegate.m */,
 				756F9E0A110BB79100E6F291 /* IGKWindowController.h */,
 				756F9E0B110BB79100E6F291 /* IGKWindowController.m */,
-				756F9F9F110BEA8D00E6F291 /* CHLeftSplitVIew.h */,
-				756F9FA0110BEA8D00E6F291 /* CHLeftSplitView.m */,
-				755F437811232C9500AA16F5 /* IGKLaunchController.h */,
-				755F437911232C9500AA16F5 /* IGKLaunchController.m */,
 				756F9FF6110C803D00E6F291 /* Scraping */,
 				0C7C02E3110DFFF300412666 /* Views & Cells */,
 			);
@@ -167,6 +161,10 @@
 		0C7C02E3110DFFF300412666 /* Views & Cells */ = {
 			isa = PBXGroup;
 			children = (
+				0C7C02EB110E006000412666 /* CHSymbolButtonImage.h */,
+				0C7C02EC110E006000412666 /* CHSymbolButtonImage.m */,
+				756F9F9F110BEA8D00E6F291 /* CHLeftSplitVIew.h */,
+				756F9FA0110BEA8D00E6F291 /* CHLeftSplitView.m */,
 				0C7C02E4110E000800412666 /* XBNewSourceListCell.h */,
 				0C7C02E5110E000800412666 /* XBNewSourceListCell.m */,
 				75C9FE8E110F53E400C9B51C /* IGKHTMLGenerator.h */,
@@ -293,6 +291,8 @@
 		756F9FF6110C803D00E6F291 /* Scraping */ = {
 			isa = PBXGroup;
 			children = (
+				755F437811232C9500AA16F5 /* IGKLaunchController.h */,
+				755F437911232C9500AA16F5 /* IGKLaunchController.m */,
 				756F9FF9110C805C00E6F291 /* IGKScraper.h */,
 				756F9FFA110C805C00E6F291 /* IGKScraper.m */,
 			);
