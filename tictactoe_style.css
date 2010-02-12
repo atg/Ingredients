@@ -14,7 +14,9 @@ body {
 	color: #323232;
 }
 
-.infobox {
+#infobox {
+	font-weight: bold;
+	
 	background: -webkit-gradient(
     linear,
     left bottom,
@@ -22,7 +24,7 @@ body {
     color-stop(0.0, #bf3838),
     color-stop(1.0, #ff6363)
 );
-	-webkit-border-radius: 2px;
+	-webkit-border-radius: 3px;
 
 	color: white;
 	text-shadow: rgba(0,0,0,0.3) 0 1px 0;

@@ -41,11 +41,11 @@
 - (BOOL)findPaths
 {
 	//Get the info.plist
-	NSDictionary *infoPlist = [[NSDictionary alloc] initWithContentsOfURL:[docsetURL URLByAppendingPathComponent:@"Contents/info.plist"]];
+	NSDictionary *infoPlist = [[NSDictionary alloc] initWithContentsOfURL:[docsetURL URLByAppendingPathComponent:@"Contents/Info.plist"]];
 	NSString *bundleIdentifier = [infoPlist objectForKey:@"CFBundleIdentifier"];
 	
 	//Reject Xcode documentation
-	if ([bundleIdentifier isEqual:@"com.apple.adc.documentation.AppleXcode.DeveloperTools"])
+	if (!bundleIdentifier || [bundleIdentifier isEqual:@"com.apple.adc.documentation.AppleXcode.DeveloperTools"])
 		return NO;
 	
 	NSString *version = [infoPlist objectForKey:@"CFBundleVersion"];
@@ -238,9 +238,7 @@
 	//If we don't understand the entity name, bail
 	if (!entityName)
 		return NO;
-	
-	//NSLog(@">> %@ %@ %@", name, entityName, extractPath);
-	
+		
 	NSString *linkRegex = @"//apple_ref/((occ/(instm|clm)/[a-zA-Z_:][a-zA-Z0-9:_]*/([a-zA-Z:_][a-zA-Z0-9:_]*))|(tdef|econst)/([a-zA-Z:_][a-zA-Z0-9:_]*))";
 	
 	/* The interesting captures are 3 & 4, and 5 & 6 */
@@ -514,9 +512,7 @@ void IGKFreeStringChars(const unichar *string)
 		
 		[methods addObjectsFromArray:arr];
 	}
-	
-	//NSLog(@"\t 1");
-	
+		
 	dispatch_async(dbQueue, ^{
 		
 		//More parsing, database stuff

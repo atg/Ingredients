@@ -273,11 +273,8 @@
 
 - (void)executeSideSearch:(NSString *)query
 {
-	
 	sideSearchQuery = query;
-	
-	NSLog(@"Called with: %@", sideSearchQuery);
-	
+		
 	if([query length] > 0)
 	{
 		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"%K CONTAINS[cd] %@", @"name", query];
@@ -296,13 +293,11 @@
 		[self setSideFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
 		[sideSearchViewResults deselectAll:nil];
 	}
-
 }
 
 
 - (void)startIndexing
 {
-	NSLog(@"Start indexing");
 	wallpaperView = [[IGKSourceListWallpaperView alloc] initWithFrame:[[[twoPaneSplitView subviews] objectAtIndex:0] bounds]];
 	[wallpaperView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
 	[[[twoPaneSplitView subviews] objectAtIndex:0] addSubview:wallpaperView];
@@ -327,8 +322,6 @@
 - (void)setAdvancedFilterPredicate:(NSPredicate *)pred
 {
 	advancedSearchPredicate = pred;
-	
-	NSLog(@"Pred changed...");
 }
 
 
