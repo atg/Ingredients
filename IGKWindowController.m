@@ -334,6 +334,30 @@
 	advancedSearchPredicate = pred;
 }
 
+- (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)command
+{
+	if ([NSStringFromSelector(command) isEqual:@"moveUp:"])
+	{
+		[objectsController selectPrevious:nil];
+		return YES;
+	}
+	else if ([NSStringFromSelector(command) isEqual:@"moveDown:"])
+	{
+		[objectsController selectNext:nil];
+		return YES;
+	}
+	else if ([NSStringFromSelector(command) isEqual:@"insertNewline:"])
+	{
+		[[browserWebView window] makeFirstResponder:browserWebView];
+	}
+	else if ([NSStringFromSelector(command) isEqual:@"cancelOperation:"])
+	{
+		
+	}
+	
+	return NO;
+}
+
 
 #pragma mark -
 #pragma mark Table View Delegate 
