@@ -239,7 +239,7 @@
 	if (!entityName)
 		return NO;
 		
-	NSString *linkRegex = @"//apple_ref/((occ/(instm|clm)/[a-zA-Z_:][a-zA-Z0-9:_]*/([a-zA-Z:_][a-zA-Z0-9:_]*))|(tdef|econst)/([a-zA-Z:_][a-zA-Z0-9:_]*))";
+	NSString *linkRegex = @"name=\"//apple_ref/((occ/(instm|clm|intfm|intfcm|intfp|instp)/[a-zA-Z_:][a-zA-Z0-9:_]*/([a-zA-Z:_][a-zA-Z0-9:_]*))|(c/(tdef|econst)/([a-zA-Z:_][a-zA-Z0-9:_]*)))\"";
 	
 	/* The interesting captures are 3 & 4, and 5 & 6 */
 	NSArray *items = [contents arrayOfCaptureComponentsMatchedByRegex:linkRegex];
@@ -247,6 +247,7 @@
 	
 	dispatch_sync(dbQueue, ^{
 		
+		NSEntityDescription *propertyEntity = [NSEntityDescription entityForName:@"ObjCProperty" inManagedObjectContext:ctx];
 		NSEntityDescription *methodEntity = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:ctx];
 		NSEntityDescription *typedefEntity = [NSEntityDescription entityForName:@"CTypedef" inManagedObjectContext:ctx];
 		
@@ -255,6 +256,9 @@
 		
 		for (NSArray *captures in items)
 		{
+			//NSLog(@">> %@", [captures objectAtIndex:0]);
+			//continue;
+			
 			if ([captures count] > 4)
 			{
 				NSString *itemType = [captures objectAtIndex:3];
@@ -263,9 +267,10 @@
 				if ([itemType length] && [itemName length])
 				{
 					//Method
-					BOOL isInstanceMethod = [itemType isEqual:@"instm"];
+					BOOL isProperty = [itemType isEqual:@"intfp"] || [itemType isEqual:@"instp"];
+					BOOL isInstanceMethod = isProperty || [itemType isEqual:@"instm"] || [itemType isEqual:@"intfm"];
 					
-					IGKDocRecordManagedObject *newMethod = [[IGKDocRecordManagedObject alloc] initWithEntity:methodEntity insertIntoManagedObjectContext:ctx];
+					IGKDocRecordManagedObject *newMethod = [[IGKDocRecordManagedObject alloc] initWithEntity:isProperty ? propertyEntity : methodEntity insertIntoManagedObjectContext:ctx];
 					
 					[newMethod setValue:itemName forKey:@"name"];
 					[newMethod setValue:obj forKey:@"container"];

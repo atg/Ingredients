@@ -43,12 +43,15 @@
 	NSRectFillUsingOperation(rect, NSCompositeSourceOver);
 	
 	NSBezierPath *bp = [NSBezierPath bezierPathWithRect:rect];
-	[bp fillWithInnerShadow:[[NSShadow alloc] initWithColor:[NSColor colorWithCalibratedWhite:0.0 alpha:0.5] offset:NSMakeSize(0, -1.0) blurRadius:10.0]];
+	[bp fillWithInnerShadow:[[NSShadow alloc] initWithColor:[NSColor colorWithCalibratedWhite:0.0 alpha:0.25] offset:NSMakeSize(0, -1.0) blurRadius:10.0]];
 	
 	
 	//This should probably be in an NSProgressIndicator subclass, but I CBA to do that for something that will appear for all of 10 seconds.
 	if (progressValue < 0.01)
 		return;
+	
+	NSShadow *barShadow = [[NSShadow alloc] initWithColor:[NSColor colorWithCalibratedWhite:0.0 alpha:0.5] offset:NSMakeSize(0, -1.0) blurRadius:0.0];
+	[barShadow set];
 	
 	NSRect outlineRect = NSMakeRect(11.0, rect.size.height / 2.0 - 9.0, rect.size.width - 22.0, 18.0);
 	
