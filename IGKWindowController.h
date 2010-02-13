@@ -11,6 +11,7 @@
 
 @class IGKApplicationDelegate;
 @class IGKSourceListWallpaperView;
+@class IGKArrayController;
 
 typedef enum {
 	
@@ -72,7 +73,7 @@ typedef enum {
 	NSPredicate *advancedSearchPredicate;
 	
 	// Other
-	IBOutlet NSArrayController *objectsController;
+	IBOutlet IGKArrayController *objectsController;
 	IGKSourceListWallpaperView *wallpaperView;
 	
 	// Temp

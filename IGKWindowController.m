@@ -46,8 +46,8 @@
 	sideSearchQuery = @"";
 	
 	sideSearchResults = [[NSMutableArray alloc] init];
-	[self setSideFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
-	[self setAdvancedFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
+	//[self setSideFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
+	//[self setAdvancedFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
 	
 	if (shouldIndex)
 		[self startIndexing];
@@ -72,12 +72,12 @@
 		return NSOrderedDescending;
 		
 	}];
-	[sideSearchArrayController setSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];
+	[objectsController setSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];
 	
 	[searchViewPredicateEditor addRow:nil];
 	
-	[objectsController setManagedObjectContext:[[[NSApp delegate] kitController] managedObjectContext]];	
-	[objectsController fetch:nil];
+	//[objectsController setManagedObjectContext:[[[NSApp delegate] kitController] managedObjectContext]];	
+	//[objectsController fetch:nil];
 }
 
 
@@ -293,8 +293,8 @@
 	sideSearchQuery = query;
 	
 	//Duck tape
-	if (![objectsController managedObjectContext])
-		[objectsController setManagedObjectContext:[[[NSApp delegate] kitController] managedObjectContext]];	
+	//if (![objectsController managedObjectContext])
+	//	[objectsController setManagedObjectContext:[[[NSApp delegate] kitController] managedObjectContext]];	
 		
 	if([query length] > 0)
 	{
@@ -304,20 +304,17 @@
 		else
 			fetchPredicate = [NSPredicate predicateWithFormat:@"%K CONTAINS[cd] %@ && docset.platformFamily == %@", @"name", query, docsetFilterMode == CHDocsetFilterShowMac ? @"macosx" : @"iphoneos"];
 			
-		[self setSideFilterPredicate:fetchPredicate];
-		
-		
-		if([sideSearchViewResults numberOfRows] > 0)
-		{
-			
-			[sideSearchViewResults selectRowIndexes:[NSIndexSet indexSetWithIndex:0] 
-							   byExtendingSelection:NO];
-		}
+		//[self setSideFilterPredicate:fetchPredicate];
+		[objectsController setPredicate:fetchPredicate];
 	}
 	else {
-		[self setSideFilterPredicate:[NSPredicate predicateWithValue:NO]];
-		[sideSearchViewResults deselectAll:nil];
+		[objectsController setPredicate:[NSPredicate predicateWithValue:NO]];
+		//[sideSearchViewResults deselectAll:nil];
 	}
+	
+	[objectsController refresh];
+	//[objectsController fetch:nil];
+	//[sideSearchViewResults setNeedsDisplay:YES];
 }
 
 
@@ -343,9 +340,9 @@
 	[sideSearchViewField setEnabled:YES];
 	[sideSearchViewField setEditable:YES];
 	
-	[objectsController setManagedObjectContext:[[[NSApp delegate] kitController] managedObjectContext]];
+	//[objectsController setManagedObjectContext:[[[NSApp delegate] kitController] managedObjectContext]];
 	
-	[objectsController fetch:nil];
+	//[objectsController fetch:nil];
 }
 
 - (void)setAdvancedFilterPredicate:(NSPredicate *)pred
@@ -386,7 +383,7 @@
 	if([[aNotification object] isEqual:sideSearchViewResults])
 	{
 		
-		if ([[sideSearchArrayController selectedObjects] count] == 0)
+		if ([objectsController selection] == nil)
 		{
 			[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:
 													 [NSURL fileURLWithPath:
@@ -398,7 +395,7 @@
 		
 		IGKHTMLGenerator *generator = [[IGKHTMLGenerator alloc] init];
 		[generator setContext:[[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext]];
-		[generator setManagedObject:[[sideSearchArrayController selectedObjects] objectAtIndex:0]];
+		[generator setManagedObject:[objectsController selection]];
 		[generator setDisplayType:IGKHTMLDisplayType_All];
 		
 		
