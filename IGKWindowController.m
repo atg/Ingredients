@@ -75,6 +75,8 @@
 	
 	[searchViewPredicateEditor addRow:nil];
 	
+	[objectsController setManagedObjectContext:[[[NSApp delegate] kitController] managedObjectContext]];	
+	[objectsController fetch:nil];
 }
 
 
@@ -274,6 +276,10 @@
 - (void)executeSideSearch:(NSString *)query
 {
 	sideSearchQuery = query;
+	
+	//Duck tape
+	if (![objectsController managedObjectContext])
+		[objectsController setManagedObjectContext:[[[NSApp delegate] kitController] managedObjectContext]];	
 		
 	if([query length] > 0)
 	{
@@ -317,6 +323,10 @@
 	
 	[sideSearchViewField setEnabled:YES];
 	[sideSearchViewField setEditable:YES];
+	
+	[objectsController setManagedObjectContext:[[[NSApp delegate] kitController] managedObjectContext]];
+	
+	[objectsController fetch:nil];
 }
 
 - (void)setAdvancedFilterPredicate:(NSPredicate *)pred

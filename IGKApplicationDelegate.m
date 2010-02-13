@@ -200,6 +200,7 @@
 	
     backgroundManagedObjectContext = [[NSManagedObjectContext alloc] init];
     [backgroundManagedObjectContext setPersistentStoreCoordinator:coordinator];
+	[backgroundManagedObjectContext setUndoManager:nil];
 	
     return backgroundManagedObjectContext;
 }

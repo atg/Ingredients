@@ -256,9 +256,6 @@
 		
 		for (NSArray *captures in items)
 		{
-			//NSLog(@">> %@", [captures objectAtIndex:0]);
-			//continue;
-			
 			if ([captures count] > 4)
 			{
 				NSString *itemType = [captures objectAtIndex:3];
@@ -275,7 +272,9 @@
 					[newMethod setValue:itemName forKey:@"name"];
 					[newMethod setValue:obj forKey:@"container"];
 					[newMethod setValue:docset forKey:@"docset"];
-					[newMethod setValue:[NSNumber numberWithBool:isInstanceMethod] forKey:@"isInstanceMethod"];
+					
+					if (!isProperty)
+						[newMethod setValue:[NSNumber numberWithBool:isInstanceMethod] forKey:@"isInstanceMethod"];
 					
 					continue;
 				}

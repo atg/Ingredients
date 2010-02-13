@@ -15,4 +15,9 @@
 	[kitController showWindow:nil];
 }
 
+- (id)kitController
+{
+	return kitController;
+}
+
 @end
