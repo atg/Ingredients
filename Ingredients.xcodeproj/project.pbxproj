@@ -13,6 +13,11 @@
 		0C7C02EE110E006000412666 /* CHSymbolButtonImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7C02EC110E006000412666 /* CHSymbolButtonImage.m */; };
 		751D2AD21126E4A100403E64 /* IGKArrayController.h in Headers */ = {isa = PBXBuildFile; fileRef = 751D2AD01126E4A100403E64 /* IGKArrayController.h */; };
 		751D2AD31126E4A100403E64 /* IGKArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 751D2AD11126E4A100403E64 /* IGKArrayController.m */; };
+		751D2D181126F1F400403E64 /* no_selection.html in Resources */ = {isa = PBXBuildFile; fileRef = 751D2D171126F1F400403E64 /* no_selection.html */; };
+		751D2DC01127340700403E64 /* IGKNoSelectionInnerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 751D2DBE1127340700403E64 /* IGKNoSelectionInnerView.h */; };
+		751D2DC11127340700403E64 /* IGKNoSelectionInnerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 751D2DBF1127340700403E64 /* IGKNoSelectionInnerView.m */; };
+		751D2DC91127354E00403E64 /* IGKNoSelectionOuterView.h in Headers */ = {isa = PBXBuildFile; fileRef = 751D2DC71127354E00403E64 /* IGKNoSelectionOuterView.h */; };
+		751D2DCA1127354E00403E64 /* IGKNoSelectionOuterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 751D2DC81127354E00403E64 /* IGKNoSelectionOuterView.m */; };
 		751E45D61125E6CE00CD544A /* tictactoe_style.css in Resources */ = {isa = PBXBuildFile; fileRef = 751E45D51125E6CE00CD544A /* tictactoe_style.css */; };
 		755F427E112323C600AA16F5 /* tictactoe.html in Resources */ = {isa = PBXBuildFile; fileRef = 755F427D112323C600AA16F5 /* tictactoe.html */; };
 		755F42AF112326E700AA16F5 /* sourcelist_indexing_wallpaper.png in Resources */ = {isa = PBXBuildFile; fileRef = 755F42AE112326E700AA16F5 /* sourcelist_indexing_wallpaper.png */; };
@@ -83,6 +88,11 @@
 		32CA4F630368D1EE00C91783 /* Ingredients_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ingredients_Prefix.pch; sourceTree = "<group>"; };
 		751D2AD01126E4A100403E64 /* IGKArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKArrayController.h; sourceTree = "<group>"; };
 		751D2AD11126E4A100403E64 /* IGKArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKArrayController.m; sourceTree = "<group>"; };
+		751D2D171126F1F400403E64 /* no_selection.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = no_selection.html; sourceTree = "<group>"; };
+		751D2DBE1127340700403E64 /* IGKNoSelectionInnerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKNoSelectionInnerView.h; sourceTree = "<group>"; };
+		751D2DBF1127340700403E64 /* IGKNoSelectionInnerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKNoSelectionInnerView.m; sourceTree = "<group>"; };
+		751D2DC71127354E00403E64 /* IGKNoSelectionOuterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKNoSelectionOuterView.h; sourceTree = "<group>"; };
+		751D2DC81127354E00403E64 /* IGKNoSelectionOuterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKNoSelectionOuterView.m; sourceTree = "<group>"; };
 		751E45D51125E6CE00CD544A /* tictactoe_style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = tictactoe_style.css; sourceTree = "<group>"; };
 		755F427D112323C600AA16F5 /* tictactoe.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = tictactoe.html; sourceTree = "<group>"; };
 		755F42AE112326E700AA16F5 /* sourcelist_indexing_wallpaper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sourcelist_indexing_wallpaper.png; path = Images/sourcelist_indexing_wallpaper.png; sourceTree = "<group>"; };
@@ -179,6 +189,10 @@
 				75C9FE8F110F53E400C9B51C /* IGKHTMLGenerator.m */,
 				755F42B21123270700AA16F5 /* IGKSourceListWallpaperView.h */,
 				755F42B31123270700AA16F5 /* IGKSourceListWallpaperView.m */,
+				751D2DC71127354E00403E64 /* IGKNoSelectionOuterView.h */,
+				751D2DC81127354E00403E64 /* IGKNoSelectionOuterView.m */,
+				751D2DBE1127340700403E64 /* IGKNoSelectionInnerView.h */,
+				751D2DBF1127340700403E64 /* IGKNoSelectionInnerView.m */,
 			);
 			name = "Views & Cells";
 			sourceTree = "<group>";
@@ -251,6 +265,7 @@
 				75B534F9111076C000560848 /* View_SideSearchTemplate.png */,
 				755F42AE112326E700AA16F5 /* sourcelist_indexing_wallpaper.png */,
 				755F427D112323C600AA16F5 /* tictactoe.html */,
+				751D2D171126F1F400403E64 /* no_selection.html */,
 				751E45D51125E6CE00CD544A /* tictactoe_style.css */,
 				8D1107310486CEB800E47090 /* Ingredients-Info.plist */,
 				756F9D30110BA72F00E6F291 /* IngredientsKit-Info.plist */,
@@ -343,6 +358,8 @@
 				75F672AB110E254A005F299C /* IGKDocRecordManagedObject.h in Headers */,
 				75C9FE90110F53E400C9B51C /* IGKHTMLGenerator.h in Headers */,
 				751D2AD21126E4A100403E64 /* IGKArrayController.h in Headers */,
+				751D2DC01127340700403E64 /* IGKNoSelectionInnerView.h in Headers */,
+				751D2DC91127354E00403E64 /* IGKNoSelectionOuterView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,6 +443,7 @@
 				755F427E112323C600AA16F5 /* tictactoe.html in Resources */,
 				755F42AF112326E700AA16F5 /* sourcelist_indexing_wallpaper.png in Resources */,
 				751E45D61125E6CE00CD544A /* tictactoe_style.css in Resources */,
+				751D2D181126F1F400403E64 /* no_selection.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -450,6 +468,8 @@
 				755F435D11232C1200AA16F5 /* NSBezierPath+MCAdditions.m in Sources */,
 				755F438111232DA800AA16F5 /* IGKLaunchController.m in Sources */,
 				751D2AD31126E4A100403E64 /* IGKArrayController.m in Sources */,
+				751D2DC11127340700403E64 /* IGKNoSelectionInnerView.m in Sources */,
+				751D2DCA1127354E00403E64 /* IGKNoSelectionOuterView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -47,6 +47,7 @@ typedef enum {
 	IBOutlet NSView *browserView;
 	IBOutlet NSTextField *browserViewTitle;
 	IBOutlet NSTextField *browserViewPath;
+	IBOutlet NSView *browserWebViewContainer;
 	IBOutlet WebView *browserWebView;
 	
 	//Side Search
@@ -88,6 +89,14 @@ typedef enum {
 	int currentModeIndex;
 	
 	BOOL shouldIndex;
+	
+	NSManagedObjectID *objectID;
+	
+	IBOutlet NSView *noselectionView;
+	IBOutlet NSPopUpButton *noselectionPopupButton;
+	IBOutlet NSTextField *noselectionSearchField;
+	
+	IBOutlet NSTextField *urlField;
 }
 
 @property (assign) IGKApplicationDelegate *appDelegate;
@@ -100,6 +109,8 @@ typedef enum {
 
 @property (assign) CHDocsetFilterMode docsetFilterMode;
 @property (assign) NSNumber *ui_docsetFilterMode;
+
+- (IBAction)noselectionSearchField:(id)sender;
 
 - (IBAction)executeSearch:(id)sender;
 - (IBAction)executeAdvancedSearch:(id)sender;

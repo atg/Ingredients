@@ -8,7 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-
 @interface IGKArrayController : NSObject<NSTableViewDataSource, NSTableViewDelegate>
 {
 	IBOutlet NSTableView *tableView;
@@ -23,6 +22,9 @@
 @property (assign) NSArray *sortDescriptors;
 
 - (void)refresh;
+
+- (id)objectAtRow:(NSInteger)row;
+- (id)selection;
 
 - (IBAction)selectPrevious:(id)sender;
 - (IBAction)selectNext:(id)sender;

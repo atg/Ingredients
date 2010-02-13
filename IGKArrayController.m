@@ -17,7 +17,6 @@
 - (void)awakeFromNib
 {
 	[tableView setDataSource:self];
-	[tableView setDelegate:self];
 }
 
 - (void)fetch
@@ -36,6 +35,11 @@
 	[self fetch];
 	
 	[tableView reloadData];
+	
+	[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];;
+	[tableView scrollRowToVisible:0];
+	
+	[[tableView delegate] tableViewSelectionDidChange:nil];
 }
 
 - (IBAction)selectPrevious:(id)sender
@@ -46,6 +50,9 @@
 		return;
 	
 	[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
+	[tableView scrollRowToVisible:row];
+	
+	[[tableView delegate] tableViewSelectionDidChange:nil];
 }
 - (IBAction)selectNext:(id)sender
 {
@@ -55,6 +62,17 @@
 		return;
 	
 	[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
+	[tableView scrollRowToVisible:row];
+	
+	[[tableView delegate] tableViewSelectionDidChange:nil];
+}
+
+- (id)objectAtRow:(NSInteger)row
+{
+	if (row < 0 || row >= [fetchedObjects count])
+		return nil;
+	
+	return [fetchedObjects objectAtIndex:row];
 }
 
 - (id)selection
@@ -75,6 +93,12 @@
 {
 	if (row < 0 || row >= [fetchedObjects count])
 		return nil;
+	
+	if ([[tableColumn identifier] isEqual:@"normalIcon"])
+	{
+		if (row == [tableView selectedRow])
+			return [[fetchedObjects objectAtIndex:row] valueForKey:@"selectedIcon"];
+	}
 	
 	return [[fetchedObjects objectAtIndex:row] valueForKey:[tableColumn identifier]];
 	

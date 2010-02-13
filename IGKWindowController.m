@@ -10,6 +10,18 @@
 #import "IGKApplicationDelegate.h"
 #import "IGKHTMLGenerator.h"
 #import "IGKSourceListWallpaperView.h"
+#import "IGKArrayController.h"
+
+@interface IGKWindowController ()
+
+- (void)startIndexing;
+- (void)indexedAllPaths:(NSNotification *)notif;
+- (void)stopIndexing;
+
+- (void)executeSideSearch:(NSString *)query;
+- (void)setMode:(int)modeIndex;
+
+@end
 
 @implementation IGKWindowController
 
@@ -19,24 +31,19 @@
 @synthesize shouldIndex;
 @synthesize docsetFilterMode;
 
-- (id) init
+- (id)init
 {
-	self = [super init];
-	if (self != nil) {
+	if (self = [super init])
+	{
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(indexedAllPaths:) name:@"IGKHasIndexedAllPaths" object:nil];
-
 	}
+	
 	return self;
-}
-- (void)indexedAllPaths:(NSNotification *)notif
-{
-	[self stopIndexing];
 }
 
 - (NSString *)windowNibName
 {
 	return @"CHDocumentationBrowser";
-	
 }
 
 - (void)windowDidLoad
@@ -46,14 +53,13 @@
 	sideSearchQuery = @"";
 	
 	sideSearchResults = [[NSMutableArray alloc] init];
-	//[self setSideFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
-	//[self setAdvancedFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
 	
 	if (shouldIndex)
 		[self startIndexing];
 	
-	sideSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES comparator:^NSComparisonResult (id a, id b) {
-		//NSLog(@"Called with: %@, Q: %@", a, sideSearchQuery);
+	sideSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name"
+													   ascending:YES
+													  comparator:^NSComparisonResult (id a, id b) {
 		if([sideSearchQuery length] == 0)
 			return NSOrderedAscending;
 		
@@ -72,12 +78,10 @@
 		return NSOrderedDescending;
 		
 	}];
+	
 	[objectsController setSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];
 	
 	[searchViewPredicateEditor addRow:nil];
-	
-	//[objectsController setManagedObjectContext:[[[NSApp delegate] kitController] managedObjectContext]];	
-	//[objectsController fetch:nil];
 }
 
 
@@ -251,17 +255,6 @@
 	else if(selectedSegment == 1)
 		[browserWebView goForward:nil];
 }
-/*
-- (IBAction)changeViewMode:(id)sender
-{	
-	NSInteger selectedSegment = [sender selectedSegment];
-	if(selectedSegment == 0)
-		[self setMode:CHDocumentationBrowserUIMode_BrowserOnly];
-	else if(selectedSegment == 1)
-		[self setMode:CHDocumentationBrowserUIMode_TwoUp];
-	else if(selectedSegment == 2)
-		[self setMode:CHDocumentationBrowserUIMode_AdvancedSearch];
-}*/
 
 @dynamic ui_currentModeIndex;
 
@@ -292,10 +285,6 @@
 {
 	sideSearchQuery = query;
 	
-	//Duck tape
-	//if (![objectsController managedObjectContext])
-	//	[objectsController setManagedObjectContext:[[[NSApp delegate] kitController] managedObjectContext]];	
-		
 	if([query length] > 0)
 	{
 		NSPredicate *fetchPredicate = nil;
@@ -304,17 +293,13 @@
 		else
 			fetchPredicate = [NSPredicate predicateWithFormat:@"%K CONTAINS[cd] %@ && docset.platformFamily == %@", @"name", query, docsetFilterMode == CHDocsetFilterShowMac ? @"macosx" : @"iphoneos"];
 			
-		//[self setSideFilterPredicate:fetchPredicate];
 		[objectsController setPredicate:fetchPredicate];
 	}
 	else {
 		[objectsController setPredicate:[NSPredicate predicateWithValue:NO]];
-		//[sideSearchViewResults deselectAll:nil];
 	}
 	
 	[objectsController refresh];
-	//[objectsController fetch:nil];
-	//[sideSearchViewResults setNeedsDisplay:YES];
 }
 
 
@@ -333,16 +318,16 @@
 											  ]
 											 ]];
 }
+- (void)indexedAllPaths:(NSNotification *)notif
+{
+	[self stopIndexing];
+}
 - (void)stopIndexing
 {
 	[wallpaperView removeFromSuperview];
 	
 	[sideSearchViewField setEnabled:YES];
 	[sideSearchViewField setEditable:YES];
-	
-	//[objectsController setManagedObjectContext:[[[NSApp delegate] kitController] managedObjectContext]];
-	
-	//[objectsController fetch:nil];
 }
 
 - (void)setAdvancedFilterPredicate:(NSPredicate *)pred
@@ -380,33 +365,80 @@
 
 - (void)tableViewSelectionDidChange:(NSNotification *)aNotification
 {
-	if([[aNotification object] isEqual:sideSearchViewResults])
+	if ([objectsController selection] == nil)
 	{
-		
-		if ([objectsController selection] == nil)
+		id superview = [browserWebViewContainer superview];
+		if (superview)
 		{
-			[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:
-													 [NSURL fileURLWithPath:
-													  [[NSBundle mainBundle] pathForResource:@"no_selection" ofType:@"html"]
-													  ]
-													 ]];
-			return;
+			[browserWebViewContainer removeFromSuperview];
+			[noselectionView setFrame:[browserWebViewContainer frame]];
+			[superview addSubview:noselectionView];
 		}
 		
-		IGKHTMLGenerator *generator = [[IGKHTMLGenerator alloc] init];
-		[generator setContext:[[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext]];
-		[generator setManagedObject:[objectsController selection]];
-		[generator setDisplayType:IGKHTMLDisplayType_All];
+		/*
+			
+		[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:
+												 [NSURL fileURLWithPath:
+												  [[NSBundle mainBundle] pathForResource:@"no_selection" ofType:@"html"]
+												  ]
+												 ]];
+		 
+		 */
 		
-		
-		
-		NSString *html = [generator html];
-		[[browserWebView mainFrame] loadHTMLString:html
-										   baseURL:[[NSBundle mainBundle] resourceURL]];
-		
+		return;
 	}
+	
+	id superview = [noselectionView superview];
+	if (superview)
+	{
+		[noselectionView removeFromSuperview];
+		[browserWebViewContainer setFrame:[noselectionView frame]];
+		[superview addSubview:browserWebViewContainer];
+	}
+	
+	IGKHTMLGenerator *generator = [[IGKHTMLGenerator alloc] init];
+	[generator setContext:[[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext]];
+	[generator setManagedObject:[objectsController selection]];
+	[generator setDisplayType:IGKHTMLDisplayType_All];
+	
+	
+	
+	NSString *html = [generator html];
+	[[browserWebView mainFrame] loadHTMLString:html
+									   baseURL:[[NSBundle mainBundle] resourceURL]];
+	
 }
 
+- (IBAction)noselectionSearchField:(id)sender
+{	
+	NSString *url = nil;
+	if ([noselectionPopupButton selectedTag] == 0) // Google
+	{
+		//TODO: We need to add percent escapes
+		url = [NSString stringWithFormat:@"http://www.google.com/search?q=%@", [sender stringValue]];
+	}
+	else if ([noselectionPopupButton selectedTag] == 1) // Cocoabuilder
+	{
+		url = [NSString stringWithFormat:@"http://www.cocoabuilder.com/archive/search/1?q=%@&l=cocoa", [sender stringValue]];
+	}
+	else if ([noselectionPopupButton selectedTag] == 2) // CocoaDev
+	{
+		url = [NSString stringWithFormat:@"http://www.google.com/search?q=site%%3Awww.cocoadev.com&q=%@", [sender stringValue]];
+	}
+	
+	if (!url)
+		return;
+	
+	id superview = [noselectionView superview];
+	if (superview)
+	{
+		[noselectionView removeFromSuperview];
+		[browserWebViewContainer setFrame:[noselectionView frame]];
+		[superview addSubview:browserWebViewContainer];
+	}
+	
+	[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
+}
 
 
 @end

@@ -1,0 +1,83 @@
+body {
+	padding: 0;
+	margin: 0;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+/*
+input {
+	margin-top: 14px;
+	float: right;
+	margin-right: 15px;
+	height: 30px;
+	width: 500px;
+	
+	padding-left: 7px;
+	font: 13px "Lucida Grande", Lucida, Verdana, sans-serif;
+}*/
+
+input {
+	height: 32px;
+	
+	padding-left: 6px;
+	font: 13px "Lucida Grande", Lucida, Verdana, sans-serif;
+	
+	width: 100%;
+}
+
+#top {
+	text-align: center;
+	
+	padding-top: 50px;
+	padding-bottom: 50px;
+	background-color: #f4f4f4;
+	color: #7f7f7f;
+	font-style: italic;
+	font-size: 24px;
+}
+
+#main {
+	height: 100%;
+}
+#main .text {
+	text-align: center;
+	color: #7f7f7f;
+	font-size: 13px;
+}
+#main .search {
+	background-color: red;
+	
+	-webkit-border-radius: 10px;
+	background: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0.0, #d9d9d9),
+    color-stop(1.0, #ededed)
+);
+	
+	
+	position: relative;
+	top: 50%;
+	
+	margin-left: 72px;
+	margin-right: 72px;
+	margin-top: -30px;
+	
+	height: 32px;
+	border: 1px solid #cbcbcb;
+	
+	padding: 14px;
+}
+#main .search .left {
+	width: 100px;
+	float: left;
+	font-weight: bold;
+}
+#main .search .right {
+	float: right;
+	width: 100%;
+}
+#main .search .right .input {
+	
+}
