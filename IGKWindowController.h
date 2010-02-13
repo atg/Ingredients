@@ -22,6 +22,13 @@ typedef enum {
 	
 } CHDocumentationBrowserUIMode;
 
+typedef enum {
+	CHDocsetFilterShowAll=0,
+	CHDocsetFilterShowMac=1,
+	CHDocsetFilterShowiPhone=2,
+	CHDocsetFilterShowiPad=3
+} CHDocsetFilterMode;
+
 @interface IGKWindowController : NSWindowController
 {
 	IGKApplicationDelegate *appDelegate;
@@ -72,6 +79,9 @@ typedef enum {
 	IBOutlet NSTableView *temporaryTable;
 	
 	
+	CHDocsetFilterMode docsetFilterMode;
+	
+	
 	BOOL awaken;
 	
 	int currentModeIndex;
@@ -86,6 +96,9 @@ typedef enum {
 @property (assign) NSNumber *ui_currentModeIndex;
 
 @property (assign) BOOL shouldIndex;
+
+@property (assign) CHDocsetFilterMode docsetFilterMode;
+@property (assign) NSNumber *ui_docsetFilterMode;
 
 - (IBAction)executeSearch:(id)sender;
 - (IBAction)executeAdvancedSearch:(id)sender;

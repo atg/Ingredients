@@ -17,6 +17,7 @@
 @synthesize sideFilterPredicate;
 @synthesize advancedFilterPredicate;
 @synthesize shouldIndex;
+@synthesize docsetFilterMode;
 
 - (id) init
 {
@@ -273,6 +274,20 @@
 	return [NSNumber numberWithInt:currentModeIndex];
 }
 
+- (NSNumber *)ui_docsetFilterMode
+{
+	return [NSNumber numberWithInteger:docsetFilterMode];
+}
+- (void)setUi_docsetFilterMode:(NSNumber *)n
+{
+	[self willChangeValueForKey:@"ui_docsetFilterMode"];
+	docsetFilterMode = [n integerValue];
+	[self didChangeValueForKey:@"ui_docsetFilterMode"];
+	
+	[self executeSearch:nil];
+}
+
+
 - (void)executeSideSearch:(NSString *)query
 {
 	sideSearchQuery = query;
@@ -283,8 +298,12 @@
 		
 	if([query length] > 0)
 	{
-		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"%K CONTAINS[cd] %@", @"name", query];
-		
+		NSPredicate *fetchPredicate = nil;
+		if (docsetFilterMode == CHDocsetFilterShowAll)
+			fetchPredicate = [NSPredicate predicateWithFormat:@"%K CONTAINS[cd] %@", @"name", query];
+		else
+			fetchPredicate = [NSPredicate predicateWithFormat:@"%K CONTAINS[cd] %@ && docset.platformFamily == %@", @"name", query, docsetFilterMode == CHDocsetFilterShowMac ? @"macosx" : @"iphoneos"];
+			
 		[self setSideFilterPredicate:fetchPredicate];
 		
 		
@@ -296,7 +315,7 @@
 		}
 	}
 	else {
-		[self setSideFilterPredicate:[NSPredicate predicateWithFormat:@"FALSEPREDICATE"]];
+		[self setSideFilterPredicate:[NSPredicate predicateWithValue:NO]];
 		[sideSearchViewResults deselectAll:nil];
 	}
 }
