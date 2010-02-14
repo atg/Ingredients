@@ -51,7 +51,7 @@
 {
 	NSMutableString *outputString = [[NSMutableString alloc] init];
 	
-	[outputString appendString:@"<!doctype html>\n<html>\n<head>\n<meta charset='utf-8'>\n<title>%@</title>\n<link rel='stylesheet' href='main.css' type='text/css' media='screen'>\n</head>\n<body>\n"];
+	[outputString appendFormat:@"<!doctype html>\n<html>\n<head>\n<meta charset='utf-8'>\n<title>%@</title>\n<link rel='stylesheet' href='main.css' type='text/css' media='screen'>\n</head>\n<body>\n", [managedObject valueForKey:@"name"]];
 	
 	return outputString;
 }

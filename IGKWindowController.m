@@ -21,6 +21,8 @@
 - (void)executeSideSearch:(NSString *)query;
 - (void)setMode:(int)modeIndex;
 
+- (void)setUpForWebView:(WebView *)sender frame:(WebFrame *)frame;
+
 @end
 
 @implementation IGKWindowController
@@ -82,6 +84,13 @@
 	[objectsController setSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];
 	
 	[searchViewPredicateEditor addRow:nil];
+	
+	//[[WebPreferences standardPreferences] setMinimumFontSize:12];
+	//[[WebPreferences standardPreferences] setMinimumLogicalFontSize:12];
+	//[[WebPreferences standardPreferences] setDefaultFontSize:16];
+	//[[WebPreferences standardPreferences] setDefaultFixedFontSize:16];
+	
+	[self tableViewSelectionDidChange:nil]; 
 }
 
 
@@ -277,7 +286,7 @@
 	docsetFilterMode = [n integerValue];
 	[self didChangeValueForKey:@"ui_docsetFilterMode"];
 	
-	[self executeSearch:nil];
+	[self executeSearch:sideSearchViewField];
 }
 
 
@@ -409,6 +418,10 @@
 	
 }
 
+- (IBAction)openInSafari:(id)sender
+{
+	[[NSWorkspace sharedWorkspace] openURL:[[[[browserWebView mainFrame] dataSource] request] URL]];
+}
 - (IBAction)noselectionSearchField:(id)sender
 {	
 	NSString *url = nil;
@@ -440,5 +453,57 @@
 	[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
 }
 
+- (void)webView:(WebView *)sender didStartProvisionalLoadForFrame:(WebFrame *)frame
+{
+	[self setUpForWebView:sender frame:frame];
+}
+- (void)webView:(WebView *)sender didReceiveServerRedirectForProvisionalLoadForFrame:(WebFrame *)frame
+{
+	[self setUpForWebView:sender frame:frame];
+}
+- (void)webView:(WebView *)sender didCommitLoadForFrame:(WebFrame *)frame
+{
+	[self setUpForWebView:sender frame:frame];
+}
+- (void)webView:(WebView *)sender didReceiveTitle:(NSString *)title forFrame:(WebFrame *)frame
+{
+	[self setUpForWebView:sender frame:frame];
+}
+- (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame
+{
+	[self setUpForWebView:sender frame:frame];
+}
+- (void)setUpForWebView:(WebView *)sender frame:(WebFrame *)frame
+{
+	if (sender != browserWebView || frame != [browserWebView mainFrame])
+		return;
+	
+	NSURL *url = [[[frame dataSource] request] URL];
+	if (!url || [[url scheme] isEqual:@"file"])
+	{
+		[urlField setStringValue:@""];
+		
+		NSRect r = [browserToolbar frame];
+		[[browserToolbar animator] setFrame:NSMakeRect(0, -r.size.height, r.size.width, r.size.height)];
+
+		NSRect r2 = [browserWebViewContainer frame];
+		[[browserWebView animator] setFrame:NSMakeRect(0, 0, r2.size.width, r2.size.height/* - [browserTopbar frame].size.height*/)];
+	}
+	else
+	{
+		[urlField setStringValue:[url absoluteString]];
+		
+		NSRect r = [browserToolbar frame];
+		[[browserToolbar animator] setFrame:NSMakeRect(0, 0, r.size.width, r.size.height)];
+		
+		NSRect r2 = [browserWebViewContainer frame];
+		[[browserWebView animator] setFrame:NSMakeRect(0, r.size.height, r2.size.width, r2.size.height - r.size.height/* - [browserTopbar frame].size.height*/)];
+	}
+	
+	if ([[frame dataSource] pageTitle] == nil)
+		[browserViewTitle setStringValue:@""];
+	else
+		[browserViewTitle setStringValue:[[frame dataSource] pageTitle]];
+}
 
 @end

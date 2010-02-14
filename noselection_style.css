@@ -68,11 +68,10 @@ input {
 	border: 1px solid #cbcbcb;
 	
 	padding: 14px;
+	color: #ededed;
 }
 #main .search .left {
-	width: 100px;
-	float: left;
-	font-weight: bold;
+	width: 100%;
 }
 #main .search .right {
 	float: right;
