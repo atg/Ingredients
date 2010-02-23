@@ -8,6 +8,7 @@
 
 #import "IGKHTMLGenerator.h"
 
+@class IGKScraper;
 
 @interface IGKHTMLGenerator ()
 
@@ -51,7 +52,7 @@
 {
 	NSMutableString *outputString = [[NSMutableString alloc] init];
 	
-	[outputString appendFormat:@"<!doctype html>\n<html>\n<head>\n<meta charset='utf-8'>\n<title>%@</title>\n<link rel='stylesheet' href='main.css' type='text/css' media='screen'>\n</head>\n<body>\n", [managedObject valueForKey:@"name"]];
+	[outputString appendFormat:@"<!doctype html>\n<html>\n<head>\n<meta charset='utf-8'>\n<title>%@</title>\n<link rel='stylesheet' href='main.css' type='text/css' media='screen'>\n</head>\n<body>\n", [transientObject valueForKey:@"name"]];
 	
 	return outputString;
 }
@@ -66,9 +67,20 @@
 
 - (NSString *)html
 {
+	if (!managedObject)
+		return @"";
+	
+	//Create a new managed object context to put the results of the full scrape into
+	//We don't want to actually -save: the results 
+	transientContext = [[NSManagedObjectContext alloc] init];
+	[transientContext setPersistentStoreCoordinator:[context persistentStoreCoordinator]];
+	
+	//Scrape all the information into the managed object
+	transientObject = [IGKScraper extractManagedObjectFully:managedObject context:transientContext];
+	
 	//Find out if managedObject is an ObjCAbstractMethodContainer
-	NSEntityDescription *ObjCAbstractMethodContainer = [NSEntityDescription entityForName:@"ObjCAbstractMethodContainer" inManagedObjectContext:context];
-	isMethodContainer = [[managedObject entity] isKindOfEntity:ObjCAbstractMethodContainer];
+	NSEntityDescription *ObjCAbstractMethodContainer = [NSEntityDescription entityForName:@"ObjCAbstractMethodContainer" inManagedObjectContext:transientContext];
+	isMethodContainer = [[transientObject entity] isKindOfEntity:ObjCAbstractMethodContainer];
 	
 	//Create a string to put the html in
 	NSMutableString *outputString = [[NSMutableString alloc] init];
@@ -95,6 +107,10 @@
 	//Append a footer
 	[outputString appendString:[self footer]];
 	
+	//Reset the context
+	[transientContext rollback];
+	[transientContext reset];
+	
 	return outputString;
 }
 - (NSString *)html_all
@@ -115,10 +131,10 @@
 	NSMutableString *outputString = [[NSMutableString alloc] init];
 	[outputString appendString:@"<div id='overview'>"];
 	
-	[outputString appendFormat:@"<h1>%@</h1>", [self escape:[managedObject valueForKey:@"name"]]];
+	[outputString appendFormat:@"<h1>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];
 	
-	if ([managedObject valueForKey:@"overview"])
-		[outputString appendString:[managedObject valueForKey:@"overview"]];	
+	if ([transientObject valueForKey:@"overview"])
+		[outputString appendString:[transientObject valueForKey:@"overview"]];	
 	
 	[outputString appendString:@"</div>"];
 	return outputString;
@@ -142,12 +158,12 @@
 	[outputString appendString:@"<div id='methods'>"];
 	
 	NSFetchRequest *methodsFetch = [[NSFetchRequest alloc] init];
-	[methodsFetch setEntity:[NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:context]];
-	[methodsFetch setPredicate:[NSPredicate predicateWithFormat:@"container=%@", managedObject]];
+	[methodsFetch setEntity:[NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:transientContext]];
+	[methodsFetch setPredicate:[NSPredicate predicateWithFormat:@"container=%@", transientObject]];
 	[methodsFetch setSortDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
 	
 	NSError *error = nil;
-	NSArray *methods = [context executeFetchRequest:methodsFetch error:&error];
+	NSArray *methods = [transientContext executeFetchRequest:methodsFetch error:&error];
 	for (NSManagedObject *object in methods)
 	{
 		[outputString appendFormat:@"\t<div class='method'>\n"];

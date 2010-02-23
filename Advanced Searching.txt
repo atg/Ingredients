@@ -1,0 +1,11 @@
+Advanced search:
+    Item name
+        (starts with, ends with, is, is not, contains, matches)
+    Kind
+        [Class/Protocol/Category/Method]
+    is Instance Method (Methods only)
+        [yes/no]
+    Superclass (Classes only)
+        (starts with, ends with, is, is not, contains, matches)
+    Conforms to (Classes and Protocols only)
+        (starts with, ends with, is, is not, contains, matches)

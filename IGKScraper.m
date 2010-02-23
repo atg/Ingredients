@@ -272,6 +272,7 @@
 					[newMethod setValue:itemName forKey:@"name"];
 					[newMethod setValue:obj forKey:@"container"];
 					[newMethod setValue:docset forKey:@"docset"];
+					[newMethod setValue:extractPath forKey:@"documentPath"];
 					
 					if (!isProperty)
 						[newMethod setValue:[NSNumber numberWithBool:isInstanceMethod] forKey:@"isInstanceMethod"];
@@ -293,7 +294,8 @@
 						
 						[newTypedef setValue:itemName forKey:@"name"];
 						[newTypedef setValue:docset forKey:@"docset"];
-					}				
+						[newTypedef setValue:extractPath forKey:@"documentPath"];
+					}
 					
 					continue;
 				}
@@ -316,6 +318,159 @@
 	[newRecord setValue:recordPath forKey:@"documentPath"];
 	
 	return newRecord;
+}
+
++ (id)extractManagedObjectFully:(NSManagedObject *)persistobj context:(NSManagedObjectContext *)transientContext
+{
+	//Get persistobj's equivalent in transientContext
+	NSManagedObject *obj = [transientContext objectWithID:[persistobj objectID]];
+	
+	NSManagedObject *docset = [obj valueForKey:@"docset"];
+	NSString *extractPath = [obj valueForKey:@"documentPath"];
+	NSLog(@"extractPath = %@",extractPath);
+	NSURL *fileurl = [NSURL fileURLWithPath:extractPath];
+	
+	NSError *err = nil;
+	NSXMLDocument *doc = [[NSXMLDocument alloc] initWithContentsOfURL:fileurl options:NSXMLDocumentTidyHTML error:&err];
+	if (!doc)
+		return nil;
+	
+	NSEntityDescription *methodEntity = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:transientContext];
+	
+	NSArray *methodNodes = [[doc rootElement] nodesForXPath:@"//a" error:&err];
+	//NSLog(@"methodNodes = %@", methodNodes);
+	
+	
+	NSSet *containersSet = [[NSMutableSet alloc] init];
+	for (NSXMLNode *a in methodNodes)
+	{
+		if (![a isKindOfClass:[NSXMLElement class]])
+			continue;
+		
+		NSString *name = [[a attributeForName:@"name"] stringValue];
+		if (name)
+		{
+			[containersSet addObject:[a parent]];
+		}
+		
+	}
+	
+	NSMutableArray *methods = [[NSMutableArray alloc] init];
+	for (NSXMLNode *container in containersSet)
+	{
+		NSArray *arr = [self splitArray:[container children] byBlock:^BOOL(id a) {
+			if (![a isKindOfClass:[NSXMLElement class]])
+				return NO;
+			
+			NSXMLNode *el = [a attributeForName:@"name"];
+			NSString *strval = [el stringValue];
+			//(instm|clm|intfm|intfcm|intfp|instp)
+			if ([strval isLike:@"//apple_ref/occ/instm*"] || [strval isLike:@"//apple_ref/occ/clm*"] ||
+				[strval isLike:@"//apple_ref/occ/intfm*"] || [strval isLike:@"//apple_ref/occ/intfcm*"] ||
+				[strval isLike:@"//apple_ref/occ/intfp*"] || [strval isLike:@"//apple_ref/occ/instp*"])
+				//[strval isLike:@"*/c/func*"] || [strval isLike:@"*/c/tdef*"] || [strval isLike:@"*/c/macro*"])
+				return YES;
+			return NO;
+		}];
+		
+		[methods addObjectsFromArray:arr];
+	}
+	
+	for (NSArray *arr in methods)
+	{
+		NSString *name = nil;
+		NSMutableString *description = nil;
+		NSString *prototype = nil;
+		
+		for (NSXMLElement *n in arr)
+		{
+			if (![n isKindOfClass:[NSXMLElement class]])
+				continue;
+			
+			if ([[n name] isEqual:@"h3"])
+			{
+				[self createMethodNamed:name description:description prototype:prototype methodEntity:methodEntity parent:obj docset:docset transientContext:transientContext];
+				
+				description = [[NSMutableString alloc] init];
+				prototype = nil;
+				name = [n stringValue];
+				continue;
+			}
+			
+			if ([[n name] isEqual:@"p"])
+			{
+				if ([[[n attributeForName:@"class"] stringValue] isEqual:@"spaceabovemethod"])
+				{
+					prototype = [n stringValue];
+				}
+				else
+				{
+					[description appendFormat:@"<p>%@</p>", [n stringValue]];
+				}
+			}
+		}
+		
+		[self createMethodNamed:name description:description prototype:prototype methodEntity:methodEntity parent:obj docset:docset transientContext:transientContext];
+	}
+	
+	//NSLog(@"methods = %@", methods);
+	
+	return obj;
+}
+
++ (NSArray *)splitArray:(NSArray *)array byBlock:(BOOL (^)(id a))block
+{
+	NSMutableArray *arrays = [[NSMutableArray alloc] init];
+	
+	NSMutableArray *currentArray = [[NSMutableArray alloc] init];
+	[arrays addObject:currentArray];
+	
+	for (id a in array)
+	{
+		if (block(a))
+		{
+			currentArray = [[NSMutableArray alloc] init];
+			[arrays addObject:currentArray];
+		}
+		else
+		{
+			[currentArray addObject:a];
+		}
+	}
+	
+	return arrays;
+}
++ (NSArray *)array:(NSArray *)array findObjectByBlock:(BOOL (^)(id a))block
+{	
+	for (id a in array)
+	{
+		if (block(a))
+		{
+			return a;
+		}
+	}
+	
+	return nil;
+}
+
++ (void)createMethodNamed:(NSString *)name description:(NSString *)description prototype:(NSString *)prototype methodEntity:(NSEntityDescription *)methodEntity parent:(NSManagedObject*)parent docset:(NSManagedObject*)docset transientContext:(NSManagedObjectContext *)transientContext
+{
+	if (name == nil)
+		return;
+	
+	//NSLog(@"name / proto = %@ -- %@", name, prototype);
+	
+	IGKDocRecordManagedObject *newMethod = [[IGKDocRecordManagedObject alloc] initWithEntity:methodEntity insertIntoManagedObjectContext:transientContext];
+	
+	[newMethod setValue:name forKey:@"name"];
+	
+	if ([description length])
+		[newMethod setValue:description forKey:@"overview"];
+	
+	[newMethod setValue:prototype forKey:@"signature"];
+	
+	[newMethod setValue:parent forKey:@"container"];
+	[newMethod setValue:docset forKey:@"docset"];
 }
 
 @end

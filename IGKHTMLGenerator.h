@@ -25,8 +25,11 @@ typedef enum {
 @interface IGKHTMLGenerator : NSObject
 {
 	NSManagedObjectContext *context;
+	NSManagedObjectContext *transientContext;
 	
 	IGKDocRecordManagedObject *managedObject;
+	IGKDocRecordManagedObject *transientObject;
+	
 	IGKHTMLDisplayType displayType;
 	
 	BOOL isMethodContainer;
