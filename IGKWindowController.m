@@ -428,15 +428,19 @@
 	if ([noselectionPopupButton selectedTag] == 0) // Google
 	{
 		//TODO: We need to add percent escapes
-		url = [NSString stringWithFormat:@"http://www.google.com/search?q=%@", [sender stringValue]];
+		url = [NSString stringWithFormat:@"http://www.google.com/search?q=%@", [noselectionSearchField stringValue]];
 	}
 	else if ([noselectionPopupButton selectedTag] == 1) // Cocoabuilder
 	{
-		url = [NSString stringWithFormat:@"http://www.cocoabuilder.com/archive/search/1?q=%@&l=cocoa", [sender stringValue]];
+		url = [NSString stringWithFormat:@"http://www.cocoabuilder.com/archive/search/1?q=%@&l=cocoa", [noselectionSearchField stringValue]];
 	}
 	else if ([noselectionPopupButton selectedTag] == 2) // CocoaDev
 	{
-		url = [NSString stringWithFormat:@"http://www.google.com/search?q=site%%3Awww.cocoadev.com&q=%@", [sender stringValue]];
+		url = [NSString stringWithFormat:@"http://www.google.com/search?q=site%%3Awww.cocoadev.com&q=%@", [noselectionSearchField stringValue]];
+	}
+	else if ([noselectionPopupButton selectedTag] == 3) // Stack Overflow
+	{
+		url = [NSString stringWithFormat:@"http://www.google.com/search?q=site%%3Astackoverflow.com&q=%@", [noselectionSearchField stringValue]];
 	}
 	
 	if (!url)
