@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 @class IGKLaunchController;
+@class IGKDocRecordManagedObject;
 
 //A scraper takes a .docset and populates a core data database
 
@@ -35,5 +36,30 @@
 - (void)index;
 
 + (id)extractManagedObjectFully:(NSManagedObject *)persistobj context:(NSManagedObjectContext *)transientContext;
++ (void)createMethodNamed:(NSString *)name description:(NSString *)description prototype:(NSString *)prototype methodEntity:(NSEntityDescription *)methodEntity parent:(NSManagedObject*)parent docset:(NSManagedObject*)docset transientContext:(NSManagedObjectContext *)transientContext;
+
+@end
+
+
+
+@interface IGKFullScraper : NSObject
+{
+	IGKDocRecordManagedObject *persistobj;
+	
+	IGKDocRecordManagedObject *transientObject;
+	NSManagedObjectContext *transientContext;
+	
+	//We use instance variables in IGKFullScraper as a way of maintaining state without passing arguments
+	NSManagedObject *docset;
+	NSXMLDocument *doc;
+}
+
+@property (readonly) NSManagedObject *transientObject;
+@property (readonly) NSManagedObjectContext *transientContext;
+
+- (id)initWithManagedObject:(IGKDocRecordManagedObject *)persistentObject;
+- (void)start;
+
+- (void)cleanUp;
 
 @end

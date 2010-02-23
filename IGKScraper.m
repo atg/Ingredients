@@ -320,25 +320,78 @@
 	return newRecord;
 }
 
-+ (id)extractManagedObjectFully:(NSManagedObject *)persistobj context:(NSManagedObjectContext *)transientContext
+
+@end
+
+
+
+@implementation IGKFullScraper
+
+@synthesize transientObject;
+@synthesize transientContext;
+
+- (id)initWithManagedObject:(IGKDocRecordManagedObject *)persistentObject
+{
+	if (self = [super init])
+	{
+		persistobj = persistentObject;
+	}
+	
+	return self;
+}
+
+- (void)start
+{
+	//Create a new managed object context to put the results of the full scrape into
+	//We don't want to actually -save: the results 
+	transientContext = [[NSManagedObjectContext alloc] init];
+	[transientContext setPersistentStoreCoordinator:[[persistobj managedObjectContext] persistentStoreCoordinator]];
+	
+	//Scrape
+	[self scrape];
+}
+
+- (void)cleanUp
+{
+	//Reset the context
+	[transientContext rollback];
+	[transientContext reset];
+}
+
+- (void)scrape
 {
 	//Get persistobj's equivalent in transientContext
-	NSManagedObject *obj = [transientContext objectWithID:[persistobj objectID]];
+	transientObject = [transientContext objectWithID:[persistobj objectID]];
 	
-	NSManagedObject *docset = [obj valueForKey:@"docset"];
-	NSString *extractPath = [obj valueForKey:@"documentPath"];
-	NSLog(@"extractPath = %@",extractPath);
+	docset = [transientObject valueForKey:@"docset"];
+	NSString *extractPath = [transientObject valueForKey:@"documentPath"];
+	
 	NSURL *fileurl = [NSURL fileURLWithPath:extractPath];
 	
 	NSError *err = nil;
-	NSXMLDocument *doc = [[NSXMLDocument alloc] initWithContentsOfURL:fileurl options:NSXMLDocumentTidyHTML error:&err];
+	doc = [[NSXMLDocument alloc] initWithContentsOfURL:fileurl options:NSXMLDocumentTidyHTML error:&err];
 	if (!doc)
-		return nil;
+		return;
+	
+	//Depending on the type of obj, we will need to parse it differently
+	if ([[transientObject entity] isKindOfEntity:[NSEntityDescription entityForName:@"ObjCAbstractMethodContainer" inManagedObjectContext:transientContext]])
+	{
+		[self scrapeAbstractMethodContainer];
+	}
+	else if ([[transientObject entity] isKindOfEntity:[NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:transientContext]])
+	{
+		//[self extractFully_ObjCAbstractMethodContainer:];
+	}
+}
+
+- (void)scrapeAbstractMethodContainer
+{
+	[transientObject setValue:[NSSet set] forKey:@"methods"];
 	
 	NSEntityDescription *methodEntity = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:transientContext];
 	
+	NSError *err = nil;
 	NSArray *methodNodes = [[doc rootElement] nodesForXPath:@"//a" error:&err];
-	//NSLog(@"methodNodes = %@", methodNodes);
 	
 	
 	NSSet *containersSet = [[NSMutableSet alloc] init];
@@ -358,7 +411,7 @@
 	NSMutableArray *methods = [[NSMutableArray alloc] init];
 	for (NSXMLNode *container in containersSet)
 	{
-		NSArray *arr = [self splitArray:[container children] byBlock:^BOOL(id a) {
+		NSArray *arr = [[self class] splitArray:[container children] byBlock:^BOOL(id a) {
 			if (![a isKindOfClass:[NSXMLElement class]])
 				return NO;
 			
@@ -389,7 +442,7 @@
 			
 			if ([[n name] isEqual:@"h3"])
 			{
-				[self createMethodNamed:name description:description prototype:prototype methodEntity:methodEntity parent:obj docset:docset transientContext:transientContext];
+				[self createMethodNamed:name description:description prototype:prototype methodEntity:methodEntity parent:transientObject docset:docset transientContext:transientContext];
 				
 				description = [[NSMutableString alloc] init];
 				prototype = nil;
@@ -410,12 +463,8 @@
 			}
 		}
 		
-		[self createMethodNamed:name description:description prototype:prototype methodEntity:methodEntity parent:obj docset:docset transientContext:transientContext];
+		[self createMethodNamed:name description:description prototype:prototype methodEntity:methodEntity parent:transientObject docset:docset transientContext:transientContext];
 	}
-	
-	//NSLog(@"methods = %@", methods);
-	
-	return obj;
 }
 
 + (NSArray *)splitArray:(NSArray *)array byBlock:(BOOL (^)(id a))block
@@ -453,7 +502,7 @@
 	return nil;
 }
 
-+ (void)createMethodNamed:(NSString *)name description:(NSString *)description prototype:(NSString *)prototype methodEntity:(NSEntityDescription *)methodEntity parent:(NSManagedObject*)parent docset:(NSManagedObject*)docset transientContext:(NSManagedObjectContext *)transientContext
+- (void)createMethodNamed:(NSString *)name description:(NSString *)description prototype:(NSString *)prototype methodEntity:(NSEntityDescription *)methodEntity parent:(NSManagedObject*)parent docset:(NSManagedObject*)docset transientContext:(NSManagedObjectContext *)transientContext
 {
 	if (name == nil)
 		return;
@@ -473,9 +522,8 @@
 	[newMethod setValue:docset forKey:@"docset"];
 }
 
+
 @end
-
-
 
 
 

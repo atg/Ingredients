@@ -7,8 +7,7 @@
 //
 
 #import "IGKHTMLGenerator.h"
-
-@class IGKScraper;
+#import "IGKScraper.h"
 
 @interface IGKHTMLGenerator ()
 
@@ -70,13 +69,13 @@
 	if (!managedObject)
 		return @"";
 	
-	//Create a new managed object context to put the results of the full scrape into
-	//We don't want to actually -save: the results 
-	transientContext = [[NSManagedObjectContext alloc] init];
-	[transientContext setPersistentStoreCoordinator:[context persistentStoreCoordinator]];
+	//Do a full scrape of the documentation referenced by managedObject
+	IGKFullScraper *fullScraper = [[IGKFullScraper alloc] initWithManagedObject:managedObject];
+	[fullScraper start];
 	
-	//Scrape all the information into the managed object
-	transientObject = [IGKScraper extractManagedObjectFully:managedObject context:transientContext];
+	transientContext = fullScraper.transientContext;
+	transientObject = fullScraper.transientObject;
+	
 	
 	//Find out if managedObject is an ObjCAbstractMethodContainer
 	NSEntityDescription *ObjCAbstractMethodContainer = [NSEntityDescription entityForName:@"ObjCAbstractMethodContainer" inManagedObjectContext:transientContext];
@@ -107,9 +106,7 @@
 	//Append a footer
 	[outputString appendString:[self footer]];
 	
-	//Reset the context
-	[transientContext rollback];
-	[transientContext reset];
+	[fullScraper cleanUp];
 	
 	return outputString;
 }
