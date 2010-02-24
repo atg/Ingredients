@@ -442,7 +442,7 @@
 			
 			if ([[n name] isEqual:@"h3"])
 			{
-				[self createMethodNamed:name description:description prototype:prototype methodEntity:methodEntity parent:transientObject docset:docset transientContext:transientContext];
+				[self createMethodNamed:name description:description prototype:prototype methodEntity:methodEntity parent:transientObject docset:docset];
 				
 				description = [[NSMutableString alloc] init];
 				prototype = nil;
@@ -463,7 +463,7 @@
 			}
 		}
 		
-		[self createMethodNamed:name description:description prototype:prototype methodEntity:methodEntity parent:transientObject docset:docset transientContext:transientContext];
+		[self createMethodNamed:name description:description prototype:prototype methodEntity:methodEntity parent:transientObject docset:docset];
 	}
 }
 
@@ -502,7 +502,8 @@
 	return nil;
 }
 
-- (void)createMethodNamed:(NSString *)name description:(NSString *)description prototype:(NSString *)prototype methodEntity:(NSEntityDescription *)methodEntity parent:(NSManagedObject*)parent docset:(NSManagedObject*)docset transientContext:(NSManagedObjectContext *)transientContext
+- (void)createMethodNamed:(NSString *)name description:(NSString *)description prototype:(NSString *)prototype
+			 methodEntity:(NSEntityDescription *)methodEntity parent:(NSManagedObject*)parent docset:(NSManagedObject*)docset
 {
 	if (name == nil)
 		return;
