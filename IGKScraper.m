@@ -380,16 +380,148 @@
 	}
 	else if ([[transientObject entity] isKindOfEntity:[NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:transientContext]])
 	{
+		[self scrapeMethod];
 		//[self extractFully_ObjCAbstractMethodContainer:];
 	}
 }
 
+- (void)scrapeMethod
+{
+	
+}
+- (void)scrapeMethodChildren:(NSArray *)children index:(NSUInteger)index managedObject:(NSManagedObject *)object
+{
+	/* Things we need to scrape
+	     * name
+	     * overview
+	     * parameters
+	     * returnType
+	     * returnDescription
+	     * availability
+	     * seealsos
+	     * samplecode
+	*/
+	
+	NSUInteger i = 0;
+	NSUInteger count = [children count];
+	for (i = index; i < count; i++)
+	{
+		NSXMLElement *n = [children objectAtIndex:i];
+		if (![n isKindOfClass:[NSXMLElement class]])
+			continue;
+		
+		NSString *nName = [[n name] lowercaseString];
+		NSArray *nClass = [[[[n attributeForName:@"class"] stringValue] lowercaseString] componentsSeparatedByString:@" "];
+		
+		//name
+		// <h3 class="*jump*"> ... </h3>
+		if ([nName isEqual:@"h3"] && [nClass containsObject:@"jump"])
+		{
+			[object setValue:[n stringValue] forKey:@"name"];
+		}
+		
+		//overview
+		// <p class="spaceabove"> ... </p> <p class="spaceabove"> ... </p> ...
+		if ([nClass containsObject:@"spaceabove"])
+		{
+			NSMutableString *overview = [[NSMutableString alloc] init];
+			[overview appendFormat:@"<p>%@</p>", [n stringValue]];
+			
+			NSUInteger j;
+			for (j = i + 1; j < count; j++)
+			{
+				NSXMLElement *m = [children objectAtIndex:j];
+				if (![m isKindOfClass:[NSXMLElement class]])
+					continue;
+				if (![[[m attributeForName:@"class"] stringValue] isEqual:@"spaceabove"])
+					break;
+				
+				[overview appendFormat:@"<p>%@</p>", [m stringValue]];
+			}
+			
+			[object setValue:overview forKey:@"overview"];
+		}
+		
+		//prototype
+		// <p class="spaceabovemethod"> ... </p>
+		if ([nClass containsObject:@"spaceabovemethod"])
+		{
+			NSMutableString *prototype = [[NSMutableString alloc] init];
+			[prototype appendString:[n stringValue]];
+			
+			[object setValue:prototype forKey:@"signature"];
+		}
+		
+		//parameters
+		/* <dl class="termdef">
+		       <dt> ... name ... </dt>
+		       <dd> ... overview ... </dd>
+		   </dl>
+		 */
+		if ([nName isEqual:@"dl"] && [nClass containsObject:@"termdef"])
+		{
+			NSArray *nChildren = [n children];
+			NSString *lastDT = nil;
+			for (NSXMLElement *m in nChildren)
+			{
+				if ([[[m name] lowercaseString] isEqual:@"dt"])
+				{
+					lastDT = [m stringValue];
+				}
+				else if ([lastDT length] && [[[m name] lowercaseString] isEqual:@"dd"])
+				{
+					NSString *dd = [m stringValue];
+					
+					if ([dd length])
+					{
+						if (!ParameterEntity)
+							ParameterEntity = [NSEntityDescription entityForName:@"Parameter" inManagedObjectContext:transientContext];
+						
+						NSManagedObject *parameter = [[NSManagedObject alloc] initWithEntity:ParameterEntity insertIntoManagedObjectContext:transientContext];
+						[parameter setValue:lastDT forKey:@"name"];
+						[parameter setValue:dd forKey:@"overview"];
+						[parameter setValue:object forKey:@"callable"];
+					}
+					
+					lastDT = nil;
+				}
+			}
+		}
+		
+		//returnType
+		// ???
+		
+		//returnDescription
+		/* <div class="return_value">
+			   <p> ... </p> <p> ... </p> ...
+		   </div>
+		 */
+		
+		//availability
+		/* <div class="Availability">
+			   <ul class="availability">
+				   <li class="availability"> ... </li>
+			   </ul>
+		   </div>
+		 */
+		
+		//seealsos
+		/* <h5 class="tight">See Also</h5>
+		   <ul class="availability">
+			   <li class="availability">
+				   <code>
+					   <a href=" ... ">&#8211;&#xA0; ... </a>
+				   </code>
+			   </li>
+		   </ul>
+		 */
+
+	}
+}
 - (void)scrapeAbstractMethodContainer
 {
 	[transientObject setValue:[NSSet set] forKey:@"methods"];
-	
-	NSEntityDescription *methodEntity = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:transientContext];
-	
+		
 	NSError *err = nil;
 	NSArray *methodNodes = [[doc rootElement] nodesForXPath:@"//a" error:&err];
 	
@@ -435,8 +567,19 @@
 		NSMutableString *description = nil;
 		NSString *prototype = nil;
 		
+		if (!ObjCMethodEntity)
+			ObjCMethodEntity = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:transientContext];
+	
+		IGKDocRecordManagedObject *newMethod = [[IGKDocRecordManagedObject alloc] initWithEntity:ObjCMethodEntity insertIntoManagedObjectContext:transientContext];
+		
+		[self scrapeMethodChildren:arr index:0 managedObject:newMethod];
+		[newMethod setValue:transientObject forKey:@"container"];
+		[newMethod setValue:docset forKey:@"docset"];
+		
+		/*
 		for (NSXMLElement *n in arr)
 		{
+			
 			if (![n isKindOfClass:[NSXMLElement class]])
 				continue;
 			
@@ -463,7 +606,10 @@
 			}
 		}
 		
+		
 		[self createMethodNamed:name description:description prototype:prototype methodEntity:methodEntity parent:transientObject docset:docset];
+	
+		 */
 	}
 }
 

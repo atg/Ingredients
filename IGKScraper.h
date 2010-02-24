@@ -51,6 +51,10 @@
 	//We use instance variables in IGKFullScraper as a way of maintaining state without passing arguments
 	NSManagedObject *docset;
 	NSXMLDocument *doc;
+	
+	//Some caching of entities
+	NSEntityDescription *ObjCMethodEntity;
+	NSEntityDescription *ParameterEntity;
 }
 
 @property (readonly) NSManagedObject *transientObject;

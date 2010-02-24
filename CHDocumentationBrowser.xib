@@ -24,12 +24,12 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="1"/>
-			<integer value="40"/>
+			<integer value="370"/>
 			<integer value="63"/>
 			<integer value="19"/>
-			<integer value="370"/>
-			<integer value="83"/>
 			<integer value="189"/>
+			<integer value="83"/>
+			<integer value="392"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1542,8 +1542,8 @@
 										</object>
 										<object class="NSMutableArray" key="dict.values">
 											<bool key="EncodedWithXMLCoder">YES</bool>
-											<integer value="12"/>
-											<integer value="12"/>
+											<integer value="16"/>
+											<integer value="16"/>
 											<integer value="1"/>
 										</object>
 									</object>

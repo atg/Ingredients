@@ -169,15 +169,30 @@
 			[outputString appendFormat:@"\t\t<h2>%@</h2>\n", [self escape:[object valueForKey:@"name"]]];
 		
 		if ([object valueForKey:@"overview"])
-			[outputString appendFormat:@"\t\t<p class='description'>%@</p>\n", [object valueForKey:@"overview"]];
+			[outputString appendFormat:@"\t\t<div class='description'>%@</div>\n", [object valueForKey:@"overview"]];
 		
 		if ([object valueForKey:@"signature"])
 			[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [object valueForKey:@"signature"]];
+		
+		if ([[object valueForKey:@"parameters"] count])
+		{
+			[outputString appendString:@"\t\t<div class='in-out-vals'>\n"];
+			
+			for (NSManagedObject *parameter in [object valueForKey:@"parameters"])
+			{
+				[outputString appendFormat:@"\t\t\t<p class='parameter'><strong>%@</strong> %@</p>\n", [parameter valueForKey:@"name"], [parameter valueForKey:@"overview"]];
+			}
+			
+			[outputString appendString:@"\t\t</div>\n"];
+		}
+		
 		
 		[outputString appendFormat:@"\t</div>\n\n"];
 	}
 	
 	[outputString appendString:@"</div>"];
+	
+	NSLog(@"outputString = %@", outputString);
 	
 	return outputString;
 }

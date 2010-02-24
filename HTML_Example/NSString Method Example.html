@@ -1,0 +1,88 @@
+<!-- Prologue -->
+<a name="//apple_ref/occ/clm/NSString/stringWithContentsOfFile:encoding:error:" title="stringWithContentsOfFile:encoding:error:"></a>
+<a name="//apple_ref/doc/uid/20000154-BAJIAAFJ" title="stringWithContentsOfFile:encoding:error:"></a>
+<a name="//apple_ref/doc/uid/20000154-DontLinkElementID_45"></a>
+
+<!-- Name -->
+<h3 class="jump classMethod">stringWithContentsOfFile:encoding:error:</h3>
+
+<!-- Overview -->
+<p class="spaceabove">Returns a string created by reading data from the file at a given path interpreted using a given encoding.</p>
+
+<!-- Prototype -->
+<p class="spaceabovemethod">+ (id)stringWithContentsOfFile:(NSString *)<em>path</em> encoding:(<a href="NSString.html#//apple_ref/doc/c_ref/NSStringEncoding">NSStringEncoding</a>)<em>enc</em> error:(<a href="../../NSError_Class/Reference/Reference.html#//apple_ref/doc/c_ref/NSError" target="_top">NSError</a> **)<em>error</em></p>
+
+<!-- Parameters -->
+<h5 class="tight">Parameters</h5>
+<dl class="termdef">
+    <dt><em>path</em></dt>
+    <dd><p>A path to a file.</p></dd>
+    <dt><em>enc</em></dt>
+    <dd><p>The encoding of the file at <em>path</em>.</p></dd>
+    <dt><em>error</em></dt>
+    <dd><p>If an error occurs, upon returns contains an <code>NSError</code> object that describes the problem. If you are not interested in possible errors, pass in <code>NULL</code>.</p></dd>
+</dl>
+
+<!-- Return Value -->
+<div class="return_value">
+    <h5 class="tight">Return Value</h5>
+    <p>A string created by reading data from the file named by <em>path</em> using the encoding, <em>enc</em>. If the file can’t be opened or there is an encoding error, returns <code>nil</code>.</p>
+</div>   
+
+<!-- Availability -->
+<div class="Availability">
+    <h5 class="tight">Availability</h5>
+    <ul class="availability">
+        <li class="availability">Available in iPhone OS 2.0 and later.</li>
+    </ul>
+</div>
+
+<!-- See Also -->
+<h5 class="tight">See Also</h5>
+<ul class="availability">
+    <li class="availability">
+        <code>
+            <a href="NSString.html#//apple_ref/occ/instm/NSString/initWithContentsOfFile:encoding:error:">&#8211;&#xA0;initWithContentsOfFile:encoding:error:</a>
+        </code>
+    </li>
+</ul>
+
+<!-- Sample Code -->
+<h5 class="tight">Related Sample Code</h5>
+<ul class="availability">
+    <li class="availability">
+        <span class="content_text">
+            <a href="../../../../../../../samplecode/AQOfflineRenderTest/index.html#//apple_ref/doc/uid/DTS40008413" target="_top">AQOfflineRenderTest</a>
+        </span>
+    </li>
+    
+    <li class="availability">
+        <span class="content_text">
+            <a href="../../../../../../../samplecode/iPhoneExtAudioFileConvertTest/index.html#//apple_ref/doc/uid/DTS40009222" target="_top">iPhoneExtAudioFileConvertTest</a>
+        </span>
+    </li>
+    
+    <li class="availability">
+        <span class="content_text">
+            <a href="../../../../../../../samplecode/iPhoneMultichannelMixerTest/index.html#//apple_ref/doc/uid/DTS40009113" target="_top">iPhoneMultichannelMixerTest</a>
+        </span>
+    </li>
+    
+    <li class="availability">
+        <span class="content_text">
+            <a href="../../../../../../../samplecode/MoveMe/index.html#//apple_ref/doc/uid/DTS40007315" target="_top">MoveMe</a>
+        </span>
+    </li>
+</ul>
+
+<!-- Declared In -->
+<div class="DeclaredIn">
+    <h5 class="tight">Declared In</h5>
+    <code class="HeaderFile">NSString.h</code>
+</div>
+
+
+<!-- Next item... -->    
+<a name="//apple_ref/occ/clm/NSString/stringWithContentsOfFile:usedEncoding:error:" title="stringWithContentsOfFile:usedEncoding:error:"></a>
+<a name="//apple_ref/doc/uid/20000154-BAJDDJEF" title="stringWithContentsOfFile:usedEncoding:error:"></a>
+...
