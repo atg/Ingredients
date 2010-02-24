@@ -55,8 +55,8 @@
 	
 	//Draw dividers
 	NSImage *dividerImage = [NSImage imageNamed:@"MultiSel_Divider"];
-	[dividerImage drawAtPoint:NSMakePoint(32, 0) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:(isMain ? 0.5 : 0.7 * 0.5)];
-	[dividerImage drawAtPoint:NSMakePoint(61, 0) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:(isMain ? 0.5 : 0.7 * 0.5)];
+	[dividerImage drawAtPoint:NSMakePoint(32 - 4, 0) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:(isMain ? 1.0 : 0.7 * 1.0)];
+	[dividerImage drawAtPoint:NSMakePoint(61 - 4, 0) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:(isMain ? 1.0 : 0.7 * 1.0)];
 	
 	//Draw icons
 	
