@@ -263,7 +263,7 @@
 	
 	[outputString appendString:@"</div>"];
 	
-	NSLog(@"outputString = %@", outputString);
+	//NSLog(@"outputString = %@", outputString);
 	
 	return outputString;
 }
