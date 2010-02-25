@@ -174,18 +174,89 @@
 		if ([object valueForKey:@"signature"])
 			[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [object valueForKey:@"signature"]];
 		
-		if ([[object valueForKey:@"parameters"] count])
+		BOOL hasParameters = [[object valueForKey:@"parameters"] count];
+		BOOL hasReturnDescription = [object valueForKey:@"returnDescription"] ? YES : NO;
+		if (hasParameters || hasReturnDescription)
 		{
 			[outputString appendString:@"\t\t<div class='in-out-vals'>\n"];
 			
-			for (NSManagedObject *parameter in [object valueForKey:@"parameters"])
+			if (hasParameters)
 			{
-				[outputString appendFormat:@"\t\t\t<p class='parameter'><strong>%@</strong> %@</p>\n", [parameter valueForKey:@"name"], [parameter valueForKey:@"overview"]];
+				for (NSManagedObject *parameter in [object valueForKey:@"parameters"])
+				{
+					[outputString appendFormat:@"\t\t\t<p class='parameter'><strong>%@</strong> %@</p>\n", [parameter valueForKey:@"name"], [parameter valueForKey:@"overview"]];
+				}
+			}
+			
+			if (hasReturnDescription)
+			{
+				[outputString appendFormat:@"\t\t\t<p class='returns'><strong>Returns</strong> %@</p>\n", [object valueForKey:@"returnDescription"]];
 			}
 			
 			[outputString appendString:@"\t\t</div>\n"];
 		}
 		
+		if ([object valueForKey:@"availability"])
+		{
+			[outputString appendString:@"\t\t<div class='info availability'>\n"];
+			
+			[outputString appendString:@"\t\t\t<h3>Availability</h3>\n"];
+			[outputString appendFormat:@"\t\t\t<p>%@</p>\n", [object valueForKey:@"availability"]];
+			
+			[outputString appendString:@"\t\t</div>\n"];
+		}
+		
+		if ([object valueForKey:@"declared_in_header"])
+		{
+			[outputString appendString:@"\t\t<div class='info declared_in_header'>\n"];
+			
+			[outputString appendString:@"\t\t\t<h3>Declared In</h3>\n"];
+			[outputString appendFormat:@"\t\t\t<p>%@</p>\n", [object valueForKey:@"declared_in_header"]];
+			
+			[outputString appendString:@"\t\t</div>\n"];
+		}
+		
+		if ([[object valueForKey:@"seealsos"] count])
+		{
+			[outputString appendFormat:@"\t\t<div class='seealso'>\n"];
+			[outputString appendFormat:@"\t\t\t<strong>See Also</strong>\n"];
+			[outputString appendFormat:@"\t\t\t<ul>\n"];
+			
+			NSSet *seealsos = [object valueForKey:@"seealsos"];
+			
+			//Sort by name
+			NSSortDescriptor *nameSorter = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+			NSArray *sortedSeealsos = [[seealsos allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:nameSorter]];
+			
+			for (NSManagedObject *seealso in sortedSeealsos)
+			{
+				[outputString appendFormat:@"\t\t\t\t<li><code><a href='#' class='stealth'>%@</a></code></li>\n", [seealso valueForKey:@"name"]];
+			}
+			
+			[outputString appendFormat:@"\t\t\t</ul>\n"];
+			[outputString appendFormat:@"\t\t</div>\n"];
+		}
+		
+		if ([[object valueForKey:@"samplecodeprojects"] count])
+		{
+			[outputString appendFormat:@"\t\t<div class='seealso'>\n"];
+			[outputString appendFormat:@"\t\t\t<strong>Sample Code</strong>\n"];
+			[outputString appendFormat:@"\t\t\t<ul>\n"];
+			
+			NSSet *seealsos = [object valueForKey:@"samplecodeprojects"];
+			
+			//Sort by name
+			NSSortDescriptor *nameSorter = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+			NSArray *sortedSeealsos = [[seealsos allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:nameSorter]];
+			
+			for (NSManagedObject *seealso in sortedSeealsos)
+			{
+				[outputString appendFormat:@"\t\t\t\t<li><code><a href='#' class='stealth'>%@</a></code></li>\n", [seealso valueForKey:@"name"]];
+			}
+			
+			[outputString appendFormat:@"\t\t\t</ul>\n"];
+			[outputString appendFormat:@"\t\t</div>\n"];
+		}
 		
 		[outputString appendFormat:@"\t</div>\n\n"];
 	}

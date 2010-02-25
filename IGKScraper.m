@@ -418,6 +418,7 @@
 		if ([nName isEqual:@"h3"] && [nClass containsObject:@"jump"])
 		{
 			[object setValue:[n stringValue] forKey:@"name"];
+			continue;
 		}
 		
 		//overview
@@ -440,6 +441,7 @@
 			}
 			
 			[object setValue:overview forKey:@"overview"];
+			continue;
 		}
 		
 		//prototype
@@ -450,6 +452,7 @@
 			[prototype appendString:[n stringValue]];
 			
 			[object setValue:prototype forKey:@"signature"];
+			continue;
 		}
 		
 		//parameters
@@ -486,6 +489,8 @@
 					lastDT = nil;
 				}
 			}
+			
+			continue;
 		}
 		
 		//returnType
@@ -496,6 +501,22 @@
 			   <p> ... </p> <p> ... </p> ...
 		   </div>
 		 */
+		if ([nName isEqual:@"div"] && [nClass containsObject:@"return_value"])
+		{
+			NSArray *nChildren = [n children];
+			NSMutableString *returnValueDescription = [[NSMutableString alloc] init];
+			
+			for (NSXMLElement *m in nChildren)
+			{
+				if (![[[m name] lowercaseString] isEqual:@"p"])
+					continue;
+				
+				[returnValueDescription appendString:[m stringValue]];
+			}
+			
+			[object setValue:returnValueDescription forKey:@"returnDescription"];
+			continue;
+		}
 		
 		//availability
 		/* <div class="Availability">
@@ -504,6 +525,26 @@
 			   </ul>
 		   </div>
 		 */
+		if ([nName isEqual:@"div"] && [nClass containsObject:@"availability"])
+		{
+			for (NSXMLElement *ul in [n children])
+			{
+				if ([[[ul name] lowercaseString] isEqual:@"ul"])
+				{
+					//TODO: This doesn't handle multiple availabilities. Should it? Does any docfile actually define those?
+					
+					NSArray *ulChildren = [ul children];
+					for (NSXMLElement *ulChild in ulChildren)
+					{
+						[object setValue:[ulChild stringValue] forKey:@"availability"];
+						
+						break;
+					}
+					
+					continue;
+				}
+			}
+		}
 		
 		//seealsos
 		/* <h5 class="tight">See Also</h5>
@@ -515,7 +556,101 @@
 			   </li>
 		   </ul>
 		 */
-
+		if (i + 1 < count && [nName isEqual:@"h5"] && [[[[n stringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString] isEqual:@"see also"])
+		{			
+			NSXMLElement *ul = [children objectAtIndex:i + 1];
+			if ([[[ul name] lowercaseString] isEqual:@"ul"])
+			{				
+				for (NSXMLElement *li in [ul children])
+				{					
+					NSXMLElement *codeElement = [[li children] lastObject];
+					NSXMLElement *a = [[codeElement children] lastObject];
+					
+					NSString *href = [[a attributeForName:@"href"] stringValue];
+					NSString *strval = [a stringValue];
+					
+					if (!href || !strval)
+						continue;
+					
+					if (!SeeAlsoEntity)
+						SeeAlsoEntity = [NSEntityDescription entityForName:@"SeeAlso" inManagedObjectContext:transientContext];
+					
+					NSManagedObject *seealso = [[NSManagedObject alloc] initWithEntity:SeeAlsoEntity insertIntoManagedObjectContext:transientContext];
+					[seealso setValue:href forKey:@"href"];
+					[seealso setValue:strval forKey:@"name"];
+					[seealso setValue:object forKey:@"container"];
+				}
+			}
+		}
+		
+		//samplecodeprojects
+		/* <h5 class="tight">Related Sample Code</h5>
+		   <ul class="availability">
+			
+		   <li class="availability">
+		       <span class="content_text">
+		           <a href=" ... "> ... </a>
+		       </span>
+		   </li>
+		 
+		   <li class="availability">
+		       <span class="content_text">
+		           <a href=" ... "> ... </a>
+		       </span>
+			</li>
+		   
+		   ...
+		   
+		 </ul>
+		*/
+		if (i + 1 < count && [nName isEqual:@"h5"] && [[[[n stringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString] isLike:@"*sample code*"])
+		{			
+			NSXMLElement *ul = [children objectAtIndex:i + 1];
+			if ([[[ul name] lowercaseString] isEqual:@"ul"])
+			{				
+				for (NSXMLElement *li in [ul children])
+				{					
+					NSXMLElement *spanElement = [[li children] lastObject];
+					NSXMLElement *a = [[spanElement children] lastObject];
+					
+					NSString *href = [[a attributeForName:@"href"] stringValue];
+					NSString *strval = [a stringValue];
+					
+					if (!href || !strval)
+						continue;
+					
+					if (!SampleCodeProjectEntity)
+						SampleCodeProjectEntity = [NSEntityDescription entityForName:@"SampleCodeProject" inManagedObjectContext:transientContext];
+					
+					NSManagedObject *seealso = [[NSManagedObject alloc] initWithEntity:SampleCodeProjectEntity insertIntoManagedObjectContext:transientContext];
+					[seealso setValue:href forKey:@"href"];
+					[seealso setValue:strval forKey:@"name"];
+					[seealso setValue:object forKey:@"container"];
+				}
+			}
+		}
+		
+		//declared_in_header
+		/* <div class="DeclaredIn">
+		       <h5 class="tight">Declared In</h5>
+		       <code class="HeaderFile"> ... </code>
+		   </div>
+		 */
+		if ([nName isEqual:@"div"] && [nClass containsObject:@"declaredin"])
+		{
+			NSArray *nChildren = [n children];
+			
+			for (NSXMLElement *m in nChildren)
+			{
+				if (![[[m name] lowercaseString] isEqual:@"code"])
+					continue;
+				
+				[object setValue:[m stringValue] forKey:@"declared_in_header"];
+				break;
+			}
+			
+			continue;
+		}
 	}
 }
 - (void)scrapeAbstractMethodContainer

@@ -55,6 +55,8 @@
 	//Some caching of entities
 	NSEntityDescription *ObjCMethodEntity;
 	NSEntityDescription *ParameterEntity;
+	NSEntityDescription *SeeAlsoEntity;
+	NSEntityDescription *SampleCodeProjectEntity;
 }
 
 @property (readonly) NSManagedObject *transientObject;
