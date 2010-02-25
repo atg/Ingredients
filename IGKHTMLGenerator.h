@@ -33,6 +33,9 @@ typedef enum {
 	IGKHTMLDisplayType displayType;
 	
 	BOOL isMethodContainer;
+	
+	
+	NSMutableString *outputString;
 }
 
 @property (assign) NSManagedObjectContext *context;

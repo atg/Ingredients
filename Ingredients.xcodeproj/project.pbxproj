@@ -80,6 +80,16 @@
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		75B570621136A52A00EC5FE9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 756F9D2E110BA72F00E6F291 /* IngredientsKit */;
+			remoteInfo = IngredientsKit;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		756F9DE7110BB59C00E6F291 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -459,6 +469,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				75B570631136A52A00EC5FE9 /* PBXTargetDependency */,
 			);
 			name = Ingredients;
 			productInstallPath = "$(HOME)/Applications";
@@ -564,6 +575,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		75B570631136A52A00EC5FE9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 756F9D2E110BA72F00E6F291 /* IngredientsKit */;
+			targetProxy = 75B570621136A52A00EC5FE9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {

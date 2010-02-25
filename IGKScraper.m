@@ -324,6 +324,18 @@
 @end
 
 
+@interface IGKFullScraper ()
+
++ (NSArray *)splitArray:(NSArray *)array byBlock:(BOOL (^)(id a))block;
++ (NSArray *)array:(NSArray *)array findObjectByBlock:(BOOL (^)(id a))block;
+
+- (void)createMethodNamed:(NSString *)name description:(NSString *)description prototype:(NSString *)prototype methodEntity:(NSEntityDescription *)methodEntity parent:(NSManagedObject*)parent docset:(NSManagedObject*)docset transientContext:(NSManagedObjectContext *)transientContext;
+
+- (void)scrape;
+- (void)scrapeAbstractMethodContainer;
+
+@end
+
 
 @implementation IGKFullScraper
 
@@ -346,6 +358,7 @@
 	//We don't want to actually -save: the results 
 	transientContext = [[NSManagedObjectContext alloc] init];
 	[transientContext setPersistentStoreCoordinator:[[persistobj managedObjectContext] persistentStoreCoordinator]];
+	[transientContext setUndoManager:nil];
 	
 	//Scrape
 	[self scrape];
@@ -361,7 +374,7 @@
 - (void)scrape
 {
 	//Get persistobj's equivalent in transientContext
-	transientObject = [transientContext objectWithID:[persistobj objectID]];
+	transientObject = (IGKDocRecordManagedObject *)[transientContext objectWithID:[persistobj objectID]];
 	
 	docset = [transientObject valueForKey:@"docset"];
 	NSString *extractPath = [transientObject valueForKey:@"documentPath"];
@@ -387,7 +400,37 @@
 
 - (void)scrapeMethod
 {
+	NSError *err = nil;
+	NSArray *methodNodes = [[doc rootElement] nodesForXPath:@"//a" error:&err];
 	
+	//Search through all anchors in the document, and record their parent elements
+	NSMutableSet *containersSet = [[NSMutableSet alloc] init];
+	for (NSXMLElement *a in methodNodes)
+	{
+		if (![a isKindOfClass:[NSXMLElement class]])
+			continue;
+		
+		NSString *name = [[a attributeForName:@"name"] stringValue];
+		
+		NSXMLNode *el = [a attributeForName:@"name"];
+		NSString *strval = [el stringValue];
+		//(instm|clm|intfm|intfcm|intfp|instp)
+		if ([strval isLike:@"//apple_ref/occ/instm*"] || [strval isLike:@"//apple_ref/occ/clm*"] ||
+			[strval isLike:@"//apple_ref/occ/intfm*"] || [strval isLike:@"//apple_ref/occ/intfcm*"] ||
+			[strval isLike:@"//apple_ref/occ/intfp*"] || [strval isLike:@"//apple_ref/occ/instp*"])
+		{
+			NSString *methodName = [transientObject valueForKey:@"name"];
+			
+			//This is a bit ropey
+			if ([strval isLike:[@"*" stringByAppendingString:methodName]])
+			{
+				NSArray *children = [[a parent] children];
+				NSInteger index = [children indexOfObject:a];
+				if (index != -1)
+					[self scrapeMethodChildren:children index:index managedObject:transientObject];
+			}
+		}
+	}
 }
 - (void)scrapeMethodChildren:(NSArray *)children index:(NSUInteger)index managedObject:(NSManagedObject *)object
 {
@@ -401,6 +444,8 @@
 	     * seealsos
 	     * samplecode
 	*/
+	
+	BOOL hasRecordedMethod = NO;
 	
 	NSUInteger i = 0;
 	NSUInteger count = [children count];
@@ -417,6 +462,11 @@
 		// <h3 class="*jump*"> ... </h3>
 		if ([nName isEqual:@"h3"] && [nClass containsObject:@"jump"])
 		{
+			//If we've already recorded a method, then we're done
+			if (hasRecordedMethod)
+				break;
+			hasRecordedMethod = YES;
+			
 			[object setValue:[n stringValue] forKey:@"name"];
 			continue;
 		}
@@ -661,8 +711,9 @@
 	NSArray *methodNodes = [[doc rootElement] nodesForXPath:@"//a" error:&err];
 	
 	
-	NSSet *containersSet = [[NSMutableSet alloc] init];
-	for (NSXMLNode *a in methodNodes)
+	//Search through all anchors in the document, and record their parent elements
+	NSMutableSet *containersSet = [[NSMutableSet alloc] init];
+	for (NSXMLElement *a in methodNodes)
 	{
 		if (![a isKindOfClass:[NSXMLElement class]])
 			continue;
@@ -675,9 +726,12 @@
 		
 	}
 	
+	
+	//For each container
 	NSMutableArray *methods = [[NSMutableArray alloc] init];
 	for (NSXMLNode *container in containersSet)
 	{
+		//Split the container's children array by "interesting" <a> elements
 		NSArray *arr = [[self class] splitArray:[container children] byBlock:^BOOL(id a) {
 			if (![a isKindOfClass:[NSXMLElement class]])
 				return NO;
@@ -698,10 +752,6 @@
 	
 	for (NSArray *arr in methods)
 	{
-		NSString *name = nil;
-		NSMutableString *description = nil;
-		NSString *prototype = nil;
-		
 		if (!ObjCMethodEntity)
 			ObjCMethodEntity = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:transientContext];
 	
@@ -710,41 +760,6 @@
 		[self scrapeMethodChildren:arr index:0 managedObject:newMethod];
 		[newMethod setValue:transientObject forKey:@"container"];
 		[newMethod setValue:docset forKey:@"docset"];
-		
-		/*
-		for (NSXMLElement *n in arr)
-		{
-			
-			if (![n isKindOfClass:[NSXMLElement class]])
-				continue;
-			
-			if ([[n name] isEqual:@"h3"])
-			{
-				[self createMethodNamed:name description:description prototype:prototype methodEntity:methodEntity parent:transientObject docset:docset];
-				
-				description = [[NSMutableString alloc] init];
-				prototype = nil;
-				name = [n stringValue];
-				continue;
-			}
-			
-			if ([[n name] isEqual:@"p"])
-			{
-				if ([[[n attributeForName:@"class"] stringValue] isEqual:@"spaceabovemethod"])
-				{
-					prototype = [n stringValue];
-				}
-				else
-				{
-					[description appendFormat:@"<p>%@</p>", [n stringValue]];
-				}
-			}
-		}
-		
-		
-		[self createMethodNamed:name description:description prototype:prototype methodEntity:methodEntity parent:transientObject docset:docset];
-	
-		 */
 	}
 }
 
@@ -784,7 +799,7 @@
 }
 
 - (void)createMethodNamed:(NSString *)name description:(NSString *)description prototype:(NSString *)prototype
-			 methodEntity:(NSEntityDescription *)methodEntity parent:(NSManagedObject*)parent docset:(NSManagedObject*)docset
+			 methodEntity:(NSEntityDescription *)methodEntity parent:(NSManagedObject*)parent docset:(NSManagedObject*)theDocset
 {
 	if (name == nil)
 		return;
@@ -801,7 +816,7 @@
 	[newMethod setValue:prototype forKey:@"signature"];
 	
 	[newMethod setValue:parent forKey:@"container"];
-	[newMethod setValue:docset forKey:@"docset"];
+	[newMethod setValue:theDocset forKey:@"docset"];
 }
 
 
