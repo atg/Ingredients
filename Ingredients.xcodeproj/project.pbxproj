@@ -66,6 +66,7 @@
 		75B534FA111076C000560848 /* View_AdvSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F7111076C000560848 /* View_AdvSearchTemplate.png */; };
 		75B534FB111076C000560848 /* View_NoSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F8111076C000560848 /* View_NoSearchTemplate.png */; };
 		75B534FC111076C000560848 /* View_SideSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F9111076C000560848 /* View_SideSearchTemplate.png */; };
+		75C914E211374B8100F0D7EC /* ingredients.icns in Resources */ = {isa = PBXBuildFile; fileRef = 75C914E111374B8000F0D7EC /* ingredients.icns */; };
 		75C9FE90110F53E400C9B51C /* IGKHTMLGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C9FE8E110F53E400C9B51C /* IGKHTMLGenerator.h */; };
 		75C9FE91110F53E400C9B51C /* IGKHTMLGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C9FE8F110F53E400C9B51C /* IGKHTMLGenerator.m */; };
 		75C9FF05110F868300C9B51C /* main.css in Resources */ = {isa = PBXBuildFile; fileRef = 75C9FF03110F868300C9B51C /* main.css */; };
@@ -85,7 +86,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 756F9D2E110BA72F00E6F291 /* IngredientsKit */;
+			remoteGlobalIDString = 756F9D2E110BA72F00E6F291;
 			remoteInfo = IngredientsKit;
 		};
 /* End PBXContainerItemProxy section */
@@ -171,6 +172,7 @@
 		75B534F7111076C000560848 /* View_AdvSearchTemplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = View_AdvSearchTemplate.png; path = Images/View_AdvSearchTemplate.png; sourceTree = "<group>"; };
 		75B534F8111076C000560848 /* View_NoSearchTemplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = View_NoSearchTemplate.png; path = Images/View_NoSearchTemplate.png; sourceTree = "<group>"; };
 		75B534F9111076C000560848 /* View_SideSearchTemplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = View_SideSearchTemplate.png; path = Images/View_SideSearchTemplate.png; sourceTree = "<group>"; };
+		75C914E111374B8000F0D7EC /* ingredients.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ingredients.icns; sourceTree = "<group>"; };
 		75C9FE8E110F53E400C9B51C /* IGKHTMLGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKHTMLGenerator.h; sourceTree = "<group>"; };
 		75C9FE8F110F53E400C9B51C /* IGKHTMLGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKHTMLGenerator.m; sourceTree = "<group>"; };
 		75C9FF03110F868300C9B51C /* main.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = main.css; path = HTML_Example/main.css; sourceTree = "<group>"; };
@@ -326,6 +328,7 @@
 				751E45D51125E6CE00CD544A /* tictactoe_style.css */,
 				8D1107310486CEB800E47090 /* Ingredients-Info.plist */,
 				756F9D30110BA72F00E6F291 /* IngredientsKit-Info.plist */,
+				75C914E111374B8000F0D7EC /* ingredients.icns */,
 				756F9D77110BB40C00E6F291 /* CHDocumentationBrowser.xib */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				2F7446970DB6B7EA00F9684A /* MainMenu.xib */,
@@ -532,6 +535,7 @@
 				759ECFBC11334CE100067BD1 /* MultiSel_window_frame_button_active_left.png in Resources */,
 				759ECFBD11334CE100067BD1 /* MultiSel_window_frame_button_active_middle.png in Resources */,
 				759ECFBE11334CE100067BD1 /* MultiSel_window_frame_button_active_right.png in Resources */,
+				75C914E211374B8100F0D7EC /* ingredients.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
