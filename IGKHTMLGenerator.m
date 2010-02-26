@@ -54,21 +54,36 @@
 	[outputString appendFormat:@"<!doctype html>\n<html>\n<head>\n<meta charset='utf-8'>\n<title>%@</title>\n<link rel='stylesheet' href='main.css' type='text/css' media='screen'>\n</head>\n<body>\n", [transientObject valueForKey:@"name"]];
 }
 - (void)footer
-{	
+{
 	[outputString appendString:@"</body>\n</html>\n"];
+}
+
+- (void)setManagedObject:(IGKDocRecordManagedObject *)mo
+{
+	[fullScraper cleanUp];
+	
+	//Do a full scrape of the documentation referenced by managedObject
+	fullScraper = [[IGKFullScraper alloc] initWithManagedObject:managedObject];
+	[fullScraper start];
+	
+	transientContext = fullScraper.transientContext;
+	transientObject = (IGKDocRecordManagedObject *)(fullScraper.transientObject);
+}
+- (void)finalize
+{
+	fullScraper = nil;
+	[super finalize];
+}
+
+- (IGKHTMLDisplayTypeMask)displayTypes
+{
+	return IGKHTMLDisplayType_All | IGKHTMLDisplayType_Overview | IGKHTMLDisplayType_Tasks | IGKHTMLDisplayType_Properties | IGKHTMLDisplayType_Methods | IGKHTMLDisplayType_Notifications | IGKHTMLDisplayType_Delegate;
 }
 
 - (NSString *)html
 {
 	if (!managedObject)
 		return @"";
-	
-	//Do a full scrape of the documentation referenced by managedObject
-	IGKFullScraper *fullScraper = [[IGKFullScraper alloc] initWithManagedObject:managedObject];
-	[fullScraper start];
-	
-	transientContext = fullScraper.transientContext;
-	transientObject = fullScraper.transientObject;
 	
 	//Create a string to put the html in
 	outputString = [[NSMutableString alloc] init];
@@ -108,9 +123,7 @@
 	
 	//Append a footer
 	[self footer];
-	
-	[fullScraper cleanUp];
-	
+		
 	return outputString;
 }
 - (void)html_all

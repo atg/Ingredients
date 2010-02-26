@@ -9,18 +9,23 @@
 #import <Cocoa/Cocoa.h>
 #import "IGKDocRecordManagedObject.h"
 
+@class IGKFullScraper;
+
+
 //Generates HTML for display in the webview
 
 typedef enum {
-	IGKHTMLDisplayType_All,
+	IGKHTMLDisplayType_All = 1,
 	
-	IGKHTMLDisplayType_Overview,
-	IGKHTMLDisplayType_Tasks,
-	IGKHTMLDisplayType_Properties,
-	IGKHTMLDisplayType_Methods,
-	IGKHTMLDisplayType_Notifications,
-	IGKHTMLDisplayType_Delegate,
+	IGKHTMLDisplayType_Overview = 1 << 1,
+	IGKHTMLDisplayType_Tasks = 1 << 2,
+	IGKHTMLDisplayType_Properties = 1 << 3,
+	IGKHTMLDisplayType_Methods = 1 << 4,
+	IGKHTMLDisplayType_Notifications = 1 << 5,
+	IGKHTMLDisplayType_Delegate = 1 << 6,
 } IGKHTMLDisplayType;
+
+typedef NSUInteger IGKHTMLDisplayTypeMask;
 
 @interface IGKHTMLGenerator : NSObject
 {
@@ -36,6 +41,8 @@ typedef enum {
 	
 	
 	NSMutableString *outputString;
+	
+	IGKFullScraper *fullScraper;
 }
 
 @property (assign) NSManagedObjectContext *context;
@@ -43,5 +50,7 @@ typedef enum {
 @property (assign) IGKHTMLDisplayType displayType;
 
 - (NSString *)html;
+
+- (IGKHTMLDisplayTypeMask)displayTypes;
 
 @end
