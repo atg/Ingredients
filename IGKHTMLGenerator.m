@@ -62,6 +62,8 @@
 {
 	[fullScraper cleanUp];
 	
+	managedObject = mo;
+	
 	//Do a full scrape of the documentation referenced by managedObject
 	fullScraper = [[IGKFullScraper alloc] initWithManagedObject:managedObject];
 	[fullScraper start];
@@ -71,7 +73,9 @@
 }
 - (void)finalize
 {
+	[fullScraper cleanUp];
 	fullScraper = nil;
+	
 	[super finalize];
 }
 
