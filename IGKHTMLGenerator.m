@@ -12,6 +12,7 @@
 @interface IGKHTMLGenerator ()
 
 - (NSString *)escape:(NSString *)unescapedText;
+- (NSString *)processAvailability:(NSString *)availability;
 
 - (void)header;
 - (void)footer;
@@ -127,7 +128,7 @@
 	
 	//Append a footer
 	[self footer];
-		
+	
 	return outputString;
 }
 - (void)html_all
@@ -220,6 +221,111 @@
 		[outputString appendString:@"\t\t</div>\n"];
 	}
 	
+	//Create a table for the various metadata. Now it gets tricky
+	//We want to generate something like
+	/* 
+		<table class="info">
+			    <tr>
+			        <th>Available in</th>
+			        <th>Declared in</th>
+			        <th>See also</th>
+			        <th>Sample code</th>
+			    </tr>
+			    <tr class="first">
+			        <td rowspan="3">OS X <strong>10.4</strong>+</td>
+			        <td rowspan="3"><code>NSString.h</code></td>
+			        <td><code><a href="#" class="stealth">- cStringUsingEncoding:</a></code></td>
+			        <td><code><a href="#" class="stealth">QTMetadataEditor</a></code></td>
+			    </tr>
+			    <tr>
+			        <td><code><a href="#" class="stealth">- canBeConvertedToEncoding:</a></code></td>
+			        <td></td>
+			    </tr>
+			    <tr class="last">
+			        <td><code><a href="#" class="stealth">- UTF8String</a></code></td>
+			        <td></td>
+			    </tr>
+			    
+			</table>
+	 */
+	
+	/*
+	 In particular, columns that only ever show one piece of data (such as availability) should have a rowspan = the total number of data rows. They should only generate elements in the first row
+	 meanwhile, rows that may show more than one piece of data (such as seealsos) should have no rowspan. They should generate empty <td> elements when they run out of data
+	 */
+	
+	//Find the total number of rows
+	NSUInteger maxrowcount = 0;
+	
+	//If we have availability or declared_in_header, then we have at least one row
+	if ([object valueForKey:@"availability"] || [object valueForKey:@"declared_in_header"])
+		maxrowcount = 1;
+	
+	if ([[object valueForKey:@"seealsos"] count])
+		maxrowcount = [[object valueForKey:@"seealsos"] count];
+	
+	if ([[object valueForKey:@"samplecodeprojects"] count] > maxrowcount)
+		maxrowcount = [[object valueForKey:@"samplecodeprojects"] count];
+	
+	//If there's rows to be rendered, then add a table element
+	if (maxrowcount > 0)
+		[outputString appendString:@"\t\t<table class='info'>\n"];
+	
+	NSUInteger i = 0;
+	
+	NSArray *seealsos = [[[[object valueForKey:@"seealsos"] allObjects] valueForKey:@"name"] sortedArrayUsingSelector:@selector(localizedCompare:)];
+	NSArray *samplecodeprojects = [[[[object valueForKey:@"samplecodeprojects"] allObjects] valueForKey:@"name"] sortedArrayUsingSelector:@selector(localizedCompare:)];
+	
+	for (i = 0; i < maxrowcount + 1; i++)
+	{
+		// <tr>
+		if (i == 1)
+			[outputString appendString:@"\t\t\t<tr class='first'>\n"];
+		else
+			[outputString appendString:@"\t\t\t<tr>\n"];
+		
+		if (i == 0 || i == 1)
+		{
+			if ([object valueForKey:@"availability"])
+			{
+				if (i == 0)
+					[outputString appendString:@"\t\t\t\t<th>Available in</th>\n"];
+				else
+					[outputString appendFormat:@"\t\t\t\t<td rowspan='%d'>%@</td>\n", maxrowcount, [self processAvailability:[object valueForKey:@"availability"]]];
+			}
+			
+			if ([object valueForKey:@"declared_in_header"])
+			{
+				if (i == 0)
+					[outputString appendString:@"\t\t\t\t<th>Declared in</th>\n"];
+				else
+					[outputString appendFormat:@"\t\t\t\t<td rowspan='%d'><code><a href='#' class='stealth'>%@</a></code></td>\n", maxrowcount, [object valueForKey:@"declared_in_header"]];
+			}
+		}
+		
+		//See also
+		if (i == 0 && [seealsos count])
+			[outputString appendString:@"\t\t\t\t<th>See also</th>\n"];
+		else if (i > 0 && i - 1 < [seealsos count])
+			[outputString appendFormat:@"\t\t\t\t<td><code><a href='#' class='stealth'>%@</a></code></td>\n", [seealsos objectAtIndex:i - 1]];
+		else if ([seealsos count])
+			[outputString appendString:@"\t\t\t\t<td></td>\n"];
+		
+		//See also
+		if (i == 0 && [samplecodeprojects count])
+			[outputString appendString:@"\t\t\t\t<th>Sample projects</th>\n"];
+		else if (i > 0 && i - 1 < [samplecodeprojects count])
+			[outputString appendFormat:@"\t\t\t\t<td><code><a href='#' class='stealth'>%@</a></code></td>\n", [samplecodeprojects objectAtIndex:i - 1]];
+		else if ([samplecodeprojects count])
+			[outputString appendString:@"\t\t\t\t<td></td>\n"];
+		
+		[outputString appendString:@"\t\t\t</tr>\n"];
+	}
+	
+	if (maxrowcount > 0)
+		[outputString appendString:@"\t\t</table>\n"];
+		
+#if 0
 	if ([object valueForKey:@"availability"])
 	{
 		[outputString appendString:@"\t\t<div class='info availability'>\n"];
@@ -281,8 +387,41 @@
 		[outputString appendFormat:@"\t\t\t</ul>\n"];
 		[outputString appendFormat:@"\t\t</div>\n"];
 	}
+#endif
 	
 	[outputString appendFormat:@"\t</div>\n\n"];
+}
+
+- (NSString *)processAvailability:(NSString *)availability
+{
+	NSMutableString *str = [availability mutableCopy];
+	
+	//Delete "Available in "
+	[str replaceOccurrencesOfString:@"Available in " withString:@"" options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+	
+	//Delete " and later."
+	[str replaceOccurrencesOfString:@" and later." withString:@"" options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+	
+	//Replace "Mac OS X v" with "Mac OS X <strong>"
+	if ([str replaceOccurrencesOfString:@"Mac OS X v" withString:@"Mac OS X <strong>" options:NSLiteralSearch range:NSMakeRange(0, [str length])])
+	{
+		
+	}
+	//or "iPhone OS " with "iPhone OS <strong>"
+	else if ([str replaceOccurrencesOfString:@"iPhone OS " withString:@"iPhone OS <strong>" options:NSLiteralSearch range:NSMakeRange(0, [str length])])
+	{
+		
+	}
+	//or else we have no clue - just make it all bold
+	else
+	{
+		[str insertString:@"<strong>" atIndex:0];
+	}
+	
+	//Append a "<strong>+"
+	[str appendString:@"</strong>+"];
+	
+	return str;
 }
 
 @end
