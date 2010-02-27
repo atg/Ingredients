@@ -80,8 +80,22 @@ code
 	
 	font-size: 21px;
 	text-transform: none;
+	
+	padding-top: 6px;
+	margin-top: 24px;
+	padding-bottom: 10px;
+	
+	text-align: left;
+	border-top-style: solid;
+	border-top-width: 1px;
+}
+#methods.single h2
+{
+	margin-top: 0;
+	padding-top: 0;
 	text-align: center;
 }
+
 #methods .info h3
 {
 	padding: 0;
@@ -132,9 +146,9 @@ code
 {
 	border-right-style: none;
 	border-left-style: none;
-	border-top: 1px solid #d8d8d8;
 	border-bottom: 1px none #e5e5e5;
 	margin-bottom: 14px;
+	border-top: 1px solid #d8d8d8;
 }
 #methods .seealso ul
 {
