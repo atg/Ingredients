@@ -199,6 +199,9 @@
 	if ([object valueForKey:@"signature"])
 		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [object valueForKey:@"signature"]];
 	
+	if ([object valueForKey:@"discussion"])
+		[outputString appendFormat:@"\t\t<hr>\n\n\t\t<div class='discussion'>%@</div>\n\n\t\t<hr>\n\n", [object valueForKey:@"discussion"]];
+	
 	BOOL hasParameters = [[object valueForKey:@"parameters"] count];
 	BOOL hasReturnDescription = [object valueForKey:@"returnDescription"] ? YES : NO;
 	if (hasParameters || hasReturnDescription)

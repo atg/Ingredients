@@ -764,9 +764,25 @@
 		   <p> ... </p>
 		   ...
 		 */
-		//TODO Scrape for "discussion"
-		
-		
+		if (i + 1 < count && [nName isEqual:@"h5"] && [[[[n stringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString] isEqual:@"discussion"])
+		{
+			NSMutableString *discussion = [[NSMutableString alloc] init];
+			[discussion appendFormat:@"<p>%@</p>", [n stringValue]];
+			
+			NSUInteger j;
+			for (j = i + 1; j < count; j++)
+			{
+				NSXMLElement *m = [children objectAtIndex:j];
+				if (![m isKindOfClass:[NSXMLElement class]])
+					continue;
+				if (![[[m name] lowercaseString] isEqual:@"p"])
+					break;
+				
+				[discussion appendFormat:@"<p>%@</p>", [m stringValue]];
+			}
+			
+			[object setValue:discussion forKey:@"discussion"];
+		}
 		
 		//availability
 		/* <div class="Availability">
