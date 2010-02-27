@@ -125,7 +125,6 @@
 		
 	}];
 	
-	NSLog(@"objectsController = %@", objectsController);
 	[objectsController setSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];
 	
 	[searchViewPredicateEditor addRow:nil];
