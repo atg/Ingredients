@@ -358,12 +358,16 @@
 
 - (void)startIndexing
 {
+	isIndexing = YES;
+	
 	wallpaperView = [[IGKSourceListWallpaperView alloc] initWithFrame:[[[twoPaneSplitView subviews] objectAtIndex:0] bounds]];
 	[wallpaperView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
 	[[[twoPaneSplitView subviews] objectAtIndex:0] addSubview:wallpaperView];
 	
 	[sideSearchViewField setEnabled:NO];
 	[sideSearchViewField setEditable:NO];
+	
+	[self setBrowserActive:YES];
 	
 	[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:
 											 [NSURL fileURLWithPath:
@@ -377,6 +381,8 @@
 }
 - (void)stopIndexing
 {
+	isIndexing = NO;
+	
 	[wallpaperView removeFromSuperview];
 	
 	[sideSearchViewField setEnabled:YES];
@@ -416,9 +422,19 @@
 #pragma mark -
 #pragma mark Table View Delegate 
 
-- (void)tableViewSelectionDidChange:(NSNotification *)aNotification
+- (void)setBrowserActive:(BOOL)active
 {
-	if ([objectsController selection] == nil)
+	if (active)
+	{
+		id superview = [noselectionView superview];
+		if (superview)
+		{
+			[noselectionView removeFromSuperview];
+			[browserWebViewContainer setFrame:[noselectionView frame]];
+			[superview addSubview:browserWebViewContainer];
+		}
+	}
+	else
 	{
 		id superview = [browserWebViewContainer superview];
 		if (superview)
@@ -427,6 +443,17 @@
 			[noselectionView setFrame:[browserWebViewContainer frame]];
 			[superview addSubview:noselectionView];
 		}
+	}
+}
+
+- (void)tableViewSelectionDidChange:(NSNotification *)aNotification
+{
+	if (isIndexing)
+		return;
+	
+	if ([objectsController selection] == nil)
+	{
+		[self setBrowserActive:NO];
 		
 		/*
 			
@@ -441,13 +468,7 @@
 		return;
 	}
 	
-	id superview = [noselectionView superview];
-	if (superview)
-	{
-		[noselectionView removeFromSuperview];
-		[browserWebViewContainer setFrame:[noselectionView frame]];
-		[superview addSubview:browserWebViewContainer];
-	}
+	[self setBrowserActive:YES];
 	
 	IGKHTMLGenerator *generator = [[IGKHTMLGenerator alloc] init];
 	[generator setContext:[[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext]];

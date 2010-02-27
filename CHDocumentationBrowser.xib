@@ -27,7 +27,7 @@
 			<integer value="63"/>
 			<integer value="85"/>
 			<integer value="1"/>
-			<integer value="42"/>
+			<integer value="392"/>
 			<integer value="370"/>
 			<integer value="192"/>
 		</object>
@@ -1312,22 +1312,22 @@
 									<int key="NSMaximumRecents">255</int>
 								</object>
 							</object>
-							<object class="NSSegmentedControl" id="1039288240">
+							<object class="NSSegmentedControl" id="442997140">
 								<reference key="NSNextResponder" ref="494241463"/>
 								<int key="NSvFlags">265</int>
 								<string key="NSFrame">{{525, 8}, {98, 25}}</string>
 								<reference key="NSSuperview" ref="494241463"/>
 								<bool key="NSEnabled">YES</bool>
-								<object class="NSSegmentedCell" key="NSCell" id="150860147">
+								<object class="NSSegmentedCell" key="NSCell" id="525903793">
 									<int key="NSCellFlags">-2080244224</int>
 									<int key="NSCellFlags2">0</int>
 									<reference key="NSSupport" ref="579084510"/>
-									<reference key="NSControlView" ref="1039288240"/>
+									<reference key="NSControlView" ref="442997140"/>
 									<object class="NSMutableArray" key="NSSegmentImages">
 										<bool key="EncodedWithXMLCoder">YES</bool>
 										<object class="NSSegmentItem">
 											<double key="NSSegmentItemWidth">30</double>
-											<object class="NSCustomResource" key="NSSegmentItemImage" id="337159497">
+											<object class="NSCustomResource" key="NSSegmentItemImage" id="324684358">
 												<string key="NSClassName">NSImage</string>
 												<string key="NSResourceName">View_NoSearchTemplate</string>
 											</object>
@@ -1337,7 +1337,7 @@
 										</object>
 										<object class="NSSegmentItem">
 											<double key="NSSegmentItemWidth">30</double>
-											<object class="NSCustomResource" key="NSSegmentItemImage" id="388974757">
+											<object class="NSCustomResource" key="NSSegmentItemImage" id="921884853">
 												<string key="NSClassName">NSImage</string>
 												<string key="NSResourceName">View_SideSearchTemplate</string>
 											</object>
@@ -1347,7 +1347,7 @@
 										</object>
 										<object class="NSSegmentItem">
 											<double key="NSSegmentItemWidth">30</double>
-											<object class="NSCustomResource" key="NSSegmentItemImage" id="844730803">
+											<object class="NSCustomResource" key="NSSegmentItemImage" id="410645137">
 												<string key="NSClassName">NSImage</string>
 												<string key="NSResourceName">View_AdvSearchTemplate</string>
 											</object>
@@ -1566,8 +1566,8 @@
 										</object>
 										<object class="NSMutableArray" key="dict.values">
 											<bool key="EncodedWithXMLCoder">YES</bool>
-											<integer value="12"/>
-											<integer value="12"/>
+											<integer value="16"/>
+											<integer value="16"/>
 											<integer value="1"/>
 										</object>
 									</object>
@@ -1767,36 +1767,36 @@
 									<int key="NSSegmentStyle">2</int>
 								</object>
 							</object>
-							<object class="NSSegmentedControl" id="489226746">
+							<object class="NSSegmentedControl" id="473753383">
 								<reference key="NSNextResponder" ref="311665377"/>
 								<int key="NSvFlags">265</int>
 								<string key="NSFrame">{{525, 8}, {98, 25}}</string>
 								<reference key="NSSuperview" ref="311665377"/>
 								<bool key="NSEnabled">YES</bool>
-								<object class="NSSegmentedCell" key="NSCell" id="632947906">
+								<object class="NSSegmentedCell" key="NSCell" id="988544478">
 									<int key="NSCellFlags">-2080244224</int>
 									<int key="NSCellFlags2">0</int>
 									<reference key="NSSupport" ref="579084510"/>
-									<reference key="NSControlView" ref="489226746"/>
+									<reference key="NSControlView" ref="473753383"/>
 									<object class="NSMutableArray" key="NSSegmentImages">
 										<bool key="EncodedWithXMLCoder">YES</bool>
 										<object class="NSSegmentItem">
 											<double key="NSSegmentItemWidth">30</double>
-											<reference key="NSSegmentItemImage" ref="337159497"/>
+											<reference key="NSSegmentItemImage" ref="324684358"/>
 											<string key="NSSegmentItemLabel"/>
 											<bool key="NSSegmentItemSelected">YES</bool>
 											<int key="NSSegmentItemImageScaling">2</int>
 										</object>
 										<object class="NSSegmentItem">
 											<double key="NSSegmentItemWidth">30</double>
-											<reference key="NSSegmentItemImage" ref="388974757"/>
+											<reference key="NSSegmentItemImage" ref="921884853"/>
 											<string key="NSSegmentItemLabel"/>
 											<int key="NSSegmentItemTag">1</int>
 											<int key="NSSegmentItemImageScaling">2</int>
 										</object>
 										<object class="NSSegmentItem">
 											<double key="NSSegmentItemWidth">30</double>
-											<reference key="NSSegmentItemImage" ref="844730803"/>
+											<reference key="NSSegmentItemImage" ref="410645137"/>
 											<int key="NSSegmentItemTag">2</int>
 											<int key="NSSegmentItemImageScaling">2</int>
 										</object>
@@ -2703,17 +2703,17 @@
 					<object class="IBActionConnection" key="connection">
 						<string key="label">backForward:</string>
 						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="489226746"/>
+						<reference key="destination" ref="473753383"/>
 					</object>
 					<int key="connectionID">431</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">selectedTag: ui_currentModeIndex</string>
-						<reference key="source" ref="489226746"/>
+						<reference key="source" ref="473753383"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="489226746"/>
+							<reference key="NSSource" ref="473753383"/>
 							<reference key="NSDestination" ref="1001"/>
 							<string key="NSLabel">selectedTag: ui_currentModeIndex</string>
 							<string key="NSBinding">selectedTag</string>
@@ -2726,10 +2726,10 @@
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">selectedTag: ui_currentModeIndex</string>
-						<reference key="source" ref="1039288240"/>
+						<reference key="source" ref="442997140"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="1039288240"/>
+							<reference key="NSSource" ref="442997140"/>
 							<reference key="NSDestination" ref="1001"/>
 							<string key="NSLabel">selectedTag: ui_currentModeIndex</string>
 							<string key="NSBinding">selectedTag</string>
@@ -2743,7 +2743,7 @@
 					<object class="IBActionConnection" key="connection">
 						<string key="label">backForward:</string>
 						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="1039288240"/>
+						<reference key="destination" ref="442997140"/>
 					</object>
 					<int key="connectionID">437</int>
 				</object>
@@ -2859,7 +2859,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="786580050"/>
 							<reference ref="7977298"/>
-							<reference ref="489226746"/>
+							<reference ref="473753383"/>
 							<reference ref="109674972"/>
 						</object>
 						<reference key="parent" ref="495249127"/>
@@ -2965,7 +2965,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="247766763"/>
-							<reference ref="1039288240"/>
+							<reference ref="442997140"/>
 						</object>
 						<reference key="parent" ref="2016783"/>
 					</object>
@@ -3553,31 +3553,31 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">429</int>
-						<reference key="object" ref="489226746"/>
+						<reference key="object" ref="473753383"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="632947906"/>
+							<reference ref="988544478"/>
 						</object>
 						<reference key="parent" ref="311665377"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">430</int>
-						<reference key="object" ref="632947906"/>
-						<reference key="parent" ref="489226746"/>
+						<reference key="object" ref="988544478"/>
+						<reference key="parent" ref="473753383"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">434</int>
-						<reference key="object" ref="1039288240"/>
+						<reference key="object" ref="442997140"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="150860147"/>
+							<reference ref="525903793"/>
 						</object>
 						<reference key="parent" ref="494241463"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">435</int>
-						<reference key="object" ref="150860147"/>
-						<reference key="parent" ref="1039288240"/>
+						<reference key="object" ref="525903793"/>
+						<reference key="parent" ref="442997140"/>
 					</object>
 				</object>
 			</object>

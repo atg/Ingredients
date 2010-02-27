@@ -10,7 +10,7 @@ h1 {
 body {
 	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 	
-	font-size: 120%;
+	/*font-size: 120%;*/
 	color: #323232;
 }
 
@@ -34,6 +34,20 @@ body {
 	margin-bottom: 20px;
 	padding-top: 2px;
 	padding-bottom: 3px;
+}
+#infobox a, #infobox a:hover {
+	color: white;
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-bottom: 1px;
+}
+#infobox a:hover {
+	-webkit-border-radius: 2px;
+	background-color: rgba(0,0,0,0.3);
+}
+#infobox a:active {
+	-webkit-border-radius: 2px;
+	background-color: rgba(0,0,0,0.6);
 }
 
 #board td {

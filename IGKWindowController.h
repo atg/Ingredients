@@ -99,6 +99,8 @@ typedef enum {
 	IBOutlet NSTextField *urlField;
 	IBOutlet NSView *browserTopbar;
 	IBOutlet NSView *browserToolbar;
+	
+	BOOL isIndexing;
 }
 
 @property (assign) IGKApplicationDelegate *appDelegate;
@@ -121,5 +123,7 @@ typedef enum {
 - (IBAction)changeViewMode:(id)sender;
 
 - (IBAction)openInSafari:(id)sender;
+
+- (void)setBrowserActive:(BOOL)active;
 
 @end

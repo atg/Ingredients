@@ -7,6 +7,13 @@
     <script type="text/javascript" charset="utf-8">
     
     var bitboard = [0, 0, 0,   0, 0, 0,   0, 0, 0]; //0 for unused, 1 for human, 2 for computer
+    var totalScore = {
+        you: 0,
+        computer: 0,
+        draws: 0
+    }
+    
+    var inFinalState = false;
     
     Board = function() {
         this.rotationMap = [0, 1, 2,   3, 4, 5,   6, 7, 8];
@@ -38,7 +45,8 @@
         
         return true;
     }
-    Board.prototype.set = function(i) {
+    Board.prototype.set = function(i)
+    {
         bitboard[this.rotationMap[i]] = 2;
         this[i] = 2;
         
@@ -48,14 +56,26 @@
     }
     
     
-    function alertWithInfobox(str) {
+    function alertWithInfobox(str)
+    {
         var infobox = document.getElementById("infobox");
         
         infobox.style.display = 'block';
         infobox.innerHTML = str;
     }
+    function hideInfobox()
+    {
+        var infobox = document.getElementById("infobox");
+        
+        infobox.style.display = 'none';
+        infobox.innerHTML = '';
+    }
     
-    function cc(e, n) {
+    function cc(e, n)
+    {
+        
+        if (inFinalState)
+            return;
         
         if (bitboard[e.id] != 0)
         {
@@ -80,8 +100,13 @@
             return true;
 		
         //Someone won
-        detectWin();
-        alertWithInfobox("It's a draw");
+        if (!detectWin())
+        {
+            totalScore['draws'] += 1;
+            inFinalState = true;
+            resetscore();
+            alertWithInfobox("It's a draw :| <a href='javascript:resetgame()'>Play again.</a>");
+        }
         return false;
     }
     
@@ -112,6 +137,26 @@
         }
         
         return false;
+    }
+    
+    function resetgame()
+    {
+        inFinalState = false;
+        for (var i = 0; i < 9; i++)
+        {
+            document.getElementById(String(i)).innerHTML = "";
+            
+            bitboard[i] = 0;
+        }
+        
+        hideInfobox();
+    }
+    function resetscore()
+    {
+        for(var k in totalScore)
+        {
+           document.getElementById('score_' + k).innerHTML = totalScore[k]; 
+        }
     }
     
     function rotate(b) {
@@ -210,10 +255,16 @@
         }
         
         if (a == 2) {
-            alertWithInfobox("The computer won :(");
+            totalScore['computer'] += 1;
+            inFinalState = true;
+            resetscore();
+            alertWithInfobox("The computer won :( <a href='javascript:resetgame()'>Play again.</a>");
         }
         else {
-            alertWithInfobox("You won :)");
+            totalScore['you'] += 1;
+            inFinalState = true;
+            resetscore();
+            alertWithInfobox("You won :) <a href='javascript:resetgame()'>Play again.</a>");
         }
                 
         return true;
@@ -287,11 +338,13 @@
                 <tr>
                     <th>You</th>
                     <th>Computer</th>
+                    <th>Draws</th>
                 </tr>
                 
                 <tr>
-                    <td>0</td>
-                    <td>0</td>
+                    <td id='score_you'>0</td>
+                    <td id='score_computer'>0</td>
+                    <td id='score_draws'>0</td>
                 </tr>
             </table>
         </div>
