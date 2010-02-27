@@ -100,6 +100,7 @@ typedef enum {
 	IBOutlet NSView *browserTopbar;
 	IBOutlet NSView *browserToolbar;
 	
+	NSArray *tableOfContentsItems;
 	BOOL isIndexing;
 }
 

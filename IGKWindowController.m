@@ -23,6 +23,9 @@
 
 - (void)setUpForWebView:(WebView *)sender frame:(WebFrame *)frame;
 
+- (void)tableOfContentsChangedSelection;
+- (void)sideSearchTableChangedSelection;
+
 @end
 
 @implementation IGKWindowController
@@ -446,41 +449,74 @@
 	}
 }
 
+//Table of contents datasource
+- (void)reloadTableOfContents
+{
+	tableOfContentsItems = [NSArray arrayWithObjects:@"All", @"Tasks", @"Properties", @"Methods", @"Notifications", nil];
+	[tableOfContentsTableView reloadData];
+}
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
+{
+	if (tableView == tableOfContentsTableView)
+		return [tableOfContentsItems count];
+	return 0;
+}
+- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+	if (tableView == tableOfContentsTableView)
+	{
+		if ([[tableColumn identifier] isEqual:@"title"])
+			return [tableOfContentsItems objectAtIndex:row];
+		if ([[tableColumn identifier] isEqual:@"icon"])
+			return [NSImage imageNamed:@"NSComputer"];
+	}
+	return nil;
+}	
+
 - (void)tableViewSelectionDidChange:(NSNotification *)aNotification
 {
+	if ([aNotification object] == tableOfContentsTableView)
+	{
+		[self tableOfContentsChangedSelection];
+	}
+	else
+	{
+		[self sideSearchTableChangedSelection];
+	}
+}
+- (void)tableOfContentsChangedSelection
+{
+	
+}
+- (void)sideSearchTableChangedSelection
+{
+	//If we're indexing, don't change what page is displayed
 	if (isIndexing)
 		return;
 	
+	//If there's no selection, switch to the no selection search page
 	if ([objectsController selection] == nil)
 	{
 		[self setBrowserActive:NO];
-		
-		/*
-			
-		[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:
-												 [NSURL fileURLWithPath:
-												  [[NSBundle mainBundle] pathForResource:@"no_selection" ofType:@"html"]
-												  ]
-												 ]];
-		 
-		 */
-		
 		return;
 	}
 	
+	//Otherwise switch to the webview
 	[self setBrowserActive:YES];
 	
+	//Generate the HTML
 	IGKHTMLGenerator *generator = [[IGKHTMLGenerator alloc] init];
 	[generator setContext:[[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext]];
 	[generator setManagedObject:[objectsController selection]];
 	[generator setDisplayType:IGKHTMLDisplayType_All];
 	
-	
-	
 	NSString *html = [generator html];
+	
+	//Load the HTML into the webview
 	[[browserWebView mainFrame] loadHTMLString:html
 									   baseURL:[[NSBundle mainBundle] resourceURL]];
 	
+	[self reloadTableOfContents];
 }
 
 - (IBAction)openInSafari:(id)sender
@@ -553,20 +589,20 @@
 		[urlField setStringValue:@""];
 		
 		NSRect r = [browserToolbar frame];
-		[[browserToolbar animator] setFrame:NSMakeRect(0, -r.size.height, r.size.width, r.size.height)];
+		[browserToolbar setFrame:NSMakeRect(0, -r.size.height, r.size.width, r.size.height)];
 
 		NSRect r2 = [browserWebViewContainer frame];
-		[[browserWebView animator] setFrame:NSMakeRect(0, 0, r2.size.width, r2.size.height/* - [browserTopbar frame].size.height*/)];
+		[browserWebView setFrame:NSMakeRect(0, 0, r2.size.width, r2.size.height/* - [browserTopbar frame].size.height*/)];
 	}
 	else
 	{
 		[urlField setStringValue:[url absoluteString]];
 		
 		NSRect r = [browserToolbar frame];
-		[[browserToolbar animator] setFrame:NSMakeRect(0, 0, r.size.width, r.size.height)];
+		[browserToolbar setFrame:NSMakeRect(0, 0, r.size.width, r.size.height)];
 		
 		NSRect r2 = [browserWebViewContainer frame];
-		[[browserWebView animator] setFrame:NSMakeRect(0, r.size.height, r2.size.width, r2.size.height - r.size.height/* - [browserTopbar frame].size.height*/)];
+		[browserWebView setFrame:NSMakeRect(0, r.size.height, r2.size.width, r2.size.height - r.size.height/* - [browserTopbar frame].size.height*/)];
 	}
 	
 	if ([[frame dataSource] pageTitle] == nil)

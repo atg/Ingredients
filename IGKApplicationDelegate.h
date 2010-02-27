@@ -38,5 +38,6 @@
 @property (nonatomic, retain, readonly) NSManagedObjectContext *backgroundManagedObjectContext;
 
 - (IBAction)saveAction:sender;
+- (IBAction)newWindow:(id)sender;
 
 @end
