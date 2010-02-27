@@ -74,6 +74,12 @@ static NSMutableDictionary *sharedSymbolButtonImageCache = nil;
 		CGFloat offset = 0.0;
 		BOOL bold = NO;
 		
+		if (mask & CHSymbolButtonMacro)
+		{
+			str = @"#";
+			offset = 0.0;
+		}
+		
 		if (mask & CHSymbolButtonTypedef)
 		{
 			offset = 30;

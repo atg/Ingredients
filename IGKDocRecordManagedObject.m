@@ -69,7 +69,6 @@
 	else if([entityName isEqual:@"CGlobal"] || [entityName isEqual:@"CConstant"])
 		return CHSymbolButtonVariable | CHSymbolButtonGlobalScope;
 	
-	//TODO: Add CMacro to data model
 	else if([entityName isEqual:@"CMacro"])
 		return CHSymbolButtonMacro;
 	

@@ -176,4 +176,39 @@ code
 	text-shadow: rgba(0,0,0,0.3) 0 1px 0;
 }
 
+#methods table.info
+{
+	border-collapse: collapse;
+	
+	border: 1px solid #d8d8d8;
+	background-color: #f2f2f2;
+	
+	margin-bottom: 12px;
+}
+th
+{
+	padding: 6px;
+	background-color: #f2f2f2;
+	border-bottom: 1px solid #d8d8d8;
+
+	padding: 6px 12px;
+	border-right: 1px solid #d8d8d8;
+}
+td
+{
+	background-color: #f9f9f9;
+	border-right: 1px solid #d8d8d8;
+	
+	padding: 0 12px 2px;
+}
+tr.first td
+{
+	padding-top: 2px;
+}
+
+td code
+{
+	font-size: 12px;
+}
+
 /* @end */

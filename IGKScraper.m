@@ -203,15 +203,16 @@
 	
 	
 	//Parse the item's name and kind
-	NSString *regex_className = @"<a name=\"//apple_ref/occ/([a-z_]+)/([a-zA-Z_][a-zA-Z0-9_]*)";
+	NSString *regex_className = @"<a name=\"//apple_ref/(occ/([a-z_]+)/([a-zA-Z_][a-zA-Z0-9_]*)|c/([a-zA-Z_][a-zA-Z0-9_]*))";
 	NSArray *className_captures = [contents captureComponentsMatchedByRegex:regex_className];
 	if ([className_captures count] < 3)
 	{
 		return NO;
 	}
 	
-	NSString *type = [className_captures objectAtIndex:1];
-	NSString *name = [className_captures objectAtIndex:2];
+	NSString *type = [className_captures objectAtIndex:2];
+	NSString *name = [className_captures objectAtIndex:3];
+	NSString *ctype = [className_captures objectAtIndex:4];
 	
 	/* Common types
 	 cl		 - class
@@ -222,24 +223,102 @@
 	 binding - bindings listing
 	 */
 	
+	enum {
+		ParentItemType_ObjCClass,
+		ParentItemType_ObjCCategory,
+		ParentItemType_ObjCProtocol,
+		ParentItemType_ObjCBindingsListing,
+		ParentItemType_GenericCListing,
+	} parentItemType;
+	
 	NSString *entityName = nil;
-	if ([type isEqual:@"cl"] || [type isEqual:@"instm"])
+	if ([type isEqual:@"cl"])
+	{
 		entityName = @"ObjCClass";
+		parentItemType = ParentItemType_ObjCClass;
+	}
 	
 	else if ([type isEqual:@"cat"])
+	{
 		entityName = @"ObjCCategory";
+		parentItemType = ParentItemType_ObjCCategory;
+	}
 	
-	else if ([type isEqual:@"intf"] || [type isEqual:@"intfm"])
+	else if ([type isEqual:@"intf"])
+	{
 		entityName = @"ObjCProtocol";
+		parentItemType = ParentItemType_ObjCCategory;
+	}
 	
 	else if ([type isEqual:@"binding"])
-	    entityName = @"ObjCBindingsListing";
+	{
+		entityName = @"ObjCBindingsListing";
+		parentItemType = ParentItemType_ObjCBindingsListing;
+	}
 	
-	//If we don't understand the entity name, bail
-	if (!entityName)
+	//Otherwise we may have a listing of C functions, structs, typedefs, etc
+	else if ([ctype length])
+	{
+		entityName = nil;
+		parentItemType = ParentItemType_GenericCListing;
+	}
+	
+	//Nothing of note matched
+	else
+	{
+		// bail
 		return NO;
+	}
+	
+	//Superclass
+	NSString *superclass = nil;
+	if (parentItemType == ParentItemType_ObjCClass)
+	{
+		//Find the superclass
+		NSString *superclassRegex = @"Inherits from.+?>([A-Za-z0-9_$]+)<";
 		
-	NSString *linkRegex = @"name=\"//apple_ref/((occ/(instm|clm|intfm|intfcm|intfp|instp)/[a-zA-Z_:][a-zA-Z0-9:_]*/([a-zA-Z:_][a-zA-Z0-9:_]*))|(c/(tdef|econst)/([a-zA-Z:_][a-zA-Z0-9:_]*)))\"";
+		NSArray *superclassCaptureSet = [contents captureComponentsMatchedByRegex:superclassRegex];
+		if ([superclassCaptureSet count] >= 2)
+		{
+			superclass = [superclassCaptureSet objectAtIndex:1];
+		}
+	}
+	
+	//Conforms to
+	NSMutableSet *conformsTo = nil;
+	if (parentItemType == ParentItemType_ObjCClass || parentItemType == ParentItemType_ObjCProtocol)
+	{
+		NSString *conformsToRegex = @"Conforms to.+?</td>(.+?)</td>";
+		NSArray *conformsToCaptureSet = [contents captureComponentsMatchedByRegex:conformsToRegex];
+		if ([conformsToCaptureSet count] >= 2)
+		{
+			NSString *conformsToSubstring = [conformsToCaptureSet objectAtIndex:1];
+			NSString *conformsToSubregex = @">([A-Za-z0-9_$]+)<";
+			
+			NSArray *arrayOfMatchesCaptures = [conformsToSubstring arrayOfCaptureComponentsMatchedByRegex:conformsToSubregex];
+			if ([arrayOfMatchesCaptures count])
+			{
+				conformsTo = [[NSMutableSet alloc] init];
+				for (NSArray *conformsToCaptures in arrayOfMatchesCaptures)
+				{
+					if ([conformsToCaptures count] < 2)
+						continue;
+					
+					NSString *n = [conformsToCaptures objectAtIndex:1];
+					[conformsTo addObject:n];
+				}
+			}
+			
+			if ([conformsTo count] == 0)
+				conformsTo = nil;
+		}
+	}
+	
+	//Declared in
+	NSString *declaredInRegex = @"Declared in.+?<span class=\"content_text\">([^<]+)<";
+	
+	
+	NSString *linkRegex = @"name=\"//apple_ref/((occ/(instm|clm|intfm|intfcm|intfp|instp)/[a-zA-Z_:][a-zA-Z0-9:_]*/([a-zA-Z:_][a-zA-Z0-9:_]*))|(c/([a-zA-Z0-9_]+)/([a-zA-Z:_][a-zA-Z0-9:_]*)))\"([^<>]+role=\"([a-zA-Z0-9_]+)\")?";
 	
 	/* The interesting captures are 3 & 4, and 5 & 6 */
 	NSArray *items = [contents arrayOfCaptureComponentsMatchedByRegex:linkRegex];
@@ -249,10 +328,30 @@
 		
 		NSEntityDescription *propertyEntity = [NSEntityDescription entityForName:@"ObjCProperty" inManagedObjectContext:ctx];
 		NSEntityDescription *methodEntity = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:ctx];
-		NSEntityDescription *typedefEntity = [NSEntityDescription entityForName:@"CTypedef" inManagedObjectContext:ctx];
 		
-		NSManagedObject *obj = [self addRecordNamed:name entityName:entityName desc:@"" sourcePath:extractPath];
-		[obj setValue:docset forKey:@"docset"];
+		NSEntityDescription *globalVariableEntity = nil;
+		NSEntityDescription *constantEntity = nil;
+		NSEntityDescription *functionEntity = nil;
+		NSEntityDescription *macroEntity = nil;
+		NSEntityDescription *typedefEntity = nil;
+		NSEntityDescription *enumEntity = nil;
+		NSEntityDescription *structEntity = nil;
+		NSEntityDescription *unionEntity = nil;
+		NSEntityDescription *cppMethodEntity = nil;
+		NSEntityDescription *cppClassStructEntity = nil;
+		NSEntityDescription *cppNamespaceEntity = nil;
+		
+		NSManagedObject *obj = nil;
+		if (entityName)
+		{
+			obj = [self addRecordNamed:name entityName:entityName desc:@"" sourcePath:extractPath];
+			[obj setValue:docset forKey:@"docset"];
+			
+			if ([superclass length])
+				[obj setValue:superclass forKey:@"superclass"];
+			if ([conformsTo count])
+				[obj setValue:[[conformsTo allObjects] componentsJoinedByString:@","] forKey:@"conformsto"];
+		}
 		
 		for (NSArray *captures in items)
 		{
@@ -283,19 +382,110 @@
 			
 			if ([captures count] > 6)
 			{
-				NSString *itemType = [captures objectAtIndex:5];
-				NSString *itemName = [captures objectAtIndex:6];
+				NSString *itemType = [captures objectAtIndex:6];
+				NSString *itemName = [captures objectAtIndex:7];
+								
+				NSString *itemRole = nil;
+				if ([captures count] > 9)
+					itemRole = [captures objectAtIndex:9];
 				
 				if ([itemType length] && [itemName length])
 				{
+					IGKDocRecordManagedObject *newSubobject = nil;
+					
+					/* Item types and examples:
+						 tdef: vDSP_Length
+						 
+						 cl: IOFireWireAVCLibConsumerInterface
+						 
+						 econst: kFFTDirection_Forward
+						 
+						 macro: vDSP_Version0
+						 
+						 tag: kAXErrorSuccess
+						 
+						 func: AXNotificationHIObjectNotify
+						 
+						 instm: devicePairingConnecting:
+						 
+						 data: kAXAttachmentTextAttribute
+					 */					 
+					
 					if ([itemType isEqual:@"tdef"])
 					{
-						IGKDocRecordManagedObject *newTypedef = [[IGKDocRecordManagedObject alloc] initWithEntity:typedefEntity insertIntoManagedObjectContext:ctx];
+						NSEntityDescription *entity = nil;
 						
-						[newTypedef setValue:itemName forKey:@"name"];
-						[newTypedef setValue:docset forKey:@"docset"];
-						[newTypedef setValue:extractPath forKey:@"documentPath"];
+						if ([itemRole isEqual:@"Enum"])
+						{
+							if (!enumEntity)
+								enumEntity = [NSEntityDescription entityForName:@"CEnum" inManagedObjectContext:ctx];
+							entity = enumEntity;
+						}
+						
+						//These two don't actually exists... yet. The only role= attribute used is "Enum" (and "Macro", but that's kind of redundant but that's kind of redundant)
+						else if ([itemRole isEqual:@"Struct"])
+						{
+							if (!structEntity)
+								structEntity = [NSEntityDescription entityForName:@"CStruct" inManagedObjectContext:ctx];
+							entity = structEntity;
+						}
+						else if ([itemRole isEqual:@"Union"])
+						{
+							if (!unionEntity)
+								unionEntity = [NSEntityDescription entityForName:@"CUnion" inManagedObjectContext:ctx];
+							entity = unionEntity;
+						}
+						else
+						{
+							if (!typedefEntity)
+								typedefEntity = [NSEntityDescription entityForName:@"CTypedef" inManagedObjectContext:ctx];
+							entity = typedefEntity;
+						}
+						
+						newSubobject = [[IGKDocRecordManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:ctx];
 					}
+					
+					else if ([itemType isEqual:@"func"])
+					{
+						if (!functionEntity)
+							functionEntity = [NSEntityDescription entityForName:@"CFunction" inManagedObjectContext:ctx];
+						
+						newSubobject = [[IGKDocRecordManagedObject alloc] initWithEntity:functionEntity insertIntoManagedObjectContext:ctx];
+					}
+					
+					else if ([itemType isEqual:@"macro"])
+					{
+						if (!macroEntity)
+							macroEntity = [NSEntityDescription entityForName:@"CMacro" inManagedObjectContext:ctx];
+						
+						newSubobject = [[IGKDocRecordManagedObject alloc] initWithEntity:macroEntity insertIntoManagedObjectContext:ctx];
+					}
+					
+					//Weirdly, "constant_group" is Apple's code for a global and "data" is Apple's code for a constant *facepalm*
+					else if ([itemType isEqual:@"constant_group"])
+					{
+						if (!globalVariableEntity)
+							globalVariableEntity = [NSEntityDescription entityForName:@"CGlobal" inManagedObjectContext:ctx];
+						
+						newSubobject = [[IGKDocRecordManagedObject alloc] initWithEntity:globalVariableEntity insertIntoManagedObjectContext:ctx];
+					}
+					
+					else if ([itemType isEqual:@"econst"] || [itemType isEqual:@"data"] ||
+							 [itemType isEqual:@"tag"]) //TODO: An item type of "tag" should really be a CEnumRecord entity
+					{
+						if (!constantEntity)
+							constantEntity = [NSEntityDescription entityForName:@"CConstant" inManagedObjectContext:ctx];
+						
+						newSubobject = [[IGKDocRecordManagedObject alloc] initWithEntity:constantEntity insertIntoManagedObjectContext:ctx];
+					}
+					
+					if (newSubobject)
+					{
+						[newSubobject setValue:itemName forKey:@"name"];
+						[newSubobject setValue:docset forKey:@"docset"];
+						[newSubobject setValue:extractPath forKey:@"documentPath"];
+					}
+
 					
 					continue;
 				}
@@ -567,6 +757,16 @@
 			[object setValue:returnValueDescription forKey:@"returnDescription"];
 			continue;
 		}
+		
+		//discussion
+		/* <h5 class="tight">Discussion</h5>
+		   <p> ... </p>
+		   <p> ... </p>
+		   ...
+		 */
+		//TODO Scrape for "discussion"
+		
+		
 		
 		//availability
 		/* <div class="Availability">
