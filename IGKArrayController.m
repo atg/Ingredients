@@ -26,9 +26,11 @@
 	NSFetchRequest *request = [[NSFetchRequest alloc] init];
 	[request setEntity:[NSEntityDescription entityForName:@"DocRecord" inManagedObjectContext:ctx]];
 	[request setPredicate:predicate];
-	[request setSortDescriptors:sortDescriptors];
-	
+
 	fetchedObjects = [ctx executeFetchRequest:request error:nil];
+	
+	//NSFetchRequests and NSComparator-based sort descriptors apparently don't go together
+	fetchedObjects = [fetchedObjects sortedArrayUsingDescriptors:sortDescriptors];
 }
 - (void)refresh
 {

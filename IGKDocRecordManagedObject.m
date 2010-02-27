@@ -33,7 +33,7 @@
 	//FIXME: Maybe it would be better to use an NSDictionary -> NSNumber here instead
 	
 	NSString *entityName = [[self entity] name];
-	
+
 	if([entityName isEqual:@"ObjCClass"])
 		return CHSymbolButtonObjcClass;
 	
@@ -80,6 +80,9 @@
 	
 	else if([entityName isEqual:@"CppNamespace"])
 		return CHSymbolButtonCppNamespace;
+	
+	else if([entityName isEqual:@"ObjCBindingsListing"])
+		return CHSymbolButtonObjcBindingsListing;
 	
 	return 0;
 }

@@ -61,19 +61,63 @@
 	
 	sideSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name"
 													   ascending:YES
-													  comparator:^NSComparisonResult (id a, id b) {
-		if([sideSearchQuery length] == 0)
+													  comparator:^NSComparisonResult (id a, id b)
+	{
+		
+		NSUInteger qLength = [sideSearchQuery length];
+		NSString *qlower = [sideSearchQuery lowercaseString];
+		NSUInteger qlowerLength = [qlower length];
+
+		if (qLength == 0)
 			return NSOrderedAscending;
 		
-		NSInteger qLength = [sideSearchQuery length];
-		NSInteger aLength = [a length];
-		NSInteger bLength = [b length];
+		NSUInteger aLength = [a length];
+		NSUInteger bLength = [b length];
 		
 		NSInteger l1 = abs(aLength - qLength);
 		NSInteger l2 = abs(bLength - qLength);
 		
 		if (l1 == l2)
+		{
+			//If l1 == l2 then attempt to see if one of them equals or starts with the substring
+			
+			//Case sensitive equality
+			if (aLength == qLength && [a isEqual:sideSearchQuery])
+				return NSOrderedAscending;
+			if (bLength == qLength && [b isEqual:sideSearchQuery])
+				return NSOrderedDescending;
+			
+			//Case insensitive equality
+			NSString *alower = [a lowercaseString];
+			NSUInteger alowerLength = [alower length]; //We can't use aLength since alower may be a different length to a in some locales. Probably not an issue, since identifiers won't have unicode in them, but let's not risk the crash
+			
+			if (alowerLength == qlowerLength && [alower isEqual:sideSearchQuery])
+				return NSOrderedAscending;
+
+			NSString *blower = [a lowercaseString];
+			NSUInteger blowerLength = [alower length];
+			
+			if (blowerLength == qlowerLength && [blower isEqual:sideSearchQuery])
+				return NSOrderedAscending;
+			
+			//Case sensitive starts-with
+			if (aLength > qLength && [[a substringToIndex:qLength] isEqual:sideSearchQuery])
+				return NSOrderedAscending;
+			if (bLength > qLength && [[b substringToIndex:qLength] isEqual:sideSearchQuery])
+				return NSOrderedDescending;
+			
+			//Case insensitive start-with
+			if (alowerLength > qlowerLength && [[alower substringToIndex:qlowerLength] isEqual:qlower])
+				return NSOrderedAscending;
+			if (blowerLength > qlowerLength && [[blower substringToIndex:qlowerLength] isEqual:qlower])
+				return NSOrderedDescending;
+			
+			//So neither a nor b starts with q. Now we apply prioritization. Some types get priority over others. For instance, a class > method > typedef > constant
+			
+			//Just a normal compare
 			return [a localizedCompare:b];
+			
+		}
 		else if(l1 < l2)
 			return NSOrderedAscending;
 		
@@ -81,6 +125,7 @@
 		
 	}];
 	
+	NSLog(@"objectsController = %@", objectsController);
 	[objectsController setSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];
 	
 	[searchViewPredicateEditor addRow:nil];

@@ -138,6 +138,11 @@ static NSMutableDictionary *sharedSymbolButtonImageCache = nil;
 			offset = 252.0;
 			str = @"C";
 		}
+		else if (mask & CHSymbolButtonObjcBindingsListing)
+		{
+			offset = 252.0;
+			str = @"B";
+		}
 		else if (mask & CHSymbolButtonObjcProtocol)
 		{
 			offset = 252.0;
