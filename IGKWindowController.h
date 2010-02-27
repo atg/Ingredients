@@ -8,7 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
+#import "IGKHTMLGenerator.h"
 
+@class BWSplitView;
 @class IGKApplicationDelegate;
 @class IGKSourceListWallpaperView;
 @class IGKArrayController;
@@ -40,8 +42,8 @@ typedef enum {
 	IBOutlet NSView *contentView;
 	
 	IBOutlet NSView *twoPaneView;
-	IBOutlet NSSplitView *twoPaneSplitView;
-	IBOutlet NSSplitView *twoPaneContentsSplitView;
+	IBOutlet BWSplitView *twoPaneSplitView;
+	IBOutlet BWSplitView *twoPaneContentsSplitView;
 	
 	//Browser View
 	IBOutlet NSView *browserView;
@@ -100,7 +102,9 @@ typedef enum {
 	IBOutlet NSView *browserTopbar;
 	IBOutlet NSView *browserToolbar;
 	
-	NSArray *tableOfContentsItems;
+	IGKHTMLDisplayTypeMask acceptableDisplayTypes;
+	
+	NSMutableArray *tableOfContentsItems;
 	BOOL isIndexing;
 }
 

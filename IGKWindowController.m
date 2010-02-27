@@ -26,6 +26,8 @@
 - (void)tableOfContentsChangedSelection;
 - (void)sideSearchTableChangedSelection;
 
+- (void)loadDocIntoBrowser;
+
 @end
 
 @implementation IGKWindowController
@@ -452,7 +454,42 @@
 //Table of contents datasource
 - (void)reloadTableOfContents
 {
-	tableOfContentsItems = [NSArray arrayWithObjects:@"All", @"Tasks", @"Properties", @"Methods", @"Notifications", nil];
+	tableOfContentsItems = [[NSMutableArray alloc] init];
+	
+	if (IGKHTMLDisplayTypeMaskIsSingle(acceptableDisplayTypes))
+	{
+		//Hide the list
+		NSLog(@"Hiding the list %@", twoPaneContentsSplitView);
+		if (![twoPaneContentsSplitView collapsibleSubviewCollapsed])
+			[twoPaneContentsSplitView toggleCollapse:nil];
+	}
+	else
+	{
+		//Show the list
+		NSLog(@"Showing the list %@", twoPaneContentsSplitView);		
+		if ([twoPaneContentsSplitView collapsibleSubviewCollapsed])
+			[twoPaneContentsSplitView toggleCollapse:nil];
+		
+		IGKHTMLDisplayTypeMask displayTypeMask = acceptableDisplayTypes;
+		if (displayTypeMask & IGKHTMLDisplayType_All)
+			[tableOfContentsItems addObject:@"All"];
+		
+		if (displayTypeMask & IGKHTMLDisplayType_Overview)
+			[tableOfContentsItems addObject:@"Overview"];
+		if (displayTypeMask & IGKHTMLDisplayType_Tasks)
+			[tableOfContentsItems addObject:@"Tasks"];
+		if (displayTypeMask & IGKHTMLDisplayType_Properties)
+			[tableOfContentsItems addObject:@"Properties"];
+		if (displayTypeMask & IGKHTMLDisplayType_Methods)
+			[tableOfContentsItems addObject:@"Methods"];
+		if (displayTypeMask & IGKHTMLDisplayType_Notifications)
+			[tableOfContentsItems addObject:@"Notifications"];
+		if (displayTypeMask & IGKHTMLDisplayType_Delegate)
+			[tableOfContentsItems addObject:@"Delegate"];
+		if (displayTypeMask & IGKHTMLDisplayType_BindingListings)
+			[tableOfContentsItems addObject:@"Bindings"];
+	}
+	
 	[tableOfContentsTableView reloadData];
 }
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
@@ -486,7 +523,7 @@
 }
 - (void)tableOfContentsChangedSelection
 {
-	
+	[self loadDocIntoBrowser];
 }
 - (void)sideSearchTableChangedSelection
 {
@@ -504,19 +541,28 @@
 	//Otherwise switch to the webview
 	[self setBrowserActive:YES];
 	
+	[self loadDocIntoBrowser];
+	[self reloadTableOfContents];
+}
+- (IGKHTMLDisplayTypeMask)tableOfContentsSelectedDisplayTypeMask
+{
+	return IGKHTMLDisplayType_All;
+}
+- (void)loadDocIntoBrowser
+{
 	//Generate the HTML
 	IGKHTMLGenerator *generator = [[IGKHTMLGenerator alloc] init];
 	[generator setContext:[[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext]];
 	[generator setManagedObject:[objectsController selection]];
-	[generator setDisplayType:IGKHTMLDisplayType_All];
+	[generator setDisplayTypeMask:[self tableOfContentsSelectedDisplayTypeMask]];
+	
+	acceptableDisplayTypes = [generator acceptableDisplayTypes];
 	
 	NSString *html = [generator html];
 	
 	//Load the HTML into the webview
 	[[browserWebView mainFrame] loadHTMLString:html
 									   baseURL:[[NSBundle mainBundle] resourceURL]];
-	
-	[self reloadTableOfContents];
 }
 
 - (IBAction)openInSafari:(id)sender

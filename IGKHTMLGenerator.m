@@ -9,6 +9,11 @@
 #import "IGKHTMLGenerator.h"
 #import "IGKScraper.h"
 
+BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
+{
+	return mask == 0 || (mask & (mask - 1)) == 0;
+}
+
 @interface IGKHTMLGenerator ()
 
 - (NSString *)escape:(NSString *)unescapedText;
@@ -30,11 +35,12 @@
 @end
 
 
+
 @implementation IGKHTMLGenerator
 
 @synthesize context;
 @synthesize managedObject;
-@synthesize displayType;
+@synthesize displayTypeMask;
 
 //Take an unescaped string and add escapes for <, >, &, ", '
 - (NSString *)escape:(NSString *)unescapedText
@@ -80,9 +86,36 @@
 	[super finalize];
 }
 
-- (IGKHTMLDisplayTypeMask)displayTypes
+- (IGKHTMLDisplayTypeMask)acceptableDisplayTypes
 {
-	return IGKHTMLDisplayType_All | IGKHTMLDisplayType_Overview | IGKHTMLDisplayType_Tasks | IGKHTMLDisplayType_Properties | IGKHTMLDisplayType_Methods | IGKHTMLDisplayType_Notifications | IGKHTMLDisplayType_Delegate;
+	IGKHTMLDisplayTypeMask mask = IGKHTMLDisplayType_All;
+	
+	NSEntityDescription *entity = [transientObject entity];
+	if ([entity isKindOfEntity:[NSEntityDescription entityForName:@"ObjCClass" inManagedObjectContext:transientContext]])
+	{
+		if ([[transientObject valueForKey:@"overview"] length])
+			mask |= IGKHTMLDisplayType_Overview;
+		if ([[transientObject valueForKey:@"taskgroups"] count])
+			mask |= IGKHTMLDisplayType_Tasks;
+		if ([[transientObject valueForKey:@"properties"] count])
+			mask |= IGKHTMLDisplayType_Properties;
+		if ([[transientObject valueForKey:@"methods"] count])
+			mask |= IGKHTMLDisplayType_Methods;
+		if ([[transientObject valueForKey:@"miscitems"] count])
+			mask |= IGKHTMLDisplayType_Misc;
+		if ([[transientObject valueForKey:@"notifications"] count])
+			mask |= IGKHTMLDisplayType_Notifications;
+		if ([[transientObject valueForKey:@"delegatemethods"] count])
+			mask |= IGKHTMLDisplayType_Delegate;
+		
+		if ([entity isKindOfEntity:[NSEntityDescription entityForName:@"ObjCClass" inManagedObjectContext:transientContext]])
+		{
+			if ([[transientObject valueForKey:@"bindinglistings"] count])
+				mask |= IGKHTMLDisplayType_BindingListings;
+		}
+	}
+	
+	return mask;
 }
 
 - (NSString *)html
@@ -102,20 +135,23 @@
 	if ([[transientObject entity] isKindOfEntity:ObjCAbstractMethodContainer])
 	{
 		//Append the main content
-		if (displayType == IGKHTMLDisplayType_All)
+		if (displayTypeMask & IGKHTMLDisplayType_All)
 			[self html_all];
-		else if (displayType == IGKHTMLDisplayType_Overview)
-			[self html_overview];
-		else if (displayType == IGKHTMLDisplayType_Tasks)
-			[self html_tasks];
-		else if (displayType == IGKHTMLDisplayType_Properties)
-			[self html_properties];
-		else if (displayType == IGKHTMLDisplayType_Methods)
-			[self html_methods];
-		else if (displayType == IGKHTMLDisplayType_Notifications)
-			[self html_notifications];
-		else if (displayType == IGKHTMLDisplayType_Delegate)
-			[self html_delegate];
+		else
+		{
+			if (displayTypeMask & IGKHTMLDisplayType_Overview)
+				[self html_overview];
+			if (displayTypeMask & IGKHTMLDisplayType_Tasks)
+				[self html_tasks];
+			if (displayTypeMask & IGKHTMLDisplayType_Properties)
+				[self html_properties];
+			if (displayTypeMask & IGKHTMLDisplayType_Methods)
+				[self html_methods];
+			if (displayTypeMask & IGKHTMLDisplayType_Notifications)
+				[self html_notifications];
+			if (displayTypeMask & IGKHTMLDisplayType_Delegate)
+				[self html_delegate];
+		}
 	}
 	else if ([[transientObject entity] isKindOfEntity:ObjCMethod])
 	{

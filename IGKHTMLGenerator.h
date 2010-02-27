@@ -15,6 +15,10 @@
 //Generates HTML for display in the webview
 
 typedef enum {
+	//The table of contents should be hidden if the bit mask is a power of 2
+	
+	IGKHTMLDisplayType_None = 0,
+	
 	IGKHTMLDisplayType_All = 1,
 	
 	IGKHTMLDisplayType_Overview = 1 << 1,
@@ -23,9 +27,16 @@ typedef enum {
 	IGKHTMLDisplayType_Methods = 1 << 4,
 	IGKHTMLDisplayType_Notifications = 1 << 5,
 	IGKHTMLDisplayType_Delegate = 1 << 6,
+	IGKHTMLDisplayType_Misc = 1 << 7, //For miscellaneous things like structs, enums and consts
+	
+	IGKHTMLDisplayType_BindingListings = 1 << 8,
+	
 } IGKHTMLDisplayType;
 
 typedef NSUInteger IGKHTMLDisplayTypeMask;
+
+//Returns YES if mask is the set of one value. That is, if mask is a power of 2
+BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask);
 
 @interface IGKHTMLGenerator : NSObject
 {
@@ -35,7 +46,7 @@ typedef NSUInteger IGKHTMLDisplayTypeMask;
 	IGKDocRecordManagedObject *managedObject;
 	IGKDocRecordManagedObject *transientObject;
 	
-	IGKHTMLDisplayType displayType;
+	IGKHTMLDisplayTypeMask displayTypeMask;
 	
 	BOOL isMethodContainer;
 	
@@ -47,10 +58,10 @@ typedef NSUInteger IGKHTMLDisplayTypeMask;
 
 @property (assign) NSManagedObjectContext *context;
 @property (assign) IGKDocRecordManagedObject *managedObject;
-@property (assign) IGKHTMLDisplayType displayType;
+@property (assign) IGKHTMLDisplayTypeMask displayTypeMask;
 
 - (NSString *)html;
 
-- (IGKHTMLDisplayTypeMask)displayTypes;
+- (IGKHTMLDisplayTypeMask)acceptableDisplayTypes;
 
 @end

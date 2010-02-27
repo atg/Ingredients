@@ -23,7 +23,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="370"/>
+			<integer value="373"/>
 			<integer value="85"/>
 			<integer value="76"/>
 			<integer value="393"/>
@@ -3988,8 +3988,8 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 							<string>NSTableView</string>
 							<string>NSView</string>
 							<string>NSTableView</string>
-							<string>NSSplitView</string>
-							<string>NSSplitView</string>
+							<string>BWSplitView</string>
+							<string>BWSplitView</string>
 							<string>NSView</string>
 							<string>NSTextField</string>
 							<string>NSWindow</string>
