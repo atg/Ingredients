@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <dispatch/dispatch.h>
 
 @interface IGKArrayController : NSObject<NSTableViewDataSource, NSTableViewDelegate>
 {

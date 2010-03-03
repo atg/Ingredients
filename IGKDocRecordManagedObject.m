@@ -19,6 +19,55 @@
 
 @implementation IGKDocRecordManagedObject
 
+- (void)awakeFromInsert
+{
+	[super awakeFromInsert];
+	
+	[self setValue:[NSNumber numberWithShort:[self priorityval]] forKey:@"priority"];
+}
+- (CHRecordPriority)priorityval
+{
+	NSString *entityName = [[self entity] name];
+	
+	if([entityName isEqual:@"ObjCMethod"])
+		return CHPriorityMethod;
+	
+	else if([entityName isEqual:@"ObjCClass"])
+		return CHPriorityClass;
+	
+	else if([entityName isEqual:@"ObjCProtocol"])
+		return CHPriorityProtocol;
+	
+	else if([entityName isEqual:@"ObjCCategory"])
+		return CHPriorityCategory;
+	
+	else if([entityName isEqual:@"CTypedef"])
+		return CHPriorityType;
+	
+	else if([entityName isEqual:@"CEnum"])
+		return CHPriorityType;
+	
+	else if([entityName isEqual:@"CStruct"])
+		return CHPriorityType;
+	
+	else if([entityName isEqual:@"CFunction"])
+		return CHPriorityFunction;
+	
+	else if([entityName isEqual:@"CMacro"])
+		return CHPriorityFunction;
+	
+	else if([entityName isEqual:@"CppClassStruct"])
+		return CHPriorityClass;
+	
+	else if([entityName isEqual:@"CppMethod"])
+		return CHPriorityMethod;
+	
+	else if([entityName isEqual:@"CUnion"])
+		return CHPriorityType;
+	
+	return CHPriorityOther;
+}
+
 - (NSImage *)normalIcon
 {
 	return [self iconForSelectedState:NO];

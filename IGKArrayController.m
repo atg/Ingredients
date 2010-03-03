@@ -20,17 +20,24 @@
 }
 
 - (void)fetch
-{
+{	
+	//dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+		
 	NSManagedObjectContext *ctx = [[[NSApp delegate] kitController] managedObjectContext];
-	
+		
 	NSFetchRequest *request = [[NSFetchRequest alloc] init];
 	[request setEntity:[NSEntityDescription entityForName:@"DocRecord" inManagedObjectContext:ctx]];
 	[request setPredicate:predicate];
-
+	[request setSortDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:NO]]];
+	[request setFetchLimit:200];
+	
 	fetchedObjects = [ctx executeFetchRequest:request error:nil];
 	
 	//NSFetchRequests and NSComparator-based sort descriptors apparently don't go together
+	//TODO: The computation in our comparators is pretty heavy. Perhaps do our own timsort?
 	fetchedObjects = [fetchedObjects sortedArrayUsingDescriptors:sortDescriptors];
+	
+	//});
 }
 - (void)refresh
 {

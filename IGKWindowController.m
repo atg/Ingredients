@@ -64,10 +64,12 @@
 	if (shouldIndex)
 		[self startIndexing];
 	
-	sideSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name"
+	sideSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:nil
 													   ascending:YES
-													  comparator:^NSComparisonResult (id a, id b)
+													  comparator:^NSComparisonResult (id obja, id objb)
 	{
+		NSString *a = [obja valueForKey:@"name"];
+		NSString *b = [objb valueForKey:@"name"];
 		
 		NSUInteger qLength = [sideSearchQuery length];
 		NSString *qlower = [sideSearchQuery lowercaseString];
@@ -118,6 +120,14 @@
 				return NSOrderedDescending;
 			
 			//So neither a nor b starts with q. Now we apply prioritization. Some types get priority over others. For instance, a class > method > typedef > constant
+			NSUInteger objaPriority = [obja priorityval];
+			NSUInteger objbPriority = [objb priorityval];
+			
+			//Higher priorities are better
+			if (objaPriority > objbPriority)
+				return NSOrderedAscending;
+			else if (objaPriority < objbPriority)
+				return NSOrderedDescending;
 			
 			//Just a normal compare
 			return [a localizedCompare:b];
