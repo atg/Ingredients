@@ -1018,9 +1018,7 @@
 {
 	if (name == nil)
 		return;
-	
-	//NSLog(@"name / proto = %@ -- %@", name, prototype);
-	
+		
 	IGKDocRecordManagedObject *newMethod = [[IGKDocRecordManagedObject alloc] initWithEntity:methodEntity insertIntoManagedObjectContext:transientContext];
 	
 	[newMethod setValue:name forKey:@"name"];
@@ -1392,7 +1390,6 @@ void IGKFreeStringChars(const unichar *string)
 	if (name == nil)
 		return;
 	
-	//NSLog(@"createMethodNamed = %@", name);
 	IGKDocRecordManagedObject *newMethod = [[IGKDocRecordManagedObject alloc] initWithEntity:methodEntity insertIntoManagedObjectContext:ctx];
 	
 	[newMethod setValue:name forKey:@"name"];

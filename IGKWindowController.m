@@ -68,6 +68,8 @@
 	
 	if (shouldIndex)
 		[self startIndexing];
+	else
+		[self setBrowserActive:NO];
 	
 	[searchViewTable setTarget:self];
 	[searchViewTable setDoubleAction:@selector(advancedSearchDoubleAction:)];
@@ -149,9 +151,9 @@
 	}];
 	
 	[sideSearchController setMaxRows:100];
-	[sideSearchController setSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];
+	[sideSearchController setSmartSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];
 	
-	[advancedController setSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];	
+	[advancedController setSmartSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];	
 	
 	[searchViewPredicateEditor addRow:nil];
 	
@@ -587,7 +589,6 @@
 
 - (void)advancedSearchDoubleAction:(id)sender
 {
-	NSLog(@"Double action");
 	[self sideSearchTableChangedSelection];
 }
 - (void)tableViewSelectionDidChange:(NSNotification *)aNotification
@@ -625,7 +626,9 @@
 	else if ([sideSearchController selection] == nil)
 	{
 		[self setBrowserActive:NO];
-	
+		[self reloadTableOfContents];
+		acceptableDisplayTypes = 0;
+		
 		return;
 	}
 	
@@ -667,6 +670,9 @@
 - (void)loadDocIntoBrowser
 {	
 	//Generate the HTML
+	if (![[self currentArrayController] selection])
+		return;
+	
 	IGKHTMLGenerator *generator = [[IGKHTMLGenerator alloc] init];
 	[generator setContext:[[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext]];
 	[generator setManagedObject:[[self currentArrayController] selection]];

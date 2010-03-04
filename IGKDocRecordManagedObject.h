@@ -28,4 +28,7 @@ typedef enum {
 
 - (CHRecordPriority)priorityval;
 
+- (NSString *)xcontainername;
+- (IGKDocRecordManagedObject *)xcontainer;
+
 @end

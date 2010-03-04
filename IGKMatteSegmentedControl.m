@@ -33,7 +33,6 @@
 	
 	int i;
 	float runningY = 0.0;
-	//NSLog(@"[self segmentCount] = %d", [self segmentCount]);
 	float sely = 0.0;
 	for (i = 0; i < [self segmentCount]; i++)
 	{

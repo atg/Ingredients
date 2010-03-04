@@ -16,16 +16,21 @@
 	NSUInteger maxRows;
 	
 	NSPredicate *predicate;
-	NSArray *sortDescriptors;
+	NSArray *smartSortDescriptors;
+	NSArray *currentSortDescriptors;
 	
 	NSArray *fetchedObjects;
 	
 	id vipObject;
 	BOOL fetchContainsVipObject;
+	
+	BOOL sortIsAscending;
+	NSString *sortColumn;
 }
 
 @property (assign) NSPredicate *predicate;
-@property (assign) NSArray *sortDescriptors;
+@property (assign) NSArray *smartSortDescriptors;
+@property (assign) NSArray *currentSortDescriptors;
 @property (assign) NSUInteger maxRows;
 
 //The VIP object, if set, will sit at the very top of the the predicate or anything else

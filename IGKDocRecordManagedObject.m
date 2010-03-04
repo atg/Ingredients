@@ -68,6 +68,19 @@
 	return CHPriorityOther;
 }
 
+- (NSString *)xcontainername
+{
+	return [[self xcontainer] valueForKey:@"name"];
+}
+- (IGKDocRecordManagedObject *)xcontainer
+{
+	NSDictionary *relationships = [[self entity] relationshipsByName];
+	if ([relationships objectForKey:@"container"])
+		return [self valueForKey:@"container"];
+	
+	return [self valueForKey:@"misccontainer"];
+}
+
 - (NSImage *)normalIcon
 {
 	return [self iconForSelectedState:NO];
