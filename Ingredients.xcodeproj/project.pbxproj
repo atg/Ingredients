@@ -728,7 +728,7 @@
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				INFOPLIST_FILE = "IngredientsKit-Info.plist";
 				INSTALL_PATH = "@loader_path/../Frameworks";
-				LD_DYLIB_INSTALL_NAME = "@loader_path/../$(EXECUTABLE_PATH)";
+				LD_DYLIB_INSTALL_NAME = "@loader_path/../Frameworks/$(EXECUTABLE_PATH)";
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
@@ -755,7 +755,7 @@
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				INFOPLIST_FILE = "IngredientsKit-Info.plist";
 				INSTALL_PATH = "@loader_path/../Frameworks";
-				LD_DYLIB_INSTALL_NAME = "@loader_path/../$(EXECUTABLE_PATH)";
+				LD_DYLIB_INSTALL_NAME = "@loader_path/../Frameworks/$(EXECUTABLE_PATH)";
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
