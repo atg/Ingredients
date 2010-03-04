@@ -625,9 +625,10 @@
 	//If there's no selection, switch to the no selection search page
 	else if ([sideSearchController selection] == nil)
 	{
+		acceptableDisplayTypes = 0;
+
 		[self setBrowserActive:NO];
 		[self reloadTableOfContents];
-		acceptableDisplayTypes = 0;
 		
 		return;
 	}
@@ -694,22 +695,25 @@
 - (IBAction)noselectionSearchField:(id)sender
 {	
 	NSString *url = nil;
+	
+	CFStringRef query = (CFStringRef)[noselectionSearchField stringValue];
+	NSString *urlencodedQuery = NSMakeCollectable(CFURLCreateStringByAddingPercentEscapes(NULL, query, NULL, CFSTR("!*'();:@&=+$,/?%#[]"), kCFStringEncodingUTF8));
+	
 	if ([noselectionPopupButton selectedTag] == 0) // Google
 	{
-		//TODO: We need to add percent escapes
-		url = [NSString stringWithFormat:@"http://www.google.com/search?q=%@", [noselectionSearchField stringValue]];
+		url = [NSString stringWithFormat:@"http://www.google.com/search?q=%@", urlencodedQuery];
 	}
 	else if ([noselectionPopupButton selectedTag] == 1) // Cocoabuilder
 	{
-		url = [NSString stringWithFormat:@"http://www.cocoabuilder.com/archive/search/1?q=%@&l=cocoa", [noselectionSearchField stringValue]];
+		url = [NSString stringWithFormat:@"http://www.cocoabuilder.com/archive/search/1?q=%@&l=cocoa", urlencodedQuery];
 	}
 	else if ([noselectionPopupButton selectedTag] == 2) // CocoaDev
 	{
-		url = [NSString stringWithFormat:@"http://www.google.com/search?q=site%%3Awww.cocoadev.com&q=%@", [noselectionSearchField stringValue]];
+		url = [NSString stringWithFormat:@"http://www.google.com/search?q=site%%3Awww.cocoadev.com&q=%@", urlencodedQuery];
 	}
 	else if ([noselectionPopupButton selectedTag] == 3) // Stack Overflow
 	{
-		url = [NSString stringWithFormat:@"http://www.google.com/search?q=site%%3Astackoverflow.com&q=%@", [noselectionSearchField stringValue]];
+		url = [NSString stringWithFormat:@"http://www.google.com/search?q=site%%3Astackoverflow.com&q=%@", urlencodedQuery];
 	}
 	
 	if (!url)

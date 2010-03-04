@@ -7,11 +7,14 @@
 //
 
 #import "Ingredients_AppDelegate.h"
+#import "PFMoveApplication.h"
 
 @implementation Ingredients_AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
+	PFMoveToApplicationsFolderIfNecessary();
+	
 	[kitController showWindow:nil];
 }
 
