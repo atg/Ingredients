@@ -25,19 +25,12 @@ typedef enum {
 	
 } CHDocumentationBrowserUIMode;
 
-typedef enum {
-	CHDocsetFilterShowAll=0,
-	CHDocsetFilterShowMac=1,
-	CHDocsetFilterShowiPhone=2,
-	CHDocsetFilterShowiPad=3
-} CHDocsetFilterMode;
-
 @interface IGKWindowController : NSWindowController
 {
 	IGKApplicationDelegate *appDelegate;
 	
 	
-	//Basic Structure
+	//*** Basic Structure ***
 	IBOutlet NSWindow *window;
 	IBOutlet NSView *contentView;
 	
@@ -45,67 +38,68 @@ typedef enum {
 	IBOutlet BWSplitView *twoPaneSplitView;
 	IBOutlet BWSplitView *twoPaneContentsSplitView;
 	
-	//Browser View
+	
+	//*** Browser View ***
 	IBOutlet NSView *browserView;
 	IBOutlet NSTextField *browserViewTitle;
 	IBOutlet NSTextField *browserViewPath;
 	IBOutlet NSView *browserWebViewContainer;
-	IBOutlet WebView *browserWebView;
 	
-	//Side Search
+	IBOutlet WebView *browserWebView;
+	IBOutlet NSTextField *urlField;
+	IBOutlet NSView *browserTopbar;
+	IBOutlet NSView *browserToolbar;
+	
+	
+	//*** No Selection ***
+	IBOutlet NSView *noselectionView;
+	IBOutlet NSPopUpButton *noselectionPopupButton;
+	IBOutlet NSTextField *noselectionSearchField;
+	
+	IGKHTMLDisplayTypeMask acceptableDisplayTypes;
+	
+	
+	//*** Side Search ***
+	IBOutlet IGKArrayController *sideSearchController;
+	
 	IBOutlet NSView *sideSearchView;
 	IBOutlet NSSearchField *sideSearchViewField;
 	IBOutlet NSTableView *sideSearchViewResults;
-	IBOutlet NSArrayController *sideSearchArrayController;
-	// Additional stuff
+	
 	NSMutableArray *sideSearchResults;
 	NSPredicate *sideFilterPredicate;
 	NSSortDescriptor *sideSortDescriptor;
 	NSString *sideSearchQuery;
 	
-	//Contents
+	
+	//*** Table of Contents ***
 	IBOutlet NSView *tableOfContentsView;
 	IBOutlet NSTableView *tableOfContentsTableView;
 	
-	//Search view
+	NSMutableArray *tableOfContentsItems;
+	
+	
+	//*** Advanced Search ***
+	IBOutlet IGKArrayController *advancedController;
+	
 	IBOutlet NSView *searchView;
 	IBOutlet NSSearchField *searchViewField;
 	IBOutlet NSPredicateEditor *searchViewPredicateEditor;
 	IBOutlet NSTableView *searchViewTable;
 	
-	NSPredicate *advancedSearchPredicate;
+	NSPredicate *advancedFilterPredicate;
 	
-	// Other
-	IBOutlet IGKArrayController *objectsController;
+	
+	//*** Other ***
 	IGKSourceListWallpaperView *wallpaperView;
-	
-	// Temp
-	IBOutlet NSTableView *temporaryTable;
-	
-	
-	CHDocsetFilterMode docsetFilterMode;
-	
-	
-	BOOL awaken;
-	
+		
 	int currentModeIndex;
 	
+	BOOL awaken;
 	BOOL shouldIndex;
-	
-	NSManagedObjectID *objectID;
-	
-	IBOutlet NSView *noselectionView;
-	IBOutlet NSPopUpButton *noselectionPopupButton;
-	IBOutlet NSTextField *noselectionSearchField;
-	
-	IBOutlet NSTextField *urlField;
-	IBOutlet NSView *browserTopbar;
-	IBOutlet NSView *browserToolbar;
-	
-	IGKHTMLDisplayTypeMask acceptableDisplayTypes;
-	
-	NSMutableArray *tableOfContentsItems;
 	BOOL isIndexing;
+		
+	NSArray *selectedFilterDocset;
 }
 
 @property (assign) IGKApplicationDelegate *appDelegate;
@@ -116,10 +110,11 @@ typedef enum {
 
 @property (assign) BOOL shouldIndex;
 
-@property (assign) CHDocsetFilterMode docsetFilterMode;
-@property (assign) NSNumber *ui_docsetFilterMode;
+@property (assign) NSArray *selectedFilterDocset;
 
 - (IBAction)noselectionSearchField:(id)sender;
+
+- (IBAction)changeSelectedFilterDocset:(id)sender;
 
 - (IBAction)executeSearch:(id)sender;
 - (IBAction)executeAdvancedSearch:(id)sender;
@@ -130,5 +125,7 @@ typedef enum {
 - (IBAction)openInSafari:(id)sender;
 
 - (void)setBrowserActive:(BOOL)active;
+
+- (void)tableViewSelectionDidChange:(NSNotification *)aNotification;
 
 @end

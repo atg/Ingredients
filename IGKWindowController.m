@@ -18,15 +18,20 @@
 - (void)indexedAllPaths:(NSNotification *)notif;
 - (void)stopIndexing;
 
+- (void)advancedSearchDoubleAction:(id)sender;
+
 - (void)executeSideSearch:(NSString *)query;
-- (void)setMode:(int)modeIndex;
-
-- (void)setUpForWebView:(WebView *)sender frame:(WebFrame *)frame;
-
-- (void)tableOfContentsChangedSelection;
+- (void)restoreAdvancedSearchStateIntoTwoUp:(BOOL)selectFirst;
 - (void)sideSearchTableChangedSelection;
 
+- (void)tableOfContentsChangedSelection;
+
+- (void)setMode:(int)modeIndex;
+- (IGKArrayController *)currentArrayController;
+
+- (void)loadDocs;
 - (void)loadDocIntoBrowser;
+- (void)setUpForWebView:(WebView *)sender frame:(WebFrame *)frame;
 
 @end
 
@@ -35,8 +40,8 @@
 @synthesize appDelegate;
 @synthesize sideFilterPredicate;
 @synthesize advancedFilterPredicate;
+@synthesize selectedFilterDocset;
 @synthesize shouldIndex;
-@synthesize docsetFilterMode;
 
 - (id)init
 {
@@ -63,6 +68,9 @@
 	
 	if (shouldIndex)
 		[self startIndexing];
+	
+	[searchViewTable setTarget:self];
+	[searchViewTable setDoubleAction:@selector(advancedSearchDoubleAction:)];
 	
 	sideSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:nil
 													   ascending:YES
@@ -120,8 +128,8 @@
 				return NSOrderedDescending;
 			
 			//So neither a nor b starts with q. Now we apply prioritization. Some types get priority over others. For instance, a class > method > typedef > constant
-			NSUInteger objaPriority = [obja priorityval];
-			NSUInteger objbPriority = [objb priorityval];
+			NSUInteger objaPriority = [[obja valueForKey:@"priority"] shortValue];
+			NSUInteger objbPriority = [[objb valueForKey:@"priority"] shortValue];
 			
 			//Higher priorities are better
 			if (objaPriority > objbPriority)
@@ -140,7 +148,10 @@
 		
 	}];
 	
-	[objectsController setSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];
+	[sideSearchController setMaxRows:100];
+	[sideSearchController setSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];
+	
+	[advancedController setSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];	
 	
 	[searchViewPredicateEditor addRow:nil];
 	
@@ -151,7 +162,6 @@
 	
 	[self tableViewSelectionDidChange:nil]; 
 }
-
 
 
 - (void)close
@@ -293,27 +303,47 @@
 	[self willChangeValueForKey:@"ui_currentModeIndex"];
 	currentModeIndex = modeIndex;
 	[self didChangeValueForKey:@"ui_currentModeIndex"];
+	
+	
+	
+	if (modeIndex == CHDocumentationBrowserUIMode_TwoUp)
+	{
+		[[sideSearchViewField window] makeFirstResponder:sideSearchViewField];
+	}
+	else if (modeIndex == CHDocumentationBrowserUIMode_BrowserOnly)
+	{
+		[[browserWebView window] makeFirstResponder:browserWebView];
+	}
+	else if (modeIndex == CHDocumentationBrowserUIMode_AdvancedSearch)
+	{
+		[[searchViewField window] makeFirstResponder:searchViewField];
+	}
 }
 
 - (IBAction)executeSearch:(id)sender
 {
-	[self executeSideSearch:[sender stringValue]];
-}
-
-- (IBAction)executeAdvancedSearch:(id)sender
-{
-	
+	if (currentModeIndex == CHDocumentationBrowserUIMode_AdvancedSearch)
+		[self executeAdvancedSearch:[sender stringValue]];
+	else
+		[self executeSideSearch:[sender stringValue]];
 }
 
 - (IBAction)changeViewModeTagged:(id)sender
 {	
 	NSInteger selectedSegment = [sender tag];
 	if (selectedSegment == 0)
-		[self setMode:CHDocumentationBrowserUIMode_BrowserOnly];
-	else if(selectedSegment == 1)
-		[self setMode:CHDocumentationBrowserUIMode_TwoUp];
-	else if(selectedSegment == 2)
-		[self setMode:CHDocumentationBrowserUIMode_AdvancedSearch];
+	{
+		//We use self.ui_currentModeIndex instead of [self setMode:] because we want to refetch the side search view if we're already in advanced search
+		self.ui_currentModeIndex = [NSNumber numberWithInt:CHDocumentationBrowserUIMode_BrowserOnly];
+	}
+	else if (selectedSegment == 1)
+	{
+		self.ui_currentModeIndex = [NSNumber numberWithInt:CHDocumentationBrowserUIMode_TwoUp];
+	}
+	else if (selectedSegment == 2)
+	{
+		self.ui_currentModeIndex = [NSNumber numberWithInt:CHDocumentationBrowserUIMode_AdvancedSearch];
+	}
 }
 - (IBAction)backForward:(id)sender
 {
@@ -327,49 +357,76 @@
 @dynamic ui_currentModeIndex;
 
 - (void)setUi_currentModeIndex:(NSNumber *)n
-{
-	[self setMode:[n intValue]];
+{	
+	CHDocumentationBrowserUIMode oldMode = currentModeIndex;
+	CHDocumentationBrowserUIMode newMode = [n intValue];
+	
+	if (newMode == CHDocumentationBrowserUIMode_BrowserOnly || 
+		newMode == CHDocumentationBrowserUIMode_TwoUp)
+	{
+		if (oldMode == CHDocumentationBrowserUIMode_AdvancedSearch)
+		{
+			
+			if (newMode == CHDocumentationBrowserUIMode_TwoUp)
+				[self restoreAdvancedSearchStateIntoTwoUp:NO];
+			else
+				[self restoreAdvancedSearchStateIntoTwoUp:NO];
+		}
+	}
+	
+	[self setMode:newMode];
+	
+	[self loadDocs];
 }
 - (NSNumber *)ui_currentModeIndex
 {
 	return [NSNumber numberWithInt:currentModeIndex];
 }
 
-- (NSNumber *)ui_docsetFilterMode
-{
-	return [NSNumber numberWithInteger:docsetFilterMode];
-}
-- (void)setUi_docsetFilterMode:(NSNumber *)n
-{
-	[self willChangeValueForKey:@"ui_docsetFilterMode"];
-	docsetFilterMode = [n integerValue];
-	[self didChangeValueForKey:@"ui_docsetFilterMode"];
-	
-	[self executeSearch:sideSearchViewField];
-}
-
-
 - (void)executeSideSearch:(NSString *)query
 {
 	sideSearchQuery = query;
 	
-	if([query length] > 0)
+	if ([query length] > 0)
 	{
 		NSPredicate *fetchPredicate = nil;
-		if (docsetFilterMode == CHDocsetFilterShowAll)
-			fetchPredicate = [NSPredicate predicateWithFormat:@"%K CONTAINS[cd] %@", @"name", query];
+		if (selectedFilterDocset)
+			fetchPredicate = [NSPredicate predicateWithFormat:@"name CONTAINS[c] %@ && docset == %@", query, selectedFilterDocset];
 		else
-			fetchPredicate = [NSPredicate predicateWithFormat:@"%K CONTAINS[cd] %@ && docset.platformFamily == %@", @"name", query, docsetFilterMode == CHDocsetFilterShowMac ? @"macosx" : @"iphoneos"];
-			
-		[objectsController setPredicate:fetchPredicate];
+			fetchPredicate = [NSPredicate predicateWithFormat:@"name CONTAINS[c] %@", query];
+		
+		[sideSearchController setPredicate:fetchPredicate];
 	}
-	else {
-		[objectsController setPredicate:[NSPredicate predicateWithValue:NO]];
+	else
+	{
+		[sideSearchController setPredicate:[NSPredicate predicateWithValue:NO]];
 	}
 	
-	[objectsController refresh];
+	sideSearchController.vipObject = nil;
+	
+	[sideSearchController refresh];
 }
-
+- (void)executeAdvancedSearch:(NSString *)query
+{
+	sideSearchQuery = query;
+	
+	if ([query length] > 0)
+	{
+		NSPredicate *fetchPredicate = nil;
+		if (selectedFilterDocset)
+			fetchPredicate = [NSPredicate predicateWithFormat:@"name CONTAINS[c] %@ && docset == %@", query, selectedFilterDocset];
+		else
+			fetchPredicate = [NSPredicate predicateWithFormat:@"name CONTAINS[c] %@", query];
+		
+		[advancedController setPredicate:fetchPredicate];
+	}
+	else
+	{
+		[advancedController setPredicate:[NSPredicate predicateWithValue:NO]];
+	}
+	
+	[advancedController refresh];
+}
 
 - (void)startIndexing
 {
@@ -406,24 +463,25 @@
 
 - (void)setAdvancedFilterPredicate:(NSPredicate *)pred
 {
-	advancedSearchPredicate = pred;
+	advancedFilterPredicate = pred;
 }
 
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)command
 {
 	if ([NSStringFromSelector(command) isEqual:@"moveUp:"])
 	{
-		[objectsController selectPrevious:nil];
+		[[self currentArrayController] selectPrevious:nil];
 		return YES;
 	}
 	else if ([NSStringFromSelector(command) isEqual:@"moveDown:"])
 	{
-		[objectsController selectNext:nil];
+		[[self currentArrayController] selectNext:nil];
 		return YES;
 	}
 	else if ([NSStringFromSelector(command) isEqual:@"insertNewline:"])
 	{
-		[[browserWebView window] makeFirstResponder:browserWebView];
+		if ([self currentArrayController] == sideSearchController)
+			[[browserWebView window] makeFirstResponder:browserWebView];
 	}
 	else if ([NSStringFromSelector(command) isEqual:@"cancelOperation:"])
 	{
@@ -431,6 +489,13 @@
 	}
 	
 	return NO;
+}
+
+- (IBAction)changeSelectedFilterDocset:(id)sender
+{
+	selectedFilterDocset = [[sender selectedItem] representedObject];
+	
+	[self executeSearch:sideSearchViewField];
 }
 
 
@@ -520,13 +585,18 @@
 	return nil;
 }	
 
+- (void)advancedSearchDoubleAction:(id)sender
+{
+	NSLog(@"Double action");
+	[self sideSearchTableChangedSelection];
+}
 - (void)tableViewSelectionDidChange:(NSNotification *)aNotification
 {
 	if ([aNotification object] == tableOfContentsTableView)
 	{
 		[self tableOfContentsChangedSelection];
 	}
-	else
+	else if ([aNotification object] == sideSearchViewResults)
 	{
 		[self sideSearchTableChangedSelection];
 	}
@@ -541,29 +611,65 @@
 	if (isIndexing)
 		return;
 	
+	if ([self currentArrayController] == advancedController)
+	{
+		//We need to load our predicate into the side search controller
+		[self restoreAdvancedSearchStateIntoTwoUp:YES];
+		
+		//Open in two up
+		//TODO: Make which view this switched to a preference. It could switch to either Two Up or Browser Only
+		[self setMode:CHDocumentationBrowserUIMode_TwoUp];
+	}
+	
 	//If there's no selection, switch to the no selection search page
-	if ([objectsController selection] == nil)
+	else if ([sideSearchController selection] == nil)
 	{
 		[self setBrowserActive:NO];
+	
 		return;
 	}
 	
 	//Otherwise switch to the webview
 	[self setBrowserActive:YES];
 	
+	[self loadDocs];
+}
+- (void)loadDocs
+{
 	[self loadDocIntoBrowser];
 	[self reloadTableOfContents];
 }
+- (void)restoreAdvancedSearchStateIntoTwoUp:(BOOL)selectFirst
+{	
+	//Restore the predicate, etc into the side search's array controlller
+	[sideSearchController setPredicate:[advancedController predicate]];
+	sideSearchController.vipObject = [advancedController selection];
+	
+	[sideSearchViewField setStringValue:[searchViewField stringValue]];
+	
+	if (selectFirst)
+		[sideSearchController refreshAndSelectFirst:YES renderSelection:NO];
+	else
+		[sideSearchController refreshAndSelectFirst:NO renderSelection:NO];
+}
+
 - (IGKHTMLDisplayTypeMask)tableOfContentsSelectedDisplayTypeMask
 {
 	return IGKHTMLDisplayType_All;
 }
-- (void)loadDocIntoBrowser
+- (IGKArrayController *)currentArrayController
 {
+	if (currentModeIndex == CHDocumentationBrowserUIMode_AdvancedSearch)
+		return advancedController;
+	else
+		return sideSearchController;
+}
+- (void)loadDocIntoBrowser
+{	
 	//Generate the HTML
 	IGKHTMLGenerator *generator = [[IGKHTMLGenerator alloc] init];
 	[generator setContext:[[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext]];
-	[generator setManagedObject:[objectsController selection]];
+	[generator setManagedObject:[[self currentArrayController] selection]];
 	[generator setDisplayTypeMask:[self tableOfContentsSelectedDisplayTypeMask]];
 	
 	acceptableDisplayTypes = [generator acceptableDisplayTypes];

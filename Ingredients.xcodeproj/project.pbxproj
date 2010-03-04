@@ -65,6 +65,8 @@
 		759ECFBE11334CE100067BD1 /* MultiSel_window_frame_button_active_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 759ECFB111334CE100067BD1 /* MultiSel_window_frame_button_active_right.png */; };
 		759ECFC411334D9800067BD1 /* IGKWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 759ECFC211334D9800067BD1 /* IGKWindow.h */; };
 		759ECFC511334D9800067BD1 /* IGKWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 759ECFC311334D9800067BD1 /* IGKWindow.m */; };
+		75B23908113FB4D300EC1D2B /* IGKDocSetManagedObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B23906113FB4D300EC1D2B /* IGKDocSetManagedObject.h */; };
+		75B23909113FB4D300EC1D2B /* IGKDocSetManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B23907113FB4D300EC1D2B /* IGKDocSetManagedObject.m */; };
 		75B534FA111076C000560848 /* View_AdvSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F7111076C000560848 /* View_AdvSearchTemplate.png */; };
 		75B534FB111076C000560848 /* View_NoSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F8111076C000560848 /* View_NoSearchTemplate.png */; };
 		75B534FC111076C000560848 /* View_SideSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F9111076C000560848 /* View_SideSearchTemplate.png */; };
@@ -173,6 +175,8 @@
 		759ECFB111334CE100067BD1 /* MultiSel_window_frame_button_active_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MultiSel_window_frame_button_active_right.png; sourceTree = "<group>"; };
 		759ECFC211334D9800067BD1 /* IGKWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKWindow.h; sourceTree = "<group>"; };
 		759ECFC311334D9800067BD1 /* IGKWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKWindow.m; sourceTree = "<group>"; };
+		75B23906113FB4D300EC1D2B /* IGKDocSetManagedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKDocSetManagedObject.h; sourceTree = "<group>"; };
+		75B23907113FB4D300EC1D2B /* IGKDocSetManagedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKDocSetManagedObject.m; sourceTree = "<group>"; };
 		75B534F7111076C000560848 /* View_AdvSearchTemplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = View_AdvSearchTemplate.png; path = Images/View_AdvSearchTemplate.png; sourceTree = "<group>"; };
 		75B534F8111076C000560848 /* View_NoSearchTemplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = View_NoSearchTemplate.png; path = Images/View_NoSearchTemplate.png; sourceTree = "<group>"; };
 		75B534F9111076C000560848 /* View_SideSearchTemplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = View_SideSearchTemplate.png; path = Images/View_SideSearchTemplate.png; sourceTree = "<group>"; };
@@ -423,6 +427,8 @@
 				770B37EC0679A11B001EADE2 /* Ingredients_DataModel.xcdatamodel */,
 				75F672A9110E254A005F299C /* IGKDocRecordManagedObject.h */,
 				75F672AA110E254A005F299C /* IGKDocRecordManagedObject.m */,
+				75B23906113FB4D300EC1D2B /* IGKDocSetManagedObject.h */,
+				75B23907113FB4D300EC1D2B /* IGKDocSetManagedObject.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -451,6 +457,7 @@
 				759ECFA3113349D700067BD1 /* IGKMultiSelector.h in Headers */,
 				759ECFC411334D9800067BD1 /* IGKWindow.h in Headers */,
 				759030231139BFF500550A86 /* IGKMatteSegmentedControl.h in Headers */,
+				75B23908113FB4D300EC1D2B /* IGKDocSetManagedObject.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -581,6 +588,7 @@
 				759ECFA4113349D700067BD1 /* IGKMultiSelector.m in Sources */,
 				759ECFC511334D9800067BD1 /* IGKWindow.m in Sources */,
 				759030241139BFF500550A86 /* IGKMatteSegmentedControl.m in Sources */,
+				75B23909113FB4D300EC1D2B /* IGKDocSetManagedObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

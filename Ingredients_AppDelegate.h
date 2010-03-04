@@ -14,4 +14,6 @@
 	IBOutlet IGKApplicationDelegate *kitController;
 }
 
+- (id)kitController;
+
 @end
