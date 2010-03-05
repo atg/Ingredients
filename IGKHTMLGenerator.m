@@ -242,6 +242,17 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	if ([object valueForKey:@"signature"])
 		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [object valueForKey:@"signature"]];
 	
+	[self html_parametersForCallable:object];
+	
+	if ([object valueForKey:@"discussion"])
+		[outputString appendFormat:@"\t\t<hr>\n\n\t\t<div class='discussion'>%@</div>\n\n\t\t<hr>\n\n", [object valueForKey:@"discussion"]];
+	
+	[self html_metadataTable:object];
+		
+	[outputString appendFormat:@"\t</div>\n\n"];
+}
+- (void)html_parametersForCallable:(IGKDocRecordManagedObject *)object
+{
 	BOOL hasParameters = [[object valueForKey:@"parameters"] count];
 	BOOL hasReturnDescription = [object valueForKey:@"returnDescription"] ? YES : NO;
 	if (hasParameters || hasReturnDescription)
@@ -265,16 +276,19 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		
 		[outputString appendString:@"\t\t</div>\n"];
 	}
-	
-	if ([object valueForKey:@"discussion"])
-		[outputString appendFormat:@"\t\t<hr>\n\n\t\t<div class='discussion'>%@</div>\n\n\t\t<hr>\n\n", [object valueForKey:@"discussion"]];
-	
-	[self html_metadataTable:object];
-		
-	[outputString appendFormat:@"\t</div>\n\n"];
 }
 - (void)html_metadataTable:(IGKDocRecordManagedObject *)object
 {
+	if ([object valueForKey:@"specialConsiderations"])
+	{
+		[outputString appendString:@"\t\t<div class='info special_considerations'>\n"];
+		
+		[outputString appendString:@"\t\t\t<h3>Special Considerations</h3>\n"];
+		[outputString appendFormat:@"\t\t\t<p>%@</p>\n", [object valueForKey:@"specialConsiderations"]];
+		
+		[outputString appendString:@"\t\t</div>\n"];
+	}
+	
 	//Create a table for the various metadata. Now it gets tricky
 	//We want to generate something like
 	/* 
@@ -460,6 +474,9 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	if ([transientObject valueForKey:@"signature"])
 		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [transientObject valueForKey:@"signature"]];
+	
+	if ([transientObject isKindOfEntityNamed:@"Callable"])
+		[self html_parametersForCallable:transientObject];
 	
 	[self html_metadataTable:transientObject];
 	

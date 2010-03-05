@@ -522,7 +522,7 @@
 - (void)createMethodNamed:(NSString *)name description:(NSString *)description prototype:(NSString *)prototype methodEntity:(NSEntityDescription *)methodEntity parent:(NSManagedObject*)parent docset:(NSManagedObject*)docset transientContext:(NSManagedObjectContext *)transientContext;
 
 - (void)scrape;
-- (void)scrapeFunction;
+- (void)scrapeApplecode:(NSString *)applecode;
 - (void)scrapeMethod;
 - (void)scrapeAbstractMethodContainer;
 - (void)scrapeMethodChildren:(NSArray *)children index:(NSUInteger)index managedObject:(NSManagedObject *)object;
@@ -591,14 +591,24 @@
 	}
 	else if ([entity isKindOfEntity:[NSEntityDescription entityForName:@"CFunction" inManagedObjectContext:transientContext]])
 	{
-		[self scrapeFunction];
+		[self scrapeApplecode:@"c/func"];
+	}
+	else if ([entity isKindOfEntity:[NSEntityDescription entityForName:@"CTypedef" inManagedObjectContext:transientContext]])
+	{
+		[self scrapeApplecode:@"c/tdef"];
+	}
+	else if ([entity isKindOfEntity:[NSEntityDescription entityForName:@"CStruct" inManagedObjectContext:transientContext]])
+	{
+		[self scrapeApplecode:@"c/tdef"];
 	}
 }
 
-- (void)scrapeFunction
+- (void)scrapeApplecode:(NSString *)applecode
 {
 	NSError *err = nil;
 	NSArray *methodNodes = [[doc rootElement] nodesForXPath:@"//a" error:&err];
+	
+	NSString *fullApplecodePattern = [NSString stringWithFormat:@"//apple_ref/%@*", applecode];
 	
 	//Search through all anchors in the document, and record their parent elements
 	NSMutableSet *containersSet = [[NSMutableSet alloc] init];
@@ -614,7 +624,7 @@
 		NSString *strval = [el commentlessStringValue];
 		
 		//(instm|clm|intfm|intfcm|intfp|instp)
-		if ([strval isLike:@"//apple_ref/c/func*"])
+		if ([strval isLike:fullApplecodePattern])
 		{
 			NSString *methodName = [transientObject valueForKey:@"name"];
 			
@@ -980,6 +990,32 @@
 			
 			continue;
 		}
+		
+		//discussion
+		/* <h5 class="tight">Discussion</h5>
+		 <p> ... </p>
+		 <p> ... </p>
+		 ...
+		 */
+		if (i + 1 < count && [nName isEqual:@"h5"] && [[[[n commentlessStringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString] isEqual:@"special considerations"])
+		{
+			NSMutableString *discussion = [[NSMutableString alloc] init];
+			
+			NSUInteger j;
+			for (j = i + 1; j < count; j++)
+			{
+				NSXMLElement *m = [children objectAtIndex:j];
+				if (![m isKindOfClass:[NSXMLElement class]])
+					continue;
+				if (![[[m name] lowercaseString] isEqual:@"p"])
+					break;
+				
+				[discussion appendFormat:@"<p>%@</p>", [m commentlessStringValue]];
+			}
+			
+			[object setValue:discussion forKey:@"specialConsiderations"];
+		}
+		
 	}
 }
 - (void)scrapeAbstractMethodContainer

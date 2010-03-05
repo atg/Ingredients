@@ -23,6 +23,10 @@ typedef enum {
 
 }
 
+- (BOOL)isKindOfEntityNamed:(NSString *)entityName;
+- (BOOL)hasKey:(NSString *)key;
+- (id)valueForSoftKey:(NSString *)key;
+
 - (NSImage *)normalIcon;
 - (NSImage *)selectedIcon;
 
