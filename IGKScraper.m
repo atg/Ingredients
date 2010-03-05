@@ -763,6 +763,9 @@
 		{
 			NSArray *nChildren = [n children];
 			NSString *lastDT = nil;
+			
+			NSUInteger ind = 1;
+			
 			for (NSXMLElement *m in nChildren)
 			{
 				if ([[[m name] lowercaseString] isEqual:@"dt"])
@@ -779,9 +782,12 @@
 							ParameterEntity = [NSEntityDescription entityForName:@"Parameter" inManagedObjectContext:transientContext];
 						
 						NSManagedObject *parameter = [[NSManagedObject alloc] initWithEntity:ParameterEntity insertIntoManagedObjectContext:transientContext];
+						[parameter setValue:[NSNumber numberWithShort:ind] forKey:@"positionIndex"];
 						[parameter setValue:lastDT forKey:@"name"];
 						[parameter setValue:dd forKey:@"overview"];
 						[parameter setValue:object forKey:@"callable"];
+						
+						ind++;
 					}
 					
 					lastDT = nil;

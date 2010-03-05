@@ -250,7 +250,9 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		
 		if (hasParameters)
 		{
-			for (NSManagedObject *parameter in [object valueForKey:@"parameters"])
+			NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"positionIndex" ascending:YES];
+			NSArray *parameters = [[[object valueForKey:@"parameters"] allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
+			for (NSManagedObject *parameter in parameters)
 			{
 				[outputString appendFormat:@"\t\t\t<p class='parameter'><strong>%@</strong> %@</p>\n", [parameter valueForKey:@"name"], [parameter valueForKey:@"overview"]];
 			}
