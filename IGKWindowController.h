@@ -76,7 +76,9 @@ typedef enum {
 	IBOutlet NSView *tableOfContentsView;
 	IBOutlet NSTableView *tableOfContentsTableView;
 	
-	NSMutableArray *tableOfContentsItems;
+	NSUInteger tableOfContentsMask;
+	NSMutableArray *tableOfContentsTypes;
+	NSMutableArray *tableOfContentsTitles;
 	
 	
 	//*** Advanced Search ***

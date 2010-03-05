@@ -25,6 +25,7 @@
 - (void)sideSearchTableChangedSelection;
 
 - (void)tableOfContentsChangedSelection;
+- (void)registerDisplayTypeInTableView:(IGKHTMLDisplayType)type title:(NSString *)title;
 
 - (void)setMode:(int)modeIndex;
 - (IGKArrayController *)currentArrayController;
@@ -533,7 +534,8 @@
 //Table of contents datasource
 - (void)reloadTableOfContents
 {
-	tableOfContentsItems = [[NSMutableArray alloc] init];
+	tableOfContentsTypes = [[NSMutableArray alloc] init];
+	tableOfContentsTitles = [[NSMutableArray alloc] init];
 	
 	if (IGKHTMLDisplayTypeMaskIsSingle(acceptableDisplayTypes))
 	{
@@ -551,37 +553,42 @@
 		
 		IGKHTMLDisplayTypeMask displayTypeMask = acceptableDisplayTypes;
 		if (displayTypeMask & IGKHTMLDisplayType_All)
-			[tableOfContentsItems addObject:@"All"];
+			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_All title:@"All"];//[tableOfContentsItems addObject:@"All"];
 		
 		if (displayTypeMask & IGKHTMLDisplayType_Overview)
-			[tableOfContentsItems addObject:@"Overview"];
+			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_Overview title:@"Overview"];//[tableOfContentsItems addObject:@"Overview"];
 		//if (displayTypeMask & IGKHTMLDisplayType_Tasks)
 		//	[tableOfContentsItems addObject:@"Tasks"];
 		if (displayTypeMask & IGKHTMLDisplayType_Properties)
-			[tableOfContentsItems addObject:@"Properties"];
+			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_Properties title:@"Properties"];//[tableOfContentsItems addObject:@"Properties"];
 		if (displayTypeMask & IGKHTMLDisplayType_Methods)
-			[tableOfContentsItems addObject:@"Methods"];
+			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_Methods title:@"Methods"];//[tableOfContentsItems addObject:@"Methods"];
 		if (displayTypeMask & IGKHTMLDisplayType_Notifications)
-			[tableOfContentsItems addObject:@"Notifications"];
+			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_Notifications title:@"Notifications"];//[tableOfContentsItems addObject:@"Notifications"];
 		if (displayTypeMask & IGKHTMLDisplayType_Delegate)
-			[tableOfContentsItems addObject:@"Delegate"];
+			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_Delegate title:@"Delegate"];//[tableOfContentsItems addObject:@"Delegate"];
 		if (displayTypeMask & IGKHTMLDisplayType_BindingListings)
-			[tableOfContentsItems addObject:@"Bindings"];
+			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_BindingListings title:@"Bindings"];//[tableOfContentsItems addObject:@"Bindings"];
 	}
 	
 	[tableOfContentsTableView reloadData];
 }
+- (void)registerDisplayTypeInTableView:(IGKHTMLDisplayType)type title:(NSString *)title
+{
+	[tableOfContentsTypes addObject:[NSNumber numberWithLongLong:type]];
+	[tableOfContentsTitles addObject:title];
+}
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
 	if (tableView == tableOfContentsTableView)
-		return [tableOfContentsItems count];
+		return [tableOfContentsTitles count];
 	return 0;
 }
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
 	if (tableView == tableOfContentsTableView)
 	{
-		id title = [tableOfContentsItems objectAtIndex:row];
+		id title = [tableOfContentsTitles objectAtIndex:row];
 		
 		if ([[tableColumn identifier] isEqual:@"title"])
 		{
@@ -590,7 +597,7 @@
 		
 		if ([[tableColumn identifier] isEqual:@"icon"])
 		{
-			BOOL isSelected = (row == [tableView selectedRow]);
+			BOOL isSelected = [[tableView selectedRowIndexes] containsIndex:row];
 			NSString *imageName = [NSString stringWithFormat:@"ToC_%@%@", title, (isSelected ? @"_S" : @"")];
 			return [NSImage imageNamed:imageName];
 		}
@@ -615,6 +622,7 @@
 }
 - (void)tableOfContentsChangedSelection
 {
+	NSLog(@"TABLE OF CONTENTS CHANGED SELECTION");
 	[self loadDocIntoBrowser];
 }
 - (void)sideSearchTableChangedSelection
@@ -671,7 +679,24 @@
 
 - (IGKHTMLDisplayTypeMask)tableOfContentsSelectedDisplayTypeMask
 {
-	return IGKHTMLDisplayType_All;
+	__block IGKHTMLDisplayTypeMask dtmask = IGKHTMLDisplayType_None;
+	
+	NSIndexSet *selectedIndicies = [tableOfContentsTableView selectedRowIndexes];
+	[selectedIndicies enumerateIndexesUsingBlock:^(NSUInteger index, BOOL *stop) {
+		
+		//Get the mask at this selected index
+		IGKHTMLDisplayType dt = [[tableOfContentsTypes objectAtIndex:index] longLongValue];
+		
+		//Append it to the bitmask 
+		dtmask |= dt;
+	}];
+	
+	//A display type of none is a little unhelpful - pass all along instead
+	if (dtmask == IGKHTMLDisplayType_None)
+		return IGKHTMLDisplayType_All;
+	
+	//Otherwise use the mask as-is
+	return dtmask;
 }
 - (IGKArrayController *)currentArrayController
 {
@@ -687,14 +712,22 @@
 		return;
 	
 	NSManagedObject *currentSelectionObject = [[self currentArrayController] selection];
-	if (currentObjectIDInBrowser && [[currentSelectionObject objectID] isEqual:currentObjectIDInBrowser])
+	BOOL objectSelectionHasNotChanged = (currentObjectIDInBrowser && [[currentSelectionObject objectID] isEqual:currentObjectIDInBrowser]);
+	
+	IGKHTMLDisplayTypeMask dtmask = [self tableOfContentsSelectedDisplayTypeMask];
+	BOOL displayTypeSelectionHasNotChanged = (tableOfContentsMask && dtmask && tableOfContentsMask == dtmask);
+	
+	//If the object selection hasn't change AND the display type hasn't changed, then there's no need to do anything
+	if (objectSelectionHasNotChanged && displayTypeSelectionHasNotChanged)
 		return;
+	
+	tableOfContentsMask = dtmask;
 	
 	currentObjectIDInBrowser = [currentSelectionObject objectID];
 	
 	IGKHTMLGenerator *generator = [[IGKHTMLGenerator alloc] init];
 	[generator setContext:[[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext]];
-	[generator setManagedObject:currentSelectionObject];
+	[generator setManagedObject:(IGKDocRecordManagedObject *)currentSelectionObject];
 	[generator setDisplayTypeMask:[self tableOfContentsSelectedDisplayTypeMask]];
 	
 	acceptableDisplayTypes = [generator acceptableDisplayTypes];

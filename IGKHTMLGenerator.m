@@ -30,8 +30,10 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 - (void)html_notifications;
 - (void)html_delegate;
 
-- (void)html_method:(IGKDocRecordManagedObject *)obj;
+- (void)html_methodLikeDeclarationsWithEntity:(NSString *)entityName hasParameters:(BOOL)hasParameters;
+- (void)html_method:(IGKDocRecordManagedObject *)obj hasParameters:(BOOL)hasParameters;
 - (void)html_metadataTable:(IGKDocRecordManagedObject *)object;
+- (void)html_parametersForCallable:(IGKDocRecordManagedObject *)object;
 
 - (void)html_generic;
 
@@ -160,7 +162,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	{
 		[outputString appendString:@"<div id='methods' class='single'>"];
 		
-		[self html_method:transientObject];
+		[self html_method:transientObject hasParameters:YES];
 		
 		[outputString appendString:@"</div>"];
 	}
@@ -200,14 +202,24 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 }
 - (void)html_properties
 {
+	[outputString appendString:@"<div id='methods' class='properties'>"];
 	
+	[self html_methodLikeDeclarationsWithEntity:@"ObjCProperty" hasParameters:NO];
+	
+	[outputString appendString:@"</div>"];
 }
 - (void)html_methods
 {	
 	[outputString appendString:@"<div id='methods'>"];
 	
+	[self html_methodLikeDeclarationsWithEntity:@"ObjCMethod" hasParameters:YES];
+	
+	[outputString appendString:@"</div>"];
+}
+- (void)html_methodLikeDeclarationsWithEntity:(NSString *)entityName hasParameters:(BOOL)hasParameters
+{
 	NSFetchRequest *methodsFetch = [[NSFetchRequest alloc] init];
-	[methodsFetch setEntity:[NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:transientContext]];
+	[methodsFetch setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:transientContext]];
 	[methodsFetch setPredicate:[NSPredicate predicateWithFormat:@"container=%@", transientObject]];
 	[methodsFetch setSortDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
 	
@@ -215,11 +227,10 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	NSArray *methods = [transientContext executeFetchRequest:methodsFetch error:&error];
 	for (IGKDocRecordManagedObject *object in methods)
 	{
-		[self html_method:object];
+		[self html_method:object hasParameters:hasParameters];
 	}
-	
-	[outputString appendString:@"</div>"];
 }
+
 - (void)html_notifications
 {
 	
@@ -229,7 +240,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 }
 
-- (void)html_method:(IGKDocRecordManagedObject *)object
+- (void)html_method:(IGKDocRecordManagedObject *)object hasParameters:(BOOL)hasParameters
 {
 	[outputString appendFormat:@"\t<div class='method'>\n"];
 	
@@ -242,7 +253,8 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	if ([object valueForKey:@"signature"])
 		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [object valueForKey:@"signature"]];
 	
-	[self html_parametersForCallable:object];
+	if (hasParameters)
+		[self html_parametersForCallable:object];
 	
 	if ([object valueForKey:@"discussion"])
 		[outputString appendFormat:@"\t\t<hr>\n\n\t\t<div class='discussion'>%@</div>\n\n\t\t<hr>\n\n", [object valueForKey:@"discussion"]];
