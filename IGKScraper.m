@@ -581,34 +581,58 @@
 	
 	//Depending on the type of obj, we will need to parse it differently
 	NSEntityDescription *entity = [transientObject entity];
-	if ([entity isKindOfEntity:[NSEntityDescription entityForName:@"ObjCAbstractMethodContainer" inManagedObjectContext:transientContext]])
+	if ([transientObject isKindOfEntityNamed:@"ObjCAbstractMethodContainer"])
 	{
 		[self scrapeAbstractMethodContainer];
 	}
-	else if ([entity isKindOfEntity:[NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:transientContext]])
+	else if ([transientObject isKindOfEntityNamed:@"ObjCMethod"])
 	{
 		[self scrapeMethod];
 	}
-	else if ([entity isKindOfEntity:[NSEntityDescription entityForName:@"CFunction" inManagedObjectContext:transientContext]])
+	else if ([transientObject isKindOfEntityNamed:@"CFunction"])
 	{
 		[self scrapeApplecode:@"c/func"];
 	}
-	else if ([entity isKindOfEntity:[NSEntityDescription entityForName:@"CTypedef" inManagedObjectContext:transientContext]])
+	else if ([transientObject isKindOfEntityNamed:@"CTypedef"])
 	{
 		[self scrapeApplecode:@"c/tdef"];
 	}
-	else if ([entity isKindOfEntity:[NSEntityDescription entityForName:@"CStruct" inManagedObjectContext:transientContext]])
+	else if ([transientObject isKindOfEntityNamed:@"CStruct"])
 	{
 		[self scrapeApplecode:@"c/tdef"];
+	}
+	else if ([transientObject isKindOfEntityNamed:@"CEnum"])
+	{
+		[self scrapeApplecode:@"c/tdef"];
+	}
+	else if ([transientObject isKindOfEntityNamed:@"CMacro"])
+	{
+		[self scrapeApplecode:@"c/macro"];
+	}
+	else if ([transientObject isKindOfEntityNamed:@"CConstant"])
+	{
+		[self scrapeApplecodes:[NSArray arrayWithObjects:@"c/econst", @"c/data", @"c/tag", nil]];
+	}
+	else if ([transientObject isKindOfEntityNamed:@"CGlobal"])
+	{
+		[self scrapeApplecode:@"c/constant_group"];
 	}
 }
 
 - (void)scrapeApplecode:(NSString *)applecode
 {
+	[self scrapeApplecodes:[NSArray arrayWithObject:applecode]];
+}
+- (void)scrapeApplecodes:(NSArray *)applecodes
+{
 	NSError *err = nil;
 	NSArray *methodNodes = [[doc rootElement] nodesForXPath:@"//a" error:&err];
 	
-	NSString *fullApplecodePattern = [NSString stringWithFormat:@"//apple_ref/%@*", applecode];
+	NSMutableArray *fullApplecodePatterns = [[NSMutableArray alloc] init];
+	for (NSString *applecode in applecodes)
+	{
+		[fullApplecodePatterns addObject:[NSString stringWithFormat:@"//apple_ref/%@*", applecode]];
+	}
 	
 	//Search through all anchors in the document, and record their parent elements
 	NSMutableSet *containersSet = [[NSMutableSet alloc] init];
@@ -624,19 +648,24 @@
 		NSString *strval = [el commentlessStringValue];
 		
 		//(instm|clm|intfm|intfcm|intfp|instp)
-		if ([strval isLike:fullApplecodePattern])
+		for (NSString *fullApplecodePattern in fullApplecodePatterns)
 		{
-			NSString *methodName = [transientObject valueForKey:@"name"];
-			
-			//This is a bit ropey
-			if ([strval isLike:[@"*" stringByAppendingString:methodName]])
+			if ([strval isLike:fullApplecodePattern])
 			{
-				[containersSet addObject:[a parent]];
+				NSString *methodName = [transientObject valueForKey:@"name"];
 				
-				NSArray *children = [[a parent] children];
-				NSInteger index = [children indexOfObject:a];
-				if (index != -1)
-					[self scrapeMethodChildren:children index:index managedObject:transientObject];
+				//This is a bit ropey
+				if ([strval isLike:[@"*" stringByAppendingString:methodName]])
+				{					
+					[containersSet addObject:[a parent]];
+					
+					NSArray *children = [[a parent] children];
+					NSInteger index = [children indexOfObject:a];
+					if (index != -1)
+						[self scrapeMethodChildren:children index:index managedObject:transientObject];
+					
+					break;
+				}
 			}
 		}
 	}

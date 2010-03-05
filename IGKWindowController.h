@@ -98,7 +98,9 @@ typedef enum {
 	BOOL awaken;
 	BOOL shouldIndex;
 	BOOL isIndexing;
-		
+	
+	NSManagedObjectID *currentObjectIDInBrowser;
+	
 	NSArray *selectedFilterDocset;
 }
 

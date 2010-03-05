@@ -506,6 +506,8 @@
 
 - (void)setBrowserActive:(BOOL)active
 {
+	currentObjectIDInBrowser = nil;
+	
 	if (active)
 	{
 		id superview = [noselectionView superview];
@@ -634,6 +636,7 @@
 	//If there's no selection, switch to the no selection search page
 	else if ([sideSearchController selection] == nil)
 	{
+		currentObjectIDInBrowser = nil;
 		acceptableDisplayTypes = 0;
 
 		[self setBrowserActive:NO];
@@ -683,9 +686,15 @@
 	if (![[self currentArrayController] selection])
 		return;
 	
+	NSManagedObject *currentSelectionObject = [[self currentArrayController] selection];
+	if (currentObjectIDInBrowser && [[currentSelectionObject objectID] isEqual:currentObjectIDInBrowser])
+		return;
+	
+	currentObjectIDInBrowser = [currentSelectionObject objectID];
+	
 	IGKHTMLGenerator *generator = [[IGKHTMLGenerator alloc] init];
 	[generator setContext:[[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext]];
-	[generator setManagedObject:[[self currentArrayController] selection]];
+	[generator setManagedObject:currentSelectionObject];
 	[generator setDisplayTypeMask:[self tableOfContentsSelectedDisplayTypeMask]];
 	
 	acceptableDisplayTypes = [generator acceptableDisplayTypes];

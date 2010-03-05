@@ -87,7 +87,7 @@
 }
 - (void)refresh
 {
-	[self refreshAndSelectFirst:YES renderSelection:NO];
+	[self refreshAndSelectFirst:YES renderSelection:YES];
 }
 - (void)refreshAndSelectFirst:(BOOL)selectFirst renderSelection:(BOOL)renderSelection
 {
@@ -112,7 +112,7 @@
 			[tableView scrollRowToVisible:0];
 			
 			if (renderSelection)
-				[[tableView delegate] tableViewSelectionDidChange:nil];
+				[[tableView delegate] tableViewSelectionDidChange:[NSNotification notificationWithName:NSTableViewSelectionDidChangeNotification object:tableView]];
 		}
 	}];
 }
