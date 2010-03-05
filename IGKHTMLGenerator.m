@@ -32,6 +32,8 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 
 - (void)html_method:(IGKDocRecordManagedObject *)obj;
 
+- (void)html_generic;
+
 @end
 
 
@@ -93,10 +95,10 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	NSEntityDescription *entity = [transientObject entity];
 	if ([entity isKindOfEntity:[NSEntityDescription entityForName:@"ObjCClass" inManagedObjectContext:transientContext]])
 	{
-		if ([[transientObject valueForKey:@"overview"] length])
+		if ([[transientObject valueForKey:@"overview"] length] || [[transientObject valueForKey:@"taskgroups"] count])
 			mask |= IGKHTMLDisplayType_Overview;
-		if ([[transientObject valueForKey:@"taskgroups"] count])
-			mask |= IGKHTMLDisplayType_Tasks;
+		//if ([[transientObject valueForKey:@"taskgroups"] count])
+		//	mask |= IGKHTMLDisplayType_Tasks;
 		if ([[transientObject valueForKey:@"properties"] count])
 			mask |= IGKHTMLDisplayType_Properties;
 		if ([[transientObject valueForKey:@"methods"] count])
@@ -160,6 +162,10 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		[self html_method:transientObject];
 		
 		[outputString appendString:@"</div>"];
+	}
+	else
+	{
+		[self html_generic];
 	}
 	
 	//Append a footer
@@ -429,6 +435,20 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 #endif
 	
 	[outputString appendFormat:@"\t</div>\n\n"];
+}
+- (void)html_generic
+{
+	[outputString appendString:@"<div id='overview'>"];
+	
+	[outputString appendFormat:@"<h1>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];
+	
+	if ([transientObject valueForKey:@"discussion"])
+		[outputString appendString:[transientObject valueForKey:@"discussion"]];
+	
+	else if ([transientObject valueForKey:@"overview"])
+		[outputString appendString:[transientObject valueForKey:@"overview"]];	
+	
+	[outputString appendString:@"</div>"];
 }
 
 - (NSString *)processAvailability:(NSString *)availability

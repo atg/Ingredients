@@ -551,19 +551,19 @@
 		if (displayTypeMask & IGKHTMLDisplayType_All)
 			[tableOfContentsItems addObject:@"All"];
 		
-		//if (displayTypeMask & IGKHTMLDisplayType_Overview)
+		if (displayTypeMask & IGKHTMLDisplayType_Overview)
 			[tableOfContentsItems addObject:@"Overview"];
 		//if (displayTypeMask & IGKHTMLDisplayType_Tasks)
 		//	[tableOfContentsItems addObject:@"Tasks"];
-		//if (displayTypeMask & IGKHTMLDisplayType_Properties)
+		if (displayTypeMask & IGKHTMLDisplayType_Properties)
 			[tableOfContentsItems addObject:@"Properties"];
-		//if (displayTypeMask & IGKHTMLDisplayType_Methods)
+		if (displayTypeMask & IGKHTMLDisplayType_Methods)
 			[tableOfContentsItems addObject:@"Methods"];
-		//if (displayTypeMask & IGKHTMLDisplayType_Notifications)
+		if (displayTypeMask & IGKHTMLDisplayType_Notifications)
 			[tableOfContentsItems addObject:@"Notifications"];
-		//if (displayTypeMask & IGKHTMLDisplayType_Delegate)
+		if (displayTypeMask & IGKHTMLDisplayType_Delegate)
 			[tableOfContentsItems addObject:@"Delegate"];
-		//if (displayTypeMask & IGKHTMLDisplayType_BindingListings)
+		if (displayTypeMask & IGKHTMLDisplayType_BindingListings)
 			[tableOfContentsItems addObject:@"Bindings"];
 	}
 	

@@ -20,6 +20,8 @@
 	NSManagedObjectModel *managedObjectModel;
 	NSManagedObjectContext *managedObjectContext;
 	NSManagedObjectContext *backgroundManagedObjectContext;
+	
+	dispatch_queue_t backgroundQueue;
 }
 
 - (BOOL)hasMultipleWindowControllers;

@@ -498,7 +498,7 @@
 }
 
 - (NSManagedObject *)addRecordNamed:(NSString *)recordName entityName:(NSString *)entityName desc:(NSString *)recordDesc sourcePath:(NSString *)recordPath
-{
+{	
 	NSEntityDescription *ed = [NSEntityDescription entityForName:entityName inManagedObjectContext:ctx];
 	
 	NSManagedObject *newRecord = [[IGKDocRecordManagedObject alloc] initWithEntity:ed insertIntoManagedObjectContext:ctx];
@@ -523,6 +523,7 @@
 
 - (void)scrape;
 - (void)scrapeAbstractMethodContainer;
+- (void)scrapeMethodChildren:(NSArray *)children index:(NSUInteger)index managedObject:(NSManagedObject *)object;
 
 @end
 
@@ -597,13 +598,15 @@
 	NSMutableSet *containersSet = [[NSMutableSet alloc] init];
 	for (NSXMLElement *a in methodNodes)
 	{
-		if (![a isKindOfClass:[NSXMLElement class]])
+		if ([containersSet containsObject:[a parent]])
 			continue;
 		
-		NSString *name = [[a attributeForName:@"name"] stringValue];
-		
+		if (![a isKindOfClass:[NSXMLElement class]])
+			continue;
+						
 		NSXMLNode *el = [a attributeForName:@"name"];
 		NSString *strval = [el stringValue];
+		
 		//(instm|clm|intfm|intfcm|intfp|instp)
 		if ([strval isLike:@"//apple_ref/occ/instm*"] || [strval isLike:@"//apple_ref/occ/clm*"] ||
 			[strval isLike:@"//apple_ref/occ/intfm*"] || [strval isLike:@"//apple_ref/occ/intfcm*"] ||
@@ -614,6 +617,8 @@
 			//This is a bit ropey
 			if ([strval isLike:[@"*" stringByAppendingString:methodName]])
 			{
+				[containersSet addObject:[a parent]];
+				
 				NSArray *children = [[a parent] children];
 				NSInteger index = [children indexOfObject:a];
 				if (index != -1)

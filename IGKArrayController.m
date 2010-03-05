@@ -23,10 +23,10 @@
 	[tableView setDataSource:self];
 }
 
-- (void)fetch
+- (void)fetch:(void (^)(NSArray *managedObjectIDs, BOOL fetchContainsVip))completionBlock
 {	
 	//TODO: Eventually we want to fetch on another thread. There are still some synchronization issues to sort out
-	//dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+	
 	
 	if (!predicate)
 		return;
@@ -35,35 +35,55 @@
 		currentSortDescriptors = smartSortDescriptors;
 	
 	NSManagedObjectContext *ctx = [[[NSApp delegate] kitController] managedObjectContext];
+	dispatch_queue_t queue = [[[NSApp delegate] kitController] backgroundQueue];
 	
-	NSFetchRequest *request = [[NSFetchRequest alloc] init];
-	[request setEntity:[NSEntityDescription entityForName:@"DocRecord" inManagedObjectContext:ctx]];
-	[request setPredicate:predicate];
-	
-	
-	[request setFetchLimit:500];
-	if (maxRows != 0 && maxRows < 500)
-	{
-		//Limit the list to 100 items. This could be changed to more, if requested, but my view is that if anybody needs more than 100, our sorting isn't smart enough
-		[request setFetchLimit:maxRows];
-	}
+	//Copy objects that may change while we're doing this
+	NSPredicate *copiedPredicate = [predicate copy];
+	NSArray *copiedCurrentSortDescriptors = [currentSortDescriptors copy];
+	NSManagedObjectID *vipObjectID = [vipObject objectID];
+		
+	dispatch_async(queue, ^{
 				
-	//Sort results by priority, so that when we LIMIT our list, only the low priority items are cut
-	[request setSortDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:NO]]];
-
-	//Fetch a list of objects
-	fetchedObjects = [ctx executeFetchRequest:request error:nil];
+		NSFetchRequest *request = [[NSFetchRequest alloc] init];
+		[request setEntity:[NSEntityDescription entityForName:@"DocRecord" inManagedObjectContext:ctx]];
+		[request setPredicate:copiedPredicate];
+		
+		[request setFetchLimit:500];
+		if (maxRows != 0 && maxRows < 500)
+		{
+			//Limit the list to 100 items. This could be changed to more, if requested, but my view is that if anybody needs more than 100, our sorting isn't smart enough
+			[request setFetchLimit:maxRows];
+		}
+		
+		//Sort results by priority, so that when we LIMIT our list, only the low priority items are cut
+		[request setSortDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:NO]]];
+		
+		//Fetch a list of objects
+		NSArray *objects = [ctx executeFetchRequest:request error:nil];
+		
+		//NSFetchRequests and NSComparator-based sort descriptors apparently don't go together, so we can't tell the fetch request to sort using this descriptor
+		//Besides, it's far better to be sorting 100 objects with our expensive comparator than 10000
+		objects = [objects sortedArrayUsingDescriptors:copiedCurrentSortDescriptors];
+		
+		BOOL containsVIP = NO;
+		if (vipObjectID && [objects containsObject:[ctx objectWithID:vipObjectID]])
+			containsVIP = YES;
+		
+		//Put the object IDs into an array
+		NSMutableArray *objectIDs = [[NSMutableArray alloc] initWithCapacity:[objects count]];
+		for (NSManagedObject *obj in objects)
+		{
+			[objectIDs addObject:[obj objectID]];
+		}
+		
+		
+		//Run the completion block on the main thread
+		dispatch_async(dispatch_get_main_queue(), ^{
+			
+			completionBlock(objectIDs, containsVIP);
 	
-	//NSFetchRequests and NSComparator-based sort descriptors apparently don't go together, so we can't tell the fetch request to sort using this descriptor
-	//Besides, it's far better to be sorting 100 objects with our expensive comparator than 10000
-	fetchedObjects = [fetchedObjects sortedArrayUsingDescriptors:currentSortDescriptors];
-	
-	if ([fetchedObjects containsObject:vipObject])
-		fetchContainsVipObject = YES;
-	else
-		fetchContainsVipObject = NO;
-	
-	//});
+		});
+	});
 }
 - (void)refresh
 {
@@ -71,20 +91,30 @@
 }
 - (void)refreshAndSelectFirst:(BOOL)selectFirst renderSelection:(BOOL)renderSelection
 {
+	NSManagedObjectContext *ctx = [[[NSApp delegate] kitController] managedObjectContext];
+	
 	//Fetch a new list of objects and refresh the table
-	[self fetch];
-	
-	[tableView reloadData];
-	
-	if (selectFirst)
-	{
-		//Select the first row, scroll to it, and notify the delegate
-		[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];;
-		[tableView scrollRowToVisible:0];
+	[self fetch:^ (NSArray *managedObjectIDs, BOOL fetchContainsVip) {
+		fetchContainsVipObject = fetchContainsVip;
 		
-		if (renderSelection)
-			[[tableView delegate] tableViewSelectionDidChange:nil];
-	}
+		fetchedObjects = [[NSMutableArray alloc] initWithCapacity:[managedObjectIDs count]];
+		for (NSManagedObjectID *objID in managedObjectIDs)
+		{
+			[fetchedObjects addObject:[ctx objectWithID:objID]];
+		}
+		
+		[tableView reloadData];
+		
+		if (selectFirst)
+		{
+			//Select the first row, scroll to it, and notify the delegate
+			[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];;
+			[tableView scrollRowToVisible:0];
+			
+			if (renderSelection)
+				[[tableView delegate] tableViewSelectionDidChange:nil];
+		}
+	}];
 }
 
 - (IBAction)selectPrevious:(id)sender

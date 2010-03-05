@@ -85,6 +85,13 @@
 	[windowController showWindow:nil];
 }
 
+- (void)finalize
+{
+	dispatch_release(backgroundQueue);
+	
+	[super finalize];
+}
+
 #pragma mark Core Data Nonsense
 
 /**
@@ -236,6 +243,14 @@
     return backgroundManagedObjectContext;
 }
 
+- (dispatch_queue_t)backgroundQueue
+{
+	if (backgroundQueue == NULL)
+		backgroundQueue = dispatch_queue_create(NULL, NULL);
+	
+	return backgroundQueue;
+}
+
 /**
  Returns the NSUndoManager for the application.  In this case, the manager
  returned is that of the managed object context for the application.
@@ -264,7 +279,6 @@
         [[NSApplication sharedApplication] presentError:error];
     }
 }
-
 
 /**
  Implementation of the applicationShouldTerminate: method, used here to
