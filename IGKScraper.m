@@ -522,6 +522,8 @@
 - (void)createMethodNamed:(NSString *)name description:(NSString *)description prototype:(NSString *)prototype methodEntity:(NSEntityDescription *)methodEntity parent:(NSManagedObject*)parent docset:(NSManagedObject*)docset transientContext:(NSManagedObjectContext *)transientContext;
 
 - (void)scrape;
+- (void)scrapeFunction;
+- (void)scrapeMethod;
 - (void)scrapeAbstractMethodContainer;
 - (void)scrapeMethodChildren:(NSArray *)children index:(NSUInteger)index managedObject:(NSManagedObject *)object;
 
@@ -578,17 +580,57 @@
 		return;
 	
 	//Depending on the type of obj, we will need to parse it differently
-	if ([[transientObject entity] isKindOfEntity:[NSEntityDescription entityForName:@"ObjCAbstractMethodContainer" inManagedObjectContext:transientContext]])
+	NSEntityDescription *entity = [transientObject entity];
+	if ([entity isKindOfEntity:[NSEntityDescription entityForName:@"ObjCAbstractMethodContainer" inManagedObjectContext:transientContext]])
 	{
 		[self scrapeAbstractMethodContainer];
 	}
-	else if ([[transientObject entity] isKindOfEntity:[NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:transientContext]])
+	else if ([entity isKindOfEntity:[NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:transientContext]])
 	{
 		[self scrapeMethod];
-		//[self extractFully_ObjCAbstractMethodContainer:];
+	}
+	else if ([entity isKindOfEntity:[NSEntityDescription entityForName:@"CFunction" inManagedObjectContext:transientContext]])
+	{
+		[self scrapeFunction];
 	}
 }
 
+- (void)scrapeFunction
+{
+	NSError *err = nil;
+	NSArray *methodNodes = [[doc rootElement] nodesForXPath:@"//a" error:&err];
+	
+	//Search through all anchors in the document, and record their parent elements
+	NSMutableSet *containersSet = [[NSMutableSet alloc] init];
+	for (NSXMLElement *a in methodNodes)
+	{
+		if ([containersSet containsObject:[a parent]])
+			continue;
+		
+		if (![a isKindOfClass:[NSXMLElement class]])
+			continue;
+		
+		NSXMLNode *el = [a attributeForName:@"name"];
+		NSString *strval = [el commentlessStringValue];
+		
+		//(instm|clm|intfm|intfcm|intfp|instp)
+		if ([strval isLike:@"//apple_ref/c/func*"])
+		{
+			NSString *methodName = [transientObject valueForKey:@"name"];
+			
+			//This is a bit ropey
+			if ([strval isLike:[@"*" stringByAppendingString:methodName]])
+			{
+				[containersSet addObject:[a parent]];
+				
+				NSArray *children = [[a parent] children];
+				NSInteger index = [children indexOfObject:a];
+				if (index != -1)
+					[self scrapeMethodChildren:children index:index managedObject:transientObject];
+			}
+		}
+	}
+}
 - (void)scrapeMethod
 {
 	NSError *err = nil;
@@ -605,7 +647,7 @@
 			continue;
 						
 		NSXMLNode *el = [a attributeForName:@"name"];
-		NSString *strval = [el stringValue];
+		NSString *strval = [el commentlessStringValue];
 		
 		//(instm|clm|intfm|intfcm|intfp|instp)
 		if ([strval isLike:@"//apple_ref/occ/instm*"] || [strval isLike:@"//apple_ref/occ/clm*"] ||
@@ -651,7 +693,7 @@
 			continue;
 		
 		NSString *nName = [[n name] lowercaseString];
-		NSArray *nClass = [[[[n attributeForName:@"class"] stringValue] lowercaseString] componentsSeparatedByString:@" "];
+		NSArray *nClass = [[[[n attributeForName:@"class"] commentlessStringValue] lowercaseString] componentsSeparatedByString:@" "];
 		
 		//name
 		// <h3 class="*jump*"> ... </h3>
@@ -662,7 +704,7 @@
 				break;
 			hasRecordedMethod = YES;
 			
-			[object setValue:[n stringValue] forKey:@"name"];
+			[object setValue:[n commentlessStringValue] forKey:@"name"];
 			continue;
 		}
 		
@@ -671,7 +713,7 @@
 		if ([nClass containsObject:@"spaceabove"])
 		{
 			NSMutableString *overview = [[NSMutableString alloc] init];
-			[overview appendFormat:@"<p>%@</p>", [n stringValue]];
+			[overview appendFormat:@"<p>%@</p>", [n commentlessStringValue]];
 			
 			NSUInteger j;
 			for (j = i + 1; j < count; j++)
@@ -679,22 +721,33 @@
 				NSXMLElement *m = [children objectAtIndex:j];
 				if (![m isKindOfClass:[NSXMLElement class]])
 					continue;
-				if (![[[m attributeForName:@"class"] stringValue] isEqual:@"spaceabove"])
+				if (![[[m attributeForName:@"class"] commentlessStringValue] isEqual:@"spaceabove"])
 					break;
 				
-				[overview appendFormat:@"<p>%@</p>", [m stringValue]];
+				[overview appendFormat:@"<p>%@</p>", [m commentlessStringValue]];
 			}
 			
 			[object setValue:overview forKey:@"overview"];
 			continue;
 		}
 		
-		//prototype
+		//signature (methods only)
 		// <p class="spaceabovemethod"> ... </p>
 		if ([nClass containsObject:@"spaceabovemethod"])
 		{
 			NSMutableString *prototype = [[NSMutableString alloc] init];
-			[prototype appendString:[n stringValue]];
+			[prototype appendString:[n commentlessStringValue]];
+			
+			[object setValue:prototype forKey:@"signature"];
+			continue;
+		}
+		
+		//signature (other items)
+		// <pre class="declaration">
+		else if ([nName isEqual:@"pre"] && [nClass containsObject:@"declaration"])
+		{
+			NSMutableString *prototype = [[NSMutableString alloc] init];
+			[prototype appendString:[n commentlessStringValue]];
 			
 			[object setValue:prototype forKey:@"signature"];
 			continue;
@@ -714,11 +767,11 @@
 			{
 				if ([[[m name] lowercaseString] isEqual:@"dt"])
 				{
-					lastDT = [m stringValue];
+					lastDT = [m commentlessStringValue];
 				}
 				else if ([lastDT length] && [[[m name] lowercaseString] isEqual:@"dd"])
 				{
-					NSString *dd = [m stringValue];
+					NSString *dd = [m commentlessStringValue];
 					
 					if ([dd length])
 					{
@@ -756,7 +809,7 @@
 				if (![[[m name] lowercaseString] isEqual:@"p"])
 					continue;
 				
-				[returnValueDescription appendString:[m stringValue]];
+				[returnValueDescription appendString:[m commentlessStringValue]];
 			}
 			
 			[object setValue:returnValueDescription forKey:@"returnDescription"];
@@ -769,7 +822,7 @@
 		   <p> ... </p>
 		   ...
 		 */
-		if (i + 1 < count && [nName isEqual:@"h5"] && [[[[n stringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString] isEqual:@"discussion"])
+		if (i + 1 < count && [nName isEqual:@"h5"] && [[[[n commentlessStringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString] isEqual:@"discussion"])
 		{
 			NSMutableString *discussion = [[NSMutableString alloc] init];
 			
@@ -782,7 +835,7 @@
 				if (![[[m name] lowercaseString] isEqual:@"p"])
 					break;
 				
-				[discussion appendFormat:@"<p>%@</p>", [m stringValue]];
+				[discussion appendFormat:@"<p>%@</p>", [m commentlessStringValue]];
 			}
 			
 			[object setValue:discussion forKey:@"discussion"];
@@ -806,7 +859,7 @@
 					NSArray *ulChildren = [ul children];
 					for (NSXMLElement *ulChild in ulChildren)
 					{
-						[object setValue:[ulChild stringValue] forKey:@"availability"];
+						[object setValue:[ulChild commentlessStringValue] forKey:@"availability"];
 						
 						break;
 					}
@@ -826,7 +879,7 @@
 			   </li>
 		   </ul>
 		 */
-		if (i + 1 < count && [nName isEqual:@"h5"] && [[[[n stringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString] isEqual:@"see also"])
+		if (i + 1 < count && [nName isEqual:@"h5"] && [[[[n commentlessStringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString] isEqual:@"see also"])
 		{			
 			NSXMLElement *ul = [children objectAtIndex:i + 1];
 			if ([[[ul name] lowercaseString] isEqual:@"ul"])
@@ -836,8 +889,8 @@
 					NSXMLElement *codeElement = [[li children] lastObject];
 					NSXMLElement *a = [[codeElement children] lastObject];
 					
-					NSString *href = [[a attributeForName:@"href"] stringValue];
-					NSString *strval = [a stringValue];
+					NSString *href = [[a attributeForName:@"href"] commentlessStringValue];
+					NSString *strval = [a commentlessStringValue];
 					
 					if (!href || !strval)
 						continue;
@@ -873,7 +926,7 @@
 		   
 		 </ul>
 		*/
-		if (i + 1 < count && [nName isEqual:@"h5"] && [[[[n stringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString] isLike:@"*sample code*"])
+		if (i + 1 < count && [nName isEqual:@"h5"] && [[[[n commentlessStringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString] isLike:@"*sample code*"])
 		{			
 			NSXMLElement *ul = [children objectAtIndex:i + 1];
 			if ([[[ul name] lowercaseString] isEqual:@"ul"])
@@ -883,8 +936,8 @@
 					NSXMLElement *spanElement = [[li children] lastObject];
 					NSXMLElement *a = [[spanElement children] lastObject];
 					
-					NSString *href = [[a attributeForName:@"href"] stringValue];
-					NSString *strval = [a stringValue];
+					NSString *href = [[a attributeForName:@"href"] commentlessStringValue];
+					NSString *strval = [a commentlessStringValue];
 					
 					if (!href || !strval)
 						continue;
@@ -915,7 +968,7 @@
 				if (![[[m name] lowercaseString] isEqual:@"code"])
 					continue;
 				
-				[object setValue:[m stringValue] forKey:@"declared_in_header"];
+				[object setValue:[m commentlessStringValue] forKey:@"declared_in_header"];
 				break;
 			}
 			
@@ -938,12 +991,11 @@
 		if (![a isKindOfClass:[NSXMLElement class]])
 			continue;
 		
-		NSString *name = [[a attributeForName:@"name"] stringValue];
+		NSString *name = [[a attributeForName:@"name"] commentlessStringValue];
 		if (name)
 		{
 			[containersSet addObject:[a parent]];
 		}
-		
 	}
 	
 	
@@ -957,7 +1009,7 @@
 				return NO;
 			
 			NSXMLNode *el = [a attributeForName:@"name"];
-			NSString *strval = [el stringValue];
+			NSString *strval = [el commentlessStringValue];
 			//(instm|clm|intfm|intfcm|intfp|instp)
 			if ([strval isLike:@"//apple_ref/occ/instm*"] || [strval isLike:@"//apple_ref/occ/clm*"] ||
 				[strval isLike:@"//apple_ref/occ/intfm*"] || [strval isLike:@"//apple_ref/occ/intfcm*"] ||
@@ -1185,7 +1237,7 @@ void IGKFreeStringChars(const unichar *string)
 		if (![a isKindOfClass:[NSXMLElement class]])
 			continue;
 		
-		NSString *name = [[a attributeForName:@"name"] stringValue];
+		NSString *name = [[a attributeForName:@"name"] commentlessStringValue];
 		if (name)
 		{
 #if 0
@@ -1227,7 +1279,7 @@ void IGKFreeStringChars(const unichar *string)
 				return NO;
 			
 			NSXMLNode *el = [a attributeForName:@"name"];
-			if ([[el stringValue] isLike:@"*instm*"])
+			if ([[el commentlessStringValue] isLike:@"*instm*"])
 				return YES;
 			return NO;
 		}];
@@ -1258,19 +1310,19 @@ void IGKFreeStringChars(const unichar *string)
 					
 					description = [[NSMutableString alloc] init];
 					prototype = nil;
-					name = [n stringValue];
+					name = [n commentlessStringValue];
 					continue;
 				}
 				
 				if ([[n name] isEqual:@"p"])
 				{
-					if ([[[n attributeForName:@"class"] stringValue] isEqual:@"spaceabovemethod"])
+					if ([[[n attributeForName:@"class"] commentlessStringValue] isEqual:@"spaceabovemethod"])
 					{
-						prototype = [n stringValue];
+						prototype = [n commentlessStringValue];
 					}
 					else
 					{
-						[description appendFormat:@"<p>%@</p>", [n stringValue]];
+						[description appendFormat:@"<p>%@</p>", [n commentlessStringValue]];
 					}
 				}
 			}

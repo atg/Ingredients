@@ -31,6 +31,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 - (void)html_delegate;
 
 - (void)html_method:(IGKDocRecordManagedObject *)obj;
+- (void)html_metadataTable:(IGKDocRecordManagedObject *)object;
 
 - (void)html_generic;
 
@@ -266,32 +267,37 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	if ([object valueForKey:@"discussion"])
 		[outputString appendFormat:@"\t\t<hr>\n\n\t\t<div class='discussion'>%@</div>\n\n\t\t<hr>\n\n", [object valueForKey:@"discussion"]];
 	
+	[self html_metadataTable:object];
+		
+	[outputString appendFormat:@"\t</div>\n\n"];
+}
+- (void)html_metadataTable:(IGKDocRecordManagedObject *)object
+{
 	//Create a table for the various metadata. Now it gets tricky
 	//We want to generate something like
 	/* 
 		<table class="info">
-			    <tr>
-			        <th>Available in</th>
-			        <th>Declared in</th>
-			        <th>See also</th>
-			        <th>Sample code</th>
-			    </tr>
-			    <tr class="first">
-			        <td rowspan="3">OS X <strong>10.4</strong>+</td>
-			        <td rowspan="3"><code>NSString.h</code></td>
-			        <td><code><a href="#" class="stealth">- cStringUsingEncoding:</a></code></td>
-			        <td><code><a href="#" class="stealth">QTMetadataEditor</a></code></td>
-			    </tr>
-			    <tr>
-			        <td><code><a href="#" class="stealth">- canBeConvertedToEncoding:</a></code></td>
-			        <td></td>
-			    </tr>
-			    <tr class="last">
-			        <td><code><a href="#" class="stealth">- UTF8String</a></code></td>
-			        <td></td>
-			    </tr>
-			    
-			</table>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+				<th>See also</th>
+				<th>Sample code</th>
+			</tr>
+			<tr class="first">
+				<td rowspan="3">OS X <strong>10.4</strong>+</td>
+				<td rowspan="3"><code>NSString.h</code></td>
+				<td><code><a href="#" class="stealth">- cStringUsingEncoding:</a></code></td>
+				<td><code><a href="#" class="stealth">QTMetadataEditor</a></code></td>
+			</tr>
+			<tr>
+				<td><code><a href="#" class="stealth">- canBeConvertedToEncoding:</a></code></td>
+				<td></td>
+			</tr>
+			<tr class="last">
+				<td><code><a href="#" class="stealth">- UTF8String</a></code></td>
+				<td></td>
+			</tr>
+		</table>
 	 */
 	
 	/*
@@ -433,9 +439,9 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		[outputString appendFormat:@"\t\t</div>\n"];
 	}
 #endif
-	
-	[outputString appendFormat:@"\t</div>\n\n"];
 }
+
+
 - (void)html_generic
 {
 	[outputString appendString:@"<div id='overview'>"];
@@ -444,9 +450,19 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	if ([transientObject valueForKey:@"discussion"])
 		[outputString appendString:[transientObject valueForKey:@"discussion"]];
-	
 	else if ([transientObject valueForKey:@"overview"])
-		[outputString appendString:[transientObject valueForKey:@"overview"]];	
+		[outputString appendString:[transientObject valueForKey:@"overview"]];
+	
+	
+	[outputString appendString:@"<div id='methods'>"];
+	
+	if ([transientObject valueForKey:@"signature"])
+		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [transientObject valueForKey:@"signature"]];
+	
+	[self html_metadataTable:transientObject];
+	
+	[outputString appendString:@"</div>"];
+	
 	
 	[outputString appendString:@"</div>"];
 }

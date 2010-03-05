@@ -66,6 +66,8 @@
 		759ECFBE11334CE100067BD1 /* MultiSel_window_frame_button_active_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 759ECFB111334CE100067BD1 /* MultiSel_window_frame_button_active_right.png */; };
 		759ECFC411334D9800067BD1 /* IGKWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 759ECFC211334D9800067BD1 /* IGKWindow.h */; };
 		759ECFC511334D9800067BD1 /* IGKWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 759ECFC311334D9800067BD1 /* IGKWindow.m */; };
+		75A9DA6711411C49003F8437 /* NSXMLNode+IGKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A9DA6511411C49003F8437 /* NSXMLNode+IGKAdditions.h */; };
+		75A9DA6811411C49003F8437 /* NSXMLNode+IGKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A9DA6611411C49003F8437 /* NSXMLNode+IGKAdditions.m */; };
 		75B23908113FB4D300EC1D2B /* IGKDocSetManagedObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B23906113FB4D300EC1D2B /* IGKDocSetManagedObject.h */; };
 		75B23909113FB4D300EC1D2B /* IGKDocSetManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B23907113FB4D300EC1D2B /* IGKDocSetManagedObject.m */; };
 		75B23F4711401DD700EC1D2B /* PFMoveApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B23F4611401DD700EC1D2B /* PFMoveApplication.m */; };
@@ -198,6 +200,8 @@
 		759ECFB111334CE100067BD1 /* MultiSel_window_frame_button_active_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MultiSel_window_frame_button_active_right.png; sourceTree = "<group>"; };
 		759ECFC211334D9800067BD1 /* IGKWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKWindow.h; sourceTree = "<group>"; };
 		759ECFC311334D9800067BD1 /* IGKWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKWindow.m; sourceTree = "<group>"; };
+		75A9DA6511411C49003F8437 /* NSXMLNode+IGKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSXMLNode+IGKAdditions.h"; sourceTree = "<group>"; };
+		75A9DA6611411C49003F8437 /* NSXMLNode+IGKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSXMLNode+IGKAdditions.m"; sourceTree = "<group>"; };
 		75B23906113FB4D300EC1D2B /* IGKDocSetManagedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKDocSetManagedObject.h; sourceTree = "<group>"; };
 		75B23907113FB4D300EC1D2B /* IGKDocSetManagedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKDocSetManagedObject.m; sourceTree = "<group>"; };
 		75B23F4511401DD700EC1D2B /* PFMoveApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PFMoveApplication.h; path = ../LetsMove/PFMoveApplication.h; sourceTree = SOURCE_ROOT; };
@@ -369,6 +373,8 @@
 				755F432111232B2F00AA16F5 /* NSBezierPath+MCAdditions.m */,
 				755F432211232B2F00AA16F5 /* NSShadow+MCAdditions.h */,
 				755F432311232B2F00AA16F5 /* NSShadow+MCAdditions.m */,
+				75A9DA6511411C49003F8437 /* NSXMLNode+IGKAdditions.h */,
+				75A9DA6611411C49003F8437 /* NSXMLNode+IGKAdditions.m */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -540,6 +546,7 @@
 				759030231139BFF500550A86 /* IGKMatteSegmentedControl.h in Headers */,
 				75B23908113FB4D300EC1D2B /* IGKDocSetManagedObject.h in Headers */,
 				75C74A601140539B00E3EAC6 /* IGKSometimesCenteredTextCell.h in Headers */,
+				75A9DA6711411C49003F8437 /* NSXMLNode+IGKAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -686,6 +693,7 @@
 				759030241139BFF500550A86 /* IGKMatteSegmentedControl.m in Sources */,
 				75B23909113FB4D300EC1D2B /* IGKDocSetManagedObject.m in Sources */,
 				75C74A611140539B00E3EAC6 /* IGKSometimesCenteredTextCell.m in Sources */,
+				75A9DA6811411C49003F8437 /* NSXMLNode+IGKAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
