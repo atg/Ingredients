@@ -54,6 +54,7 @@
 	
 	//Some caching of entities
 	NSEntityDescription *ObjCMethodEntity;
+	NSEntityDescription *ObjCNotificationEntity;
 	NSEntityDescription *ParameterEntity;
 	NSEntityDescription *SeeAlsoEntity;
 	NSEntityDescription *SampleCodeProjectEntity;

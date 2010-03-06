@@ -233,7 +233,11 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 
 - (void)html_notifications
 {
+	[outputString appendString:@"<div id='methods' class='notifications'>"];
 	
+	[self html_methodLikeDeclarationsWithEntity:@"ObjCNotification" hasParameters:NO];
+	
+	[outputString appendString:@"</div>"];
 }
 - (void)html_delegate
 {
@@ -246,6 +250,8 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	if ([object valueForKey:@"name"])
 		[outputString appendFormat:@"\t\t<h2>%@</h2>\n", [self escape:[object valueForKey:@"name"]]];
+	
+	BOOL isnotif = [object isKindOfEntityNamed:@"ObjCNotification"];
 	
 	if ([object valueForKey:@"overview"])
 		[outputString appendFormat:@"\t\t<div class='description'>%@</div>\n", [object valueForKey:@"overview"]];

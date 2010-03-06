@@ -328,6 +328,7 @@
 		
 		NSEntityDescription *propertyEntity = [NSEntityDescription entityForName:@"ObjCProperty" inManagedObjectContext:ctx];
 		NSEntityDescription *methodEntity = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:ctx];
+		NSEntityDescription *notificationEntity = nil;
 		
 		NSEntityDescription *globalVariableEntity = nil;
 		NSEntityDescription *constantEntity = nil;
@@ -473,10 +474,23 @@
 					else if ([itemType isEqual:@"econst"] || [itemType isEqual:@"data"] ||
 							 [itemType isEqual:@"tag"]) //TODO: An item type of "tag" should really be a CEnumRecord entity
 					{
-						if (!constantEntity)
-							constantEntity = [NSEntityDescription entityForName:@"CConstant" inManagedObjectContext:ctx];
-						
-						newSubobject = [[IGKDocRecordManagedObject alloc] initWithEntity:constantEntity insertIntoManagedObjectContext:ctx];
+						//This is such a hacky way to find out if an element is a notification, but it seems the most accurate way
+						BOOL isNotification = ([itemType isEqual:@"data"] && [itemName isLike:@"*Notification"]);
+						if (isNotification)
+						{
+							if (!notificationEntity)
+								notificationEntity = [NSEntityDescription entityForName:@"ObjCNotification" inManagedObjectContext:ctx];
+							
+							newSubobject = [[IGKDocRecordManagedObject alloc] initWithEntity:notificationEntity insertIntoManagedObjectContext:ctx];
+							[newSubobject setValue:obj forKey:@"container"];
+						}
+						else
+						{
+							if (!constantEntity)
+								constantEntity = [NSEntityDescription entityForName:@"CConstant" inManagedObjectContext:ctx];
+							
+							newSubobject = [[IGKDocRecordManagedObject alloc] initWithEntity:constantEntity insertIntoManagedObjectContext:ctx];
+						}
 					}
 					
 					if (newSubobject)
@@ -516,7 +530,7 @@
 
 @interface IGKFullScraper ()
 
-+ (NSArray *)splitArray:(NSArray *)array byBlock:(BOOL (^)(id a))block;
++ (NSArray *)splitArray:(NSArray *)array byBlock:(NSString* (^)(id a))block;
 + (NSArray *)array:(NSArray *)array findObjectByBlock:(BOOL (^)(id a))block;
 
 - (void)createMethodNamed:(NSString *)name description:(NSString *)description prototype:(NSString *)prototype methodEntity:(NSEntityDescription *)methodEntity parent:(NSManagedObject*)parent docset:(NSManagedObject*)docset transientContext:(NSManagedObjectContext *)transientContext;
@@ -581,6 +595,7 @@
 	
 	//Depending on the type of obj, we will need to parse it differently
 	NSEntityDescription *entity = [transientObject entity];
+	
 	if ([transientObject isKindOfEntityNamed:@"ObjCAbstractMethodContainer"])
 	{
 		[self scrapeAbstractMethodContainer];
@@ -616,6 +631,10 @@
 	else if ([transientObject isKindOfEntityNamed:@"CGlobal"])
 	{
 		[self scrapeApplecode:@"c/constant_group"];
+	}
+	else if ([transientObject isKindOfEntityNamed:@"ObjCNotification"])
+	{
+		[self scrapeApplecode:@"c/data"];
 	}
 }
 
@@ -744,6 +763,7 @@
 			hasRecordedMethod = YES;
 			
 			[object setValue:[n commentlessStringValue] forKey:@"name"];
+						
 			continue;
 		}
 		
@@ -765,8 +785,9 @@
 				
 				[overview appendFormat:@"<p>%@</p>", [m commentlessStringValue]];
 			}
-			
+						
 			[object setValue:overview forKey:@"overview"];
+						
 			continue;
 		}
 		
@@ -1050,7 +1071,11 @@
 - (void)scrapeAbstractMethodContainer
 {
 	[transientObject setValue:[NSSet set] forKey:@"methods"];
-		
+	[transientObject setValue:[NSSet set] forKey:@"properties"];
+	[transientObject setValue:[NSSet set] forKey:@"notifications"];
+	[transientObject setValue:[NSSet set] forKey:@"delegatemethods"];
+	[transientObject setValue:[NSSet set] forKey:@"taskgroups"];
+	
 	NSError *err = nil;
 	NSArray *methodNodes = [[doc rootElement] nodesForXPath:@"//a" error:&err];
 	
@@ -1074,20 +1099,45 @@
 	NSMutableArray *methods = [[NSMutableArray alloc] init];
 	for (NSXMLNode *container in containersSet)
 	{
+		__block BOOL lastWasProperty = NO;
+		
 		//Split the container's children array by "interesting" <a> elements
-		NSArray *arr = [[self class] splitArray:[container children] byBlock:^BOOL(id a) {
+		NSArray *arr = [[self class] splitArray:[container children] byBlock:^ NSString* (id a) {
 			if (![a isKindOfClass:[NSXMLElement class]])
-				return NO;
+				return nil;
 			
 			NSXMLNode *el = [a attributeForName:@"name"];
 			NSString *strval = [el commentlessStringValue];
 			//(instm|clm|intfm|intfcm|intfp|instp)
+			
+			BOOL lastWasPropertyTrue = lastWasProperty;
+			lastWasProperty = NO;
+			
+			if ([strval isLike:@"//apple_ref/occ/intfp*"] || [strval isLike:@"//apple_ref/occ/instp*"])
+			{
+				lastWasProperty = YES;
+				return @"ObjCProperty";
+			}
+			
+			
 			if ([strval isLike:@"//apple_ref/occ/instm*"] || [strval isLike:@"//apple_ref/occ/clm*"] ||
-				[strval isLike:@"//apple_ref/occ/intfm*"] || [strval isLike:@"//apple_ref/occ/intfcm*"] ||
-				[strval isLike:@"//apple_ref/occ/intfp*"] || [strval isLike:@"//apple_ref/occ/instp*"])
-				//[strval isLike:@"*/c/func*"] || [strval isLike:@"*/c/tdef*"] || [strval isLike:@"*/c/macro*"])
-				return YES;
-			return NO;
+				[strval isLike:@"//apple_ref/occ/intfm*"] || [strval isLike:@"//apple_ref/occ/intfcm*"])
+			{
+				if (lastWasPropertyTrue)
+				{
+					lastWasProperty = YES;
+					return nil;
+				}
+				
+				return @"ObjCMethod";
+			}
+			
+			if ([strval isLike:@"//apple_ref/c/data*"])
+				return @"ObjCNotification";
+			
+			//[strval isLike:@"*/c/func*"] || [strval isLike:@"*/c/tdef*"] || [strval isLike:@"*/c/macro*"])
+			
+			return nil;
 		}];
 		
 		[methods addObjectsFromArray:arr];
@@ -1095,30 +1145,54 @@
 	
 	for (NSArray *arr in methods)
 	{
-		if (!ObjCMethodEntity)
-			ObjCMethodEntity = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:transientContext];
-	
-		IGKDocRecordManagedObject *newMethod = [[IGKDocRecordManagedObject alloc] initWithEntity:ObjCMethodEntity insertIntoManagedObjectContext:transientContext];
+		if ([arr count] < 2)
+			continue;
 		
-		[self scrapeMethodChildren:arr index:0 managedObject:newMethod];
-		[newMethod setValue:transientObject forKey:@"container"];
-		[newMethod setValue:docset forKey:@"docset"];
+		NSString *entityName = [arr objectAtIndex:0];
+				
+		//if (!ObjCMethodEntity)
+		NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:transientContext];
+		
+		IGKDocRecordManagedObject *newItem = [[IGKDocRecordManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:transientContext];
+		
+		[self scrapeMethodChildren:arr index:0 managedObject:newItem];
+		[newItem setValue:transientObject forKey:@"container"];
+		[newItem setValue:docset forKey:@"docset"];
 	}
+	
+	/*
+	for (NSArray *arr in methods)
+	{
+		if ([arr count] < 2)
+			continue;
+		
+		if (!ObjCNotificationEntity)
+			ObjCNotificationEntity = [NSEntityDescription entityForName:@"ObjCNotification" inManagedObjectContext:transientContext];
+		
+		//IGKDocRecordManagedObject *newNotification = [[IGKDocRecordManagedObject alloc] initWithEntity:ObjCNotificationEntity insertIntoManagedObjectContext:transientContext];
+		
+		[self scrapeMethodChildren:arr index:0 managedObject:newNotification];
+		[newNotification setValue:transientObject forKey:@"container"];
+		[newNotification setValue:docset forKey:@"docset"];
+	}
+	 */
 }
 
-+ (NSArray *)splitArray:(NSArray *)array byBlock:(BOOL (^)(id a))block
++ (NSArray *)splitArray:(NSArray *)array byBlock:(NSString* (^)(id a))block
 {
 	NSMutableArray *arrays = [[NSMutableArray alloc] init];
 	
-	NSMutableArray *currentArray = [[NSMutableArray alloc] init];
-	[arrays addObject:currentArray];
+	NSMutableArray *currentArray = nil;
 	
 	for (id a in array)
-	{
-		if (block(a))
-		{
+	{		
+		NSString *entityName = nil;
+		if (entityName = block(a))
+		{			
 			currentArray = [[NSMutableArray alloc] init];
 			[arrays addObject:currentArray];
+
+			[currentArray addObject:entityName];
 		}
 		else
 		{
