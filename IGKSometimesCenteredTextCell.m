@@ -13,7 +13,7 @@
 
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
-    cellFrame.origin.y += 3;
+    cellFrame.origin.y += [self tag];
 	
 	[super drawWithFrame:cellFrame inView:controlView];
 }

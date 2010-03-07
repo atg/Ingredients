@@ -108,6 +108,8 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 			mask |= IGKHTMLDisplayType_Methods;
 		if ([[transientObject valueForKey:@"miscitems"] count])
 			mask |= IGKHTMLDisplayType_Misc;
+		
+		NSLog(@"THIS NOTIF = %d / %@", [[transientObject valueForKey:@"notifications"] count], [transientObject valueForKey:@"notifications"]);
 		if ([[transientObject valueForKey:@"notifications"] count])
 			mask |= IGKHTMLDisplayType_Notifications;
 		if ([[transientObject valueForKey:@"delegatemethods"] count])

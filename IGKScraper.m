@@ -1156,6 +1156,14 @@
 		IGKDocRecordManagedObject *newItem = [[IGKDocRecordManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:transientContext];
 		
 		[self scrapeMethodChildren:arr index:0 managedObject:newItem];
+		
+		//If this is a notification but the name does not end in 'Notification' then it's some other kind of data - ignore it
+		//TODO: When we get around to handling C constants this will need to be fixed so it's not just ignored
+		if ([entityName isEqual:@"ObjCNotification"] && ![[newItem valueForKey:@"name"] isLike:@"*Notification"])
+		{
+			continue;
+		}
+		
 		[newItem setValue:transientObject forKey:@"container"];
 		[newItem setValue:docset forKey:@"docset"];
 	}

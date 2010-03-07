@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
 #import "IGKHTMLGenerator.h"
+#import "IGKTableOfContentsView.h"
 
 @class BWSplitView;
 @class IGKApplicationDelegate;
@@ -25,7 +26,7 @@ typedef enum {
 	
 } CHDocumentationBrowserUIMode;
 
-@interface IGKWindowController : NSWindowController
+@interface IGKWindowController : NSWindowController<IGKTableOfContentsDelegate>
 {
 	IGKApplicationDelegate *appDelegate;
 	
@@ -75,6 +76,7 @@ typedef enum {
 	//*** Table of Contents ***
 	IBOutlet NSView *tableOfContentsView;
 	IBOutlet NSTableView *tableOfContentsTableView;
+	IBOutlet IGKTableOfContentsView *tableOfContentsPicker;
 	
 	NSUInteger tableOfContentsMask;
 	NSMutableArray *tableOfContentsTypes;

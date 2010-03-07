@@ -213,6 +213,7 @@
 		if (modeIndex == CHDocumentationBrowserUIMode_TwoUp)
 		{
 			[[twoPaneSplitView animator] setFrame:[contentView frame]];	
+			[twoPaneSplitView setEnabled:YES];
 		}
 		
 		// browser -> search
@@ -235,6 +236,7 @@
 			[contentView addSubview:twoPaneView];
 			
 			[twoPaneSplitView setFrame:[contentView frame]];	
+			[twoPaneSplitView setEnabled:YES];
 		}
 		
 		// search -> browser
@@ -281,6 +283,7 @@
 		if (modeIndex == CHDocumentationBrowserUIMode_TwoUp || modeIndex == CHDocumentationBrowserUIMode_BrowserOnly)
 		{
 			[contentView addSubview:twoPaneView];
+			[twoPaneSplitView setEnabled:YES];
 			
 			// none -> browser
 			if (modeIndex == CHDocumentationBrowserUIMode_BrowserOnly)
@@ -572,6 +575,7 @@
 	}
 	
 	[tableOfContentsTableView reloadData];
+	[tableOfContentsPicker reloadData];
 }
 - (void)registerDisplayTypeInTableView:(IGKHTMLDisplayType)type title:(NSString *)title
 {
@@ -584,6 +588,30 @@
 		return [tableOfContentsTitles count];
 	return 0;
 }
+
+- (NSInteger)numberOfRowsInTableOfContents
+{
+	return [tableOfContentsTitles count];
+}
+- (id)valueForTableOfContentsColumn:(IGKTableOfContentsColumn)col row:(NSInteger)row
+{
+	id title = [tableOfContentsTitles objectAtIndex:row];
+	
+	if (col == IGKTableOfContentsTitleColumn)
+	{
+		return NSLocalizedString(title, @"");
+	}
+	
+	if (col == IGKTableOfContentsIconColumn)
+	{
+		BOOL isSelected = [[tableOfContentsPicker selectedRowIndexes] containsIndex:row];
+		NSString *imageName = [NSString stringWithFormat:@"ToC_%@%@", title, (isSelected ? @"_S" : @"")];
+		return [NSImage imageNamed:imageName];
+	}
+	
+	return nil;
+}
+
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
 	if (tableView == tableOfContentsTableView)
@@ -681,7 +709,7 @@
 {
 	__block IGKHTMLDisplayTypeMask dtmask = IGKHTMLDisplayType_None;
 	
-	NSIndexSet *selectedIndicies = [tableOfContentsTableView selectedRowIndexes];
+	NSIndexSet *selectedIndicies = [tableOfContentsPicker selectedRowIndexes];
 	[selectedIndicies enumerateIndexesUsingBlock:^(NSUInteger index, BOOL *stop) {
 		
 		//Get the mask at this selected index
