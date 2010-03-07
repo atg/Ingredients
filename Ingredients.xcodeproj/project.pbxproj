@@ -47,6 +47,10 @@
 		75901BEE1129FC2100BA0316 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 75901BEC1129FC2100BA0316 /* Credits.rtf */; };
 		759030231139BFF500550A86 /* IGKMatteSegmentedControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 759030211139BFF500550A86 /* IGKMatteSegmentedControl.h */; };
 		759030241139BFF500550A86 /* IGKMatteSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 759030221139BFF500550A86 /* IGKMatteSegmentedControl.m */; };
+		75943BA5114407C2004126E7 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75943BA4114407C2004126E7 /* Sparkle.framework */; };
+		75943BCE114407C9004126E7 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 75943BA4114407C2004126E7 /* Sparkle.framework */; };
+		75943BD1114407D1004126E7 /* IGKPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BD177D1143E94000E67594 /* IGKPreferencesController.m */; };
+		75943BDD1144085D004126E7 /* IGKPreferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 75BD176A1143E6C300E67594 /* IGKPreferences.xib */; };
 		759ECF9B113344CC00067BD1 /* IGKShyTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 759ECF99113344CC00067BD1 /* IGKShyTableView.h */; };
 		759ECF9C113344CC00067BD1 /* IGKShyTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 759ECF9A113344CC00067BD1 /* IGKShyTableView.m */; };
 		759ECFA3113349D700067BD1 /* IGKMultiSelector.h in Headers */ = {isa = PBXBuildFile; fileRef = 759ECFA1113349D700067BD1 /* IGKMultiSelector.h */; };
@@ -88,10 +92,8 @@
 		75B534FA111076C000560848 /* View_AdvSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F7111076C000560848 /* View_AdvSearchTemplate.png */; };
 		75B534FB111076C000560848 /* View_NoSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F8111076C000560848 /* View_NoSearchTemplate.png */; };
 		75B534FC111076C000560848 /* View_SideSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F9111076C000560848 /* View_SideSearchTemplate.png */; };
-		75BD176B1143E6C300E67594 /* IGKPreferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 75BD176A1143E6C300E67594 /* IGKPreferences.xib */; };
 		75BD17761143E7F000E67594 /* TBReSparkle.png in Resources */ = {isa = PBXBuildFile; fileRef = 75BD17751143E7F000E67594 /* TBReSparkle.png */; };
 		75BD177E1143E94000E67594 /* IGKPreferencesController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75BD177C1143E94000E67594 /* IGKPreferencesController.h */; };
-		75BD177F1143E94000E67594 /* IGKPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BD177D1143E94000E67594 /* IGKPreferencesController.m */; };
 		75BD17C61143F37E00E67594 /* SQPreferencesBackgroundComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BD17C51143F37E00E67594 /* SQPreferencesBackgroundComponent.m */; };
 		75C74A0A1140415F00E3EAC6 /* ToC_All_S.png in Resources */ = {isa = PBXBuildFile; fileRef = 75C749FE1140415F00E3EAC6 /* ToC_All_S.png */; };
 		75C74A0B1140415F00E3EAC6 /* ToC_All.png in Resources */ = {isa = PBXBuildFile; fileRef = 75C749FF1140415F00E3EAC6 /* ToC_All.png */; };
@@ -141,6 +143,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				75943BCE114407C9004126E7 /* Sparkle.framework in CopyFiles */,
 				756F9E00110BB74600E6F291 /* IngredientsKit.framework in CopyFiles */,
 				756F9DE3110BB59100E6F291 /* BWToolkitFramework.framework in CopyFiles */,
 			);
@@ -198,6 +201,7 @@
 		75901BED1129FC2100BA0316 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Credits.rtf; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		759030211139BFF500550A86 /* IGKMatteSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKMatteSegmentedControl.h; sourceTree = "<group>"; };
 		759030221139BFF500550A86 /* IGKMatteSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKMatteSegmentedControl.m; sourceTree = "<group>"; };
+		75943BA4114407C2004126E7 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		759ECF99113344CC00067BD1 /* IGKShyTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKShyTableView.h; sourceTree = "<group>"; };
 		759ECF9A113344CC00067BD1 /* IGKShyTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKShyTableView.m; sourceTree = "<group>"; };
 		759ECFA1113349D700067BD1 /* IGKMultiSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKMultiSelector.h; sourceTree = "<group>"; };
@@ -297,6 +301,7 @@
 				756F9E54110BE74100E6F291 /* IngredientsKit.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				75B23F6A1140216200EC1D2B /* Security.framework in Frameworks */,
+				75943BA5114407C2004126E7 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -354,6 +359,7 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				75943BA4114407C2004126E7 /* Sparkle.framework */,
 				75F67043110CD033005F299C /* libicucore.dylib */,
 				756F9E60110BE76600E6F291 /* WebKit.framework */,
 				756F9DAC110BB55100E6F291 /* BWToolkitFramework.framework */,
@@ -391,7 +397,6 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				75BD176A1143E6C300E67594 /* IGKPreferences.xib */,
 			);
 			name = Ingredients;
 			sourceTree = "<group>";
@@ -437,6 +442,7 @@
 				8D1107310486CEB800E47090 /* Ingredients-Info.plist */,
 				756F9D30110BA72F00E6F291 /* IngredientsKit-Info.plist */,
 				75C914E111374B8000F0D7EC /* ingredients.icns */,
+				75BD176A1143E6C300E67594 /* IGKPreferences.xib */,
 				756F9D77110BB40C00E6F291 /* CHDocumentationBrowser.xib */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				2F7446970DB6B7EA00F9684A /* MainMenu.xib */,
@@ -678,7 +684,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				756F9D78110BB40C00E6F291 /* CHDocumentationBrowser.xib in Resources */,
-				75BD176B1143E6C300E67594 /* IGKPreferences.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -686,6 +691,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75943BDD1144085D004126E7 /* IGKPreferences.xib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				756F9D7C110BB42300E6F291 /* MainMenu.xib in Resources */,
 				75C9FF05110F868300C9B51C /* main.css in Resources */,
@@ -770,7 +776,6 @@
 				75C74A611140539B00E3EAC6 /* IGKSometimesCenteredTextCell.m in Sources */,
 				75A9DA6811411C49003F8437 /* NSXMLNode+IGKAdditions.m in Sources */,
 				75A4B48611429ECD008CA9E8 /* IGKTableOfContentsView.m in Sources */,
-				75BD177F1143E94000E67594 /* IGKPreferencesController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -785,6 +790,7 @@
 				75B23F6E1140218400EC1D2B /* Ingredients_AppDelegate.m in Sources */,
 				754AA3FA1140267300321EAF /* AnthillBugReporter.m in Sources */,
 				75BD17C61143F37E00E67594 /* SQPreferencesBackgroundComponent.m in Sources */,
+				75943BD1114407D1004126E7 /* IGKPreferencesController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

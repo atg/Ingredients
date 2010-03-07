@@ -82,12 +82,11 @@
 
 - (IBAction)checkForUpdates:(id)sender
 {
-	//[[SUUpdater sharedUpdater] checkForUpdates:sender];
+	[[SUUpdater sharedUpdater] checkForUpdates:sender];
 }
 
 - (void)setUpdateMatrixTag:(NSInteger)updateMatrixTag
 {
-	/*
 	if (updateMatrixTag == 1)
 	{
 		[[SUUpdater sharedUpdater] setAutomaticallyChecksForUpdates:YES];
@@ -103,12 +102,9 @@
 		[[SUUpdater sharedUpdater] setAutomaticallyChecksForUpdates:NO];
 		[[SUUpdater sharedUpdater] setAutomaticallyDownloadsUpdates:NO];
 	}
-	 */
 }
 - (NSInteger)updateMatrixTag
 {
-	return 1;
-	/*
 	BOOL checks = [[SUUpdater sharedUpdater] automaticallyChecksForUpdates];
 	BOOL downloads = [[SUUpdater sharedUpdater] automaticallyDownloadsUpdates];
 	
@@ -118,7 +114,6 @@
 		return 2;
 	else
 		return 3;
-	 */
 }
 
 @end

@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class IGKLaunchController, IGKPreferencesController;
+@class IGKLaunchController;
 
 @interface IGKApplicationDelegate : NSObject
 {
@@ -21,7 +21,7 @@
 	NSManagedObjectContext *managedObjectContext;
 	NSManagedObjectContext *backgroundManagedObjectContext;
 	
-	IGKPreferencesController *preferencesController;
+	id preferencesController;
 	
 	dispatch_queue_t backgroundQueue;
 }

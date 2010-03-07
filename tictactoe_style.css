@@ -17,6 +17,19 @@ body {
 #infobox {
 	font-weight: bold;
 	
+	-webkit-border-radius: 3px;
+
+	color: white;
+	text-shadow: rgba(0,0,0,0.3) 0 1px 0;
+	font-size: 90%;
+	text-align: center;
+	margin-bottom: 20px;
+	padding-top: 2px;
+	padding-bottom: 3px;
+}
+#infobox.red {
+	border: 1px solid #b72225;
+	
 	background: -webkit-gradient(
     linear,
     left bottom,
@@ -24,17 +37,30 @@ body {
     color-stop(0.0, #bf3838),
     color-stop(1.0, #ff6363)
 );
-	-webkit-border-radius: 3px;
-
-	color: white;
-	text-shadow: rgba(0,0,0,0.3) 0 1px 0;
-	border: 1px solid #b72225;
-	font-size: 90%;
-	text-align: center;
-	margin-bottom: 20px;
-	padding-top: 2px;
-	padding-bottom: 3px;
 }
+#infobox.green {
+	border: 1px solid #23A711;
+	
+	background: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0.0, #31B024),
+    color-stop(1.0, #58FD4A)
+);
+}
+#infobox.blue {
+	border: 1px solid #003BAB;
+	
+	background: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0.0, #0024A2),
+    color-stop(1.0, #2358FF)
+);
+}
+
 #infobox a, #infobox a:hover {
 	color: white;
 	padding-left: 4px;

@@ -28,6 +28,10 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>SUFeedURL</key>
+	<string>http://fileability.net/ingredients/appcast.rss</string>
+	<key>SUEnableSystemProfiling</key>
+	<true/>
 	<key>AnthillBugReporter</key>
 	<dict>
 		<key>AnthillInstallationURL</key>

@@ -9,7 +9,6 @@
 #import "IGKApplicationDelegate.h"
 #import "IGKWindowController.h"
 #import "IGKLaunchController.h"
-#import "IGKPreferencesController.h"
 
 @implementation IGKApplicationDelegate
 
@@ -57,7 +56,7 @@
 {
 	//We load preferences lazily
 	if (!preferencesController)
-		preferencesController = [[IGKPreferencesController alloc] init];
+		preferencesController = [[NSClassFromString(@"IGKPreferencesController") alloc] init];
 	
 	[preferencesController showWindow:sender];
 }

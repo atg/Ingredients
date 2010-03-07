@@ -56,10 +56,11 @@
     }
     
     
-    function alertWithInfobox(str)
+    function alertWithInfobox(str, color)
     {
         var infobox = document.getElementById("infobox");
-        
+        infobox.className = color;
+		
         infobox.style.display = 'block';
         infobox.innerHTML = str;
     }
@@ -79,7 +80,7 @@
         
         if (bitboard[e.id] != 0)
         {
-            alertWithInfobox("You can't play that move!");
+            alertWithInfobox("You can't play that move!", "blue");
             //alert("You can't play that move!");
             return;
         }
@@ -105,7 +106,7 @@
             totalScore['draws'] += 1;
             inFinalState = true;
             resetscore();
-            alertWithInfobox("It's a draw :| <a href='javascript:resetgame()'>Play again.</a>");
+            alertWithInfobox("It's a draw :| <a href='javascript:resetgame()'>Play again.</a>", "blue");
         }
         return false;
     }
@@ -258,13 +259,13 @@
             totalScore['computer'] += 1;
             inFinalState = true;
             resetscore();
-            alertWithInfobox("The computer won :( <a href='javascript:resetgame()'>Play again.</a>");
+            alertWithInfobox("The computer won :( <a href='javascript:resetgame()'>Play again.</a>", "red");
         }
         else {
             totalScore['you'] += 1;
             inFinalState = true;
             resetscore();
-            alertWithInfobox("You won :) <a href='javascript:resetgame()'>Play again.</a>");
+            alertWithInfobox("You won :) <a href='javascript:resetgame()'>Play again.</a>", "green");
         }
                 
         return true;
