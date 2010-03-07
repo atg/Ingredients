@@ -387,6 +387,7 @@
 {
 	if ([[url scheme] isEqual:@"special"] && [[url resourceSpecifier] isEqual:@"no-selection"])
 	{
+		[browserWebView stopLoading:nil];
 		[self loadNoSelectionRecordHistory:YES];
 	}
 	else if ([[url scheme] isEqual:@"doc"])
@@ -397,6 +398,7 @@
 	{
 		[self loadNoSelectionRecordHistory:NO];
 		[self setBrowserActive:YES];
+		[browserWebView stopLoading:nil];
 		[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:url]];
 	}
 }
@@ -736,7 +738,8 @@
 	[self setBrowserActive:NO];
 	[self reloadTableOfContents];
 	
-	[self recordHistoryForURL:[NSURL URLWithString:@"special:no-selection"] title:@"No Selection"];
+	if (recordHistory)
+		[self recordHistoryForURL:[NSURL URLWithString:@"special:no-selection"] title:@"No Selection"];
 }
 - (void)loadDocs
 {

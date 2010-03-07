@@ -40,7 +40,10 @@
 	NSString *itemURL = [item URLString];
 	NSString *currentItemURL = [currentItem URLString];
 	if ([itemURL length] && [currentItemURL length] && [[NSURL URLWithString:itemURL] isEqual:[NSURL URLWithString:currentItemURL]])
+	{
+		NSLog(@"\t Aborting mission!");
 		return;
+	}
 	
 	//Push currentItem onto backStack, if it exists
 	if (currentItem)
@@ -49,6 +52,11 @@
 	}
 	
 	currentItem = item;
+	
+	//Dump whatever's in forwardStack
+	[forwardStack removeAllObjects];
+	
+	NSLog(@"back forward manager = %@", self);
 }
 
 - (void)loadItem:(WebHistoryItem *)item
@@ -59,6 +67,8 @@
 	
 	if ([delegate respondsToSelector:@selector(loadURL:recordHistory:)])
 		[delegate loadURL:url recordHistory:NO];
+	
+	NSLog(@"back forward manager = %@", self);
 }
 - (BOOL)canGoBack
 {
@@ -80,7 +90,10 @@
 	
 	//Check that there's a page to go back to
 	if ([backStack count] == 0)
+	{
+		NSLog(@"\t Aborting mission!");
 		return;
+	}
 	
 	//Push currentItem onto forwardStack, if it exists
 	if (currentItem)
@@ -92,14 +105,21 @@
 	currentItem = [backStack lastObject];
 	[backStack removeLastObject];
 	
+	NSLog(@"back forward manager = %@", self);
+
 	//Load the page we're going back to
 	[self loadItem:currentItem];
 }
 - (IBAction)goForward:(id)sender
 {
+	NSLog(@"goForward = %@", forwardStack);
+	
 	//Check that there's a page to go forward to
 	if ([forwardStack count] == 0)
+	{
+		NSLog(@"\t Aborting mission!");
 		return;
+	}
 	
 	//Push currentItem onto backStack, if it exists
 	if (currentItem)
@@ -110,6 +130,8 @@
 	//Pop an object off forwardStack and assign it to currentItem
 	currentItem = [forwardStack lastObject];
 	[forwardStack removeLastObject];
+	
+	NSLog(@"back forward manager = %@", self);
 	
 	//Load the page we're going forward to
 	[self loadItem:currentItem];
@@ -148,6 +170,11 @@
 	}
 	
 	return reverseCopy;
+}
+
+- (NSString *)description
+{
+	return [NSString stringWithFormat:@"\thistory = \n\tbackStack = %@\n\tcurrent = %@\n\tforwardStack = %@\n\t", backStack, currentItem, forwardStack];
 }
 
 @end
