@@ -9,7 +9,7 @@
 #import "IGKApplicationDelegate.h"
 #import "IGKWindowController.h"
 #import "IGKLaunchController.h"
-
+#import "IGKPreferencesController.h"
 
 @implementation IGKApplicationDelegate
 
@@ -51,6 +51,15 @@
 - (BOOL)hasMultipleWindowControllers
 {
 	return YES;
+}
+
+- (IBAction)showPreferences:(id)sender
+{
+	//We load preferences lazily
+	if (!preferencesController)
+		preferencesController = [[IGKPreferencesController alloc] init];
+	
+	[preferencesController showWindow:sender];
 }
 
 - (IBAction)showWindow:(id)sender

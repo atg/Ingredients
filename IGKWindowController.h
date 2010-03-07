@@ -32,7 +32,6 @@ typedef enum {
 	
 	
 	//*** Basic Structure ***
-	IBOutlet NSWindow *window;
 	IBOutlet NSView *contentView;
 	
 	IBOutlet NSView *twoPaneView;

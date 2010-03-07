@@ -66,16 +66,17 @@
 		objects = [objects sortedArrayUsingDescriptors:copiedCurrentSortDescriptors];
 		
 		BOOL containsVIP = NO;
-		if (vipObjectID && [objects containsObject:[ctx objectWithID:vipObjectID]])
-			containsVIP = YES;
 		
 		//Put the object IDs into an array
 		NSMutableArray *objectIDs = [[NSMutableArray alloc] initWithCapacity:[objects count]];
 		for (NSManagedObject *obj in objects)
 		{
-			[objectIDs addObject:[obj objectID]];
+			id objid = [obj objectID];
+			[objectIDs addObject:objid];
+			
+			if (!containsVIP && [vipObjectID isEqual:objid])
+				containsVIP = YES;
 		}
-		
 		
 		//Run the completion block on the main thread
 		dispatch_async(dispatch_get_main_queue(), ^{
@@ -165,6 +166,7 @@
 	if (row < 0 || row >= [self numberOfRowsInTableView:tableView])
 		return nil;
 	
+	NSLog(@"row = %d, fetch contains = %d, vipObject = %@", row, fetchContainsVipObject, vipObject);
 	if (vipObject && !fetchContainsVipObject)
 	{
 		if (row == 0)
@@ -249,7 +251,7 @@
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tv
 {
-	return [fetchedObjects count] + (vipObject && !fetchContainsVipObject ? 1 : 0);
+	return [fetchedObjects count] + ((vipObject && !fetchContainsVipObject) ? 1 : 0);
 }
 - (id)tableView:(NSTableView *)tv objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
@@ -258,12 +260,17 @@
 	
 	//Get the object at this row
 	id fo /* sure */ = nil;
-	if (row == 0 && vipObject)
-		fo = vipObject;
-	else if (vipObject)
-		fo = [fetchedObjects objectAtIndex:row - 1];
+	if (vipObject && !fetchContainsVipObject)
+	{
+		if (row == 0)
+			fo = vipObject;
+		else
+			fo = [fetchedObjects objectAtIndex:row - 1];
+	}
 	else
+	{
 		fo = [fetchedObjects objectAtIndex:row];
+	}
 	
 	id identifier = [tableColumn identifier];
 	

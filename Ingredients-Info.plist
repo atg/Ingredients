@@ -19,9 +19,9 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>0.0.1</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>0.0.1</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>${MACOSX_DEPLOYMENT_TARGET}</string>
 	<key>NSMainNibFile</key>
@@ -30,10 +30,10 @@
 	<string>NSApplication</string>
 	<key>AnthillBugReporter</key>
 	<dict>
-        <key>AnthillInstallationURL</key>
-        <string>http://www.fileability.net/anthill2</string>
-        <key>AnthillProjectName</key>
-        <string>Ingredients</string>
-    </dict>
+		<key>AnthillInstallationURL</key>
+		<string>http://www.fileability.net/anthill2</string>
+		<key>AnthillProjectName</key>
+		<string>Ingredients</string>
+	</dict>
 </dict>
 </plist>

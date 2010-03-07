@@ -49,6 +49,7 @@
 	if (self = [super init])
 	{
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(indexedAllPaths:) name:@"IGKHasIndexedAllPaths" object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDefaultsDidChange:) name:NSUserDefaultsDidChangeNotification object:nil];
 	}
 	
 	return self;
@@ -59,8 +60,19 @@
 	return @"CHDocumentationBrowser";
 }
 
-- (void)windowDidLoad
+- (void)userDefaultsDidChange:(NSNotification *)notif
 {
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"IGKKeepOnAllSpaces"])
+	{
+		[[self window] setCollectionBehavior:NSWindowCollectionBehaviorCanJoinAllSpaces];
+	}
+	else
+	{
+		[[self window] setCollectionBehavior:NSWindowCollectionBehaviorDefault];
+	}
+}
+- (void)windowDidLoad
+{	
 	currentModeIndex = CHDocumentationBrowserUIMode_NeedsSetup;
 	[self setMode:CHDocumentationBrowserUIMode_TwoUp];
 	sideSearchQuery = @"";
@@ -163,7 +175,10 @@
 	//[[WebPreferences standardPreferences] setDefaultFontSize:16];
 	//[[WebPreferences standardPreferences] setDefaultFixedFontSize:16];
 	
-	[self tableViewSelectionDidChange:nil]; 
+	[self tableViewSelectionDidChange:nil];
+	
+	//Simulate user defaults changing
+	[self userDefaultsDidChange:nil];
 }
 
 
@@ -271,8 +286,8 @@
 		[[[twoPaneContentsSplitView subviews] objectAtIndex:0] addSubview:sideSearchView];
 		
 		//Table of contents
-		[tableOfContentsView setFrame:[[[twoPaneContentsSplitView subviews] objectAtIndex:1] bounds]];
-		[[[twoPaneContentsSplitView subviews] objectAtIndex:1] addSubview:tableOfContentsView];
+		//[tableOfContentsView setFrame:[[[twoPaneContentsSplitView subviews] objectAtIndex:1] bounds]];
+		//[[[twoPaneContentsSplitView subviews] objectAtIndex:1] addSubview:tableOfContentsView];
 		
 		
 		//Set up the search view
@@ -650,7 +665,6 @@
 }
 - (void)tableOfContentsChangedSelection
 {
-	NSLog(@"TABLE OF CONTENTS CHANGED SELECTION");
 	[self loadDocIntoBrowser];
 }
 - (void)sideSearchTableChangedSelection

@@ -88,6 +88,11 @@
 		75B534FA111076C000560848 /* View_AdvSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F7111076C000560848 /* View_AdvSearchTemplate.png */; };
 		75B534FB111076C000560848 /* View_NoSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F8111076C000560848 /* View_NoSearchTemplate.png */; };
 		75B534FC111076C000560848 /* View_SideSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F9111076C000560848 /* View_SideSearchTemplate.png */; };
+		75BD176B1143E6C300E67594 /* IGKPreferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 75BD176A1143E6C300E67594 /* IGKPreferences.xib */; };
+		75BD17761143E7F000E67594 /* TBReSparkle.png in Resources */ = {isa = PBXBuildFile; fileRef = 75BD17751143E7F000E67594 /* TBReSparkle.png */; };
+		75BD177E1143E94000E67594 /* IGKPreferencesController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75BD177C1143E94000E67594 /* IGKPreferencesController.h */; };
+		75BD177F1143E94000E67594 /* IGKPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BD177D1143E94000E67594 /* IGKPreferencesController.m */; };
+		75BD17C61143F37E00E67594 /* SQPreferencesBackgroundComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BD17C51143F37E00E67594 /* SQPreferencesBackgroundComponent.m */; };
 		75C74A0A1140415F00E3EAC6 /* ToC_All_S.png in Resources */ = {isa = PBXBuildFile; fileRef = 75C749FE1140415F00E3EAC6 /* ToC_All_S.png */; };
 		75C74A0B1140415F00E3EAC6 /* ToC_All.png in Resources */ = {isa = PBXBuildFile; fileRef = 75C749FF1140415F00E3EAC6 /* ToC_All.png */; };
 		75C74A0C1140415F00E3EAC6 /* ToC_Delegate_S.png in Resources */ = {isa = PBXBuildFile; fileRef = 75C74A001140415F00E3EAC6 /* ToC_Delegate_S.png */; };
@@ -234,6 +239,12 @@
 		75B534F7111076C000560848 /* View_AdvSearchTemplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = View_AdvSearchTemplate.png; path = Images/View_AdvSearchTemplate.png; sourceTree = "<group>"; };
 		75B534F8111076C000560848 /* View_NoSearchTemplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = View_NoSearchTemplate.png; path = Images/View_NoSearchTemplate.png; sourceTree = "<group>"; };
 		75B534F9111076C000560848 /* View_SideSearchTemplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = View_SideSearchTemplate.png; path = Images/View_SideSearchTemplate.png; sourceTree = "<group>"; };
+		75BD176A1143E6C300E67594 /* IGKPreferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IGKPreferences.xib; sourceTree = "<group>"; };
+		75BD17751143E7F000E67594 /* TBReSparkle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBReSparkle.png; sourceTree = "<group>"; };
+		75BD177C1143E94000E67594 /* IGKPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKPreferencesController.h; sourceTree = "<group>"; };
+		75BD177D1143E94000E67594 /* IGKPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKPreferencesController.m; sourceTree = "<group>"; };
+		75BD17C51143F37E00E67594 /* SQPreferencesBackgroundComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQPreferencesBackgroundComponent.m; sourceTree = "<group>"; };
+		75BD17C71143F38800E67594 /* SQPreferencesBackgroundComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQPreferencesBackgroundComponent.h; sourceTree = "<group>"; };
 		75C749FE1140415F00E3EAC6 /* ToC_All_S.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ToC_All_S.png; path = TableOfContents/ToC_All_S.png; sourceTree = "<group>"; };
 		75C749FF1140415F00E3EAC6 /* ToC_All.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ToC_All.png; path = TableOfContents/ToC_All.png; sourceTree = "<group>"; };
 		75C74A001140415F00E3EAC6 /* ToC_Delegate_S.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ToC_Delegate_S.png; path = TableOfContents/ToC_Delegate_S.png; sourceTree = "<group>"; };
@@ -301,6 +312,7 @@
 				756F9E0B110BB79100E6F291 /* IGKWindowController.m */,
 				751D2AD01126E4A100403E64 /* IGKArrayController.h */,
 				751D2AD11126E4A100403E64 /* IGKArrayController.m */,
+				75BD17791143E92700E67594 /* Preferences */,
 				756F9FF6110C803D00E6F291 /* Scraping */,
 				0C7C02E3110DFFF300412666 /* Views & Cells */,
 			);
@@ -379,6 +391,7 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				75BD176A1143E6C300E67594 /* IGKPreferences.xib */,
 			);
 			name = Ingredients;
 			sourceTree = "<group>";
@@ -386,6 +399,8 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				75BD17C71143F38800E67594 /* SQPreferencesBackgroundComponent.h */,
+				75BD17C51143F37E00E67594 /* SQPreferencesBackgroundComponent.m */,
 				75C9FF03110F868300C9B51C /* main.css */,
 				75F6702F110CCD31005F299C /* RegexKitLite.h */,
 				75F67030110CCD31005F299C /* RegexKitLite.m */,
@@ -414,6 +429,7 @@
 				75B534F7111076C000560848 /* View_AdvSearchTemplate.png */,
 				75B534F8111076C000560848 /* View_NoSearchTemplate.png */,
 				75B534F9111076C000560848 /* View_SideSearchTemplate.png */,
+				75BD17751143E7F000E67594 /* TBReSparkle.png */,
 				755F42AE112326E700AA16F5 /* sourcelist_indexing_wallpaper.png */,
 				755F427D112323C600AA16F5 /* tictactoe.html */,
 				751D2D171126F1F400403E64 /* no_selection.html */,
@@ -495,6 +511,15 @@
 				75C74A2B1140417D00E3EAC6 /* Multiselector */,
 			);
 			path = Images;
+			sourceTree = "<group>";
+		};
+		75BD17791143E92700E67594 /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				75BD177C1143E94000E67594 /* IGKPreferencesController.h */,
+				75BD177D1143E94000E67594 /* IGKPreferencesController.m */,
+			);
+			name = Preferences;
 			sourceTree = "<group>";
 		};
 		75C74A281140416C00E3EAC6 /* Table of Contents */ = {
@@ -584,6 +609,7 @@
 				75C74A601140539B00E3EAC6 /* IGKSometimesCenteredTextCell.h in Headers */,
 				75A9DA6711411C49003F8437 /* NSXMLNode+IGKAdditions.h in Headers */,
 				75A4B48511429ECD008CA9E8 /* IGKTableOfContentsView.h in Headers */,
+				75BD177E1143E94000E67594 /* IGKPreferencesController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -652,6 +678,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				756F9D78110BB40C00E6F291 /* CHDocumentationBrowser.xib in Resources */,
+				75BD176B1143E6C300E67594 /* IGKPreferences.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -709,6 +736,7 @@
 				75A1C0B911432C90005489E4 /* HistorySelRight.png in Resources */,
 				75A1C0C811432E85005489E4 /* HistorySelLeft_S.png in Resources */,
 				75A1C0C911432E85005489E4 /* HistorySelRight_S.png in Resources */,
+				75BD17761143E7F000E67594 /* TBReSparkle.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -742,6 +770,7 @@
 				75C74A611140539B00E3EAC6 /* IGKSometimesCenteredTextCell.m in Sources */,
 				75A9DA6811411C49003F8437 /* NSXMLNode+IGKAdditions.m in Sources */,
 				75A4B48611429ECD008CA9E8 /* IGKTableOfContentsView.m in Sources */,
+				75BD177F1143E94000E67594 /* IGKPreferencesController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -755,6 +784,7 @@
 				75B23F4711401DD700EC1D2B /* PFMoveApplication.m in Sources */,
 				75B23F6E1140218400EC1D2B /* Ingredients_AppDelegate.m in Sources */,
 				754AA3FA1140267300321EAF /* AnthillBugReporter.m in Sources */,
+				75BD17C61143F37E00E67594 /* SQPreferencesBackgroundComponent.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

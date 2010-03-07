@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class IGKLaunchController;
+@class IGKLaunchController, IGKPreferencesController;
 
 @interface IGKApplicationDelegate : NSObject
 {
@@ -21,11 +21,14 @@
 	NSManagedObjectContext *managedObjectContext;
 	NSManagedObjectContext *backgroundManagedObjectContext;
 	
+	IGKPreferencesController *preferencesController;
+	
 	dispatch_queue_t backgroundQueue;
 }
 
 - (BOOL)hasMultipleWindowControllers;
 
+- (IBAction)showPreferences:(id)sender;
 - (IBAction)showWindow:(id)sender;
 - (IBAction)newWindow:(id)sender;
 - (void)newWindowIsIndexing:(BOOL)isIndexing;
