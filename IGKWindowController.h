@@ -15,6 +15,7 @@
 @class IGKApplicationDelegate;
 @class IGKSourceListWallpaperView;
 @class IGKArrayController;
+@class IGKBackForwardManager;
 
 typedef enum {
 	
@@ -40,6 +41,8 @@ typedef enum {
 	
 	
 	//*** Browser View ***
+	IBOutlet IGKBackForwardManager *backForwardManager;
+	
 	IBOutlet NSView *browserView;
 	IBOutlet NSTextField *browserViewTitle;
 	IBOutlet NSTextField *browserViewPath;

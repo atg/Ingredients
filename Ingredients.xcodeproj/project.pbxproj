@@ -51,6 +51,8 @@
 		75943BCE114407C9004126E7 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 75943BA4114407C2004126E7 /* Sparkle.framework */; };
 		75943BD1114407D1004126E7 /* IGKPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BD177D1143E94000E67594 /* IGKPreferencesController.m */; };
 		75943BDD1144085D004126E7 /* IGKPreferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 75BD176A1143E6C300E67594 /* IGKPreferences.xib */; };
+		75943C0B11441AE0004126E7 /* IGKBackForwardManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 75943C0911441AE0004126E7 /* IGKBackForwardManager.h */; };
+		75943C0C11441AE0004126E7 /* IGKBackForwardManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 75943C0A11441AE0004126E7 /* IGKBackForwardManager.m */; };
 		759ECF9B113344CC00067BD1 /* IGKShyTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 759ECF99113344CC00067BD1 /* IGKShyTableView.h */; };
 		759ECF9C113344CC00067BD1 /* IGKShyTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 759ECF9A113344CC00067BD1 /* IGKShyTableView.m */; };
 		759ECFA3113349D700067BD1 /* IGKMultiSelector.h in Headers */ = {isa = PBXBuildFile; fileRef = 759ECFA1113349D700067BD1 /* IGKMultiSelector.h */; };
@@ -202,6 +204,8 @@
 		759030211139BFF500550A86 /* IGKMatteSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKMatteSegmentedControl.h; sourceTree = "<group>"; };
 		759030221139BFF500550A86 /* IGKMatteSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKMatteSegmentedControl.m; sourceTree = "<group>"; };
 		75943BA4114407C2004126E7 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
+		75943C0911441AE0004126E7 /* IGKBackForwardManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKBackForwardManager.h; sourceTree = "<group>"; };
+		75943C0A11441AE0004126E7 /* IGKBackForwardManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKBackForwardManager.m; sourceTree = "<group>"; };
 		759ECF99113344CC00067BD1 /* IGKShyTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKShyTableView.h; sourceTree = "<group>"; };
 		759ECF9A113344CC00067BD1 /* IGKShyTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKShyTableView.m; sourceTree = "<group>"; };
 		759ECFA1113349D700067BD1 /* IGKMultiSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKMultiSelector.h; sourceTree = "<group>"; };
@@ -317,6 +321,8 @@
 				756F9E0B110BB79100E6F291 /* IGKWindowController.m */,
 				751D2AD01126E4A100403E64 /* IGKArrayController.h */,
 				751D2AD11126E4A100403E64 /* IGKArrayController.m */,
+				75943C0911441AE0004126E7 /* IGKBackForwardManager.h */,
+				75943C0A11441AE0004126E7 /* IGKBackForwardManager.m */,
 				75BD17791143E92700E67594 /* Preferences */,
 				756F9FF6110C803D00E6F291 /* Scraping */,
 				0C7C02E3110DFFF300412666 /* Views & Cells */,
@@ -616,6 +622,7 @@
 				75A9DA6711411C49003F8437 /* NSXMLNode+IGKAdditions.h in Headers */,
 				75A4B48511429ECD008CA9E8 /* IGKTableOfContentsView.h in Headers */,
 				75BD177E1143E94000E67594 /* IGKPreferencesController.h in Headers */,
+				75943C0B11441AE0004126E7 /* IGKBackForwardManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -776,6 +783,7 @@
 				75C74A611140539B00E3EAC6 /* IGKSometimesCenteredTextCell.m in Sources */,
 				75A9DA6811411C49003F8437 /* NSXMLNode+IGKAdditions.m in Sources */,
 				75A4B48611429ECD008CA9E8 /* IGKTableOfContentsView.m in Sources */,
+				75943C0C11441AE0004126E7 /* IGKBackForwardManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,6 +11,7 @@
 #import "IGKHTMLGenerator.h"
 #import "IGKSourceListWallpaperView.h"
 #import "IGKArrayController.h"
+#import "IGKBackForwardManager.h"
 
 @interface IGKWindowController ()
 
@@ -29,6 +30,11 @@
 
 - (void)setMode:(int)modeIndex;
 - (IGKArrayController *)currentArrayController;
+
+- (void)loadNoSelectionRecordHistory:(BOOL)recordHistory;
+
+- (void)loadURL:(NSURL *)url recordHistory:(BOOL)recordHistory;
+- (void)recordHistoryForURL:(NSURL *)url title:(NSString *)title;
 
 - (void)loadDocs;
 - (void)loadDocIntoBrowser;
@@ -82,7 +88,9 @@
 	if (shouldIndex)
 		[self startIndexing];
 	else
-		[self setBrowserActive:NO];
+	{
+		[self loadNoSelectionRecordHistory:YES];
+	}
 	
 	[searchViewTable setTarget:self];
 	[searchViewTable setDoubleAction:@selector(advancedSearchDoubleAction:)];
@@ -370,10 +378,34 @@
 {
 	NSInteger selectedSegment = [sender selectedSegment];
 	if(selectedSegment == 0)
-		[browserWebView goBack:nil];
+		[backForwardManager goBack:nil];
 	else if(selectedSegment == 1)
-		[browserWebView goForward:nil];
+		[backForwardManager goForward:nil];
 }
+
+- (void)loadURL:(NSURL *)url recordHistory:(BOOL)recordHistory
+{
+	if ([[url scheme] isEqual:@"special"] && [[url resourceSpecifier] isEqual:@"no-selection"])
+	{
+		[self loadNoSelectionRecordHistory:YES];
+	}
+	else if ([[url scheme] isEqual:@"doc"])
+	{
+		
+	}
+	else
+	{
+		[self loadNoSelectionRecordHistory:NO];
+		[self setBrowserActive:YES];
+		[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:url]];
+	}
+}
+- (void)recordHistoryForURL:(NSURL *)url title:(NSString *)title
+{
+	WebHistoryItem *item = [[WebHistoryItem alloc] initWithURLString:[url absoluteString] title:title lastVisitedTimeInterval:[NSDate timeIntervalSinceReferenceDate]];
+	[backForwardManager visitPage:item];
+}
+
 
 @dynamic ui_currentModeIndex;
 
@@ -686,11 +718,7 @@
 	//If there's no selection, switch to the no selection search page
 	else if ([sideSearchController selection] == nil)
 	{
-		currentObjectIDInBrowser = nil;
-		acceptableDisplayTypes = 0;
-
-		[self setBrowserActive:NO];
-		[self reloadTableOfContents];
+		[self loadNoSelectionRecordHistory:YES];
 		
 		return;
 	}
@@ -699,6 +727,16 @@
 	[self setBrowserActive:YES];
 	
 	[self loadDocs];
+}
+- (void)loadNoSelectionRecordHistory:(BOOL)recordHistory
+{
+	currentObjectIDInBrowser = nil;
+	acceptableDisplayTypes = 0;
+	
+	[self setBrowserActive:NO];
+	[self reloadTableOfContents];
+	
+	[self recordHistoryForURL:[NSURL URLWithString:@"special:no-selection"] title:@"No Selection"];
 }
 - (void)loadDocs
 {
@@ -779,6 +817,8 @@
 	//Load the HTML into the webview
 	[[browserWebView mainFrame] loadHTMLString:html
 									   baseURL:[[NSBundle mainBundle] resourceURL]];
+	
+	//[self recordHistoryForURL:[NSURL URLWithString:@"doc:"]];
 }
 
 - (IBAction)openInSafari:(id)sender
@@ -820,7 +860,8 @@
 		[superview addSubview:browserWebViewContainer];
 	}
 	
-	[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
+	[self loadURL:[NSURL URLWithString:url] recordHistory:YES];
+	//[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
 }
 
 - (void)webView:(WebView *)sender didStartProvisionalLoadForFrame:(WebFrame *)frame
@@ -837,6 +878,8 @@
 }
 - (void)webView:(WebView *)sender didReceiveTitle:(NSString *)title forFrame:(WebFrame *)frame
 {
+	[self recordHistoryForURL:[[[frame dataSource] request] URL] title:title];
+	
 	[self setUpForWebView:sender frame:frame];
 }
 - (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame
