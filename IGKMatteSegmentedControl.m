@@ -29,6 +29,12 @@
 {
     rect = [self bounds];
 	
+	//Setting isFlipped makes the menu appear in the wrong place. So we need to fake it
+	//NSAffineTransform doesn't play well with inner shadows, so we're using an image instead
+	
+	NSImage *image = [[NSImage alloc] initWithSize:rect.size];
+	[image lockFocus];
+	
 	NSUInteger selseg = [self selectedSegment];
 	
 	int i;
@@ -49,6 +55,15 @@
 	
 	if (selseg != -1)
 		[self igk_drawSegment:selseg runningY:sely selected:YES];
+	
+	[image unlockFocus];
+	
+	[image drawInRect:NSMakeRect(0, 0, rect.size.width, rect.size.height)
+			  fromRect:NSZeroRect
+			 operation:NSCompositeSourceOver
+			  fraction:1.0
+	   respectFlipped:YES
+				hints:nil];
 }
 - (float)igk_drawSegment:(NSUInteger)segment runningY:(float)runningY selected:(BOOL)isSelected
 {
@@ -366,44 +381,6 @@
 		
 		runningX += 1.0;
 	}
-}
-
-- (void)drawRect_old:(NSRect)rect
-{
-    rect = [self bounds];
-	
-	[NSGraphicsContext saveGraphicsState];
-	
-	int i;
-	for (i = 0; i < [self segmentCount]; i++)
-	{
-		CGFloat w = rect.size.width/[self segmentCount];
-		NSRect segmentRect = NSMakeRect(i * w, 0, w, rect.size.height);
-		//[NSBezierPath clipRect:segmentRect];
-		
-		[self drawBackground:[self selectedSegment] == i];
-		
-		[[NSBezierPath bezierPathWithRect:rect] addClip];
-		
-		if (i + 1 < [self segmentCount])
-		{
-			NSGradient *strokeGradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedWhite:0.27 alpha:1.0] endingColor:[NSColor colorWithCalibratedWhite:0.51 alpha:1.0]];
-			[strokeGradient drawInRect:NSMakeRect(round((i + 1) * w), 1, 1, rect.size.height - 1) angle:270];
-		}
-	}
-	
-	for (i = 0; i < [self segmentCount]; i++)
-	{
-		NSImage *img = [self imageForSegment:i];
-		[img compositeToPoint:NSMakePoint(round((rect.size.width/2)*i + 11), 7) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
-	}
-	
-	[NSGraphicsContext restoreGraphicsState];
-}
-
-- (BOOL)isFlipped
-{
-	return NO;
 }
 
 @end
