@@ -163,6 +163,11 @@ static NSMutableDictionary *sharedSymbolButtonImageCache = nil;
 			else
 				offset = 120.0;
 		}
+		else if (mask & CHSymbolButtonNotification)
+		{
+			str = @"N";
+			offset = 120.0;
+		}
 		
 		if (![str length])
 			return nil;

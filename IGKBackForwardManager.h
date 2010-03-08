@@ -33,6 +33,9 @@
 - (IBAction)goBack:(id)sender;
 - (IBAction)goForward:(id)sender;
 
+- (void)goBackBy:(NSInteger)amount;
+- (void)goForwardBy:(NSInteger)amount;
+
 - (BOOL)canGoBack;
 - (BOOL)canGoForward;
 

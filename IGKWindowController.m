@@ -36,6 +36,9 @@
 - (void)loadURL:(NSURL *)url recordHistory:(BOOL)recordHistory;
 - (void)recordHistoryForURL:(NSURL *)url title:(NSString *)title;
 
+- (void)setUpBackMenu;
+- (void)setUpForwardMenu;
+
 - (void)loadDocs;
 - (void)loadDocIntoBrowser;
 - (void)setUpForWebView:(WebView *)sender frame:(WebFrame *)frame;
@@ -59,6 +62,65 @@
 	}
 	
 	return self;
+}
+
+- (void)backForwardManagerUpdatedLists:(id)bfm
+{
+	[self setUpBackMenu];
+	[self setUpForwardMenu];
+}
+
+- (void)setUpBackMenu
+{
+	NSArray *backList = [backForwardManager backList];
+	if (![backList count])
+	{
+		[backForwardButton setMenu:nil forSegment:0];
+		return;
+	}
+	
+	NSMenu *newBackMenu = [[NSMenu alloc] initWithTitle:@"Back"];
+	for (WebHistoryItem *item in backList)
+	{
+		NSMenuItem *menuItem = [newBackMenu addItemWithTitle:[item title] action:@selector(backMenuItem:) keyEquivalent:@""];
+		[menuItem setRepresentedObject:item];
+		[menuItem setTarget:self];
+	}
+	
+	[backForwardButton setMenu:newBackMenu forSegment:0];
+}
+- (void)setUpForwardMenu
+{
+	NSArray *forwardList = [backForwardManager forwardList];
+	if (![forwardList count])
+	{
+		[backForwardButton setMenu:nil forSegment:1];
+		return;
+	}
+	
+	NSMenu *newForwardMenu = [[NSMenu alloc] initWithTitle:@"Forward"];
+	for (WebHistoryItem *item in forwardList)
+	{
+		NSMenuItem *menuItem = [newForwardMenu addItemWithTitle:[item title] action:@selector(forwardMenuItem:) keyEquivalent:@""];
+		[menuItem setRepresentedObject:item];
+		[menuItem setTarget:self];
+	}
+	
+	[backForwardButton setMenu:newForwardMenu forSegment:1];
+}
+- (void)backMenuItem:(NSMenuItem *)sender
+{	
+	NSInteger index = [[backForwardButton menuForSegment:0] indexOfItem:sender];
+	NSInteger amount = index + 1;
+	
+	[backForwardManager goBackBy:amount];
+}
+- (void)forwardMenuItem:(NSMenuItem *)sender
+{	
+	NSInteger index = [[backForwardButton menuForSegment:1] indexOfItem:sender];
+	NSInteger amount = index + 1;
+	
+	[backForwardManager goForwardBy:amount];
 }
 
 - (NSString *)windowNibName
@@ -768,6 +830,9 @@
 	[selectedIndicies enumerateIndexesUsingBlock:^(NSUInteger index, BOOL *stop) {
 		
 		//Get the mask at this selected index
+		if (index >= [tableOfContentsTypes count])
+			return;
+		
 		IGKHTMLDisplayType dt = [[tableOfContentsTypes objectAtIndex:index] longLongValue];
 		
 		//Append it to the bitmask 

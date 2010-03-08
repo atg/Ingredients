@@ -48,13 +48,20 @@
 	//Push currentItem onto backStack, if it exists
 	if (currentItem)
 	{
+		[self willChangeValueForKey:@"backStack"];
 		[backStack addObject:currentItem];
+		[self didChangeValueForKey:@"backStack"];
 	}
 	
 	currentItem = item;
 	
 	//Dump whatever's in forwardStack
+	[self willChangeValueForKey:@"forwardStack"];
 	[forwardStack removeAllObjects];
+	[self didChangeValueForKey:@"forwardStack"];
+	
+	if ([delegate respondsToSelector:@selector(backForwardManagerUpdatedLists:)])
+		[delegate backForwardManagerUpdatedLists:self];
 	
 	NSLog(@"back forward manager = %@", self);
 }
@@ -86,6 +93,16 @@
 }
 - (IBAction)goBack:(id)sender
 {
+	[self goBackBy:1];
+}
+- (IBAction)goForward:(id)sender
+{
+	[self goForwardBy:1];
+}
+
+
+- (void)goBackBy:(NSInteger)amount
+{
 	NSLog(@"goBack = %@", backStack);
 	
 	//Check that there's a page to go back to
@@ -95,22 +112,50 @@
 		return;
 	}
 	
-	//Push currentItem onto forwardStack, if it exists
-	if (currentItem)
+	//Check that amount is in range
+	if (amount < 1 || amount > [backStack count])
 	{
-		[forwardStack addObject:currentItem];
+		NSLog(@"\t Aborting mission! amount is out of range");
+		return;
 	}
 	
-	//Pop an object off backStack and assign it to currentItem
-	currentItem = [backStack lastObject];
-	[backStack removeLastObject];
+	if (currentItem || amount > 1)
+	{
+		[self willChangeValueForKey:@"forwardStack"];
+		
+		//Push currentItem onto forwardStack, if it exists
+		if (currentItem)
+			[forwardStack addObject:currentItem];
+		
+		//Push the last [amount] objects into forwardStack
+		if (amount > 1)
+		{
+			NSArray *subarray = [backStack subarrayWithRange:NSMakeRange([backStack count] - amount + 1, amount - 1)];
+			for (id item in [subarray reverseObjectEnumerator])
+			{
+				[forwardStack addObject:item];
+			}
+		}
+		
+		[self didChangeValueForKey:@"forwardStack"];
+	}
+	
+	//Pop amount objects off backStack and assign the last one to currentItem
+	currentItem = [backStack objectAtIndex:[backStack count] - amount];
+	
+	[self willChangeValueForKey:@"backStack"];
+	[backStack removeObjectsInRange:NSMakeRange([backStack count] - amount, amount)];
+	[self didChangeValueForKey:@"backStack"];
+	
+	if ([delegate respondsToSelector:@selector(backForwardManagerUpdatedLists:)])
+		[delegate backForwardManagerUpdatedLists:self];
 	
 	NSLog(@"back forward manager = %@", self);
-
+	
 	//Load the page we're going back to
 	[self loadItem:currentItem];
 }
-- (IBAction)goForward:(id)sender
+- (void)goForwardBy:(NSInteger)amount
 {
 	NSLog(@"goForward = %@", forwardStack);
 	
@@ -121,15 +166,43 @@
 		return;
 	}
 	
-	//Push currentItem onto backStack, if it exists
-	if (currentItem)
+	//Check that amount is in range
+	if (amount < 1 || amount > [forwardStack count])
 	{
-		[backStack addObject:currentItem];
+		NSLog(@"\t Aborting mission! amount is out of range");
+		return;
 	}
 	
-	//Pop an object off forwardStack and assign it to currentItem
-	currentItem = [forwardStack lastObject];
-	[forwardStack removeLastObject];
+	if (currentItem || amount > 1)
+	{
+		[self willChangeValueForKey:@"backStack"];
+		
+		//Push currentItem onto forwardStack, if it exists
+		if (currentItem)
+			[backStack addObject:currentItem];
+		
+		//Push the last [amount] objects into forwardStack
+		if (amount > 1)
+		{
+			NSArray *subarray = [forwardStack subarrayWithRange:NSMakeRange([forwardStack count] - amount + 1, amount - 1)];
+			for (id item in [subarray reverseObjectEnumerator])
+			{
+				[backStack addObject:item];
+			}
+		}
+		
+		[self didChangeValueForKey:@"backStack"];
+	}
+	
+	//Pop amount objects off forwardStack and assign the last one to currentItem
+	currentItem = [forwardStack objectAtIndex:[forwardStack count] - amount];
+	
+	[self willChangeValueForKey:@"forwardStack"];
+	[forwardStack removeObjectsInRange:NSMakeRange([forwardStack count] - amount, amount)];
+	[self didChangeValueForKey:@"forwardStack"];
+	
+	if ([delegate respondsToSelector:@selector(backForwardManagerUpdatedLists:)])
+		[delegate backForwardManagerUpdatedLists:self];
 	
 	NSLog(@"back forward manager = %@", self);
 	

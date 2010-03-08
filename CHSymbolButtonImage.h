@@ -40,6 +40,7 @@ typedef enum _CHSymbolButtonImageType
 	
 	CHSymbolButtonDontDrawBorder = 1<<9,
 	CHSymbolButtonObjcBindingsListing = 1<<10,
+	CHSymbolButtonNotification = 1<<11,
 	
 } CHSymbolButtonImageType; 
 

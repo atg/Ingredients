@@ -41,6 +41,7 @@ typedef enum {
 	
 	
 	//*** Browser View ***
+	IBOutlet NSSegmentedControl *backForwardButton;
 	IBOutlet IGKBackForwardManager *backForwardManager;
 	
 	IBOutlet NSView *browserView;

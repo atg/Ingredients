@@ -29,7 +29,7 @@
 			<integer value="85"/>
 			<integer value="370"/>
 			<integer value="1"/>
-			<integer value="40"/>
+			<integer value="42"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1958,8 +1958,8 @@
 										</object>
 										<object class="NSMutableArray" key="dict.values">
 											<bool key="EncodedWithXMLCoder">YES</bool>
-											<integer value="12"/>
-											<integer value="12"/>
+											<integer value="16"/>
+											<integer value="16"/>
 											<integer value="1"/>
 										</object>
 									</object>
@@ -2384,7 +2384,7 @@
 				<bool key="NSFilterRestrictsInsertion">YES</bool>
 				<bool key="NSClearsFilterPredicateOnInsertion">YES</bool>
 			</object>
-			<object class="NSCustomObject" id="273934068">
+			<object class="NSCustomObject" id="856224198">
 				<string key="NSClassName">IGKBackForwardManager</string>
 			</object>
 		</object>
@@ -2859,7 +2859,7 @@
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">delegate</string>
-						<reference key="source" ref="273934068"/>
+						<reference key="source" ref="856224198"/>
 						<reference key="destination" ref="1001"/>
 					</object>
 					<int key="connectionID">566</int>
@@ -2867,7 +2867,7 @@
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">webView</string>
-						<reference key="source" ref="273934068"/>
+						<reference key="source" ref="856224198"/>
 						<reference key="destination" ref="549921697"/>
 					</object>
 					<int key="connectionID">567</int>
@@ -2876,9 +2876,17 @@
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">backForwardManager</string>
 						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="273934068"/>
+						<reference key="destination" ref="856224198"/>
 					</object>
 					<int key="connectionID">568</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">backForwardButton</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="7977298"/>
+					</object>
+					<int key="connectionID">569</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2992,8 +3000,8 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="786580050"/>
-							<reference ref="7977298"/>
 							<reference ref="916318684"/>
+							<reference ref="7977298"/>
 							<reference ref="109674972"/>
 						</object>
 						<reference key="parent" ref="495249127"/>
@@ -3692,7 +3700,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">565</int>
-						<reference key="object" ref="273934068"/>
+						<reference key="object" ref="856224198"/>
 						<reference key="parent" ref="0"/>
 					</object>
 				</object>
@@ -3940,7 +3948,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">568</int>
+			<int key="maxID">569</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4125,6 +4133,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>advancedController</string>
+							<string>backForwardButton</string>
 							<string>backForwardManager</string>
 							<string>browserToolbar</string>
 							<string>browserTopbar</string>
@@ -4156,6 +4165,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>IGKArrayController</string>
+							<string>NSSegmentedControl</string>
 							<string>IGKBackForwardManager</string>
 							<string>NSView</string>
 							<string>NSView</string>

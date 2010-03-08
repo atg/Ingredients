@@ -152,6 +152,9 @@
 	else if([entityName isEqual:@"CMacro"])
 		return CHSymbolButtonMacro;
 	
+	else if([entityName isEqual:@"ObjCNotification"])
+		return CHSymbolButtonNotification;
+	
 	else if([entityName isEqual:@"CppClassStruct"])
 		return CHSymbolButtonCppClass;
 	
