@@ -7,6 +7,10 @@ h1 {
 	padding: 0;
 }
 
+p.last {
+	margin-bottom: 48px;
+}
+
 body {
 	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 	
@@ -39,25 +43,25 @@ body {
 );
 }
 #infobox.green {
-	border: 1px solid #23A711;
+	border: 1px solid #25A610;
 	
 	background: -webkit-gradient(
     linear,
     left bottom,
     left top,
-    color-stop(0.0, #31B024),
-    color-stop(1.0, #58FD4A)
+    color-stop(0.0, #3FC027),
+    color-stop(1.0, #57FB49)
 );
 }
 #infobox.blue {
-	border: 1px solid #003BAB;
+	border: 1px solid #005AAA;
 	
 	background: -webkit-gradient(
     linear,
     left bottom,
     left top,
-    color-stop(0.0, #0024A2),
-    color-stop(1.0, #2358FF)
+    color-stop(0.0, #1F68B4),
+    color-stop(1.0, #449FFF)
 );
 }
 
@@ -76,21 +80,22 @@ body {
 	background-color: rgba(0,0,0,0.6);
 }
 
-#board td {
+#board td {	
    color: white;
    text-align: center;
 	
 	display: block;
-	width: 45px;
-	height: 45px;
+	min-width: 55px;
+	height: 60px;
 	
-	font-size: 35px;
+	font-size: 30px;
+	
+	float: right;
 	
 	font-family: "Helvetica Neue";
 	font-weight: bold;
 	text-shadow: rgba(0,0,0,0.3) 0 1px 0;
 }
-
 .a, .b, .d, .e, .g, .h {
 	border-right: 1px solid #bfbfbf;
 }
@@ -99,8 +104,9 @@ body {
 }
 
 #boardcontainer {
-	width: 50%;
+	width: 45%;
 	float: left;
+	
 }
 #board {
 	margin: 0 auto;
@@ -112,20 +118,55 @@ body {
 	-webkit-border-radius: 10px;
 	background-color: #d7d7d7;
 	padding: 10px;
-	width: 145px;
+	width: 172px;
 }
 #board table {
 	border-collapse: collapse;
 }
 
+#score table
+{	
+	border-collapse: collapse;
+	
+	border: 1px solid #d8d8d8;
+	background-color: #f2f2f2;
+	
+	margin-bottom: 12px;
+}
+#score th
+{
+	padding: 6px;
+	background-color: #f2f2f2;
+	border-bottom: 1px solid #d8d8d8;
+
+	padding: 6px 12px;
+	border-right: 1px solid #d8d8d8;
+}
+#score td
+{
+	text-align: center;
+
+	background-color: #f9f9f9;
+	border-right: 1px solid #d8d8d8;
+	
+	padding: 0 12px 2px;
+}
+#score tr.first td
+{
+	padding-top: 2px;
+}
+
+#score td code
+{
+	font-size: 12px;
+}
+
 #score {
 	float: right;
 	width: 50%;
-	margin: 0;
+	padding: 0 0 0 0;
 }
 #score h2 {
-	margin: 0;
+	margin: 0 0 12px 0;
 	padding: 0;
-	
-	
 }

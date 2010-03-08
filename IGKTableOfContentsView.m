@@ -59,7 +59,7 @@ const float ToCRowHeight = 31.0;
 	
 	
 	//Font
-	NSFont *font = isSelected ? [NSFont boldSystemFontOfSize:13] : [NSFont systemFontOfSize:13];
+	NSFont *font = isSelected ? [NSFont boldSystemFontOfSize:13] : [NSFont boldSystemFontOfSize:11.5];
 	[attrs setValue:font forKey:NSFontAttributeName];
 	
 	
@@ -229,8 +229,8 @@ const float ToCRowHeight = 31.0;
 		
 		NSSize titleSize = [title sizeWithAttributes:attrs];
 		NSRect titleRect;
-		titleRect.origin = NSMakePoint(NSMaxX(iconRect) + ToCIconTitleBetweenPadding, runningY + floor(rowRect.size.height / 2.0 - titleSize.height / 2.0));
-		titleRect.size = NSMakeSize(rect.size.width - titleRect.origin.x - ToCSideEdgePadding, titleSize.height);
+		titleRect.origin = NSMakePoint(round(NSMaxX(iconRect) + ToCIconTitleBetweenPadding), round(runningY + floor(rowRect.size.height / 2.0 - titleSize.height / 2.0)));
+		titleRect.size = NSMakeSize(round(rect.size.width - titleRect.origin.x - ToCSideEdgePadding), round(titleSize.height));
 		[title drawInRect:titleRect withAttributes:attrs];
 		
 		//Work out the Y for the next row

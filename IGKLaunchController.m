@@ -111,12 +111,9 @@
 	{
 		NSLog(@"Saving %@", [appController backgroundManagedObjectContext]);
 		
-		//Save our changes
-		[[appController backgroundManagedObjectContext] save:nil];
-		[[appController backgroundManagedObjectContext] reset];
+		//[[NSNotificationCenter defaultCenter] postNotificationName:@"IGKWillSaveIndex" object:self];
 		
-		//All paths have been reported
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"IGKHasIndexedAllPaths" object:self];
+		[self performSelector:@selector(saveDatabaseAndStopIndexing) withObject:nil afterDelay:1.0];
 	}
 	else
 	{
@@ -128,6 +125,22 @@
 			[[NSNotificationCenter defaultCenter] postNotificationName:@"IGKHasIndexedNewPaths" object:self];
 		}
 	}
+}
+- (void)saveDatabaseAndStopIndexing
+{
+	//Save our changes
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+		
+		[[appController backgroundManagedObjectContext] save:nil];
+		[[appController backgroundManagedObjectContext] reset];
+		
+		
+		dispatch_async(dispatch_get_main_queue(), ^{
+			
+			//All paths have been reported
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"IGKHasIndexedAllPaths" object:self];
+		});
+	});
 }
 
 - (double)fraction

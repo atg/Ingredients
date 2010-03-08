@@ -98,6 +98,8 @@ typedef enum {
 	
 	
 	//*** Other ***
+	IBOutlet NSWindow *savingProgressWindow;
+	IBOutlet NSProgressIndicator *savingProgressIndicator;
 	IGKSourceListWallpaperView *wallpaperView;
 		
 	int currentModeIndex;

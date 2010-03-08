@@ -58,6 +58,8 @@
 	if (self = [super init])
 	{
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(indexedAllPaths:) name:@"IGKHasIndexedAllPaths" object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSavingProgressSheet:) name:@"IGKWillSaveIndex" object:nil];
+		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDefaultsDidChange:) name:NSUserDefaultsDidChangeNotification object:nil];
 	}
 	
@@ -558,14 +560,37 @@
 	
 	[self setBrowserActive:YES];
 	
+	NSRect topBarFrame = [browserTopbar frame];
+	topBarFrame.origin.y += topBarFrame.size.height;
+	[browserTopbar setFrame:topBarFrame];
+	[browserTopbar setHidden:YES];
+	
+	NSRect browserViewFrame = [browserWebViewContainer frame];
+	browserViewFrame.size.height += topBarFrame.size.height;
+	[browserWebViewContainer setFrame:browserViewFrame];
+	
+	[twoPaneSplitView setColorIsEnabled:YES];
+	[twoPaneSplitView setColor:[NSColor colorWithCalibratedRed:0.166 green:0.166 blue:0.166 alpha:1.000]];
+	
 	[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:
 											 [NSURL fileURLWithPath:
 											  [[NSBundle mainBundle] pathForResource:@"tictactoe" ofType:@"html"]
 											  ]
 											 ]];
 }
+- (void)showSavingProgressSheet:(NSNotification *)notif
+{
+	[savingProgressIndicator setUsesThreadedAnimation:YES];
+	[savingProgressIndicator startAnimation:nil];
+	[NSApp beginSheet:savingProgressWindow modalForWindow:[self window] modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
+}
 - (void)indexedAllPaths:(NSNotification *)notif
 {
+	NSLog(@"Ending sheet = %@", savingProgressWindow);
+	[NSApp endSheet:savingProgressWindow];
+	[savingProgressWindow orderOut:nil];
+	[savingProgressIndicator stopAnimation:nil];
+	
 	[self stopIndexing];
 }
 - (void)stopIndexing
@@ -576,6 +601,28 @@
 	
 	[sideSearchViewField setEnabled:YES];
 	[sideSearchViewField setEditable:YES];
+	
+	[twoPaneSplitView setColor:[NSColor colorWithCalibratedRed:0.647 green:0.647 blue:0.647 alpha:1.000]];
+	
+	
+	//*** Show the top bar ***
+	
+	//Geometry for the top bar
+	NSRect topBarFrame = [browserTopbar frame];
+	topBarFrame.origin.y -= topBarFrame.size.height;
+	[browserTopbar setHidden:NO];
+	
+	//Geometry for the browser container
+	NSRect browserViewFrame = [browserWebViewContainer frame];
+	browserViewFrame.size.height -= topBarFrame.size.height;
+	
+	//Animate
+	[NSAnimationContext beginGrouping];
+	
+	[[browserTopbar animator] setFrame:topBarFrame];
+	[[browserWebViewContainer animator] setFrame:browserViewFrame];
+	
+	[NSAnimationContext endGrouping];
 }
 
 - (void)setAdvancedFilterPredicate:(NSPredicate *)pred
