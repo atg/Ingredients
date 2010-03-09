@@ -14,9 +14,9 @@ const float ToCBottomPadding = 12.0;
 const float ToCIconTitleBetweenPadding = 13.0;
 
 const float ToCRowBetweenMargin = 1.0;
-const float ToCRowSideMargin = 1.0;
-const float ToCRowTopMargin = 1.0;
-const float ToCRowBottomMargin = 1.0;
+const float ToCRowSideMargin = 4.0;
+const float ToCRowTopMargin = 4.0;
+const float ToCRowBottomMargin = 4.0;
 
 //The old table view had a row height of 24 pixels
 const float ToCRowHeight = 31.0;
@@ -64,11 +64,11 @@ const float ToCRowHeight = 31.0;
 	
 	
 	//Color
-	NSColor *color = [NSColor colorWithCalibratedRed:0.309 green:0.358 blue:0.418 alpha:1.000];//[NSColor colorWithCalibratedRed:0.329 green:0.384 blue:0.451 alpha:1.000];
+	NSColor *color = [NSColor colorWithCalibratedHue:0.59 saturation:0.36 brightness:0.44 alpha:1.00];//[NSColor colorWithCalibratedRed:0.329 green:0.384 blue:0.451 alpha:1.000];
 	if (isSelected)
 		color = [NSColor colorWithCalibratedWhite:1.0 alpha:1.0];
 	else if (![self isActive])
-		color = [NSColor colorWithCalibratedWhite:0.248 alpha:1.0];
+		color = [NSColor colorWithCalibratedWhite:0.448 alpha:1.0];
 	
 	[attrs setValue:color forKey:NSForegroundColorAttributeName];
 	
@@ -107,13 +107,13 @@ const float ToCRowHeight = 31.0;
 	NSColor *stripeColor = [NSColor colorWithCalibratedWhite:1.0 alpha:0.1];
 	
 	//The width of each pinstripe
-	const float stripeWidth = 10.0;
+	const float stripeWidth = 20.0;
 	
 	//The color of the line at the very top of the view
 	//NSColor *topBorderColor = [NSColor greenColor];
 	NSColor *topBorderHighlightColor = [NSColor colorWithCalibratedWhite:1.0 alpha:0.27];
 	NSColor *topHighlightGradientColor = [NSColor colorWithCalibratedWhite:1.0 alpha:0.4];
-	const float topHighlightGradientHeight = 33.0;
+	const float topHighlightGradientHeight = 10.0;//33.0;
 	
 	//The top color of the selection gradient
 	NSColor *selectionGradientStartColor = [NSColor colorWithCalibratedRed:0.686 green:0.729 blue:0.835 alpha:1.000];
@@ -155,7 +155,7 @@ const float ToCRowHeight = 31.0;
 		NSRect stripeRect = NSMakeRect(i * stripeWidth, 0.0, stripeWidth, rect.size.height - 1.0);
 		
 		[stripeColor set];
-		NSRectFillUsingOperation(stripeRect, NSCompositeSourceOver);
+		//NSRectFillUsingOperation(stripeRect, NSCompositeSourceOver);
 	}
 	
 	/*
@@ -229,7 +229,7 @@ const float ToCRowHeight = 31.0;
 		
 		NSSize titleSize = [title sizeWithAttributes:attrs];
 		NSRect titleRect;
-		titleRect.origin = NSMakePoint(round(NSMaxX(iconRect) + ToCIconTitleBetweenPadding), round(runningY + floor(rowRect.size.height / 2.0 - titleSize.height / 2.0)));
+		titleRect.origin = NSMakePoint(round(NSMaxX(iconRect) + ToCIconTitleBetweenPadding), round(runningY + floor(rowRect.size.height / 2.0 - titleSize.height / 2.0) - (isSelected ? 1.0 : 0)));
 		titleRect.size = NSMakeSize(round(rect.size.width - titleRect.origin.x - ToCSideEdgePadding), round(titleSize.height));
 		[title drawInRect:titleRect withAttributes:attrs];
 		
@@ -309,17 +309,21 @@ const float ToCRowHeight = 31.0;
 {
 	NSPoint p = [self convertPoint:[event locationInWindow] fromView:nil];
 	
-	BOOL commandKeyIsDown = [event modifierFlags] & NSCommandKeyMask;
+	BOOL commandKeyIsDown = NO;
 	if ([event modifierFlags] & NSCommandKeyMask)
 		commandKeyIsDown = YES;
+	
+	BOOL shiftKeyIsDown = NO;
+	if ([event modifierFlags] & NSShiftKeyMask)
+		shiftKeyIsDown = YES;
 	
 	NSUInteger index = [self rowIndexForPoint:p];
 	
 	NSIndexSet *oldSelectedIndexes = [selectedRowIndexes copy];
 	
-	if (commandKeyIsDown)
+	if (commandKeyIsDown || shiftKeyIsDown)
 	{
-		if (isDrag && (lastDraggedRow != index))
+		if (!isDrag || (isDrag && (lastDraggedRow != index)))
 		{
 			if ([selectedRowIndexes containsIndex:index])
 			{

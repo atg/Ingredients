@@ -23,13 +23,13 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="42"/>
-			<integer value="571"/>
-			<integer value="85"/>
 			<integer value="1"/>
-			<integer value="370"/>
-			<integer value="189"/>
 			<integer value="63"/>
+			<integer value="327"/>
+			<integer value="189"/>
+			<integer value="571"/>
+			<integer value="370"/>
+			<integer value="85"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3936,6 +3936,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>27.IBPluginDependency</string>
 					<string>301.IBEditorWindowLastContentRect</string>
 					<string>327.IBPluginDependency</string>
+					<string>328.CustomClassName</string>
 					<string>328.IBPluginDependency</string>
 					<string>329.IBEditorWindowLastContentRect</string>
 					<string>329.IBPluginDependency</string>
@@ -4058,6 +4059,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{334, 582}, {137, 136}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>IGKMattePopUpButtonCell</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{527, 795}, {180, 53}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4228,6 +4230,14 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">IGKBackForwardManager.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">IGKMattePopUpButtonCell</string>
+					<string key="superclassName">NSPopUpButtonCell</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">IGKMattePopUpButton.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

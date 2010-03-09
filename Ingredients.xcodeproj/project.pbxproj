@@ -11,6 +11,7 @@
 		0C7C02E7110E000800412666 /* XBNewSourceListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7C02E5110E000800412666 /* XBNewSourceListCell.m */; };
 		0C7C02ED110E006000412666 /* CHSymbolButtonImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C7C02EB110E006000412666 /* CHSymbolButtonImage.h */; };
 		0C7C02EE110E006000412666 /* CHSymbolButtonImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7C02EC110E006000412666 /* CHSymbolButtonImage.m */; };
+		750DFBCF114671CC004C5D08 /* IGKMattePopUpButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 750DFBCE114671CC004C5D08 /* IGKMattePopUpButton.m */; };
 		751D2AD21126E4A100403E64 /* IGKArrayController.h in Headers */ = {isa = PBXBuildFile; fileRef = 751D2AD01126E4A100403E64 /* IGKArrayController.h */; };
 		751D2AD31126E4A100403E64 /* IGKArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 751D2AD11126E4A100403E64 /* IGKArrayController.m */; };
 		751D2D181126F1F400403E64 /* no_selection.html in Resources */ = {isa = PBXBuildFile; fileRef = 751D2D171126F1F400403E64 /* no_selection.html */; };
@@ -27,6 +28,8 @@
 		755F435C11232C0E00AA16F5 /* NSShadow+MCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 755F432311232B2F00AA16F5 /* NSShadow+MCAdditions.m */; };
 		755F435D11232C1200AA16F5 /* NSBezierPath+MCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 755F432111232B2F00AA16F5 /* NSBezierPath+MCAdditions.m */; };
 		755F438111232DA800AA16F5 /* IGKLaunchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 755F437911232C9500AA16F5 /* IGKLaunchController.m */; };
+		756D7A8D1145BB11001C05D7 /* Ingredients.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 756D7A8A1145BB11001C05D7 /* Ingredients.sdef */; };
+		756D7A8E1145BB11001C05D7 /* IngredientsCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 756D7A8C1145BB11001C05D7 /* IngredientsCommand.m */; };
 		756F9D4E110BA94500E6F291 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		756F9D78110BB40C00E6F291 /* CHDocumentationBrowser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 756F9D77110BB40C00E6F291 /* CHDocumentationBrowser.xib */; };
 		756F9D7C110BB42300E6F291 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F7446970DB6B7EA00F9684A /* MainMenu.xib */; };
@@ -165,6 +168,8 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		2F7446980DB6B7EA00F9684A /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Ingredients_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ingredients_Prefix.pch; sourceTree = "<group>"; };
+		750DFBCD114671CC004C5D08 /* IGKMattePopUpButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKMattePopUpButton.h; sourceTree = "<group>"; };
+		750DFBCE114671CC004C5D08 /* IGKMattePopUpButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKMattePopUpButton.m; sourceTree = "<group>"; };
 		751D2AD01126E4A100403E64 /* IGKArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKArrayController.h; sourceTree = "<group>"; };
 		751D2AD11126E4A100403E64 /* IGKArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKArrayController.m; sourceTree = "<group>"; };
 		751D2D171126F1F400403E64 /* no_selection.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = no_selection.html; sourceTree = "<group>"; };
@@ -186,6 +191,9 @@
 		755F432311232B2F00AA16F5 /* NSShadow+MCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSShadow+MCAdditions.m"; sourceTree = "<group>"; };
 		755F437811232C9500AA16F5 /* IGKLaunchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKLaunchController.h; sourceTree = "<group>"; };
 		755F437911232C9500AA16F5 /* IGKLaunchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKLaunchController.m; sourceTree = "<group>"; };
+		756D7A8A1145BB11001C05D7 /* Ingredients.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.sdef; path = Ingredients.sdef; sourceTree = "<group>"; };
+		756D7A8B1145BB11001C05D7 /* IngredientsCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IngredientsCommand.h; sourceTree = "<group>"; };
+		756D7A8C1145BB11001C05D7 /* IngredientsCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IngredientsCommand.m; sourceTree = "<group>"; };
 		756F9D2F110BA72F00E6F291 /* IngredientsKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = IngredientsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		756F9D30110BA72F00E6F291 /* IngredientsKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "IngredientsKit-Info.plist"; sourceTree = "<group>"; };
 		756F9D77110BB40C00E6F291 /* CHDocumentationBrowser.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CHDocumentationBrowser.xib; sourceTree = "<group>"; };
@@ -442,6 +450,9 @@
 				75B534F9111076C000560848 /* View_SideSearchTemplate.png */,
 				75BD17751143E7F000E67594 /* TBReSparkle.png */,
 				755F42AE112326E700AA16F5 /* sourcelist_indexing_wallpaper.png */,
+				756D7A8A1145BB11001C05D7 /* Ingredients.sdef */,
+				756D7A8B1145BB11001C05D7 /* IngredientsCommand.h */,
+				756D7A8C1145BB11001C05D7 /* IngredientsCommand.m */,
 				755F427D112323C600AA16F5 /* tictactoe.html */,
 				751D2D171126F1F400403E64 /* no_selection.html */,
 				751E45D51125E6CE00CD544A /* tictactoe_style.css */,
@@ -508,6 +519,8 @@
 			children = (
 				759030211139BFF500550A86 /* IGKMatteSegmentedControl.h */,
 				759030221139BFF500550A86 /* IGKMatteSegmentedControl.m */,
+				750DFBCD114671CC004C5D08 /* IGKMattePopUpButton.h */,
+				750DFBCE114671CC004C5D08 /* IGKMattePopUpButton.m */,
 			);
 			name = "Matte White UI";
 			sourceTree = "<group>";
@@ -750,6 +763,7 @@
 				75A1C0C811432E85005489E4 /* HistorySelLeft_S.png in Resources */,
 				75A1C0C911432E85005489E4 /* HistorySelRight_S.png in Resources */,
 				75BD17761143E7F000E67594 /* TBReSparkle.png in Resources */,
+				756D7A8D1145BB11001C05D7 /* Ingredients.sdef in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -799,6 +813,8 @@
 				754AA3FA1140267300321EAF /* AnthillBugReporter.m in Sources */,
 				75BD17C61143F37E00E67594 /* SQPreferencesBackgroundComponent.m in Sources */,
 				75943BD1114407D1004126E7 /* IGKPreferencesController.m in Sources */,
+				756D7A8E1145BB11001C05D7 /* IngredientsCommand.m in Sources */,
+				750DFBCF114671CC004C5D08 /* IGKMattePopUpButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

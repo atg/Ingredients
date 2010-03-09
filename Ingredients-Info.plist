@@ -39,5 +39,9 @@
 		<key>AnthillProjectName</key>
 		<string>Ingredients</string>
 	</dict>
+	<key>OSAScriptingDefinition</key>
+	<string>Ingredients.sdef</string>
+	<key>NSAppleScriptEnabled</key>
+	<true/>
 </dict>
 </plist>
