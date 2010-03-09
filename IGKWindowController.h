@@ -37,7 +37,8 @@ typedef enum {
 	
 	IBOutlet NSView *twoPaneView;
 	IBOutlet BWSplitView *twoPaneSplitView;
-	IBOutlet BWSplitView *twoPaneContentsSplitView;
+	//IBOutlet BWSplitView *twoPaneContentsSplitView;
+	IBOutlet NSView *twoPaneContentsTopView;
 	
 	
 	//*** Browser View ***
@@ -65,6 +66,8 @@ typedef enum {
 	
 	//*** Side Search ***
 	IBOutlet IGKArrayController *sideSearchController;
+	
+	IBOutlet NSView *sideSearchContainer;
 	
 	IBOutlet NSView *sideSearchView;
 	IBOutlet NSSearchField *sideSearchViewField;

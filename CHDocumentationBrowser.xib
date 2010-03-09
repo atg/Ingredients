@@ -24,12 +24,12 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="1"/>
-			<integer value="63"/>
 			<integer value="327"/>
-			<integer value="189"/>
+			<integer value="191"/>
+			<integer value="63"/>
+			<integer value="85"/>
 			<integer value="571"/>
 			<integer value="370"/>
-			<integer value="85"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -92,82 +92,19 @@
 								<int key="NSvFlags">256</int>
 								<object class="NSMutableArray" key="NSSubviews">
 									<bool key="EncodedWithXMLCoder">YES</bool>
-									<object class="BWSplitView" id="741133956">
+									<object class="BWCustomView" id="165810080">
+										<reference key="NSNextResponder" ref="467360731"/>
+										<int key="NSvFlags">290</int>
+										<string key="NSFrameSize">{200, 136}</string>
+										<reference key="NSSuperview" ref="467360731"/>
+										<string key="NSClassName">IGKTableOfContentsView</string>
+									</object>
+									<object class="BWCustomView" id="187526841">
 										<reference key="NSNextResponder" ref="467360731"/>
 										<int key="NSvFlags">274</int>
-										<object class="NSMutableArray" key="NSSubviews">
-											<bool key="EncodedWithXMLCoder">YES</bool>
-											<object class="BWCustomView" id="187526841">
-												<reference key="NSNextResponder" ref="741133956"/>
-												<int key="NSvFlags">272</int>
-												<string key="NSFrameSize">{200, 466}</string>
-												<reference key="NSSuperview" ref="741133956"/>
-												<string key="NSClassName">NSView</string>
-											</object>
-											<object class="BWCustomView" id="165810080">
-												<reference key="NSNextResponder" ref="741133956"/>
-												<int key="NSvFlags">256</int>
-												<string key="NSFrame">{{0, 467}, {200, 135}}</string>
-												<reference key="NSSuperview" ref="741133956"/>
-												<string key="NSClassName">IGKTableOfContentsView</string>
-											</object>
-										</object>
-										<string key="NSFrameSize">{200, 602}</string>
+										<string key="NSFrame">{{0, 136}, {200, 466}}</string>
 										<reference key="NSSuperview" ref="467360731"/>
-										<int key="NSDividerStyle">2</int>
-										<object class="NSColor" key="BWSVColor">
-											<int key="NSColorSpace">2</int>
-											<bytes key="NSRGB">MC42NTg4MjM1NDk3IDAuNjg2Mjc0NTI4NSAwLjczNzI1NDkxNzYAA</bytes>
-										</object>
-										<bool key="BWSVColorIsEnabled">YES</bool>
-										<object class="NSMutableDictionary" key="BWSVMinValues">
-											<bool key="EncodedWithXMLCoder">YES</bool>
-											<object class="NSArray" key="dict.sortedKeys">
-												<bool key="EncodedWithXMLCoder">YES</bool>
-												<integer value="0"/>
-												<integer value="1"/>
-											</object>
-											<object class="NSMutableArray" key="dict.values">
-												<bool key="EncodedWithXMLCoder">YES</bool>
-												<integer value="50"/>
-												<integer value="50"/>
-											</object>
-										</object>
-										<object class="NSMutableDictionary" key="BWSVMaxValues">
-											<bool key="EncodedWithXMLCoder">YES</bool>
-											<reference key="dict.sortedKeys" ref="0"/>
-											<object class="NSMutableArray" key="dict.values">
-												<bool key="EncodedWithXMLCoder">YES</bool>
-											</object>
-										</object>
-										<object class="NSMutableDictionary" key="BWSVMinUnits">
-											<bool key="EncodedWithXMLCoder">YES</bool>
-											<object class="NSArray" key="dict.sortedKeys">
-												<bool key="EncodedWithXMLCoder">YES</bool>
-												<integer value="0"/>
-												<integer value="1"/>
-											</object>
-											<object class="NSMutableArray" key="dict.values">
-												<bool key="EncodedWithXMLCoder">YES</bool>
-												<integer value="1"/>
-												<integer value="0"/>
-											</object>
-										</object>
-										<object class="NSMutableDictionary" key="BWSVMaxUnits">
-											<bool key="EncodedWithXMLCoder">YES</bool>
-											<object class="NSArray" key="dict.sortedKeys">
-												<bool key="EncodedWithXMLCoder">YES</bool>
-												<integer value="0"/>
-												<integer value="1"/>
-											</object>
-											<object class="NSMutableArray" key="dict.values">
-												<bool key="EncodedWithXMLCoder">YES</bool>
-												<integer value="0"/>
-												<integer value="0"/>
-											</object>
-										</object>
-										<int key="BWSVCollapsiblePopupSelection">2</int>
-										<bool key="BWSVDividerCanCollapse">YES</bool>
+										<string key="NSClassName">NSView</string>
 									</object>
 								</object>
 								<string key="NSFrameSize">{200, 602}</string>
@@ -2601,14 +2538,6 @@
 					<int key="connectionID">210</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">twoPaneContentsSplitView</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="741133956"/>
-					</object>
-					<int key="connectionID">212</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
 						<string key="label">executeSearch:</string>
 						<reference key="source" ref="1001"/>
@@ -2939,14 +2868,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">splitView</string>
-						<reference key="source" ref="165810080"/>
-						<reference key="destination" ref="741133956"/>
-					</object>
-					<int key="connectionID">563</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">tableOfContentsPicker</string>
 						<reference key="source" ref="1001"/>
 						<reference key="destination" ref="165810080"/>
@@ -3000,6 +2921,22 @@
 						<reference key="destination" ref="172200094"/>
 					</object>
 					<int key="connectionID">581</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">twoPaneContentsTopView</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="187526841"/>
+					</object>
+					<int key="connectionID">582</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">sideSearchContainer</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="187526841"/>
+					</object>
+					<int key="connectionID">584</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -3345,7 +3282,8 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 						<reference key="object" ref="467360731"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="741133956"/>
+							<reference ref="187526841"/>
+							<reference ref="165810080"/>
 						</object>
 						<reference key="parent" ref="883370765"/>
 					</object>
@@ -3353,26 +3291,6 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 						<int key="objectID">192</int>
 						<reference key="object" ref="885798329"/>
 						<reference key="parent" ref="883370765"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">193</int>
-						<reference key="object" ref="741133956"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="187526841"/>
-							<reference ref="165810080"/>
-						</object>
-						<reference key="parent" ref="467360731"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">194</int>
-						<reference key="object" ref="187526841"/>
-						<reference key="parent" ref="741133956"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">195</int>
-						<reference key="object" ref="165810080"/>
-						<reference key="parent" ref="741133956"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">232</int>
@@ -3884,6 +3802,16 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 						<reference key="object" ref="172200094"/>
 						<reference key="parent" ref="211579912"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">194</int>
+						<reference key="object" ref="187526841"/>
+						<reference key="parent" ref="467360731"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">195</int>
+						<reference key="object" ref="165810080"/>
+						<reference key="parent" ref="467360731"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -3917,7 +3845,6 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>190.IBPluginDependency</string>
 					<string>191.IBPluginDependency</string>
 					<string>192.IBPluginDependency</string>
-					<string>193.IBPluginDependency</string>
 					<string>194.IBPluginDependency</string>
 					<string>195.IBPluginDependency</string>
 					<string>2.IBPluginDependency</string>
@@ -4042,7 +3969,6 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.brandonwalkin.BWToolkit</string>
-					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4151,7 +4077,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">581</int>
+			<int key="maxID">584</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4363,6 +4289,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 							<string>searchViewField</string>
 							<string>searchViewPredicateEditor</string>
 							<string>searchViewTable</string>
+							<string>sideSearchContainer</string>
 							<string>sideSearchController</string>
 							<string>sideSearchView</string>
 							<string>sideSearchViewField</string>
@@ -4370,7 +4297,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 							<string>tableOfContentsPicker</string>
 							<string>tableOfContentsTableView</string>
 							<string>tableOfContentsView</string>
-							<string>twoPaneContentsSplitView</string>
+							<string>twoPaneContentsTopView</string>
 							<string>twoPaneSplitView</string>
 							<string>twoPaneView</string>
 							<string>urlField</string>
@@ -4397,6 +4324,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 							<string>NSSearchField</string>
 							<string>NSPredicateEditor</string>
 							<string>NSTableView</string>
+							<string>NSView</string>
 							<string>IGKArrayController</string>
 							<string>NSView</string>
 							<string>NSSearchField</string>
@@ -4404,7 +4332,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 							<string>IGKTableOfContentsView</string>
 							<string>NSTableView</string>
 							<string>NSView</string>
-							<string>BWSplitView</string>
+							<string>NSView</string>
 							<string>BWSplitView</string>
 							<string>NSView</string>
 							<string>NSTextField</string>

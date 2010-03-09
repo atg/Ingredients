@@ -354,8 +354,8 @@
 		[[[twoPaneSplitView subviews] objectAtIndex:1] addSubview:browserView];
 		
 		//Side search
-		[sideSearchView setFrame:[[[twoPaneContentsSplitView subviews] objectAtIndex:0] bounds]];
-		[[[twoPaneContentsSplitView subviews] objectAtIndex:0] addSubview:sideSearchView];
+		[sideSearchView setFrame:[twoPaneContentsTopView bounds]];
+		[twoPaneContentsTopView addSubview:sideSearchView];
 		
 		//Table of contents
 		//[tableOfContentsView setFrame:[[[twoPaneContentsSplitView subviews] objectAtIndex:1] bounds]];
@@ -375,7 +375,7 @@
 			// none -> browser
 			if (modeIndex == CHDocumentationBrowserUIMode_BrowserOnly)
 			{
-				CGFloat leftWidth = [[[twoPaneContentsSplitView subviews] objectAtIndex:0] bounds].size.width;
+				CGFloat leftWidth = [twoPaneContentsTopView bounds].size.width;
 				
 				[twoPaneSplitView setEnabled:NO];
 				
@@ -698,19 +698,18 @@
 	tableOfContentsTypes = [[NSMutableArray alloc] init];
 	tableOfContentsTitles = [[NSMutableArray alloc] init];
 	
+	[[tableOfContentsPicker selectedRowIndexes] removeAllIndexes];
+	[[tableOfContentsPicker selectedRowIndexes] addIndex:0];
+	
+	IGKHTMLDisplayTypeMask m = acceptableDisplayTypes;
+	
 	if (IGKHTMLDisplayTypeMaskIsSingle(acceptableDisplayTypes))
 	{
 		//Hide the list
-		NSLog(@"Hiding the list %@", twoPaneContentsSplitView);
-		if (![twoPaneContentsSplitView collapsibleSubviewCollapsed])
-			[twoPaneContentsSplitView toggleCollapse:nil];
 	}
 	else
 	{
 		//Show the list
-		NSLog(@"Showing the list %@", twoPaneContentsSplitView);		
-		if ([twoPaneContentsSplitView collapsibleSubviewCollapsed])
-			[twoPaneContentsSplitView toggleCollapse:nil];
 		
 		IGKHTMLDisplayTypeMask displayTypeMask = acceptableDisplayTypes;
 		if (displayTypeMask & IGKHTMLDisplayType_All)
@@ -732,8 +731,48 @@
 			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_BindingListings title:@"Bindings"];//[tableOfContentsItems addObject:@"Bindings"];
 	}
 	
+	
+	
 	[tableOfContentsTableView reloadData];
 	[tableOfContentsPicker reloadData];
+	
+	
+	
+	if (IGKHTMLDisplayTypeMaskIsSingle(m))
+	{
+		NSRect newSideSearchContainerRect = [sideSearchContainer frame];
+		newSideSearchContainerRect.origin.y = 0.0;
+		newSideSearchContainerRect.size.height = [[sideSearchContainer superview] frame].size.height;
+		
+		NSRect newTableOfContentsRect = [tableOfContentsPicker frame];
+		newTableOfContentsRect.origin.y = -newTableOfContentsRect.size.height;
+		
+		[NSAnimationContext beginGrouping];
+		
+		[sideSearchContainer setFrame:newSideSearchContainerRect];
+		[tableOfContentsPicker setFrame:newTableOfContentsRect];
+		
+		[NSAnimationContext endGrouping];
+	}
+	else
+	{
+		CGFloat contentsHeight = [tableOfContentsPicker heightToFit];
+		
+		NSRect newSideSearchContainerRect = [sideSearchContainer frame];
+		newSideSearchContainerRect.origin.y = contentsHeight;
+		newSideSearchContainerRect.size.height = [[sideSearchContainer superview] frame].size.height - contentsHeight;
+		
+		NSRect newTableOfContentsRect = [tableOfContentsPicker frame];
+		newTableOfContentsRect.origin.y = 0.0;
+		newTableOfContentsRect.size.height = contentsHeight;
+		
+		[NSAnimationContext beginGrouping];
+		
+		[[sideSearchContainer animator] setFrame:newSideSearchContainerRect];
+		[[tableOfContentsPicker animator] setFrame:newTableOfContentsRect];
+		
+		[NSAnimationContext endGrouping];
+	}
 }
 - (void)registerDisplayTypeInTableView:(IGKHTMLDisplayType)type title:(NSString *)title
 {

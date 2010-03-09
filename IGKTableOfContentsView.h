@@ -45,4 +45,7 @@ typedef enum {
 - (void)reloadData;
 - (NSUInteger)rowIndexForPoint:(NSPoint)p;
 
+- (BOOL)hasNoItems;
+- (float)heightToFit;
+
 @end

@@ -9,13 +9,11 @@
 #import "IGKTableOfContentsView.h"
 
 const float ToCSideEdgePadding = 12.0;
-const float ToCTopPadding = 12.0;
-const float ToCBottomPadding = 12.0;
 const float ToCIconTitleBetweenPadding = 13.0;
 
 const float ToCRowBetweenMargin = 1.0;
 const float ToCRowSideMargin = 4.0;
-const float ToCRowTopMargin = 4.0;
+const float ToCRowTopMargin = 5.0;
 const float ToCRowBottomMargin = 4.0;
 
 //The old table view had a row height of 24 pixels
@@ -99,21 +97,23 @@ const float ToCRowHeight = 31.0;
 {
 	//*** Parameters ***
 	
+	//The color of the line at the very top of the view
+	NSColor *topBorderColor = [NSColor colorWithCalibratedRed:0.65 green:0.65 blue:0.65 alpha:1.00];
+	
 	//The view's background color
 	NSColor *normalBackgroundColor = [NSColor colorWithCalibratedRed:0.838 green:0.864 blue:0.898 alpha:1.000];//[NSColor colorWithCalibratedRed:0.839 green:0.867 blue:0.898 alpha:1.000];
 	NSColor *inactiveBackgroundColor = [NSColor colorWithCalibratedRed:0.912 green:0.912 blue:0.912 alpha:1.000];
-	
+		
 	//The color of the view's vertical pinstripes
 	NSColor *stripeColor = [NSColor colorWithCalibratedWhite:1.0 alpha:0.1];
 	
 	//The width of each pinstripe
-	const float stripeWidth = 20.0;
+	const float stripeWidth = 10.0;
 	
 	//The color of the line at the very top of the view
-	//NSColor *topBorderColor = [NSColor greenColor];
 	NSColor *topBorderHighlightColor = [NSColor colorWithCalibratedWhite:1.0 alpha:0.27];
-	NSColor *topHighlightGradientColor = [NSColor colorWithCalibratedWhite:1.0 alpha:0.4];
-	const float topHighlightGradientHeight = 10.0;//33.0;
+	NSColor *topHighlightGradientColor = [NSColor colorWithCalibratedWhite:1.0 alpha:0.6];
+	const float topHighlightGradientHeight = 30.0;//33.0;
 	
 	//The top color of the selection gradient
 	NSColor *selectionGradientStartColor = [NSColor colorWithCalibratedRed:0.686 green:0.729 blue:0.835 alpha:1.000];
@@ -158,16 +158,16 @@ const float ToCRowHeight = 31.0;
 		//NSRectFillUsingOperation(stripeRect, NSCompositeSourceOver);
 	}
 	
-	/*
+	
 	//Draw the top border
 	NSRect topBorderRect = NSMakeRect(0.0, 0.0, rect.size.width, 1.0);
 	
 	[topBorderColor set];
 	NSRectFillUsingOperation(topBorderRect, NSCompositeSourceOver);
-	*/
+	
 	
 	//Draw the top border highlight
-	NSRect topBorderHighlightRect = NSMakeRect(0.0, 0.0, rect.size.width, 1.0);
+	NSRect topBorderHighlightRect = NSMakeRect(0.0, 1.0, rect.size.width, 1.0);
 	
 	[topBorderHighlightColor set];
 	NSRectFillUsingOperation(topBorderHighlightRect, NSCompositeSourceOver);
@@ -176,7 +176,7 @@ const float ToCRowHeight = 31.0;
 	//Draw the top highlight gradient
 	NSGradient *topHighlightGradient = [[NSGradient alloc] initWithStartingColor:topHighlightGradientColor
 																	 endingColor:[NSColor colorWithCalibratedWhite:1.0 alpha:0.001]];
-	NSRect topHighlightGradientRect = NSMakeRect(0, 0, rect.size.width, topHighlightGradientHeight);
+	NSRect topHighlightGradientRect = NSMakeRect(0, 1.0, rect.size.width, topHighlightGradientHeight);
 	[topHighlightGradient drawInRect:topHighlightGradientRect angle:90];
 	
 	
@@ -356,6 +356,21 @@ const float ToCRowHeight = 31.0;
 		if ([delegate respondsToSelector:@selector(tableOfContentsChangedSelection)])
 			[delegate tableOfContentsChangedSelection];
 	}
+}
+
+- (BOOL)hasNoItems
+{
+	return ([[self delegate] numberOfRowsInTableOfContents] == 0);
+}
+- (float)heightToFit
+{
+	NSInteger numberOfRows = [[self delegate] numberOfRowsInTableOfContents];
+	NSInteger numberOfRowsOr1 = numberOfRows > 0 ? numberOfRows : 1;
+	
+	return ToCRowTopMargin +
+		(numberOfRowsOr1 - 1) * ToCRowBetweenMargin +
+		numberOfRows * ToCRowHeight +
+		ToCRowBottomMargin;
 }
 
 @end
