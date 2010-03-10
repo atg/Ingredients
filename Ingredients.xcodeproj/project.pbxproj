@@ -208,6 +208,7 @@
 		756F9FA0110BEA8D00E6F291 /* CHLeftSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHLeftSplitView.m; sourceTree = "<group>"; };
 		756F9FF9110C805C00E6F291 /* IGKScraper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKScraper.h; sourceTree = "<group>"; };
 		756F9FFA110C805C00E6F291 /* IGKScraper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKScraper.m; sourceTree = "<group>"; };
+		758027A61147E9BF00FCE783 /* IngredientsRevisedDataModel.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = IngredientsRevisedDataModel.xcdatamodel; sourceTree = "<group>"; };
 		75901BED1129FC2100BA0316 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Credits.rtf; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		759030211139BFF500550A86 /* IGKMatteSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKMatteSegmentedControl.h; sourceTree = "<group>"; };
 		759030221139BFF500550A86 /* IGKMatteSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKMatteSegmentedControl.m; sourceTree = "<group>"; };
@@ -598,6 +599,7 @@
 			isa = PBXGroup;
 			children = (
 				770B37EC0679A11B001EADE2 /* Ingredients_DataModel.xcdatamodel */,
+				758027A61147E9BF00FCE783 /* IngredientsRevisedDataModel.xcdatamodel */,
 				75F672A9110E254A005F299C /* IGKDocRecordManagedObject.h */,
 				75F672AA110E254A005F299C /* IGKDocRecordManagedObject.m */,
 				75B23906113FB4D300EC1D2B /* IGKDocSetManagedObject.h */,

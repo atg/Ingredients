@@ -16,19 +16,22 @@
 
 - (NSUInteger)backgroundSearch:(NSManagedObject *)docset;
 
-- (BOOL)extractPath:(NSString *)extractPath docset:(NSManagedObject *)docset;
+- (BOOL)extractPath:(NSString *)extractPath relativeExtractPath:(NSString *)relativeExtractPath docset:(NSManagedObject *)docset;
 - (NSManagedObject *)addRecordNamed:(NSString *)recordName entityName:(NSString *)entityName desc:(NSString *)recordDesc sourcePath:(NSString *)recordPath;
 
 @end
 
 @implementation IGKScraper
 
+NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentation";
+
 - (id)initWithDocsetURL:(NSURL *)theDocsetURL managedObjectContext:(NSManagedObjectContext *)moc launchController:(IGKLaunchController*)lc dbQueue:(dispatch_queue_t)dbq
 {
 	if (self = [super init])
 	{
 		docsetURL = [theDocsetURL copy];
-		url = [docsetURL URLByAppendingPathComponent:@"Contents/Resources/Documents/documentation"];
+		docsetpath = [docsetURL path];
+		url = [docsetURL URLByAppendingPathComponent:kIGKDocsetPrefixPath];
 		ctx = moc;
 		
 		launchController = lc;
@@ -92,6 +95,7 @@
 		[docset setValue:[infoPlist objectForKey:@"DocSetFallbackURL"] forKey:@"fallbackURL"];
 	
 	[docset setValue:[docsetURL absoluteString] forKey:@"url"];
+	[docset setValue:[docsetURL path] forKey:@"path"];
 	
 	
 	scraperDocset = docset;
@@ -171,7 +175,7 @@
 		
 		count++;
 		
-		[paths addObject:[urlpath stringByAppendingPathComponent:subpath]];
+		[paths addObject:subpath];//[kIGKDocsetPrefixPath stringByAppendingPathComponent:subpath]];//[urlpath stringByAppendingPathComponent:subpath]];
 	}
 	
 	return [paths count];
@@ -179,9 +183,13 @@
 - (void)index
 {
 	dispatch_async(dispatch_get_global_queue(0, 0), ^{
-		for (NSString *extractPath in paths)
+		NSString *docsetPathWithPrefix = [docsetpath stringByAppendingPathComponent:kIGKDocsetPrefixPath];
+		
+		for (NSString *relativeExtractPath in paths)
 		{
-			[self extractPath:extractPath docset:scraperDocset];
+			[self extractPath:[docsetPathWithPrefix stringByAppendingPathComponent:relativeExtractPath]
+		  relativeExtractPath:relativeExtractPath docset:scraperDocset];
+			
 			pathsCounter += 1;
 			
 			dispatch_async(dispatch_get_main_queue(), ^{
@@ -191,7 +199,7 @@
 	});
 }
 
-- (BOOL)extractPath:(NSString *)extractPath docset:(NSManagedObject *)docset
+- (BOOL)extractPath:(NSString *)extractPath relativeExtractPath:(NSString *)relativeExtractPath docset:(NSManagedObject *)docset
 {	
 	//Let's try to extract the class's name (assuming it is a class of course)	
 	NSError *error = nil;
@@ -345,7 +353,7 @@
 		NSManagedObject *obj = nil;
 		if (entityName)
 		{
-			obj = [self addRecordNamed:name entityName:entityName desc:@"" sourcePath:extractPath];
+			obj = [self addRecordNamed:name entityName:entityName desc:@"" sourcePath:relativeExtractPath];
 			[obj setValue:docset forKey:@"docset"];
 			
 			if ([superclass length])
@@ -372,7 +380,7 @@
 					[newMethod setValue:itemName forKey:@"name"];
 					[newMethod setValue:obj forKey:@"container"];
 					[newMethod setValue:docset forKey:@"docset"];
-					[newMethod setValue:extractPath forKey:@"documentPath"];
+					[newMethod setValue:relativeExtractPath forKey:@"documentPath"];
 					
 					if (!isProperty)
 						[newMethod setValue:[NSNumber numberWithBool:isInstanceMethod] forKey:@"isInstanceMethod"];
@@ -497,7 +505,7 @@
 					{
 						[newSubobject setValue:itemName forKey:@"name"];
 						[newSubobject setValue:docset forKey:@"docset"];
-						[newSubobject setValue:extractPath forKey:@"documentPath"];
+						[newSubobject setValue:relativeExtractPath forKey:@"documentPath"];
 					}
 
 					
@@ -584,7 +592,9 @@
 	transientObject = (IGKDocRecordManagedObject *)[transientContext objectWithID:[persistobj objectID]];
 	
 	docset = [transientObject valueForKey:@"docset"];
-	NSString *extractPath = [transientObject valueForKey:@"documentPath"];
+	NSString *relativeExtractPath = [transientObject valueForKey:@"documentPath"];
+	NSString *docsetPath = [[transientObject valueForKey:@"docset"] valueForKey:@"path"];
+	NSString *extractPath = [[docsetPath stringByAppendingPathComponent:kIGKDocsetPrefixPath] stringByAppendingPathComponent:relativeExtractPath];
 	
 	NSURL *fileurl = [NSURL fileURLWithPath:extractPath];
 	

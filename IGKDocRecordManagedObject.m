@@ -24,6 +24,24 @@
 	[super awakeFromInsert];
 	
 	[self setValue:[NSNumber numberWithShort:[self priorityval]] forKey:@"priority"];
+	
+	/*
+	if ([self hasKey:@"lightsplit"])
+	{		
+		NSManagedObjectContext *ctx = [self managedObjectContext];
+		
+		NSEntityDescription *lightsplitEntity = [NSEntityDescription entityForName:@"DocRecordLightSplit" inManagedObjectContext:ctx];
+		NSManagedObject *lightsplit = [[NSManagedObject alloc] initWithEntity:lightsplitEntity insertIntoManagedObjectContext:ctx];
+		
+		[lightsplit setValue:[NSNumber numberWithShort:[self priorityval]] forKey:@"priority"];
+		
+		[self setValue:lightsplit forKey:@"lightsplit"];
+		
+		NSEntityDescription *heavysplitEntity = [NSEntityDescription entityForName:@"DocRecordHeavySplit" inManagedObjectContext:ctx];
+		NSManagedObject *heavysplit = [[NSManagedObject alloc] initWithEntity:heavysplitEntity insertIntoManagedObjectContext:ctx];
+		[self setValue:heavysplit forKey:@"heavysplit"];
+	}
+	*/
 }
 - (CHRecordPriority)priorityval
 {
@@ -181,4 +199,32 @@
 	return [[CHSymbolButtonImage symbolImageWithMask:mask] objectAtIndex:index];
 }
 
+
+#pragma mark Jumping through Idiotic Hoops
+
+//Core Data has provided the perfect storm for us. Single table inheritence, underpowered NSFetchRequest, no cursors, no overriding valueForKey:
+//The end result is some very ugly code. You have been warned
+
+/*
+#define HOOPS(nom, capNom) - (id) nom { return [[self valueForKey:@"lightsplit"] valueForKey:@#nom ]; } \
+- (void) set##capNom :(id)n { [[self valueForKey:@"lightsplit"] setValue:n forKey:@#nom ]; }
+
+HOOPS(name, Name)
+HOOPS(priority, Priority)
+HOOPS(documentPath, DocumentPath)
+
+#define HEAVYHOOPS(nom, capNom) - (id) nom { return [[self valueForKey:@"heavysplit"] valueForKey:@#nom ]; } \
+- (void) set##capNom :(id)n { [[self valueForKey:@"heavysplit"] setValue:n forKey:@#nom ]; }
+
+HEAVYHOOPS(availability, Availability)
+HEAVYHOOPS(declaration, Declaration)
+HEAVYHOOPS(declared_in_header, Declared_in_header)
+
+HEAVYHOOPS(discussion, Discussion)
+HEAVYHOOPS(example, Example)
+HEAVYHOOPS(overview, Overview)
+
+HEAVYHOOPS(signature, Signature)
+HEAVYHOOPS(specialConsiderations, SpecialConsiderations)
+*/
 @end

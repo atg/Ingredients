@@ -15,6 +15,7 @@
 
 @interface IGKScraper : NSObject
 {
+	NSString *docsetpath;
 	NSURL *docsetURL;
 	NSURL *url;
 	NSManagedObjectContext *ctx;
