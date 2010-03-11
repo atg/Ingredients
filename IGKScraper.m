@@ -1079,7 +1079,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	}
 }
 - (void)scrapeAbstractMethodContainerTopDOMChildren:(NSArray *)children index:(NSUInteger)index 
-{	
+{
 	NSUInteger i = 0;
 	NSUInteger count = [children count];
 	for (i = index; i < count; i++)

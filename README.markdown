@@ -7,5 +7,5 @@ You will need to have the BWToolkit IB plugin installed. You can get it at <http
 
 ## Screenshot
 
-![Ingredients's main window](http://www.fileability.net/snaps/kitchen_sink.png)
+![Ingredients's main window](http://www.fileability.net/snaps/ing6.png)
 
