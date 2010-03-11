@@ -12,6 +12,31 @@ code
 	font-family: "Menlo", "Monaco", mono;
 }
 
+/* @group Tasks */
+
+.methods.tasks h2
+{
+	font-size: 17px;
+	margin-top: 20px;
+	padding-bottom: 8px;
+}
+.methods.tasks ul
+{
+	margin: 0;
+	padding-left: 20px;
+}
+.methods.tasks ul li
+{
+	font-size: 12px;
+	list-style-type: none;
+	
+	
+}
+
+/* @end */
+
+
+
 /* @group My Group */
 
 #description
@@ -65,12 +90,12 @@ code
 
 /* @group Methods */
 
-#methods
+.methods
 {
 	padding: 0;
 	margin: 0;
 }
-#methods h2
+.methods h2
 {
 	padding: 0;
 	margin: 0;
@@ -89,7 +114,7 @@ code
 	border-top-style: solid;
 	border-top-width: 1px;
 }
-#methods.single h2
+.methods.single h2
 {
 	margin-top: 0;
 	padding-top: 0;
@@ -97,26 +122,26 @@ code
 	border-top-style: none;
 }
 
-#methods .info h3
+.methods .info h3
 {
 	padding: 0;
 	margin: 0;
 	font-size: 14px;
 }
-#methods .info p
+.methods .info p
 {
 	margin-top: 0;
 	padding-left: 20px;
 }
 
-#methods .discussion
+.methods .discussion
 {
 }
-#methods .discussion code
+.methods .discussion code
 {
 	font-size: 12px;
 }
-#methods .prototype
+.methods .prototype
 {
 	font-size: 12px;
 	border-bottom: 1px solid #e5e5e5;
@@ -126,11 +151,11 @@ code
 	
 	color: #3f3f3f;
 }
-#methods .in-out-vals
+.methods .in-out-vals
 {
 	padding-left: 20px;
 }
-#methods .in-out-vals .parameter strong
+.methods .in-out-vals .parameter strong
 {
 	font-weight: normal;
 	font-style: italic;
@@ -138,12 +163,12 @@ code
 	display: block;
 }
 
-#methods .in-out-vals .returns strong
+.methods .in-out-vals .returns strong
 {
 	/* 	font-family: "Menlo", "Monaco", mono; */
 	display: block;
 }
-#methods hr
+.methods hr
 {
 	border-right-style: none;
 	border-left-style: none;
@@ -151,32 +176,32 @@ code
 	margin-bottom: 14px;
 	border-top: 1px solid #d8d8d8;
 }
-#methods .seealso ul
+.methods .seealso ul
 {
 	list-style-type: none;
 	padding-left: 20px;
 	margin: 0;
 }
-#methods .seealso code
+.methods .seealso code
 {
 	font-size: 12px;
 }
-#methods a.stealth
+.methods a.stealth
 {
 	color: inherit;
 	text-decoration: none;
 }
-#methods a.stealth:visited
+.methods a.stealth:visited
 {
 	color: inherit;
 	text-decoration: none;
 }
-#methods a.stealth:hover
+.methods a.stealth:hover
 {
 	color: inherit;
 	text-decoration: underline;
 }
-#methods a.stealth:active
+.methods a.stealth:active
 {
 	text-decoration: none;
 
@@ -191,7 +216,7 @@ code
 	text-shadow: rgba(0,0,0,0.3) 0 1px 0;
 }
 
-#methods table.info
+.methods table.info
 {
 	border-collapse: collapse;
 	

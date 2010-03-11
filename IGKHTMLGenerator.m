@@ -162,7 +162,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	}
 	else if ([[transientObject entity] isKindOfEntity:ObjCMethod])
 	{
-		[outputString appendString:@"<div id='methods' class='single'>"];
+		[outputString appendString:@"<div class='methods' class='single'>"];
 		
 		[self html_method:transientObject hasParameters:YES];
 		
@@ -189,7 +189,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 }
 - (void)html_overview
 {
-	[outputString appendString:@"<div id='methods overview'>"];
+	[outputString appendString:@"<div class='methods overview'>"];
 	
 	[outputString appendFormat:@"<h1>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];
 	
@@ -204,7 +204,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 }
 - (void)html_tasks
 {
-	[outputString appendString:@"<div id='methods tasks'>"];
+	[outputString appendString:@"<div class='methods tasks'>"];
 	
 	NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"positionIndex" ascending:YES];
 	NSArray *taskgroups = [[[transientObject valueForKey:@"taskgroups"] allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
@@ -228,7 +228,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 }
 - (void)html_properties
 {
-	[outputString appendString:@"<div id='methods' class='properties'>"];
+	[outputString appendString:@"<div class='methods' class='properties'>"];
 	
 	[self html_methodLikeDeclarationsWithEntity:@"ObjCProperty" hasParameters:NO];
 	
@@ -236,7 +236,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 }
 - (void)html_methods
 {	
-	[outputString appendString:@"<div id='methods'>"];
+	[outputString appendString:@"<div class='methods'>"];
 	
 	[self html_methodLikeDeclarationsWithEntity:@"ObjCMethod" hasParameters:YES];
 	
@@ -259,7 +259,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 
 - (void)html_notifications
 {
-	[outputString appendString:@"<div id='methods' class='notifications'>"];
+	[outputString appendString:@"<div class='methods' class='notifications'>"];
 	
 	[self html_methodLikeDeclarationsWithEntity:@"ObjCNotification" hasParameters:NO];
 	
@@ -504,7 +504,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 
 - (void)html_generic
 {
-	[outputString appendString:@"<div id='overview'>"];
+	[outputString appendString:@"<div class='overview'>"];
 	
 	[outputString appendFormat:@"<h1>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];
 	
@@ -514,7 +514,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		[outputString appendString:[transientObject valueForKey:@"overview"]];
 	
 	
-	[outputString appendString:@"<div id='methods'>"];
+	[outputString appendString:@"<div class='methods'>"];
 	
 	if ([transientObject valueForKey:@"signature"])
 		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [transientObject valueForKey:@"signature"]];
