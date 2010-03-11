@@ -23,6 +23,8 @@ typedef enum {
 
 }
 
++ (IGKDocRecordManagedObject *)resolveURL:(NSURL *)url inContext:(NSManagedObjectContext *)ctx;
+
 - (BOOL)isKindOfEntityNamed:(NSString *)entityName;
 - (BOOL)hasKey:(NSString *)key;
 - (id)valueForSoftKey:(NSString *)key;

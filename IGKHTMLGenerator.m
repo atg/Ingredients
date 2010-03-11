@@ -100,8 +100,6 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	{
 		if ([[transientObject valueForKey:@"overview"] length] || [[transientObject valueForKey:@"taskgroups"] count])
 			mask |= IGKHTMLDisplayType_Overview;
-		//if ([[transientObject valueForKey:@"taskgroups"] count])
-		//	mask |= IGKHTMLDisplayType_Tasks;
 		if ([[transientObject valueForKey:@"properties"] count])
 			mask |= IGKHTMLDisplayType_Properties;
 		if ([[transientObject valueForKey:@"methods"] count])
@@ -147,8 +145,6 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		{
 			if (displayTypeMask & IGKHTMLDisplayType_Overview)
 				[self html_overview];
-			if (displayTypeMask & IGKHTMLDisplayType_Tasks)
-				[self html_tasks];
 			if (displayTypeMask & IGKHTMLDisplayType_Properties)
 				[self html_properties];
 			if (displayTypeMask & IGKHTMLDisplayType_Methods)
@@ -180,7 +176,6 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 - (void)html_all
 {	
 	[self html_overview];
-	[self html_tasks];
 	[self html_properties];
 	[self html_methods];
 	[self html_notifications];

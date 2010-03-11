@@ -484,9 +484,16 @@
 		[browserWebView stopLoading:nil];
 		[self loadNoSelectionRecordHistory:YES];
 	}
-	else if ([[url scheme] isEqual:@"doc"])
+	else if ([[url scheme] isEqual:@"ingr-doc"])
 	{
+		NSManagedObjectContext *ctx = [[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext];
+		IGKDocRecordManagedObject *result = [IGKDocRecordManagedObject resolveURL:url inContext:ctx];
 		
+		if (result)
+		{
+			[self loadManagedObject:result];
+			[self recordHistoryForURL:[result docURL] title:[result valueForKey:@"name"]];
+		}
 	}
 	else
 	{
@@ -495,6 +502,23 @@
 		[browserWebView stopLoading:nil];
 		[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:url]];
 	}
+}
+- (void)loadManagedObject:(IGKDocRecordManagedObject *)mo
+{
+	currentObjectIDInBrowser = [mo objectID];
+	
+	IGKHTMLGenerator *generator = [[IGKHTMLGenerator alloc] init];
+	[generator setContext:[[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext]];
+	[generator setManagedObject:mo];
+	[generator setDisplayTypeMask:[self tableOfContentsSelectedDisplayTypeMask]];
+	
+	acceptableDisplayTypes = [generator acceptableDisplayTypes];
+	
+	NSString *html = [generator html];
+	
+	//Load the HTML into the webview
+	[[browserWebView mainFrame] loadHTMLString:html
+									   baseURL:[[NSBundle mainBundle] resourceURL]];
 }
 - (void)recordHistoryForURL:(NSURL *)url title:(NSString *)title
 {
@@ -990,22 +1014,9 @@
 	
 	tableOfContentsMask = dtmask;
 	
-	currentObjectIDInBrowser = [currentSelectionObject objectID];
+	[self loadManagedObject:currentSelectionObject];
 	
-	IGKHTMLGenerator *generator = [[IGKHTMLGenerator alloc] init];
-	[generator setContext:[[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext]];
-	[generator setManagedObject:(IGKDocRecordManagedObject *)currentSelectionObject];
-	[generator setDisplayTypeMask:[self tableOfContentsSelectedDisplayTypeMask]];
-	
-	acceptableDisplayTypes = [generator acceptableDisplayTypes];
-	
-	NSString *html = [generator html];
-	
-	//Load the HTML into the webview
-	[[browserWebView mainFrame] loadHTMLString:html
-									   baseURL:[[NSBundle mainBundle] resourceURL]];
-	
-	//[self recordHistoryForURL:[NSURL URLWithString:@"doc:"]];
+	[self recordHistoryForURL:[currentSelectionObject docURL] title:[currentSelectionObject valueForKey:@"name"]];
 }
 
 - (IBAction)openInSafari:(id)sender

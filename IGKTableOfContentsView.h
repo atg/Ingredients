@@ -7,6 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "IGKEaseInOutAnimatedView.h"
+
 
 typedef enum {
 	
@@ -30,7 +32,7 @@ typedef enum {
 
 
 
-@interface IGKTableOfContentsView : NSView {
+@interface IGKTableOfContentsView : IGKEaseInOutAnimatedView {
 	IBOutlet id<IGKTableOfContentsDelegate> delegate;
 	IBOutlet NSMutableIndexSet *selectedRowIndexes;
 	

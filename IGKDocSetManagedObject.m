@@ -10,6 +10,25 @@
 
 @implementation IGKDocSetManagedObject
 
+- (NSString *)shortPlatformName
+{
+	NSString *platformFamily = [self valueForKey:@"platformFamily"];
+	
+	if ([platformFamily isEqual:@"macosx"])
+		return @"mac";
+	else if ([platformFamily isEqual:@"iphoneos"])
+		return @"iphone";
+	
+	return platformFamily;
+}
+- (NSString *)shortVersionName
+{
+	NSString *platformVersion = [self valueForKey:@"platformVersion"];
+	if (![platformVersion length])
+		return @"unknown";
+	
+	return platformVersion;
+}
 - (NSString *)localizedUserInterfaceName
 {
 	/* The name should be

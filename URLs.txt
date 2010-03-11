@@ -1,0 +1,27 @@
+Ingredients URLs:
+   ingr-doc:// <docset-family> / <docset-version> / <item-name> . <item-type>
+   ingr-doc:// <docset-family> / <docset-version> / <container-name> . <container-type> / <item-name> . <item-type>
+   
+   Container Types -- things that contain other items
+      class
+      protocol
+      category
+   
+   Standalone or Child Item Types -- things that can exist on their own or as part of a container item
+      struct
+      enum
+      type
+      function
+      
+   
+   Child Item Types -- things that must be part of a container item
+      method
+      property
+      notification
+      
+   
+Examples:
+   ingr-doc://mac/10.6/NSString.class/stringWithFormat:.classmethod
+   ingr-doc://iphone/3.2/UIKeyInput.protocol
+   
+   

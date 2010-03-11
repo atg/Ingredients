@@ -87,6 +87,10 @@
 		75A1C0C911432E85005489E4 /* HistorySelRight_S.png in Resources */ = {isa = PBXBuildFile; fileRef = 75A1C0C711432E85005489E4 /* HistorySelRight_S.png */; };
 		75A4B48511429ECD008CA9E8 /* IGKTableOfContentsView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A4B48311429ECD008CA9E8 /* IGKTableOfContentsView.h */; };
 		75A4B48611429ECD008CA9E8 /* IGKTableOfContentsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A4B48411429ECD008CA9E8 /* IGKTableOfContentsView.m */; };
+		75A9AA9C11495DA300E539F2 /* IGKEaseInOutAnimatedView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A9AA9A11495DA300E539F2 /* IGKEaseInOutAnimatedView.h */; };
+		75A9AA9D11495DA300E539F2 /* IGKEaseInOutAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A9AA9B11495DA300E539F2 /* IGKEaseInOutAnimatedView.m */; };
+		75A9AAA911495F2300E539F2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75A9AAA811495F2300E539F2 /* QuartzCore.framework */; };
+		75A9AAE111495F2900E539F2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75A9AAA811495F2300E539F2 /* QuartzCore.framework */; };
 		75A9DA6711411C49003F8437 /* NSXMLNode+IGKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A9DA6511411C49003F8437 /* NSXMLNode+IGKAdditions.h */; };
 		75A9DA6811411C49003F8437 /* NSXMLNode+IGKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A9DA6611411C49003F8437 /* NSXMLNode+IGKAdditions.m */; };
 		75B23908113FB4D300EC1D2B /* IGKDocSetManagedObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B23906113FB4D300EC1D2B /* IGKDocSetManagedObject.h */; };
@@ -246,6 +250,9 @@
 		75A1C0C711432E85005489E4 /* HistorySelRight_S.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HistorySelRight_S.png; path = MultiSel/HistorySelRight_S.png; sourceTree = "<group>"; };
 		75A4B48311429ECD008CA9E8 /* IGKTableOfContentsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKTableOfContentsView.h; sourceTree = "<group>"; };
 		75A4B48411429ECD008CA9E8 /* IGKTableOfContentsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKTableOfContentsView.m; sourceTree = "<group>"; };
+		75A9AA9A11495DA300E539F2 /* IGKEaseInOutAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKEaseInOutAnimatedView.h; sourceTree = "<group>"; };
+		75A9AA9B11495DA300E539F2 /* IGKEaseInOutAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKEaseInOutAnimatedView.m; sourceTree = "<group>"; };
+		75A9AAA811495F2300E539F2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		75A9DA6511411C49003F8437 /* NSXMLNode+IGKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSXMLNode+IGKAdditions.h"; sourceTree = "<group>"; };
 		75A9DA6611411C49003F8437 /* NSXMLNode+IGKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSXMLNode+IGKAdditions.m"; sourceTree = "<group>"; };
 		75B23906113FB4D300EC1D2B /* IGKDocSetManagedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKDocSetManagedObject.h; sourceTree = "<group>"; };
@@ -303,6 +310,7 @@
 				756F9D4E110BA94500E6F291 /* Cocoa.framework in Frameworks */,
 				756F9F0A110BE77300E6F291 /* WebKit.framework in Frameworks */,
 				75F67044110CD033005F299C /* libicucore.dylib in Frameworks */,
+				75A9AAE111495F2900E539F2 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,6 +323,7 @@
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				75B23F6A1140216200EC1D2B /* Security.framework in Frameworks */,
 				75943BA5114407C2004126E7 /* Sparkle.framework in Frameworks */,
+				75A9AAA911495F2300E539F2 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,6 +376,8 @@
 				75C74A5F1140539B00E3EAC6 /* IGKSometimesCenteredTextCell.m */,
 				75A4B48311429ECD008CA9E8 /* IGKTableOfContentsView.h */,
 				75A4B48411429ECD008CA9E8 /* IGKTableOfContentsView.m */,
+				75A9AA9A11495DA300E539F2 /* IGKEaseInOutAnimatedView.h */,
+				75A9AA9B11495DA300E539F2 /* IGKEaseInOutAnimatedView.m */,
 			);
 			name = "Views & Cells";
 			sourceTree = "<group>";
@@ -380,6 +391,7 @@
 				756F9DAC110BB55100E6F291 /* BWToolkitFramework.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 				75B23F691140216200EC1D2B /* Security.framework */,
+				75A9AAA811495F2300E539F2 /* QuartzCore.framework */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -638,6 +650,7 @@
 				75A4B48511429ECD008CA9E8 /* IGKTableOfContentsView.h in Headers */,
 				75BD177E1143E94000E67594 /* IGKPreferencesController.h in Headers */,
 				75943C0B11441AE0004126E7 /* IGKBackForwardManager.h in Headers */,
+				75A9AA9C11495DA300E539F2 /* IGKEaseInOutAnimatedView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -800,6 +813,7 @@
 				75A9DA6811411C49003F8437 /* NSXMLNode+IGKAdditions.m in Sources */,
 				75A4B48611429ECD008CA9E8 /* IGKTableOfContentsView.m in Sources */,
 				75943C0C11441AE0004126E7 /* IGKBackForwardManager.m in Sources */,
+				75A9AA9D11495DA300E539F2 /* IGKEaseInOutAnimatedView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

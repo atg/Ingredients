@@ -7,11 +7,19 @@
 //
 
 #import "CHLeftSplitView.h"
+#import <QuartzCore/QuartzCore.h>
 
 
 @implementation CHLeftSplitView
 
 @synthesize enabled;
+
+- (id)animationForKey:(NSString *)key
+{
+	CAAnimation *animation = [super animationForKey:key];
+	animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+	return animation;
+}
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];

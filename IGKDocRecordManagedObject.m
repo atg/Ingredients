@@ -7,9 +7,12 @@
 //
 
 #import "IGKDocRecordManagedObject.h"
+#import "IGKDocSetManagedObject.h"
 #import "CHSymbolButtonImage.h"
 
 @interface IGKDocRecordManagedObject ()
+
++ (NSString *)entityNameFromURLComponentExtension:(NSString *)ext;
 
 - (NSImage *)iconForSelectedState:(BOOL)isSelected;
 - (CHSymbolButtonImageMask)iconMask;
@@ -19,12 +22,261 @@
 
 @implementation IGKDocRecordManagedObject
 
++ (IGKDocRecordManagedObject *)resolveURL:(NSURL *)url inContext:(NSManagedObjectContext *)ctx
+{
+	NSLog(@"Resolve URL = %@, %@", url, ctx);
+	NSArray *components = [url pathComponents];
+	
+	NSLog(@"components = %@", components);
+	
+	/*
+	 ingr-doc:// <docset-family> / <docset-version> / <item-name> . <item-type>
+	 ingr-doc:// <docset-family> / <docset-version> / <container-name> . <container-type> / <item-name> . <item-type>
+	 */
+	
+	//There should be at least 3 components
+	if ([components count] < 3)
+		return nil;
+	
+	//Remove an initial "/" component
+	if ([[components objectAtIndex:0] isEqual:@"/"])
+		components = [components subarrayWithRange:NSMakeRange(1, [components count] - 1)];
+
+	NSLog(@"components2 = %@", components);
+	
+	components = [[NSArray arrayWithObject:[url host]] arrayByAddingObjectsFromArray:components];
+	
+	NSLog(@"components3 = %@", components);
+	
+	// <docset-family>
+	NSString *docsetFamily = [components objectAtIndex:0];
+	if ([docsetFamily isEqual:@"mac"])
+		docsetFamily = @"macosx";
+	else if ([docsetFamily isEqual:@"iphone"])
+		docsetFamily = @"iphoneos";
+	
+	// <docset-version>
+	NSString *docsetVersion = [components objectAtIndex:1];
+	
+	NSFetchRequest *docsetFetch = [[NSFetchRequest alloc] init];
+	[docsetFetch setEntity:[NSEntityDescription entityForName:@"Docset" inManagedObjectContext:ctx]];
+	[docsetFetch setPredicate:[NSPredicate predicateWithFormat:@"platformFamily == %@ && platformVersion == %@", docsetFamily, docsetVersion]];
+	
+	NSLog(@"docsetFamily = '%@', docsetVersion = '%@'", docsetFamily, docsetVersion);
+	
+	NSError *err = nil;
+	NSArray *docsets = [ctx executeFetchRequest:docsetFetch error:&err];
+	
+	NSLog(@"Err = %@, docsets = %@", err, docsets);
+	
+	if (err || ![docsets count])
+		return nil;
+	
+	IGKDocSetManagedObject *docset = [docsets objectAtIndex:0];
+	
+	NSLog(@"docset = %@", docset);
+	
+	// <container-name> . <container-type>
+	IGKDocSetManagedObject *container = nil;
+	BOOL hasContainer = ([components count] >= 4);
+	if (hasContainer)
+	{
+		NSString *containerComponent = [components objectAtIndex:2];
+		
+		NSString *containerName = [containerComponent stringByDeletingPathExtension];
+		NSString *containerExtension = [containerComponent pathExtension];
+		if (![containerName length] || ![containerExtension length])
+			return nil;
+		
+		NSString *containerEntity = [self entityNameFromURLComponentExtension:containerExtension];
+		if (![containerEntity length])
+			return nil;
+		
+		NSFetchRequest *containerFetchRequest = [[NSFetchRequest alloc] init];
+		[containerFetchRequest setEntity:[NSEntityDescription entityForName:containerEntity inManagedObjectContext:ctx]];
+		[containerFetchRequest setPredicate:[NSPredicate predicateWithFormat:@"name == %@ && docset == %@", containerName, docset]];
+		
+		NSError *err = nil;
+		NSArray *containers = [ctx executeFetchRequest:containerFetchRequest error:&err];
+		
+		if (err || ![containers count])
+			return nil;
+		
+		container = [containers objectAtIndex:0];
+	}
+	
+	
+	NSLog(@"a");
+	// <item-name> . <item-type>
+	NSString *itemComponent = [components objectAtIndex:2];
+	
+	NSString *itemName = [itemComponent stringByDeletingPathExtension];
+	NSString *itemExtension = [itemComponent pathExtension];
+	if (![itemName length] || ![itemExtension length])
+		return nil;
+	
+	NSLog(@"b");
+
+	
+	NSString *itemEntity = [self entityNameFromURLComponentExtension:itemExtension];
+	if (![itemEntity length])
+		return nil;
+	
+	NSLog(@"c");
+
+	
+	NSFetchRequest *itemFetchRequest = [[NSFetchRequest alloc] init];
+	[itemFetchRequest setEntity:[NSEntityDescription entityForName:itemEntity inManagedObjectContext:ctx]];
+	
+	if (hasContainer)
+		[itemFetchRequest setPredicate:[NSPredicate predicateWithFormat:@"name == %@ && container == %@ && docset == %@", itemName, container, docset]];
+	else
+		[itemFetchRequest setPredicate:[NSPredicate predicateWithFormat:@"name == %@ && docset == %@", itemName, docset]];		
+	
+	NSLog(@"itemEntity = %@", itemEntity);
+	NSLog(@"itemName = %@", itemName);
+	NSLog(@"container = %@", container);
+	NSLog(@"docset = %@", docset);
+	
+	NSLog(@"itemFetchRequest = %@", itemFetchRequest);
+	
+	NSLog(@"\n\n START FETCH");
+	NSArray *items = [ctx executeFetchRequest:itemFetchRequest error:&err];
+	NSLog(@"\n\n STOP FETCH");
+	
+	NSLog(@"d = %d, %d", err, [items count]);
+	
+	
+	NSLog(@"e = %d", [items objectAtIndex:0]);
+	
+	if (err || ![items count])
+		return nil;
+		
+	return [items objectAtIndex:0];
+}
+
++ (NSString *)entityNameFromURLComponentExtension:(NSString *)ext
+{
+	if ([ext isEqual:@"class"])
+		return @"ObjCClass";
+	else if ([ext isEqual:@"category"])
+		return @"ObjCCategory";
+	else if ([ext isEqual:@"protocol"])
+		return @"ObjCProtocol";
+	else if ([ext isEqual:@"instance-method"])
+		return @"ObjCMethod";
+	else if ([ext isEqual:@"class-method"])
+		return @"ObjCMethod";
+	else if ([ext isEqual:@"type"])
+		return @"CTypedef";
+	else if ([ext isEqual:@"enum"])
+		return @"CEnum";
+	else if ([ext isEqual:@"union"])
+		return @"CUnion";
+	else if ([ext isEqual:@"struct"])
+		return @"CStruct";
+	else if ([ext isEqual:@"function"])
+		return @"CFunction";
+	else if ([ext isEqual:@"global"])
+		return @"CGlobal";
+	else if ([ext isEqual:@"constant"])
+		return @"CConstant";
+	else if ([ext isEqual:@"macro"])
+		return @"CMacro";
+	else if ([ext isEqual:@"notification"])
+		return @"ObjCNotification";
+	else if ([ext isEqual:@"cpp-struct"])
+		return @"CppClassStruct";
+	else if ([ext isEqual:@"cpp-member-function"])
+		return @"CppMethod";
+	else if ([ext isEqual:@"cpp-namespace"])
+		return @"CppNamespace";
+	else if ([ext isEqual:@"bindings"])
+		return @"ObjCBindingsListing";
+	
+	return nil;
+}
+- (NSString *)URLComponentExtension
+{
+	NSString *entityName = [[self entity] name];
+	if ([entityName isEqual:@"ObjCClass"])
+		return @"class";
+	else if ([entityName isEqual:@"ObjCCategory"])
+		return @"category";
+	else if([entityName isEqual:@"ObjCProtocol"])
+		return @"protocol";
+	else if([entityName isEqual:@"ObjCMethod"])
+	{
+		if ([[self valueForKey:@"isInstanceMethod"] boolValue])
+			return @"instance-method";
+		else
+			return @"class-method";
+	}
+	else if ([entityName isEqual:@"CTypedef"])
+		return @"type";
+	else if ([entityName isEqual:@"CEnum"])
+		return @"enum";
+	else if ([entityName isEqual:@"CUnion"])
+		return @"union";
+	else if ([entityName isEqual:@"CStruct"])
+		return @"struct";
+	else if ([entityName isEqual:@"CFunction"])
+		return @"function";
+	else if ([entityName isEqual:@"CGlobal"])
+		return @"global";
+	else if ([entityName isEqual:@"CConstant"])
+		return @"constant";
+	else if ([entityName isEqual:@"CMacro"])
+		return @"macro";
+	else if ([entityName isEqual:@"ObjCNotification"])
+		return @"notification";
+	else if ([entityName isEqual:@"CppClassStruct"])
+		return @"cpp-struct";
+	else if ([entityName isEqual:@"CppMethod"])
+		return @"cpp-member-function";
+	else if ([entityName isEqual:@"CppNamespace"])
+		return @"cpp-namespace";
+	else if ([entityName isEqual:@"ObjCBindingsListing"])
+		return @"bindings";
+	
+	return @"unknown";
+}
+- (NSString *)URLComponent
+{
+	NSString *n = [self valueForKey:@"name"];
+	if (!n)
+		n = @"unknown";
+	
+	return [n stringByAppendingFormat:@".%@", [self URLComponentExtension]];
+}
 - (NSURL *)docURL
 {
-	NSURL *docURL = [NSURL URLWithString:@"doc://"];
+	IGKDocSetManagedObject *docset = [self valueForKey:@"docset"];
+	NSString *host = [docset shortPlatformName];;
 	
-	//Docset
-	//[docURL URLByAppendingPathComponent:];
+	NSString *containerComponent = nil;
+	if ([self hasKey:@"container"])
+		containerComponent = [[self valueForKey:@"container"] URLComponent];
+	
+	NSString *itemComponent = [self URLComponent];
+	
+	NSString *path = @"unknown";
+	if ([containerComponent length])
+	{
+		if ([itemComponent length])
+			path = [containerComponent stringByAppendingPathComponent:itemComponent];
+		else
+			path = containerComponent;
+	}
+	else
+	{
+		if ([itemComponent length])
+			path = itemComponent;
+	}
+	
+	path = [[@"/" stringByAppendingPathComponent:[docset shortVersionName]] stringByAppendingPathComponent:path];
+	
+	return [[NSURL alloc] initWithScheme:@"ingr-doc" host:host path:path];
 }
 
 - (void)awakeFromInsert
