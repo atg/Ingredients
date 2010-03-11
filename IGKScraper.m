@@ -1051,15 +1051,15 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			continue;
 		}
 		
-		//discussion
-		/* <h5 class="tight">Discussion</h5>
+		//specialConsiderations
+		/* <h5 class="tight">Special Considerations</h5>
 		 <p> ... </p>
 		 <p> ... </p>
 		 ...
 		 */
 		if (i + 1 < count && [nName isEqual:@"h5"] && [[[[n commentlessStringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString] isEqual:@"special considerations"])
 		{
-			NSMutableString *discussion = [[NSMutableString alloc] init];
+			NSMutableString *specialConsiderations = [[NSMutableString alloc] init];
 			
 			NSUInteger j;
 			for (j = i + 1; j < count; j++)
@@ -1070,12 +1070,51 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 				if (![[[m name] lowercaseString] isEqual:@"p"])
 					break;
 				
-				[discussion appendFormat:@"<p>%@</p>", [m commentlessStringValue]];
+				[specialConsiderations appendFormat:@"<p>%@</p>", [m commentlessStringValue]];
 			}
 			
-			[object setValue:discussion forKey:@"specialConsiderations"];
+			[object setValue:specialConsiderations forKey:@"specialConsiderations"];
 		}
 		
+	}
+}
+- (void)scrapeAbstractMethodContainerTopDOMChildren:(NSArray *)children index:(NSUInteger)index 
+{	
+	NSUInteger i = 0;
+	NSUInteger count = [children count];
+	for (i = index; i < count; i++)
+	{
+		NSXMLElement *n = [children objectAtIndex:i];
+		if (![n isKindOfClass:[NSXMLElement class]])
+			continue;
+		
+		NSString *nName = [[n name] lowercaseString];
+		NSArray *nClass = [[[[n attributeForName:@"class"] commentlessStringValue] lowercaseString] componentsSeparatedByString:@" "];
+		
+		//overview
+		/* <p class="abstract"> ... </p>
+		 <p> ... </p>
+		 <p> ... </p>
+		 ...
+		 */
+		if ([nName isEqual:@"p"] && [nClass containsObject:@"abstract"])
+		{
+			NSMutableString *overview = [[NSMutableString alloc] init];
+			
+			NSUInteger j;
+			for (j = i; j < count; j++)
+			{
+				NSXMLElement *m = [children objectAtIndex:j];
+				if (![m isKindOfClass:[NSXMLElement class]])
+					continue;
+				if (![[[m name] lowercaseString] isEqual:@"p"])
+					break;
+				
+				[overview appendFormat:@"<p>%@</p>", [m commentlessStringValue]];
+			}
+			
+			[transientObject setValue:overview forKey:@"overview"];
+		}
 	}
 }
 - (void)scrapeAbstractMethodContainer
@@ -1088,6 +1127,20 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	
 	NSError *err = nil;
 	NSArray *methodNodes = [[doc rootElement] nodesForXPath:@"//a" error:&err];
+	
+	//Find <div id="Overview_section" class="zClassDescription">
+	NSArray *overviewSectionNodes = [[doc rootElement] nodesForXPath:@"//div[@id='Overview_section']" error:&err];
+	for (NSXMLElement *el in overviewSectionNodes)
+	{
+		if (![el isKindOfClass:[NSXMLElement class]])
+			continue;
+		
+		if (![el childCount])
+			continue;
+				
+		[self scrapeAbstractMethodContainerTopDOMChildren:[el children] index:0];
+		break;
+	}
 	
 	
 	//Search through all anchors in the document, and record their parent elements

@@ -189,12 +189,14 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 }
 - (void)html_overview
 {
-	[outputString appendString:@"<div id='overview'>"];
+	[outputString appendString:@"<div id='methods overview'>"];
 	
 	[outputString appendFormat:@"<h1>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];
 	
 	if ([transientObject valueForKey:@"overview"])
 		[outputString appendString:[transientObject valueForKey:@"overview"]];	
+	
+	[self html_metadataTable:transientObject];
 	
 	[outputString appendString:@"</div>"];
 }
