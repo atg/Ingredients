@@ -244,15 +244,15 @@
 	
 	//[[WebPreferences standardPreferences] setMinimumFontSize:12];
 	//[[WebPreferences standardPreferences] setMinimumLogicalFontSize:12];
-	//[[WebPreferences standardPreferences] setDefaultFontSize:16];
-	//[[WebPreferences standardPreferences] setDefaultFixedFontSize:16];
+	
+	[[browserWebView preferences] setDefaultFontSize:16];
+	[[browserWebView preferences] setDefaultFixedFontSize:16];
 	
 	[self tableViewSelectionDidChange:nil];
 	
 	//Simulate user defaults changing
 	[self userDefaultsDidChange:nil];
 }
-
 
 - (void)close
 {
@@ -438,6 +438,27 @@
 		self.ui_currentModeIndex = [NSNumber numberWithInt:CHDocumentationBrowserUIMode_AdvancedSearch];
 	}
 }
+
+- (void)swipeWithEvent:(NSEvent *)event
+{
+	float dx = [event deltaX];
+	float dy = [event deltaY];
+
+	//Horizontal Swipe
+	if (fabsf(dx) > fabsf(dy))
+	{
+		//Swipe left (positive is left and negative is right - go figure)
+		if (dx > 0.0)
+		{
+			[backForwardManager goBack:nil];
+		}
+		//Swipe right
+		else
+		{
+			[backForwardManager goForward:nil];
+		}
+	}
+}
 - (IBAction)backForward:(id)sender
 {
 	NSInteger selectedSegment = [sender selectedSegment];
@@ -603,6 +624,8 @@
 	[sideSearchViewField setEditable:YES];
 	
 	[twoPaneSplitView setColor:[NSColor colorWithCalibratedRed:0.647 green:0.647 blue:0.647 alpha:1.000]];
+	
+	[docsetsController fetch:nil];
 	
 	
 	//*** Show the top bar ***

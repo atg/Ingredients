@@ -104,7 +104,9 @@ typedef enum {
 	IBOutlet NSWindow *savingProgressWindow;
 	IBOutlet NSProgressIndicator *savingProgressIndicator;
 	IGKSourceListWallpaperView *wallpaperView;
-		
+	
+	IBOutlet NSArrayController *docsetsController;
+	
 	int currentModeIndex;
 	
 	BOOL awaken;
