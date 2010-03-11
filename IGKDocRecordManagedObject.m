@@ -19,6 +19,14 @@
 
 @implementation IGKDocRecordManagedObject
 
+- (NSURL *)docURL
+{
+	NSURL *docURL = [NSURL URLWithString:@"doc://"];
+	
+	//Docset
+	//[docURL URLByAppendingPathComponent:];
+}
+
 - (void)awakeFromInsert
 {
 	[super awakeFromInsert];

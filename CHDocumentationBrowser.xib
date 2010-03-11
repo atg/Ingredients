@@ -23,7 +23,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="327"/>
+			<integer value="42"/>
 			<integer value="63"/>
 			<integer value="85"/>
 			<integer value="571"/>
@@ -2670,14 +2670,6 @@
 					<int key="connectionID">428</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">backForward:</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="916318684"/>
-					</object>
-					<int key="connectionID">431</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">selectedTag: ui_currentModeIndex</string>
 						<reference key="source" ref="916318684"/>
@@ -2708,14 +2700,6 @@
 						</object>
 					</object>
 					<int key="connectionID">436</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">backForward:</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="377398867"/>
-					</object>
-					<int key="connectionID">437</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">

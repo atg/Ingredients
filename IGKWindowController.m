@@ -405,7 +405,12 @@
 	}
 	else if (modeIndex == CHDocumentationBrowserUIMode_BrowserOnly)
 	{
-		[[browserWebView window] makeFirstResponder:browserWebView];
+		if ([browserWebView window])
+			[[browserWebView window] makeFirstResponder:browserWebView];
+		else if ([noselectionView window])
+			[[noselectionView window] makeFirstResponder:noselectionView];
+		else
+			[[self window] makeFirstResponder:[self window]];
 	}
 	else if (modeIndex == CHDocumentationBrowserUIMode_AdvancedSearch)
 	{
@@ -441,9 +446,13 @@
 
 - (void)swipeWithEvent:(NSEvent *)event
 {
+	if (currentModeIndex != CHDocumentationBrowserUIMode_TwoUp &&
+		currentModeIndex != CHDocumentationBrowserUIMode_AdvancedSearch)
+		return;
+	
 	float dx = [event deltaX];
 	float dy = [event deltaY];
-
+	
 	//Horizontal Swipe
 	if (fabsf(dx) > fabsf(dy))
 	{
@@ -598,6 +607,8 @@
 											  [[NSBundle mainBundle] pathForResource:@"tictactoe" ofType:@"html"]
 											  ]
 											 ]];
+	
+	[self reloadTableOfContents];
 }
 - (void)showSavingProgressSheet:(NSNotification *)notif
 {
@@ -607,7 +618,6 @@
 }
 - (void)indexedAllPaths:(NSNotification *)notif
 {
-	NSLog(@"Ending sheet = %@", savingProgressWindow);
 	[NSApp endSheet:savingProgressWindow];
 	[savingProgressWindow orderOut:nil];
 	[savingProgressIndicator stopAnimation:nil];

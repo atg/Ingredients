@@ -59,6 +59,8 @@
 	NSEntityDescription *ParameterEntity;
 	NSEntityDescription *SeeAlsoEntity;
 	NSEntityDescription *SampleCodeProjectEntity;
+	NSEntityDescription *MetaTaskGroupEntity;
+	NSEntityDescription *MetaTaskGroupItemEntity;
 }
 
 @property (readonly) NSManagedObject *transientObject;

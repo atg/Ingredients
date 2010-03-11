@@ -1078,10 +1078,13 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		
 	}
 }
-- (void)scrapeAbstractMethodContainerTopDOMChildren:(NSArray *)children index:(NSUInteger)index 
+- (void)scrapeAbstractMethodContainerTopDOMChildren:(NSArray *)children index:(NSUInteger)index type:(int)t
 {
 	NSUInteger i = 0;
 	NSUInteger count = [children count];
+	
+	NSUInteger taskgroupPositionIndex = 1;
+	
 	for (i = index; i < count; i++)
 	{
 		NSXMLElement *n = [children objectAtIndex:i];
@@ -1091,30 +1094,102 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		NSString *nName = [[n name] lowercaseString];
 		NSArray *nClass = [[[[n attributeForName:@"class"] commentlessStringValue] lowercaseString] componentsSeparatedByString:@" "];
 		
-		//overview
-		/* <p class="abstract"> ... </p>
-		 <p> ... </p>
-		 <p> ... </p>
-		 ...
+		/*
+			t = 0: Overview
+			t = 1: Tasks
 		 */
-		if ([nName isEqual:@"p"] && [nClass containsObject:@"abstract"])
+		
+		//Overview
+		if (t == 0)
 		{
-			NSMutableString *overview = [[NSMutableString alloc] init];
-			
-			NSUInteger j;
-			for (j = i; j < count; j++)
+			//overview
+			/* <p class="abstract"> ... </p>
+			   <p> ... </p>
+			   <p> ... </p>
+			   ...
+			 */
+			if ([nName isEqual:@"p"] && [nClass containsObject:@"abstract"])
 			{
-				NSXMLElement *m = [children objectAtIndex:j];
-				if (![m isKindOfClass:[NSXMLElement class]])
-					continue;
-				if (![[[m name] lowercaseString] isEqual:@"p"])
-					break;
+				NSMutableString *overview = [[NSMutableString alloc] init];
 				
-				[overview appendFormat:@"<p>%@</p>", [m commentlessStringValue]];
+				NSUInteger j;
+				for (j = i; j < count; j++)
+				{
+					NSXMLElement *m = [children objectAtIndex:j];
+					if (![m isKindOfClass:[NSXMLElement class]])
+						continue;
+					if (![[[m name] lowercaseString] isEqual:@"p"])
+						break;
+					
+					[overview appendFormat:@"<p>%@</p>", [m commentlessStringValue]];
+				}
+				
+				[transientObject setValue:overview forKey:@"overview"];
 			}
-			
-			[transientObject setValue:overview forKey:@"overview"];
 		}
+		
+		//Tasks
+		else if (t == 1)
+		{
+			//taskgroups
+			/* <h3 class="tasks"> ... </h3>
+			   <ul class="tooltip">
+			      <li>
+			         <span class="tooltip">
+			            <code>
+			               <a href=" ... "> ... </a>
+			            </code>
+			         </span>
+			      </li>
+			   </ul>
+			 */
+			
+			if (i + 1 < count && [nName isEqual:@"h3"] && [nClass containsObject:@"tasks"])
+			{			
+				NSXMLElement *ul = [children objectAtIndex:i + 1];
+				if ([[[ul name] lowercaseString] isEqual:@"ul"])
+				{
+					if (!MetaTaskGroupEntity)
+						MetaTaskGroupEntity = [NSEntityDescription entityForName:@"MetaTaskGroup" inManagedObjectContext:transientContext];
+					
+					NSManagedObject *taskgroup = [[NSManagedObject alloc] initWithEntity:MetaTaskGroupEntity insertIntoManagedObjectContext:transientContext];
+					[taskgroup setValue:[n commentlessStringValue] forKey:@"name"];
+					[taskgroup setValue:[NSNumber numberWithInt:taskgroupPositionIndex] forKey:@"positionIndex"];
+					[taskgroup setValue:transientObject forKey:@"container"];
+					taskgroupPositionIndex++;
+					
+					NSUInteger taskgroupItemPositionIndex = 1;
+					for (NSXMLElement *li in [ul children])
+					{					
+						NSXMLElement *spanElement = [[li children] lastObject];
+						
+						if ([spanElement childCount] == 0)
+							continue;
+						
+						NSXMLElement *codeElement = [[spanElement children] objectAtIndex:0];
+						NSXMLElement *a = [[codeElement children] lastObject];
+						
+						NSString *href = [[a attributeForName:@"href"] commentlessStringValue];
+						NSString *strval = [a commentlessStringValue];
+						
+						if (!href || !strval)
+							continue;
+						
+						if (!MetaTaskGroupItemEntity)
+							MetaTaskGroupItemEntity = [NSEntityDescription entityForName:@"MetaTaskGroupItem" inManagedObjectContext:transientContext];
+						
+						NSManagedObject *taskgroupItem = [[NSManagedObject alloc] initWithEntity:MetaTaskGroupItemEntity insertIntoManagedObjectContext:transientContext];
+						[taskgroupItem setValue:href forKey:@"href"];
+						[taskgroupItem setValue:strval forKey:@"name"];
+						[taskgroupItem setValue:[NSNumber numberWithInt:taskgroupItemPositionIndex] forKey:@"positionIndex"];
+						[taskgroupItem setValue:taskgroup forKey:@"parentGroup"];
+						
+						taskgroupItemPositionIndex++;
+					}
+				}
+			}
+		}
+		
 	}
 }
 - (void)scrapeAbstractMethodContainer
@@ -1138,10 +1213,24 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		if (![el childCount])
 			continue;
 				
-		[self scrapeAbstractMethodContainerTopDOMChildren:[el children] index:0];
+		[self scrapeAbstractMethodContainerTopDOMChildren:[el children] index:0 type:0];
 		break;
 	}
 	
+	
+	//Find <div id="Tasks_section" class="zMethodsByTask">
+	NSArray *tasksSectionNodes = [[doc rootElement] nodesForXPath:@"//div[@id='Tasks_section']" error:&err];
+	for (NSXMLElement *el in tasksSectionNodes)
+	{
+		if (![el isKindOfClass:[NSXMLElement class]])
+			continue;
+		
+		if (![el childCount])
+			continue;
+		
+		[self scrapeAbstractMethodContainerTopDOMChildren:[el children] index:0 type:1];
+		break;
+	}
 	
 	//Search through all anchors in the document, and record their parent elements
 	NSMutableSet *containersSet = [[NSMutableSet alloc] init];
