@@ -33,15 +33,12 @@
 
 
 - (void)visitPage:(WebHistoryItem *)item
-{
-	NSLog(@"Visit page = %@", item);
-	
+{	
 	//If item has the same URL as currentItem, we ignore it
 	NSString *itemURL = [item URLString];
 	NSString *currentItemURL = [currentItem URLString];
 	if ([itemURL length] && [currentItemURL length] && [[NSURL URLWithString:itemURL] isEqual:[NSURL URLWithString:currentItemURL]])
 	{
-		NSLog(@"\t Aborting mission!");
 		return;
 	}
 	
@@ -62,20 +59,14 @@
 	
 	if ([delegate respondsToSelector:@selector(backForwardManagerUpdatedLists:)])
 		[delegate backForwardManagerUpdatedLists:self];
-	
-	NSLog(@"back forward manager = %@", self);
 }
 
 - (void)loadItem:(WebHistoryItem *)item
-{
-	NSLog(@"Load item = %@", item);
-	
+{	
 	NSURL *url = [NSURL URLWithString:[item URLString]];
 	
 	if ([delegate respondsToSelector:@selector(loadURL:recordHistory:)])
 		[delegate loadURL:url recordHistory:NO];
-	
-	NSLog(@"back forward manager = %@", self);
 }
 - (BOOL)canGoBack
 {
@@ -102,20 +93,16 @@
 
 
 - (void)goBackBy:(NSInteger)amount
-{
-	NSLog(@"goBack = %@", backStack);
-	
+{	
 	//Check that there's a page to go back to
 	if ([backStack count] == 0)
 	{
-		NSLog(@"\t Aborting mission!");
 		return;
 	}
 	
 	//Check that amount is in range
 	if (amount < 1 || amount > [backStack count])
 	{
-		NSLog(@"\t Aborting mission! amount is out of range");
 		return;
 	}
 	
@@ -149,27 +136,21 @@
 	
 	if ([delegate respondsToSelector:@selector(backForwardManagerUpdatedLists:)])
 		[delegate backForwardManagerUpdatedLists:self];
-	
-	NSLog(@"back forward manager = %@", self);
-	
+		
 	//Load the page we're going back to
 	[self loadItem:currentItem];
 }
 - (void)goForwardBy:(NSInteger)amount
-{
-	NSLog(@"goForward = %@", forwardStack);
-	
+{	
 	//Check that there's a page to go forward to
 	if ([forwardStack count] == 0)
 	{
-		NSLog(@"\t Aborting mission!");
 		return;
 	}
 	
 	//Check that amount is in range
 	if (amount < 1 || amount > [forwardStack count])
 	{
-		NSLog(@"\t Aborting mission! amount is out of range");
 		return;
 	}
 	
@@ -203,9 +184,7 @@
 	
 	if ([delegate respondsToSelector:@selector(backForwardManagerUpdatedLists:)])
 		[delegate backForwardManagerUpdatedLists:self];
-	
-	NSLog(@"back forward manager = %@", self);
-	
+		
 	//Load the page we're going forward to
 	[self loadItem:currentItem];
 }

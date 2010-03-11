@@ -166,7 +166,6 @@
 	if (row < 0 || row >= [self numberOfRowsInTableView:tableView])
 		return nil;
 	
-	NSLog(@"row = %d, fetch contains = %d, vipObject = %@", row, fetchContainsVipObject, vipObject);
 	if (vipObject && !fetchContainsVipObject)
 	{
 		if (row == 0)

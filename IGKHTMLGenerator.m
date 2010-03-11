@@ -109,7 +109,6 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		if ([[transientObject valueForKey:@"miscitems"] count])
 			mask |= IGKHTMLDisplayType_Misc;
 		
-		NSLog(@"THIS NOTIF = %d / %@", [[transientObject valueForKey:@"notifications"] count], [transientObject valueForKey:@"notifications"]);
 		if ([[transientObject valueForKey:@"notifications"] count])
 			mask |= IGKHTMLDisplayType_Notifications;
 		if ([[transientObject valueForKey:@"delegatemethods"] count])
@@ -208,14 +207,12 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"positionIndex" ascending:YES];
 	NSArray *taskgroups = [[[transientObject valueForKey:@"taskgroups"] allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
-	NSLog(@"taskgroups = %@", taskgroups);
 	for (NSManagedObject *taskgroup in taskgroups)
 	{
 		[outputString appendFormat:@"<h2>%@</h2>", [taskgroup valueForKey:@"name"]];
 		[outputString appendString:@"<ul>"];
 		
 		NSArray *taskgroupItems = [[[taskgroup valueForKey:@"items"] allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
-		NSLog(@"\t taskgroupItems = %@", taskgroupItems);
 		for (NSManagedObject *taskgroupItem in taskgroupItems)
 		{
 			[outputString appendFormat:@"<li><code><a href='%@' class='stealth'>%@</a></code></li>", [taskgroupItem valueForKey:@"href"], [taskgroupItem valueForKey:@"name"]];
