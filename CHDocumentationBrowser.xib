@@ -23,13 +23,13 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="42"/>
-			<integer value="63"/>
+			<integer value="1"/>
+			<integer value="40"/>
+			<integer value="370"/>
 			<integer value="85"/>
 			<integer value="571"/>
-			<integer value="370"/>
-			<integer value="191"/>
-			<integer value="1"/>
+			<integer value="63"/>
+			<integer value="190"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -104,19 +104,19 @@
 										<int key="NSvFlags">274</int>
 										<string key="NSFrame">{{0, 136}, {200, 466}}</string>
 										<reference key="NSSuperview" ref="467360731"/>
-										<string key="NSClassName">NSView</string>
+										<string key="NSClassName">IGKEaseInOutAnimatedView</string>
 									</object>
 								</object>
 								<string key="NSFrameSize">{200, 602}</string>
 								<reference key="NSSuperview" ref="883370765"/>
-								<string key="NSClassName">NSView</string>
+								<string key="NSClassName">IGKEaseInOutAnimatedView</string>
 							</object>
 							<object class="BWCustomView" id="885798329">
 								<reference key="NSNextResponder" ref="883370765"/>
 								<int key="NSvFlags">258</int>
 								<string key="NSFrame">{{201, 0}, {555, 602}}</string>
 								<reference key="NSSuperview" ref="883370765"/>
-								<string key="NSClassName">NSView</string>
+								<string key="NSClassName">IGKEaseInOutAnimatedView</string>
 							</object>
 						</object>
 						<string key="NSFrameSize">{756, 602}</string>
@@ -3825,6 +3825,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>119.IBPluginDependency</string>
 					<string>122.IBPluginDependency</string>
 					<string>123.IBPluginDependency</string>
+					<string>189.CustomClassName</string>
 					<string>189.IBEditorWindowLastContentRect</string>
 					<string>189.IBPluginDependency</string>
 					<string>19.IBEditorWindowLastContentRect</string>
@@ -3947,6 +3948,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>IGKEaseInOutAnimatedView</string>
 					<string>{{70, 87}, {756, 602}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{593, 365}, {247, 404}}</string>
@@ -3985,7 +3987,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<integer value="0"/>
 					<string>{{212, 639}, {166, 79}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{54, -70}, {830, 530}}</string>
+					<string>{{54, 4}, {830, 530}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4147,6 +4149,14 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">IGKEaseInOutAnimatedView</string>
+					<string key="superclassName">NSView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">IGKEaseInOutAnimatedView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">IGKMattePopUpButtonCell</string>
 					<string key="superclassName">NSPopUpButtonCell</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -4196,7 +4206,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">IGKTableOfContentsView</string>
-					<string key="superclassName">NSView</string>
+					<string key="superclassName">IGKEaseInOutAnimatedView</string>
 					<object class="NSMutableDictionary" key="outlets">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
@@ -4789,6 +4799,27 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">Foundation.framework/Headers/NSURLDownload.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">QuartzCore.framework/Headers/CAAnimation.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">QuartzCore.framework/Headers/CALayer.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">QuartzCore.framework/Headers/CIImageProvider.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

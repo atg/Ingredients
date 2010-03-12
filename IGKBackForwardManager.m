@@ -37,7 +37,8 @@
 	//If item has the same URL as currentItem, we ignore it
 	NSString *itemURL = [item URLString];
 	NSString *currentItemURL = [currentItem URLString];
-	if ([itemURL length] && [currentItemURL length] && [[NSURL URLWithString:itemURL] isEqual:[NSURL URLWithString:currentItemURL]])
+	NSURL *newURL = [NSURL URLWithString:itemURL];
+	if ([itemURL length] && [currentItemURL length] && ([newURL isEqual:[NSURL URLWithString:currentItemURL]] || [[newURL scheme] isEqual:@"file"]))
 	{
 		return;
 	}

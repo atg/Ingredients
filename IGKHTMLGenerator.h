@@ -7,7 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "IGKDocRecordManagedObject.h"
+@class IGKDocRecordManagedObject;
 
 @class IGKFullScraper;
 

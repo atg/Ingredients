@@ -8,6 +8,7 @@
 
 #import "IGKHTMLGenerator.h"
 #import "IGKScraper.h"
+#import "IGKDocRecordManagedObject.h"
 
 BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 {

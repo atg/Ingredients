@@ -28,6 +28,8 @@
 - (void)tableOfContentsChangedSelection;
 - (void)registerDisplayTypeInTableView:(IGKHTMLDisplayType)type title:(NSString *)title;
 
+- (void)loadManagedObject:(IGKDocRecordManagedObject *)mo tableOfContentsMask:(IGKHTMLDisplayTypeMask)tableOfContentsMask;
+
 - (void)setMode:(int)modeIndex;
 - (IGKArrayController *)currentArrayController;
 
@@ -487,13 +489,20 @@
 	else if ([[url scheme] isEqual:@"ingr-doc"])
 	{
 		NSManagedObjectContext *ctx = [[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext];
-		IGKDocRecordManagedObject *result = [IGKDocRecordManagedObject resolveURL:url inContext:ctx];
+		
+		tableOfContentsMask = IGKHTMLDisplayType_None;
+		IGKDocRecordManagedObject *result = [IGKDocRecordManagedObject resolveURL:url inContext:ctx tableOfContentsMask:&tableOfContentsMask];
+		
+		NSLog(@"result = %d, %d", result, tableOfContentsMask);
 		
 		if (result)
 		{
-			[self loadManagedObject:result];
-			[self recordHistoryForURL:[result docURL] title:[result valueForKey:@"name"]];
+			[self setBrowserActive:YES];
+			[self loadManagedObject:result tableOfContentsMask:tableOfContentsMask];
+			//[self recordHistoryForURL:[result docURL] title:[result valueForKey:@"name"]];
 		}
+		
+		[self reloadTableOfContents];
 	}
 	else
 	{
@@ -503,14 +512,14 @@
 		[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:url]];
 	}
 }
-- (void)loadManagedObject:(IGKDocRecordManagedObject *)mo
+- (void)loadManagedObject:(IGKDocRecordManagedObject *)mo tableOfContentsMask:(IGKHTMLDisplayTypeMask)tableOfContentsMask
 {
 	currentObjectIDInBrowser = [mo objectID];
 	
 	IGKHTMLGenerator *generator = [[IGKHTMLGenerator alloc] init];
 	[generator setContext:[[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext]];
 	[generator setManagedObject:mo];
-	[generator setDisplayTypeMask:[self tableOfContentsSelectedDisplayTypeMask]];
+	[generator setDisplayTypeMask:tableOfContentsMask];
 	
 	acceptableDisplayTypes = [generator acceptableDisplayTypes];
 	
@@ -522,6 +531,7 @@
 }
 - (void)recordHistoryForURL:(NSURL *)url title:(NSString *)title
 {
+	
 	WebHistoryItem *item = [[WebHistoryItem alloc] initWithURLString:[url absoluteString] title:title lastVisitedTimeInterval:[NSDate timeIntervalSinceReferenceDate]];
 	[backForwardManager visitPage:item];
 }
@@ -1014,9 +1024,9 @@
 	
 	tableOfContentsMask = dtmask;
 	
-	[self loadManagedObject:currentSelectionObject];
+	[self loadManagedObject:currentSelectionObject tableOfContentsMask:[self tableOfContentsSelectedDisplayTypeMask]];
 	
-	[self recordHistoryForURL:[currentSelectionObject docURL] title:[currentSelectionObject valueForKey:@"name"]];
+	[self recordHistoryForURL:[currentSelectionObject docURL:[self tableOfContentsSelectedDisplayTypeMask]] title:[currentSelectionObject valueForKey:@"name"]];
 }
 
 - (IBAction)openInSafari:(id)sender

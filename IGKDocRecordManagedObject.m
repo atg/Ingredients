@@ -22,7 +22,7 @@
 
 @implementation IGKDocRecordManagedObject
 
-+ (IGKDocRecordManagedObject *)resolveURL:(NSURL *)url inContext:(NSManagedObjectContext *)ctx
++ (IGKDocRecordManagedObject *)resolveURL:(NSURL *)url inContext:(NSManagedObjectContext *)ctx tableOfContentsMask:(IGKHTMLDisplayTypeMask *)tocMaskPointer
 {
 	NSLog(@"Resolve URL = %@, %@", url, ctx);
 	NSArray *components = [url pathComponents];
@@ -30,12 +30,12 @@
 	NSLog(@"components = %@", components);
 	
 	/*
-	 ingr-doc:// <docset-family> / <docset-version> / <item-name> . <item-type>
-	 ingr-doc:// <docset-family> / <docset-version> / <container-name> . <container-type> / <item-name> . <item-type>
+	 ingr-doc:// <docset-family> / <docset-version> / <table-of-contents> / <item-name> . <item-type>
+	 ingr-doc:// <docset-family> / <docset-version> / <table-of-contents> / <container-name> . <container-type> / <item-name> . <item-type>
 	 */
 	
-	//There should be at least 3 components
-	if ([components count] < 3)
+	//There should be at least 4 components
+	if ([components count] < 4)
 		return nil;
 	
 	//Remove an initial "/" component
@@ -73,15 +73,51 @@
 		return nil;
 	
 	IGKDocSetManagedObject *docset = [docsets objectAtIndex:0];
+		
 	
-	NSLog(@"docset = %@", docset);
+	// <table-of-contents>
+	NSLog(@"tocMaskPointer = %d", tocMaskPointer);
+	if (tocMaskPointer)
+	{
+		NSString *tableOfContents = [components objectAtIndex:2];
+		NSArray *tableOfContentsItems = [tableOfContents componentsSeparatedByString:@"."];
+		IGKHTMLDisplayTypeMask tocMask = IGKHTMLDisplayType_None;
+		
+		for (NSString *n in tableOfContentsItems)
+		{
+			if ([n isEqual:@"all"])
+				tocMask |= IGKHTMLDisplayType_All;
+			else if ([n isEqual:@"overview"])
+				tocMask |= IGKHTMLDisplayType_Overview;
+			else if ([n isEqual:@"tasks"])
+				tocMask |= IGKHTMLDisplayType_Tasks;
+			else if ([n isEqual:@"properties"])
+				tocMask |= IGKHTMLDisplayType_Properties;
+			else if ([n isEqual:@"methods"])
+				tocMask |= IGKHTMLDisplayType_Methods;
+			else if ([n isEqual:@"notifications"])
+				tocMask |= IGKHTMLDisplayType_Notifications;
+			else if ([n isEqual:@"delegate"])
+				tocMask |= IGKHTMLDisplayType_Delegate;
+			else if ([n isEqual:@"misc"])
+				tocMask |= IGKHTMLDisplayType_Misc;
+			else if ([n isEqual:@"bindings"])
+				tocMask |= IGKHTMLDisplayType_BindingListings;
+		}
+		
+		NSLog(@"tocMask = %d", tocMask);
+		NSLog(@"tableOfContentsItems = %@", tableOfContentsItems);
+		
+		*tocMaskPointer = tocMask;
+	}
+	
 	
 	// <container-name> . <container-type>
 	IGKDocSetManagedObject *container = nil;
-	BOOL hasContainer = ([components count] >= 4);
+	BOOL hasContainer = ([components count] >= 5);
 	if (hasContainer)
 	{
-		NSString *containerComponent = [components objectAtIndex:2];
+		NSString *containerComponent = [components objectAtIndex:3];
 		
 		NSString *containerName = [containerComponent stringByDeletingPathExtension];
 		NSString *containerExtension = [containerComponent pathExtension];
@@ -108,7 +144,7 @@
 	
 	NSLog(@"a");
 	// <item-name> . <item-type>
-	NSString *itemComponent = [components objectAtIndex:2];
+	NSString *itemComponent = [components lastObject];
 	
 	NSString *itemName = [itemComponent stringByDeletingPathExtension];
 	NSString *itemExtension = [itemComponent pathExtension];
@@ -116,14 +152,14 @@
 		return nil;
 	
 	NSLog(@"b");
-
+	
 	
 	NSString *itemEntity = [self entityNameFromURLComponentExtension:itemExtension];
 	if (![itemEntity length])
 		return nil;
 	
 	NSLog(@"c");
-
+	
 	
 	NSFetchRequest *itemFetchRequest = [[NSFetchRequest alloc] init];
 	[itemFetchRequest setEntity:[NSEntityDescription entityForName:itemEntity inManagedObjectContext:ctx]];
@@ -249,7 +285,7 @@
 	
 	return [n stringByAppendingFormat:@".%@", [self URLComponentExtension]];
 }
-- (NSURL *)docURL
+- (NSURL *)docURL:(IGKHTMLDisplayTypeMask)tocMask
 {
 	IGKDocSetManagedObject *docset = [self valueForKey:@"docset"];
 	NSString *host = [docset shortPlatformName];;
@@ -259,6 +295,35 @@
 		containerComponent = [[self valueForKey:@"container"] URLComponent];
 	
 	NSString *itemComponent = [self URLComponent];
+	
+	
+	NSString *tocComponent = nil;
+	NSMutableArray *tocComponents = [[NSMutableArray alloc] init];
+	if (tocMask & IGKHTMLDisplayType_All)
+		[tocComponents addObject:@"all"];
+	if (tocMask & IGKHTMLDisplayType_Overview)
+		[tocComponents addObject:@"overview"];
+	if (tocMask & IGKHTMLDisplayType_Tasks)
+		[tocComponents addObject:@"tasks"];
+	if (tocMask & IGKHTMLDisplayType_Properties)
+		[tocComponents addObject:@"properties"];
+	if (tocMask & IGKHTMLDisplayType_Methods)
+		[tocComponents addObject:@"methods"];
+	if (tocMask & IGKHTMLDisplayType_Notifications)
+		[tocComponents addObject:@"notifications"];
+	if (tocMask & IGKHTMLDisplayType_Delegate)
+		[tocComponents addObject:@"delegate"];
+	if (tocMask & IGKHTMLDisplayType_Misc)
+		[tocComponents addObject:@"misc"];
+	if (tocMask & IGKHTMLDisplayType_BindingListings)
+		[tocComponents addObject:@"bindings"];
+	
+	if (![tocComponents count])
+		[tocComponents addObject:@"all"];
+	
+	tocComponent = [tocComponents componentsJoinedByString:@"."];
+	
+	
 	
 	NSString *path = @"unknown";
 	if ([containerComponent length])
@@ -274,7 +339,7 @@
 			path = itemComponent;
 	}
 	
-	path = [[@"/" stringByAppendingPathComponent:[docset shortVersionName]] stringByAppendingPathComponent:path];
+	path = [[[@"/" stringByAppendingPathComponent:[docset shortVersionName]] stringByAppendingPathComponent:tocComponent] stringByAppendingPathComponent:path];
 	
 	return [[NSURL alloc] initWithScheme:@"ingr-doc" host:host path:path];
 }
