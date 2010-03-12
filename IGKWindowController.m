@@ -492,9 +492,7 @@
 		
 		tableOfContentsMask = IGKHTMLDisplayType_None;
 		IGKDocRecordManagedObject *result = [IGKDocRecordManagedObject resolveURL:url inContext:ctx tableOfContentsMask:&tableOfContentsMask];
-		
-		NSLog(@"result = %d, %d", result, tableOfContentsMask);
-		
+				
 		if (result)
 		{
 			[self setBrowserActive:YES];

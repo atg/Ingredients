@@ -377,7 +377,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 					
 					IGKDocRecordManagedObject *newMethod = [[IGKDocRecordManagedObject alloc] initWithEntity:isProperty ? propertyEntity : methodEntity insertIntoManagedObjectContext:ctx];
 					
-					[newMethod setValue:itemName forKey:@"name"];
+					[newMethod setValue:[itemName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
 					[newMethod setValue:obj forKey:@"container"];
 					[newMethod setValue:docset forKey:@"docset"];
 					[newMethod setValue:relativeExtractPath forKey:@"documentPath"];
@@ -503,7 +503,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 					
 					if (newSubobject)
 					{
-						[newSubobject setValue:itemName forKey:@"name"];
+						[newSubobject setValue:[itemName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
 						[newSubobject setValue:docset forKey:@"docset"];
 						[newSubobject setValue:relativeExtractPath forKey:@"documentPath"];
 					}
@@ -525,7 +525,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	
 	NSManagedObject *newRecord = [[IGKDocRecordManagedObject alloc] initWithEntity:ed insertIntoManagedObjectContext:ctx];
 	
-	[newRecord setValue:recordName forKey:@"name"];
+	[newRecord setValue:[recordName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
 	[newRecord setValue:recordDesc forKey:@"overview"];
 	[newRecord setValue:recordPath forKey:@"documentPath"];
 	
@@ -691,7 +691,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 					NSArray *children = [[a parent] children];
 					NSInteger index = [children indexOfObject:a];
 					if (index != -1)
+					{
 						[self scrapeMethodChildren:children index:index managedObject:transientObject];
+					}
 					
 					break;
 				}
@@ -732,7 +734,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 				NSArray *children = [[a parent] children];
 				NSInteger index = [children indexOfObject:a];
 				if (index != -1)
+				{
 					[self scrapeMethodChildren:children index:index managedObject:transientObject];
+				}
 			}
 		}
 	}
@@ -772,7 +776,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 				break;
 			hasRecordedMethod = YES;
 			
-			[object setValue:[n commentlessStringValue] forKey:@"name"];
+			[object setValue:[[n commentlessStringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
 						
 			continue;
 		}
@@ -853,7 +857,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 						
 						NSManagedObject *parameter = [[NSManagedObject alloc] initWithEntity:ParameterEntity insertIntoManagedObjectContext:transientContext];
 						[parameter setValue:[NSNumber numberWithShort:ind] forKey:@"positionIndex"];
-						[parameter setValue:lastDT forKey:@"name"];
+						[parameter setValue:[lastDT stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
 						[parameter setValue:dd forKey:@"overview"];
 						[parameter setValue:object forKey:@"callable"];
 						
@@ -976,7 +980,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 					
 					NSManagedObject *seealso = [[NSManagedObject alloc] initWithEntity:SeeAlsoEntity insertIntoManagedObjectContext:transientContext];
 					[seealso setValue:href forKey:@"href"];
-					[seealso setValue:strval forKey:@"name"];
+					[seealso setValue:[strval stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
 					[seealso setValue:object forKey:@"container"];
 				}
 			}
@@ -1023,7 +1027,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 					
 					NSManagedObject *seealso = [[NSManagedObject alloc] initWithEntity:SampleCodeProjectEntity insertIntoManagedObjectContext:transientContext];
 					[seealso setValue:href forKey:@"href"];
-					[seealso setValue:strval forKey:@"name"];
+					[seealso setValue:[strval stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
 					[seealso setValue:object forKey:@"container"];
 				}
 			}
@@ -1153,7 +1157,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 						MetaTaskGroupEntity = [NSEntityDescription entityForName:@"MetaTaskGroup" inManagedObjectContext:transientContext];
 					
 					NSManagedObject *taskgroup = [[NSManagedObject alloc] initWithEntity:MetaTaskGroupEntity insertIntoManagedObjectContext:transientContext];
-					[taskgroup setValue:[n commentlessStringValue] forKey:@"name"];
+					[taskgroup setValue:[[n commentlessStringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
 					[taskgroup setValue:[NSNumber numberWithInt:taskgroupPositionIndex] forKey:@"positionIndex"];
 					[taskgroup setValue:transientObject forKey:@"container"];
 					taskgroupPositionIndex++;
@@ -1180,7 +1184,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 						
 						NSManagedObject *taskgroupItem = [[NSManagedObject alloc] initWithEntity:MetaTaskGroupItemEntity insertIntoManagedObjectContext:transientContext];
 						[taskgroupItem setValue:href forKey:@"href"];
-						[taskgroupItem setValue:strval forKey:@"name"];
+						[taskgroupItem setValue:[strval stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
 						[taskgroupItem setValue:[NSNumber numberWithInt:taskgroupItemPositionIndex] forKey:@"positionIndex"];
 						[taskgroupItem setValue:taskgroup forKey:@"parentGroup"];
 						
@@ -1272,8 +1276,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			}
 			
 			
-			if ([strval isLike:@"//apple_ref/occ/instm*"] || [strval isLike:@"//apple_ref/occ/clm*"] ||
-				[strval isLike:@"//apple_ref/occ/intfm*"] || [strval isLike:@"//apple_ref/occ/intfcm*"])
+			BOOL isInstanceMethod = [strval isLike:@"//apple_ref/occ/instm*"] || [strval isLike:@"//apple_ref/occ/intfm*"];
+			BOOL isClassMethod = [strval isLike:@"//apple_ref/occ/clm*"] || [strval isLike:@"//apple_ref/occ/intfcm*"];
+			if (isInstanceMethod || isClassMethod)
 			{
 				if (lastWasPropertyTrue)
 				{
@@ -1281,7 +1286,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 					return nil;
 				}
 				
-				return @"ObjCMethod";
+				if (isInstanceMethod)
+					return @"ObjCMethod_Instance";
+				return @"ObjCMethod_Class";
 			}
 			
 			if ([strval isLike:@"//apple_ref/c/data*"])
@@ -1303,9 +1310,26 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		NSString *entityName = [arr objectAtIndex:0];
 				
 		//if (!ObjCMethodEntity)
+		int isInstanceMethod = -1;
+		if ([entityName isEqual:@"ObjCMethod_Instance"])
+		{
+			isInstanceMethod = 1;
+			entityName = @"ObjCMethod";
+		}
+		else if ([entityName isEqual:@"ObjCMethod_Class"])
+		{
+			isInstanceMethod = 0;
+			entityName = @"ObjCMethod";
+		}
+		
 		NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:transientContext];
 		
 		IGKDocRecordManagedObject *newItem = [[IGKDocRecordManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:transientContext];
+		
+		if (isInstanceMethod != -1)
+		{
+			[newItem setValue:[NSNumber numberWithBool:isInstanceMethod] forKey:@"isInstanceMethod"];
+		}
 		
 		[self scrapeMethodChildren:arr index:0 managedObject:newItem];
 		
@@ -1383,7 +1407,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		
 	IGKDocRecordManagedObject *newMethod = [[IGKDocRecordManagedObject alloc] initWithEntity:methodEntity insertIntoManagedObjectContext:transientContext];
 	
-	[newMethod setValue:name forKey:@"name"];
+	[newMethod setValue:[name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
 	
 	if ([description length])
 		[newMethod setValue:description forKey:@"overview"];
@@ -1730,7 +1754,7 @@ void IGKFreeStringChars(const unichar *string)
 			NSString *methodSignature = [method stringByMatching:@"<p class=\"spaceabovemethod\">(.+?)</p>" capture:1];
 			methodSignature = [methodSignature stringByReplacingOccurrencesOfRegex:@"<a\\s+[^>]+>(.+?)</a>" withString:@"$1"];
 			
-			[newMethod setValue:methodName forKey:@"name"];
+			[newMethod setValue:[methodName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
 			[newMethod setValue:obj forKey:@"container"];
 			[newMethod setValue:docset forKey:@"docset"];
 			[newMethod setValue:methodSignature forKey:@"signature"];
@@ -1754,7 +1778,7 @@ void IGKFreeStringChars(const unichar *string)
 	
 	IGKDocRecordManagedObject *newMethod = [[IGKDocRecordManagedObject alloc] initWithEntity:methodEntity insertIntoManagedObjectContext:ctx];
 	
-	[newMethod setValue:name forKey:@"name"];
+	[newMethod setValue:[name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
 	
 	if ([description length])
 		[newMethod setValue:description forKey:@"overview"];

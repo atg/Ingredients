@@ -158,11 +158,11 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	}
 	else if ([[transientObject entity] isKindOfEntity:ObjCMethod])
 	{
-		[outputString appendString:@"<div class='methods' class='single'>"];
+		[outputString appendString:@"<div class='methods' class='single'>\n"];
 		
 		[self html_method:transientObject hasParameters:YES];
 		
-		[outputString appendString:@"</div>"];
+		[outputString appendString:@"</div>\n"];
 	}
 	else
 	{
@@ -184,7 +184,8 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 }
 - (void)html_overview
 {
-	[outputString appendString:@"<div class='methods overview'>"];
+	[outputString appendString:@"<a name='overview'></a>\n"];
+	[outputString appendString:@"<div class='methods overview'>\n"];
 	
 	[outputString appendFormat:@"<h1>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];
 	
@@ -193,35 +194,93 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	[self html_metadataTable:transientObject];
 	
-	[outputString appendString:@"</div>"];
+	[outputString appendString:@"</div>\n"];
 	
 	[self html_tasks];
 }
 - (void)html_tasks
 {
-	[outputString appendString:@"<div class='methods tasks'>"];
+	[outputString appendString:@"<a name='tasks'></a>\n"];
+	[outputString appendString:@"<div class='methods tasks'>\n"];
 	
 	NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"positionIndex" ascending:YES];
 	NSArray *taskgroups = [[[transientObject valueForKey:@"taskgroups"] allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
 	for (NSManagedObject *taskgroup in taskgroups)
 	{
-		[outputString appendFormat:@"<h2>%@</h2>", [taskgroup valueForKey:@"name"]];
-		[outputString appendString:@"<ul>"];
+		[outputString appendFormat:@"<h2>%@</h2>\n", [taskgroup valueForKey:@"name"]];
+		[outputString appendString:@"<ul>\n"];
 		
 		NSArray *taskgroupItems = [[[taskgroup valueForKey:@"items"] allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
 		for (NSManagedObject *taskgroupItem in taskgroupItems)
 		{
-			[outputString appendFormat:@"<li><code><a href='%@' class='stealth'>%@</a></code></li>", [taskgroupItem valueForKey:@"href"], [taskgroupItem valueForKey:@"name"]];
+			NSString *hrefAndNameAndType = [self hrefToActualFragment:taskgroupItem];
+			
+			[outputString appendFormat:@"<li><code><a href='%@' class='stealth'>%@</a></code></li>\n", hrefAndNameAndType, [taskgroupItem valueForKey:@"name"]];
 		}
 		
-		[outputString appendString:@"</ul>"];
+		[outputString appendString:@"</ul>\n"];
 	}
 	
-	[outputString appendString:@"</div>"];
+	[outputString appendString:@"</div>\n"];
+}
+- (NSArray *)hrefToActualFragment:(IGKDocRecordManagedObject *)mo
+{
+	NSString *href = [mo valueForKey:@"href"];
+		
+	// NSString.html#//apple_ref/occ/instm/NSString/stringByAppendingPathComponent:
+	// We need to grab
+	//   the type (cl, instm, etc)
+	//   the container (NSString)
+	//   the item (stringByAppendingPathComponent:)
+	
+	NSString *regex = @"//apple_ref/(occ|c)/([^/]+)/([^/]+)(/([^/]+))?";
+	NSArray *captures = [href captureComponentsMatchedByRegex:regex];
+	if ([captures count] < 4)
+		return nil;
+	
+	NSString *applecode = [captures objectAtIndex:2];
+	NSString *n = [captures objectAtIndex:3];
+	
+	NSString *containerName = nil;
+	NSString *itemName = nil;
+	
+	
+	if ([captures count] >= 6)
+	{
+		containerName = n;
+		itemName = [captures objectAtIndex:5];
+	}
+	else
+	{
+		itemName = n;
+	}
+	
+	NSString *ingrcode = nil;
+	if ([applecode isEqual:@"instm"] || [applecode isEqual:@"intfm"])
+		ingrcode = @"instance-method";
+	else if ([applecode isEqual:@"clm"] || [applecode isEqual:@"intfcm"])
+		ingrcode = @"class-method";
+	else if ([applecode isEqual:@"intfp"] || [applecode isEqual:@"instp"])
+		ingrcode = @"property";
+	else if ([applecode isEqual:@"func"])
+		ingrcode = @"function";
+	else if ([applecode isEqual:@"tdef"])
+		ingrcode = @"type";
+	
+	if ([containerName isEqual:[transientObject valueForKey:@"name"]])
+	{
+		return [NSString stringWithFormat:@"#%@.%@", itemName, ingrcode];
+	}
+	
+	if (containerName)
+		return [NSString stringWithFormat:@"ingr-doc://%@/all/%@.unknown/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], containerName, itemName, ingrcode];
+	
+	return [NSString stringWithFormat:@"ingr-doc://%@/all/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], itemName, ingrcode];
 }
 - (void)html_properties
 {
-	[outputString appendString:@"<div class='methods' class='properties'>"];
+	[outputString appendString:@"<a name='properties'></a>\n"];
+	[outputString appendString:@"<div class='methods' class='properties'>\n"];
 	
 	[self html_methodLikeDeclarationsWithEntity:@"ObjCProperty" hasParameters:NO];
 	
@@ -229,11 +288,12 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 }
 - (void)html_methods
 {	
-	[outputString appendString:@"<div class='methods'>"];
+	[outputString appendString:@"<a name='methods'></a>\n"];
+	[outputString appendString:@"<div class='methods'>\n"];
 	
 	[self html_methodLikeDeclarationsWithEntity:@"ObjCMethod" hasParameters:YES];
 	
-	[outputString appendString:@"</div>"];
+	[outputString appendString:@"</div>\n"];
 }
 - (void)html_methodLikeDeclarationsWithEntity:(NSString *)entityName hasParameters:(BOOL)hasParameters
 {
@@ -252,11 +312,12 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 
 - (void)html_notifications
 {
-	[outputString appendString:@"<div class='methods' class='notifications'>"];
+	[outputString appendString:@"<a name='notifications'></a>\n"];
+	[outputString appendString:@"<div class='methods' class='notifications'>\n"];
 	
 	[self html_methodLikeDeclarationsWithEntity:@"ObjCNotification" hasParameters:NO];
 	
-	[outputString appendString:@"</div>"];
+	[outputString appendString:@"</div>\n"];
 }
 - (void)html_delegate
 {
@@ -265,6 +326,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 
 - (void)html_method:(IGKDocRecordManagedObject *)object hasParameters:(BOOL)hasParameters
 {
+	[outputString appendFormat:@"<a name='%@.%@'></a>\n", [object valueForKey:@"name"], [object URLComponentExtension]];
 	[outputString appendFormat:@"\t<div class='method'>\n"];
 	
 	if ([object valueForKey:@"name"])
@@ -285,7 +347,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		[outputString appendFormat:@"\t\t<hr>\n\n\t\t<div class='discussion'>%@</div>\n\n\t\t<hr>\n\n", [object valueForKey:@"discussion"]];
 	
 	[self html_metadataTable:object];
-		
+	
 	[outputString appendFormat:@"\t</div>\n\n"];
 }
 - (void)html_parametersForCallable:(IGKDocRecordManagedObject *)object
@@ -377,7 +439,8 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	NSUInteger i = 0;
 	
-	NSArray *seealsos = [[[[object valueForKey:@"seealsos"] allObjects] valueForKey:@"name"] sortedArrayUsingSelector:@selector(localizedCompare:)];
+	NSArray *seealsos = [[[object valueForKey:@"seealsos"] allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
+	//NSArray *seealsos = [[ valueForKey:@"name"] sortedArrayUsingSelector:@selector(localizedCompare:)];
 	NSArray *samplecodeprojects = [[[[object valueForKey:@"samplecodeprojects"] allObjects] valueForKey:@"name"] sortedArrayUsingSelector:@selector(localizedCompare:)];
 	
 	for (i = 0; i < maxrowcount + 1; i++)
@@ -411,7 +474,10 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		if (i == 0 && [seealsos count])
 			[outputString appendString:@"\t\t\t\t<th>See also</th>\n"];
 		else if (i > 0 && i - 1 < [seealsos count])
-			[outputString appendFormat:@"\t\t\t\t<td><code><a href='#' class='stealth'>%@</a></code></td>\n", [seealsos objectAtIndex:i - 1]];
+		{
+			NSManagedObject *mo = [seealsos objectAtIndex:i - 1];
+			[outputString appendFormat:@"\t\t\t\t<td><code><a href='%@' class='stealth'>%@</a></code></td>\n", [self hrefToActualFragment:mo], [mo valueForKey:@"name"]];
+		}
 		else if ([seealsos count])
 			[outputString appendString:@"\t\t\t\t<td></td>\n"];
 		
@@ -497,6 +563,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 
 - (void)html_generic
 {
+	[outputString appendString:@"<div class='#overview'>"];
 	[outputString appendString:@"<div class='overview'>"];
 	
 	[outputString appendFormat:@"<h1>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];

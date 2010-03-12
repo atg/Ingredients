@@ -24,11 +24,8 @@
 
 + (IGKDocRecordManagedObject *)resolveURL:(NSURL *)url inContext:(NSManagedObjectContext *)ctx tableOfContentsMask:(IGKHTMLDisplayTypeMask *)tocMaskPointer
 {
-	NSLog(@"Resolve URL = %@, %@", url, ctx);
 	NSArray *components = [url pathComponents];
-	
-	NSLog(@"components = %@", components);
-	
+		
 	/*
 	 ingr-doc:// <docset-family> / <docset-version> / <table-of-contents> / <item-name> . <item-type>
 	 ingr-doc:// <docset-family> / <docset-version> / <table-of-contents> / <container-name> . <container-type> / <item-name> . <item-type>
@@ -41,12 +38,8 @@
 	//Remove an initial "/" component
 	if ([[components objectAtIndex:0] isEqual:@"/"])
 		components = [components subarrayWithRange:NSMakeRange(1, [components count] - 1)];
-
-	NSLog(@"components2 = %@", components);
 	
 	components = [[NSArray arrayWithObject:[url host]] arrayByAddingObjectsFromArray:components];
-	
-	NSLog(@"components3 = %@", components);
 	
 	// <docset-family>
 	NSString *docsetFamily = [components objectAtIndex:0];
@@ -61,14 +54,10 @@
 	NSFetchRequest *docsetFetch = [[NSFetchRequest alloc] init];
 	[docsetFetch setEntity:[NSEntityDescription entityForName:@"Docset" inManagedObjectContext:ctx]];
 	[docsetFetch setPredicate:[NSPredicate predicateWithFormat:@"platformFamily == %@ && platformVersion == %@", docsetFamily, docsetVersion]];
-	
-	NSLog(@"docsetFamily = '%@', docsetVersion = '%@'", docsetFamily, docsetVersion);
-	
+		
 	NSError *err = nil;
 	NSArray *docsets = [ctx executeFetchRequest:docsetFetch error:&err];
-	
-	NSLog(@"Err = %@, docsets = %@", err, docsets);
-	
+		
 	if (err || ![docsets count])
 		return nil;
 	
@@ -76,7 +65,6 @@
 		
 	
 	// <table-of-contents>
-	NSLog(@"tocMaskPointer = %d", tocMaskPointer);
 	if (tocMaskPointer)
 	{
 		NSString *tableOfContents = [components objectAtIndex:2];
@@ -104,9 +92,6 @@
 			else if ([n isEqual:@"bindings"])
 				tocMask |= IGKHTMLDisplayType_BindingListings;
 		}
-		
-		NSLog(@"tocMask = %d", tocMask);
-		NSLog(@"tableOfContentsItems = %@", tableOfContentsItems);
 		
 		*tocMaskPointer = tocMask;
 	}
@@ -142,7 +127,6 @@
 	}
 	
 	
-	NSLog(@"a");
 	// <item-name> . <item-type>
 	NSString *itemComponent = [components lastObject];
 	
@@ -150,16 +134,12 @@
 	NSString *itemExtension = [itemComponent pathExtension];
 	if (![itemName length] || ![itemExtension length])
 		return nil;
-	
-	NSLog(@"b");
-	
+		
 	
 	NSString *itemEntity = [self entityNameFromURLComponentExtension:itemExtension];
 	if (![itemEntity length])
 		return nil;
-	
-	NSLog(@"c");
-	
+		
 	
 	NSFetchRequest *itemFetchRequest = [[NSFetchRequest alloc] init];
 	[itemFetchRequest setEntity:[NSEntityDescription entityForName:itemEntity inManagedObjectContext:ctx]];
@@ -169,21 +149,7 @@
 	else
 		[itemFetchRequest setPredicate:[NSPredicate predicateWithFormat:@"name == %@ && docset == %@", itemName, docset]];		
 	
-	NSLog(@"itemEntity = %@", itemEntity);
-	NSLog(@"itemName = %@", itemName);
-	NSLog(@"container = %@", container);
-	NSLog(@"docset = %@", docset);
-	
-	NSLog(@"itemFetchRequest = %@", itemFetchRequest);
-	
-	NSLog(@"\n\n START FETCH");
 	NSArray *items = [ctx executeFetchRequest:itemFetchRequest error:&err];
-	NSLog(@"\n\n STOP FETCH");
-	
-	NSLog(@"d = %d, %d", err, [items count]);
-	
-	
-	NSLog(@"e = %d", [items objectAtIndex:0]);
 	
 	if (err || ![items count])
 		return nil;

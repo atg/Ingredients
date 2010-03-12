@@ -10,6 +10,10 @@
 
 @implementation IGKDocSetManagedObject
 
+- (NSString *)docsetURLHost
+{
+	return [NSString stringWithFormat:@"%@.%@", [self shortPlatformName], [self shortVersionName]];
+}
 - (NSString *)shortPlatformName
 {
 	NSString *platformFamily = [self valueForKey:@"platformFamily"];
