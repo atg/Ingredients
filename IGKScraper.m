@@ -382,6 +382,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 					
 					[newMethod setValue:[itemName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
 					[newMethod setValue:obj forKey:@"container"];
+					[newMethod setValue:obj forKey:@"globalContainer"];
 					[newMethod setValue:docset forKey:@"docset"];
 					[newMethod setValue:relativeExtractPath forKey:@"documentPath"];
 					
@@ -494,6 +495,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 							
 							newSubobject = [[IGKDocRecordManagedObject alloc] initWithEntity:notificationEntity insertIntoManagedObjectContext:ctx];
 							[newSubobject setValue:obj forKey:@"container"];
+							[newSubobject setValue:obj forKey:@"globalContainer"];
 						}
 						else
 						{
@@ -1346,6 +1348,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		}
 		
 		[newItem setValue:transientObject forKey:@"container"];
+		[newItem setValue:transientObject forKey:@"globalContainer"];
 		[newItem setValue:docset forKey:@"docset"];
 	}
 	
@@ -1420,6 +1423,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	[newMethod setValue:prototype forKey:@"signature"];
 	
 	[newMethod setValue:parent forKey:@"container"];
+	[newMethod setValue:parent forKey:@"globalContainer"];
 	[newMethod setValue:theDocset forKey:@"docset"];
 }
 
@@ -1761,6 +1765,7 @@ void IGKFreeStringChars(const unichar *string)
 			
 			[newMethod setValue:[methodName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
 			[newMethod setValue:obj forKey:@"container"];
+			[newMethod setValue:obj forKey:@"globalContainer"];
 			[newMethod setValue:docset forKey:@"docset"];
 			[newMethod setValue:methodSignature forKey:@"signature"];
 			
@@ -1791,6 +1796,7 @@ void IGKFreeStringChars(const unichar *string)
 	[newMethod setValue:prototype forKey:@"signature"];
 	
 	[newMethod setValue:parent forKey:@"container"];
+	[newMethod setValue:parent forKey:@"globalContainer"];
 	[newMethod setValue:docset forKey:@"docset"];
 }
 
