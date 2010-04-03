@@ -408,6 +408,16 @@
 	return [self valueForKey:@"misccontainer"];
 }
 
+- (NSString *)xsuperclassname
+{
+	return [self valueForSoftKey:@"superclass"];
+}
+
+- (NSString *)xconforms
+{
+	return @"";
+}
+
 - (NSImage *)normalIcon
 {
 	return [self iconForSelectedState:NO];

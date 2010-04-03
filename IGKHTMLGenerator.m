@@ -172,6 +172,8 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	//Append a footer
 	[self footer];
 	
+	NSLog(@"outputString = \n%@", outputString);
+	
 	return outputString;
 }
 - (void)html_all

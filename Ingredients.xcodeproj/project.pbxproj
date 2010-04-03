@@ -11,6 +11,8 @@
 		0C7C02E7110E000800412666 /* XBNewSourceListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7C02E5110E000800412666 /* XBNewSourceListCell.m */; };
 		0C7C02ED110E006000412666 /* CHSymbolButtonImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C7C02EB110E006000412666 /* CHSymbolButtonImage.h */; };
 		0C7C02EE110E006000412666 /* CHSymbolButtonImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7C02EC110E006000412666 /* CHSymbolButtonImage.m */; };
+		7507CF4511598197008449DE /* IGKPredicateEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = 7507CF4311598197008449DE /* IGKPredicateEditor.h */; };
+		7507CF4611598197008449DE /* IGKPredicateEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7507CF4411598197008449DE /* IGKPredicateEditor.m */; };
 		750DFBCF114671CC004C5D08 /* IGKMattePopUpButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 750DFBCE114671CC004C5D08 /* IGKMattePopUpButton.m */; };
 		751D2AD21126E4A100403E64 /* IGKArrayController.h in Headers */ = {isa = PBXBuildFile; fileRef = 751D2AD01126E4A100403E64 /* IGKArrayController.h */; };
 		751D2AD31126E4A100403E64 /* IGKArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 751D2AD11126E4A100403E64 /* IGKArrayController.m */; };
@@ -172,6 +174,8 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		2F7446980DB6B7EA00F9684A /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Ingredients_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ingredients_Prefix.pch; sourceTree = "<group>"; };
+		7507CF4311598197008449DE /* IGKPredicateEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKPredicateEditor.h; sourceTree = "<group>"; };
+		7507CF4411598197008449DE /* IGKPredicateEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKPredicateEditor.m; sourceTree = "<group>"; };
 		750DFBCD114671CC004C5D08 /* IGKMattePopUpButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKMattePopUpButton.h; sourceTree = "<group>"; };
 		750DFBCE114671CC004C5D08 /* IGKMattePopUpButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKMattePopUpButton.m; sourceTree = "<group>"; };
 		751D2AD01126E4A100403E64 /* IGKArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKArrayController.h; sourceTree = "<group>"; };
@@ -378,6 +382,8 @@
 				75A4B48411429ECD008CA9E8 /* IGKTableOfContentsView.m */,
 				75A9AA9A11495DA300E539F2 /* IGKEaseInOutAnimatedView.h */,
 				75A9AA9B11495DA300E539F2 /* IGKEaseInOutAnimatedView.m */,
+				7507CF4311598197008449DE /* IGKPredicateEditor.h */,
+				7507CF4411598197008449DE /* IGKPredicateEditor.m */,
 			);
 			name = "Views & Cells";
 			sourceTree = "<group>";
@@ -651,6 +657,7 @@
 				75BD177E1143E94000E67594 /* IGKPreferencesController.h in Headers */,
 				75943C0B11441AE0004126E7 /* IGKBackForwardManager.h in Headers */,
 				75A9AA9C11495DA300E539F2 /* IGKEaseInOutAnimatedView.h in Headers */,
+				7507CF4511598197008449DE /* IGKPredicateEditor.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -814,6 +821,7 @@
 				75A4B48611429ECD008CA9E8 /* IGKTableOfContentsView.m in Sources */,
 				75943C0C11441AE0004126E7 /* IGKBackForwardManager.m in Sources */,
 				75A9AA9D11495DA300E539F2 /* IGKEaseInOutAnimatedView.m in Sources */,
+				7507CF4611598197008449DE /* IGKPredicateEditor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

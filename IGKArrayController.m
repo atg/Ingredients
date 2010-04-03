@@ -37,11 +37,14 @@
 	NSManagedObjectContext *ctx = [[[NSApp delegate] kitController] managedObjectContext];
 	dispatch_queue_t queue = [[[NSApp delegate] kitController] backgroundQueue];
 	
+	if (!queue)
+		return;
+	
 	//Copy objects that may change while we're doing this
 	NSPredicate *copiedPredicate = [predicate copy];
 	NSArray *copiedCurrentSortDescriptors = [currentSortDescriptors copy];
 	NSManagedObjectID *vipObjectID = [vipObject objectID];
-		
+	
 	dispatch_async(queue, ^{
 				
 		NSFetchRequest *request = [[NSFetchRequest alloc] init];

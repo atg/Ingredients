@@ -94,7 +94,9 @@ typedef enum {
 	
 	IBOutlet NSView *searchView;
 	IBOutlet NSSearchField *searchViewField;
+	IBOutlet NSScrollView *searchViewPredicateEditorScrollView;
 	IBOutlet NSPredicateEditor *searchViewPredicateEditor;
+	IBOutlet NSScrollView *searchViewTableScrollView;
 	IBOutlet NSTableView *searchViewTable;
 	
 	NSPredicate *advancedFilterPredicate;

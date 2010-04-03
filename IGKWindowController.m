@@ -63,6 +63,8 @@
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSavingProgressSheet:) name:@"IGKWillSaveIndex" object:nil];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDefaultsDidChange:) name:NSUserDefaultsDidChangeNotification object:nil];
+
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ruleEditorRowsDidChange:) name:NSRuleEditorRowsDidChangeNotification object:searchViewPredicateEditor];
 	}
 	
 	return self;
@@ -591,20 +593,29 @@
 {
 	sideSearchQuery = query;
 	
+	NSPredicate *predicate = nil;
+	NSMutableArray *subpredicates = [[NSMutableArray alloc] initWithCapacity:2];
+	
 	if ([query length] > 0)
 	{
-		NSPredicate *fetchPredicate = nil;
 		if (selectedFilterDocset)
-			fetchPredicate = [NSPredicate predicateWithFormat:@"name CONTAINS[c] %@ && docset == %@", query, selectedFilterDocset];
+			predicate = [NSPredicate predicateWithFormat:@"name CONTAINS[c] %@ && docset == %@", query, selectedFilterDocset];
 		else
-			fetchPredicate = [NSPredicate predicateWithFormat:@"name CONTAINS[c] %@", query];
-		
-		[advancedController setPredicate:fetchPredicate];
+			predicate = [NSPredicate predicateWithFormat:@"name CONTAINS[c] %@", query];
 	}
+	
+	if ([searchViewPredicateEditor predicate])
+		[subpredicates addObject:[searchViewPredicateEditor predicate]];
+	
+	if (predicate)
+		[subpredicates addObject:predicate];
+	
+	
+	if ([subpredicates count])
+		[advancedController setPredicate:[[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:subpredicates]];
 	else
-	{
 		[advancedController setPredicate:[NSPredicate predicateWithValue:NO]];
-	}
+	
 	
 	[advancedController refresh];
 }
@@ -725,6 +736,33 @@
 	selectedFilterDocset = [[sender selectedItem] representedObject];
 	
 	[self executeSearch:sideSearchViewField];
+}
+
+- (void)ruleEditorRowsDidChange:(NSNotification *)notification
+{
+	//Work out the new height of the rule editor
+	NSUInteger numRows = [searchViewPredicateEditor numberOfRows];
+	CGFloat height = numRows * [searchViewPredicateEditor rowHeight];
+	
+	NSView *superview = [searchViewPredicateEditorScrollView superview];
+	CGFloat superviewHeight = [superview frame].size.height;
+	
+	const CGFloat maximumHeight = 200;
+	if (height > maximumHeight)
+		height = maximumHeight;
+		
+	NSRect predicateEditorRect = [searchViewPredicateEditorScrollView frame];
+	predicateEditorRect.size.height = height;
+	predicateEditorRect.origin.y = superviewHeight - height;
+	
+	NSRect tableRect = [searchViewTableScrollView frame];
+	tableRect.size.height = superviewHeight - height;
+	tableRect.origin.y = 0;
+	
+	[searchViewPredicateEditorScrollView setFrame:predicateEditorRect];
+	[searchViewTableScrollView setFrame:tableRect];
+	
+	[self executeSearch:searchViewField];
 }
 
 

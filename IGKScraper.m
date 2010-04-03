@@ -965,10 +965,12 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			if ([[[ul name] lowercaseString] isEqual:@"ul"])
 			{				
 				for (NSXMLElement *li in [ul children])
-				{					
+				{
 					NSXMLElement *codeElement = [[li children] lastObject];
 					NSXMLElement *a = [[codeElement children] lastObject];
 					
+					if (![a isKindOfClass:[NSXMLElement class]])
+						continue;
 					NSString *href = [[a attributeForName:@"href"] commentlessStringValue];
 					NSString *strval = [a commentlessStringValue];
 					
