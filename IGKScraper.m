@@ -359,7 +359,10 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			if ([superclass length])
 				[obj setValue:superclass forKey:@"superclass"];
 			if ([conformsTo count])
-				[obj setValue:[[conformsTo allObjects] componentsJoinedByString:@","] forKey:@"conformsto"];
+			{
+				NSString *conformsToString = [NSString stringWithFormat:@"=%@=", [[conformsTo allObjects] componentsJoinedByString:@"="]];
+				[obj setValue:conformsToString forKey:@"conformsto"];
+			}
 		}
 		
 		for (NSArray *captures in items)
