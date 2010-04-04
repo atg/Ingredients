@@ -740,6 +740,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 				NSInteger index = [children indexOfObject:a];
 				if (index != -1)
 				{
+					
 					[self scrapeMethodChildren:children index:index managedObject:transientObject];
 				}
 			}
@@ -763,6 +764,13 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	
 	NSUInteger i = 0;
 	NSUInteger count = [children count];
+	
+	BOOL isOnlyAElements = YES;
+	if (count == 0)
+		isOnlyAElements = NO;
+	
+	NSString *objlowername = [[object valueForKey:@"name"] lowercaseString];
+	
 	for (i = index; i < count; i++)
 	{
 		NSXMLElement *n = [children objectAtIndex:i];
@@ -771,6 +779,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		
 		NSString *nName = [[n name] lowercaseString];
 		NSArray *nClass = [[[[n attributeForName:@"class"] commentlessStringValue] lowercaseString] componentsSeparatedByString:@" "];
+		
+		if (![nName isEqual:@"a"])
+			isOnlyAElements = NO;
 		
 		//name
 		// <h3 class="*jump*"> ... </h3>
@@ -785,6 +796,103 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 						
 			continue;
 		}
+		
+		//constants
+		//This is what it SHOULD look like
+		/* <a name="//apple_ref/c/econst/NSJapaneseEUCStringEncoding" title="NSJapaneseEUCStringEncoding"></a>
+		   <a name="//apple_ref/doc/c_ref/NSJapaneseEUCStringEncoding" title="NSJapaneseEUCStringEncoding"></a>
+		   <a name="//apple_ref/doc/uid/20000154-SW64" title="NSJapaneseEUCStringEncoding"></a>
+		   <a name="//apple_ref/doc/uid/20000154-DontLinkElementID_204"></a>
+		 
+		   <dt>
+		     <code class="jump constantName">NSJapaneseEUCStringEncoding</code>
+		   </dt>
+		   <dd>
+		     <p>8-bit EUC encoding for Japanese text.</p>
+		     <p>Available in Mac OS X v10.0 and later.</p>
+		     <p>Declared in <code>NSString.h</code>.</p>
+		   </dd>
+		*/
+		
+		//This is what the "tidied" version looks like
+		/* <dd>
+		     <a name="//apple_ref/c/econst/NSJapaneseEUCStringEncoding" title="NSJapaneseEUCStringEncoding"></a>
+		     <a name="//apple_ref/doc/c_ref/NSJapaneseEUCStringEncoding" title="NSJapaneseEUCStringEncoding"></a>
+		     <a name="//apple_ref/doc/uid/20000154-SW64" title="NSJapaneseEUCStringEncoding"></a>
+		     <a name="//apple_ref/doc/uid/20000154-DontLinkElementID_204"></a>
+		   </dd>
+		   <dt>
+		     <code class="jump constantName">NSJapaneseEUCStringEncoding</code>
+		   </dt>
+		   <dd>
+		     <p>8-bit EUC encoding for Japanese text.</p>
+		     <p>Available in Mac OS X v10.0 and later.</p>
+		     <p>Declared in <code>NSString.h</code>.</p>
+		   </dd>		 
+		 */
+		
+		if (i + 1 < count && [nName isEqual:@"dt"])
+		{
+			BOOL isConstant = NO;
+			for (NSXMLElement *m in [n children])
+			{
+				if (![m isKindOfClass:[NSXMLElement class]])
+					continue;
+				if (![[[m name] lowercaseString] isEqual:@"code"])
+					continue;
+				
+				NSArray *mclasses = [[[[m attributeForName:@"class"] commentlessStringValue] lowercaseString] componentsSeparatedByString:@" "];
+				if (![mclasses containsObject:@"jump"])
+					continue;
+				
+				if (![[[m commentlessStringValue] lowercaseString] isEqual:objlowername])
+					break;
+				
+				isConstant = YES;
+			}
+						
+			NSXMLElement *dd = [children objectAtIndex:i + 1];
+			do
+			{
+				//Make sure this is a definition list for a full blown item
+				if (!isConstant)
+					break;
+				if (![dd isKindOfClass:[NSXMLElement class]])
+					break;
+				if (![[[dd name] lowercaseString] isEqual:@"dd"])
+					break;
+								
+				//Loop over child <p>s				
+				NSArray *children = [dd children];
+				for (NSXMLElement *p in children)
+				{
+					if (![p isKindOfClass:[NSXMLElement class]])
+						continue;
+					
+					NSString *pStr = [p commentlessStringValue];
+					if (![pStr length])
+						continue;
+
+					if ([pStr isCaseInsensitiveLike:@"Available*"])
+					{
+						//Available in...
+						[object setValue:pStr forKey:@"availability"];
+					}
+					else if ([pStr isCaseInsensitiveLike:@"Declared in*"])
+					{
+						//Declared in...
+						[object setValue:pStr forKey:@"declared_in_header"];
+					}
+					else
+					{
+						[object setValue:pStr forKey:@"overview"];
+					}
+				}
+								
+			} while (NO);
+		}
+		
+		
 		
 		//overview
 		// <p class="spaceabove"> ... </p> <p class="spaceabove"> ... </p> ...
@@ -1088,6 +1196,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		}
 		
 	}
+	
+	if (isOnlyAElements)
+		[self scrapeMethodChildren:[[[[children objectAtIndex:0] parent] parent] children] index:0 managedObject:object];
 }
 - (void)scrapeAbstractMethodContainerTopDOMChildren:(NSArray *)children index:(NSUInteger)index type:(int)t
 {
@@ -1263,7 +1374,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	for (NSXMLNode *container in containersSet)
 	{
 		__block BOOL lastWasProperty = NO;
-		
+				
 		//Split the container's children array by "interesting" <a> elements
 		NSArray *arr = [[self class] splitArray:[container children] byBlock:^ NSString* (id a) {
 			if (![a isKindOfClass:[NSXMLElement class]])
