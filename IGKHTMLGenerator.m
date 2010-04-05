@@ -256,19 +256,52 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	}
 	
 	NSString *ingrcode = nil;
-	if ([applecode isEqual:@"instm"] || [applecode isEqual:@"intfm"])
+	if ([applecode isEqual:@"cl"])
+		ingrcode = @"class";
+	else if ([applecode isEqual:@"cat"])
+		ingrcode = @"category";
+	else if ([applecode isEqual:@"intf"])
+		ingrcode = @"protocol";
+	else if ([applecode isEqual:@"instm"] || [applecode isEqual:@"intfm"])
 		ingrcode = @"instance-method";
 	else if ([applecode isEqual:@"clm"] || [applecode isEqual:@"intfcm"])
 		ingrcode = @"class-method";
 	else if ([applecode isEqual:@"intfp"] || [applecode isEqual:@"instp"])
 		ingrcode = @"property";
-	else if ([applecode isEqual:@"func"])
-		ingrcode = @"function";
 	else if ([applecode isEqual:@"tdef"])
 		ingrcode = @"type";
-	
-	if ([containerName isEqual:[transientObject valueForKey:@"name"]])
+	else if ([applecode isEqual:@"func"])
+		ingrcode = @"function";
+	else if ([applecode isEqual:@"econst"] || [applecode isEqual:@"data"] || [applecode isEqual:@"tag"])
 	{
+		if ([applecode isEqual:@"data"] && [itemName isLike:@"*Notification"])
+			ingrcode = @"notification";
+		else
+			ingrcode = @"constant";
+	}
+	else if ([applecode isEqual:@"constant_group"])
+	{
+		ingrcode = @"global";
+	}
+	
+	if ([containerName isEqual:[transientObject valueForKey:@"name"]] || [itemName isEqual:[transientObject valueForKey:@"name"]])
+	{
+		BOOL containsInDocument = NO;
+		if (displayTypeMask & IGKHTMLDisplayType_All)
+			containsInDocument = YES;
+		
+		else if ([ingrcode isEqual:@"instance-method"] || [ingrcode isEqual:@"class-method"])
+			containsInDocument = (displayTypeMask & IGKHTMLDisplayType_Methods);
+		
+		else if ([ingrcode isEqual:@"property"])
+			containsInDocument = (displayTypeMask & IGKHTMLDisplayType_Properties);
+		
+		else if ([ingrcode isEqual:@"notification"])
+			containsInDocument = (displayTypeMask & IGKHTMLDisplayType_Notifications);
+		
+		else
+			containsInDocument = (displayTypeMask & IGKHTMLDisplayType_Misc);
+		
 		return [NSString stringWithFormat:@"#%@.%@", itemName, ingrcode];
 	}
 	

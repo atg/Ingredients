@@ -169,6 +169,8 @@
 		return @"ObjCMethod";
 	else if ([ext isEqual:@"class-method"])
 		return @"ObjCMethod";
+	else if ([ext isEqual:@"property"])
+		return @"ObjCProperty";
 	else if ([ext isEqual:@"type"])
 		return @"CTypedef";
 	else if ([ext isEqual:@"enum"])
@@ -196,7 +198,7 @@
 	else if ([ext isEqual:@"bindings"])
 		return @"ObjCBindingsListing";
 	
-	return nil;
+	return @"DocRecord";
 }
 - (NSString *)URLComponentExtension
 {
@@ -214,6 +216,8 @@
 		else
 			return @"class-method";
 	}
+	else if ([entityName isEqual:@"ObjCProperty"])
+		return @"property";
 	else if ([entityName isEqual:@"CTypedef"])
 		return @"type";
 	else if ([entityName isEqual:@"CEnum"])

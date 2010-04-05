@@ -1198,7 +1198,21 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	}
 	
 	if (isOnlyAElements)
-		[self scrapeMethodChildren:[[[[children objectAtIndex:0] parent] parent] children] index:0 managedObject:object];
+	{
+		NSXMLElement *firstChild = [children objectAtIndex:0];
+		if (![firstChild respondsToSelector:@selector(parent)])
+			return;
+		
+		NSXMLElement *parent = [firstChild parent];
+		if (![parent respondsToSelector:@selector(parent)])
+			return;
+		
+		NSXMLElement *grandparent = [parent parent];
+		if (![parent respondsToSelector:@selector(children)])
+			return;
+		
+		[self scrapeMethodChildren:[grandparent children] index:0 managedObject:object];		
+	}
 }
 - (void)scrapeAbstractMethodContainerTopDOMChildren:(NSArray *)children index:(NSUInteger)index type:(int)t
 {
