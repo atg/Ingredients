@@ -405,7 +405,8 @@
 	if ([relationships objectForKey:@"container"])
 		return [self valueForKey:@"container"];
 	
-	return [self valueForKey:@"misccontainer"];
+	return nil;
+	//return [self valueForKey:@"misccontainer"];
 }
 
 - (NSString *)xsuperclassname

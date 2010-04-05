@@ -105,8 +105,8 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 			mask |= IGKHTMLDisplayType_Properties;
 		if ([[transientObject valueForKey:@"methods"] count])
 			mask |= IGKHTMLDisplayType_Methods;
-		if ([[transientObject valueForKey:@"miscitems"] count])
-			mask |= IGKHTMLDisplayType_Misc;
+		//if ([[transientObject valueForKey:@"miscitems"] count])
+		//	mask |= IGKHTMLDisplayType_Misc;
 		
 		if ([[transientObject valueForKey:@"notifications"] count])
 			mask |= IGKHTMLDisplayType_Notifications;
