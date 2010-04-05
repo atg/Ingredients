@@ -91,7 +91,7 @@
 		
 		*outEntityName = requestedEntityName;
 	}
-	return ;
+	return newPredicate;
 }
 
 @end
