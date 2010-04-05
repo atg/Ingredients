@@ -10,7 +10,9 @@
 
 
 @interface IGKPredicateEditor : NSPredicateEditor {
-
+	NSString *requestedEntityName;
 }
+
+- (NSPredicate *)predicateWithEntityNamed:(NSString **)outEntityName;
 
 @end

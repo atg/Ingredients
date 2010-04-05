@@ -16,6 +16,7 @@
 @class IGKSourceListWallpaperView;
 @class IGKArrayController;
 @class IGKBackForwardManager;
+@class IGKPredicateEditor;
 
 typedef enum {
 	
@@ -95,7 +96,7 @@ typedef enum {
 	IBOutlet NSView *searchView;
 	IBOutlet NSSearchField *searchViewField;
 	IBOutlet NSScrollView *searchViewPredicateEditorScrollView;
-	IBOutlet NSPredicateEditor *searchViewPredicateEditor;
+	IBOutlet IGKPredicateEditor *searchViewPredicateEditor;
 	IBOutlet NSScrollView *searchViewTableScrollView;
 	IBOutlet NSTableView *searchViewTable;
 	

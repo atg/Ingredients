@@ -12,6 +12,7 @@
 #import "IGKSourceListWallpaperView.h"
 #import "IGKArrayController.h"
 #import "IGKBackForwardManager.h"
+#import "IGKPredicateEditor.h"
 
 @interface IGKWindowController ()
 
@@ -603,10 +604,13 @@
 		else
 			predicate = [NSPredicate predicateWithFormat:@"name CONTAINS[c] %@", query];
 	}
-	
+	NSString *entityToFetch = [[NSString alloc] init];
+	NSPredicate *predicateResults = [searchViewPredicateEditor predicateWithEntityNamed:&entityToFetch];
+	NSLog(@"Entity to fetch: %@", entityToFetch);
 	if ([searchViewPredicateEditor predicate])
+	{
 		[subpredicates addObject:[searchViewPredicateEditor predicate]];
-	
+	}
 	if (predicate)
 		[subpredicates addObject:predicate];
 	

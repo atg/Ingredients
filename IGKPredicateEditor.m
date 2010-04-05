@@ -29,12 +29,24 @@
 		return predicate;
 	}
 	
+	requestedEntityName = @"Any";
+	
 	NSArray *subpredicates = [predicate subpredicates];
 	NSMutableArray *newSubpredicates = [[NSMutableArray alloc] initWithCapacity:[subpredicates count]];
 	
 	for (NSComparisonPredicate *cmpP in subpredicates)
 	{
 		NSExpression *right = [cmpP rightExpression];
+		NSExpression *left = [cmpP leftExpression];
+		
+		if([[left keyPath] isEqual:@"xkind"])
+		{
+			//NSLog(@"Rught: %@", [right constantValue]);
+			requestedEntityName = [right constantValue];
+			continue;
+		}
+		
+
 		if ([right expressionType] != NSConstantValueExpressionType)
 		{
 			[newSubpredicates addObject:cmpP];
@@ -47,11 +59,39 @@
 		{
 			[newSubpredicates addObject:cmpP];
 		}
+		
+
+		
 	}
 	
 	NSLog(@"newSubpredicates = %@", newSubpredicates);
 	
 	return [[NSCompoundPredicate alloc] initWithType:[predicate compoundPredicateType] subpredicates:newSubpredicates];
+}
+
+
+- (NSPredicate *)predicateWithEntityNamed:(NSString **)outEntityName
+{
+	NSPredicate *newPredicate = [self predicate];
+	
+	if (outEntityName != NULL)
+	{
+		if([requestedEntityName isEqual:@"Class"])
+		{
+			requestedEntityName = @"ObjCClass";
+		}
+		else if([requestedEntityName isEqual:@"Protocol"])
+		{
+			requestedEntityName = @"ObjCProtocol";
+		}
+		else {
+			requestedEntityName = @"DocRecord";
+		}
+
+		
+		*outEntityName = requestedEntityName;
+	}
+	return ;
 }
 
 @end
