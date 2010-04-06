@@ -84,6 +84,14 @@
 		{
 			requestedEntityName = @"ObjCProtocol";
 		}
+		else if([requestedEntityName isEqual:@"Category"])
+		{
+			requestedEntityName = @"ObjCCategory";
+		}
+		else if([requestedEntityName isEqual:@"Method"])
+		{
+			requestedEntityName = @"ObjCMethod";
+		}
 		else {
 			requestedEntityName = @"DocRecord";
 		}

@@ -615,6 +615,7 @@
 		[subpredicates addObject:predicate];
 	
 	
+	[advancedController setEntityToFetch:entityToFetch];
 	if ([subpredicates count])
 		[advancedController setPredicate:[[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:subpredicates]];
 	else
