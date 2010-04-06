@@ -482,6 +482,14 @@
 		[backForwardManager goForward:nil];
 }
 
+- (void)loadURLWithoutRecordingHistory:(NSURL *)url
+{
+	[self loadURL:url recordHistory:NO];
+}
+- (void)loadURLRecordHistory:(NSURL *)url
+{
+	[self loadURL:url recordHistory:YES];
+}
 - (void)loadURL:(NSURL *)url recordHistory:(BOOL)recordHistory
 {
 	if ([[url scheme] isEqual:@"special"] && [[url resourceSpecifier] isEqual:@"no-selection"])
@@ -1002,7 +1010,7 @@
 	[self loadDocIntoBrowser];
 	[self reloadTableOfContents];
 }
-- (void)restoreAdvancedSearchStateIntoTwoUp:(BOOL)selectFirst
+- (void)restoreAdvancedSearchStateIntoTwoUp:(BOOL)selectSelected
 {	
 	//Restore the predicate, etc into the side search's array controlller
 	[sideSearchController setPredicate:[advancedController predicate]];
@@ -1010,10 +1018,10 @@
 	
 	[sideSearchViewField setStringValue:[searchViewField stringValue]];
 	
-	if (selectFirst)
-		[sideSearchController refreshAndSelectFirst:YES renderSelection:NO];
+	if (selectSelected)
+		[sideSearchController refreshAndSelectObject:[advancedController selection] renderSelection:NO];
 	else
-		[sideSearchController refreshAndSelectFirst:NO renderSelection:NO];
+		[sideSearchController refreshAndSelectIndex:-1 renderSelection:NO];
 }
 
 - (IGKHTMLDisplayTypeMask)tableOfContentsSelectedDisplayTypeMask
@@ -1113,6 +1121,47 @@
 	//[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
 }
 
+- (void)webView:(WebView *)sender runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WebFrame *)frame
+{
+	NSAlert *alert = [NSAlert alertWithMessageText:message defaultButton:@"OK" alternateButton:@"" otherButton:@"" informativeTextWithFormat:@""];
+	[alert beginSheetModalForWindow:[self window] modalDelegate:nil didEndSelector:nil contextInfo:nil];
+}
+- (BOOL)webView:(WebView *)sender runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WebFrame *)frame
+{
+	NSAlert *alert = [NSAlert alertWithMessageText:message defaultButton:@"OK" alternateButton:@"" otherButton:@"" informativeTextWithFormat:@""];
+	NSInteger r = [alert runModal];
+	
+	if (r == NSAlertDefaultReturn)
+		return YES;
+	return NO;
+}
+/*
+- (NSString *)webView:(WebView *)sender runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(NSString *)defaultText initiatedByFrame:(WebFrame *)frame;
+{
+	//FIXME: Implement JavaScript input() in webview
+	return @"";
+}
+*/
+
+- (NSURLRequest *)webView:(WebView *)sender resource:(id)identifier willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)redirectResponse fromDataSource:(WebDataSource *)dataSource
+{
+	NSURL *url = [request URL];
+	
+	if ([[[[request URL] host] lowercaseString] isEqual:@"ingr-doc"])
+	{
+		NSArray *comps = [[url path] pathComponents];
+		if ([comps count] > 3)
+		{
+			NSArray *newcomps = [[NSArray arrayWithObject:@"/"] arrayByAddingObjectsFromArray:[comps subarrayWithRange:NSMakeRange(2, [comps count] - 2)]];
+			NSURL *newURL = [[NSURL alloc] initWithScheme:@"ingr-doc" host:[comps objectAtIndex:1] path:[NSString pathWithComponents:newcomps]];
+			
+			[self performSelector:@selector(loadURLRecordHistory:) withObject:newURL afterDelay:0.0];
+			return nil;
+		}
+	}
+	
+	return request;
+}
 - (void)webView:(WebView *)sender didStartProvisionalLoadForFrame:(WebFrame *)frame
 {
 	[self setUpForWebView:sender frame:frame];

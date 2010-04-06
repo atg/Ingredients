@@ -94,6 +94,7 @@
 - (void)refresh
 {
 	[self refreshAndSelectIndex:0 renderSelection:YES];
+<<<<<<< HEAD
 }
 
 //This method is PRIVATE!
@@ -110,6 +111,24 @@
 	[tableView reloadData];
 }
 
+=======
+}
+
+//This method is PRIVATE!
+- (void)fetchFromRefresh:(NSManagedObjectContext *)ctx managedObjectIDs:(NSArray *)managedObjectIDs fetchContainsVip:(BOOL)fetchContainsVip
+{
+	fetchContainsVipObject = fetchContainsVip;
+	
+	fetchedObjects = [[NSMutableArray alloc] initWithCapacity:[managedObjectIDs count]];
+	for (NSManagedObjectID *objID in managedObjectIDs)
+	{
+		[fetchedObjects addObject:[ctx objectWithID:objID]];
+	}
+	
+	[tableView reloadData];
+}
+
+>>>>>>> 703c3e79607a666c0f19745b40a467040f173c15
 - (void)refreshAndSelectObject:(IGKDocRecordManagedObject *)obj renderSelection:(BOOL)renderSelection
 {
 	NSManagedObjectContext *ctx = [[[NSApp delegate] kitController] managedObjectContext];

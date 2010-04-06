@@ -223,7 +223,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	[outputString appendString:@"</div>\n"];
 }
-- (NSArray *)hrefToActualFragment:(IGKDocRecordManagedObject *)mo
+- (NSString *)hrefToActualFragment:(IGKDocRecordManagedObject *)mo
 {
 	NSString *href = [mo valueForKey:@"href"];
 		
@@ -302,13 +302,22 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		else
 			containsInDocument = (displayTypeMask & IGKHTMLDisplayType_Misc);
 		
-		return [NSString stringWithFormat:@"#%@.%@", itemName, ingrcode];
+		if (containsInDocument)
+			return [NSString stringWithFormat:@"#%@.%@", itemName, ingrcode];
 	}
 	
+	NSString *url = nil;
 	if (containerName)
-		return [NSString stringWithFormat:@"ingr-doc://%@/all/%@.unknown/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], containerName, itemName, ingrcode];
+	{
+		//FIXME: This assumes that transientObject is the container: [transientObject URLComponentExtension]. It won't work if the link is to another class
+		url = [NSString stringWithFormat:@"http://ingr-doc/%@/all/%@.%@/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], containerName, [transientObject URLComponentExtension], itemName, ingrcode];
+	}
+	else
+	{
+		url = [NSString stringWithFormat:@"http://ingr-doc/%@/all/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], itemName, ingrcode];
+	}
 	
-	return [NSString stringWithFormat:@"ingr-doc://%@/all/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], itemName, ingrcode];
+	return url;
 }
 - (void)html_properties
 {
