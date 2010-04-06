@@ -17,10 +17,12 @@
 @synthesize currentSortDescriptors;
 @synthesize maxRows;
 @synthesize vipObject;
+@synthesize entityToFetch;
 
 - (void)awakeFromNib
 {
 	[tableView setDataSource:self];
+	entityToFetch = @"DocRecord";
 }
 
 - (void)fetch:(void (^)(NSArray *managedObjectIDs, BOOL fetchContainsVip))completionBlock
@@ -46,9 +48,9 @@
 	NSManagedObjectID *vipObjectID = [vipObject objectID];
 	
 	dispatch_async(queue, ^{
-				
+		
 		NSFetchRequest *request = [[NSFetchRequest alloc] init];
-		[request setEntity:[NSEntityDescription entityForName:@"DocRecord" inManagedObjectContext:ctx]];
+		[request setEntity:[NSEntityDescription entityForName:entityToFetch inManagedObjectContext:ctx]];
 		[request setPredicate:copiedPredicate];
 		
 		[request setFetchLimit:500];
@@ -85,7 +87,7 @@
 		dispatch_async(dispatch_get_main_queue(), ^{
 			
 			completionBlock(objectIDs, containsVIP);
-	
+			
 		});
 	});
 }
