@@ -12,7 +12,7 @@
 
 - (NSString *)docsetURLHost
 {
-	return [NSString stringWithFormat:@"%@.%@", [self shortPlatformName], [self shortVersionName]];
+	return [NSString stringWithFormat:@"%@/%@", [self shortPlatformName], [self shortVersionName]];
 }
 - (NSString *)shortPlatformName
 {

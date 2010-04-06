@@ -25,7 +25,8 @@
 + (IGKDocRecordManagedObject *)resolveURL:(NSURL *)url inContext:(NSManagedObjectContext *)ctx tableOfContentsMask:(IGKHTMLDisplayTypeMask *)tocMaskPointer
 {
 	NSArray *components = [url pathComponents];
-		
+	NSLog(@"url = %@", url);
+//	url = [NSURL URLWithString:@"ingr-doc://iphone/3.2/all/NSString.class/stringByAppendingString:.instance-method"];
 	/*
 	 ingr-doc:// <docset-family> / <docset-version> / <table-of-contents> / <item-name> . <item-type>
 	 ingr-doc:// <docset-family> / <docset-version> / <table-of-contents> / <container-name> . <container-type> / <item-name> . <item-type>
@@ -34,7 +35,7 @@
 	//There should be at least 4 components
 	if ([components count] < 4)
 		return nil;
-	
+	NSLog(@"A");
 	//Remove an initial "/" component
 	if ([[components objectAtIndex:0] isEqual:@"/"])
 		components = [components subarrayWithRange:NSMakeRange(1, [components count] - 1)];
@@ -60,7 +61,7 @@
 		
 	if (err || ![docsets count])
 		return nil;
-	
+	NSLog(@"B");
 	IGKDocSetManagedObject *docset = [docsets objectAtIndex:0];
 		
 	
@@ -106,13 +107,14 @@
 		
 		NSString *containerName = [containerComponent stringByDeletingPathExtension];
 		NSString *containerExtension = [containerComponent pathExtension];
+		NSLog(@"C");
 		if (![containerName length] || ![containerExtension length])
 			return nil;
-		
+		NSLog(@"D");
 		NSString *containerEntity = [self entityNameFromURLComponentExtension:containerExtension];
 		if (![containerEntity length])
 			return nil;
-		
+		NSLog(@"E");
 		NSFetchRequest *containerFetchRequest = [[NSFetchRequest alloc] init];
 		[containerFetchRequest setEntity:[NSEntityDescription entityForName:containerEntity inManagedObjectContext:ctx]];
 		[containerFetchRequest setPredicate:[NSPredicate predicateWithFormat:@"name == %@ && docset == %@", containerName, docset]];
@@ -122,7 +124,7 @@
 		
 		if (err || ![containers count])
 			return nil;
-		
+		NSLog(@"F");
 		container = [containers objectAtIndex:0];
 	}
 	
@@ -134,26 +136,45 @@
 	NSString *itemExtension = [itemComponent pathExtension];
 	if (![itemName length] || ![itemExtension length])
 		return nil;
-		
+		NSLog(@"G");
 	
 	NSString *itemEntity = [self entityNameFromURLComponentExtension:itemExtension];
 	if (![itemEntity length])
 		return nil;
+		NSLog(@"H");
+	NSLog(@"itemEntity = %@", itemEntity);
+	NSLog(@"I");
 		
-	
 	NSFetchRequest *itemFetchRequest = [[NSFetchRequest alloc] init];
 	[itemFetchRequest setEntity:[NSEntityDescription entityForName:itemEntity inManagedObjectContext:ctx]];
+	NSLog(@"ctx = %@", ctx);
 	
 	if (hasContainer)
 		[itemFetchRequest setPredicate:[NSPredicate predicateWithFormat:@"name == %@ && container == %@ && docset == %@", itemName, container, docset]];
 	else
 		[itemFetchRequest setPredicate:[NSPredicate predicateWithFormat:@"name == %@ && docset == %@", itemName, docset]];		
 	
-	NSArray *items = [ctx executeFetchRequest:itemFetchRequest error:&err];
+	NSLog(@"J");
+	NSLog(@"itemName = %@", itemName);
+	//NSLog(@"[itemFetchRequest predicate]=  %@", [[itemFetchRequest predicate] predicateFormat]);
+	NSLog(@"K");
+
+	NSLog(@"L");
+	NSLog(@"container = %@", [container valueForKey:@"name"]);
+	//NSLog(@"itemFetchRequest =  %@", itemFetchRequest);
+	NSLog(@"M");
 	
+	NSLog(@"N");
+	NSLog(@"docset = %@", [docset valueForKey:@"path"]);
+	//NSLog(@"itemFetchRequest =  %@", itemFetchRequest);
+	NSLog(@"O");
+	
+	NSArray *items = [ctx executeFetchRequest:itemFetchRequest error:&err];
+		
+	NSLog(@"count %d", [items count]);
 	if (err || ![items count])
 		return nil;
-		
+	NSLog(@"End");
 	return [items objectAtIndex:0];
 }
 
