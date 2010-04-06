@@ -91,29 +91,59 @@
 }
 - (void)refresh
 {
-	[self refreshAndSelectFirst:YES renderSelection:YES];
+	[self refreshAndSelectIndex:0 renderSelection:YES];
 }
-- (void)refreshAndSelectFirst:(BOOL)selectFirst renderSelection:(BOOL)renderSelection
+
+//This method is PRIVATE!
+- (void)fetchFromRefresh:(NSManagedObjectContext *)ctx managedObjectIDs:(NSArray *)managedObjectIDs fetchContainsVip:(BOOL)fetchContainsVip
+{
+	fetchContainsVipObject = fetchContainsVip;
+	
+	fetchedObjects = [[NSMutableArray alloc] initWithCapacity:[managedObjectIDs count]];
+	for (NSManagedObjectID *objID in managedObjectIDs)
+	{
+		[fetchedObjects addObject:[ctx objectWithID:objID]];
+	}
+	
+	[tableView reloadData];
+}
+
+- (void)refreshAndSelectObject:(IGKDocRecordManagedObject *)obj renderSelection:(BOOL)renderSelection
 {
 	NSManagedObjectContext *ctx = [[[NSApp delegate] kitController] managedObjectContext];
 	
 	//Fetch a new list of objects and refresh the table
 	[self fetch:^ (NSArray *managedObjectIDs, BOOL fetchContainsVip) {
-		fetchContainsVipObject = fetchContainsVip;
+		[self fetchFromRefresh:ctx managedObjectIDs:managedObjectIDs fetchContainsVip:fetchContainsVip];
 		
-		fetchedObjects = [[NSMutableArray alloc] initWithCapacity:[managedObjectIDs count]];
-		for (NSManagedObjectID *objID in managedObjectIDs)
+		if (obj)
 		{
-			[fetchedObjects addObject:[ctx objectWithID:objID]];
+			NSUInteger ind = [fetchedObjects indexOfObject:obj];
+			if (ind != NSNotFound)
+			{
+				//Select the first row, scroll to it, and notify the delegate
+				[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:ind] byExtendingSelection:NO];;
+				[tableView scrollRowToVisible:ind];
+				
+				if (renderSelection)
+					[[tableView delegate] tableViewSelectionDidChange:[NSNotification notificationWithName:NSTableViewSelectionDidChangeNotification object:tableView]];
+			}
 		}
+	}];
+}
+- (void)refreshAndSelectIndex:(NSInteger)idx renderSelection:(BOOL)renderSelection
+{
+	NSManagedObjectContext *ctx = [[[NSApp delegate] kitController] managedObjectContext];
+	
+	//Fetch a new list of objects and refresh the table
+	[self fetch:^(NSArray *managedObjectIDs, BOOL fetchContainsVip) {
+		[self fetchFromRefresh:ctx managedObjectIDs:managedObjectIDs fetchContainsVip:fetchContainsVip];
 		
-		[tableView reloadData];
-		
-		if (selectFirst)
+		if (idx != -1)
 		{
 			//Select the first row, scroll to it, and notify the delegate
-			[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];;
-			[tableView scrollRowToVisible:0];
+			[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:idx] byExtendingSelection:NO];;
+			[tableView scrollRowToVisible:idx];
 			
 			if (renderSelection)
 				[[tableView delegate] tableViewSelectionDidChange:[NSNotification notificationWithName:NSTableViewSelectionDidChangeNotification object:tableView]];

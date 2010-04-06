@@ -1009,7 +1009,7 @@
 	[self loadDocIntoBrowser];
 	[self reloadTableOfContents];
 }
-- (void)restoreAdvancedSearchStateIntoTwoUp:(BOOL)selectFirst
+- (void)restoreAdvancedSearchStateIntoTwoUp:(BOOL)selectSelected
 {	
 	//Restore the predicate, etc into the side search's array controlller
 	[sideSearchController setPredicate:[advancedController predicate]];
@@ -1017,10 +1017,10 @@
 	
 	[sideSearchViewField setStringValue:[searchViewField stringValue]];
 	
-	if (selectFirst)
-		[sideSearchController refreshAndSelectFirst:YES renderSelection:NO];
+	if (selectSelected)
+		[sideSearchController refreshAndSelectObject:[advancedController selection] renderSelection:NO];
 	else
-		[sideSearchController refreshAndSelectFirst:NO renderSelection:NO];
+		[sideSearchController refreshAndSelectIndex:-1 renderSelection:NO];
 }
 
 - (IGKHTMLDisplayTypeMask)tableOfContentsSelectedDisplayTypeMask
