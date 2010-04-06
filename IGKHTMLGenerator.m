@@ -309,14 +309,14 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	NSString *url = nil;
 	if (containerName)
 	{
-		url = [NSString stringWithFormat:@"http://ingr-doc/%@/all/%@.unknown/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], containerName, itemName, ingrcode];
+		//FIXME: This assumes that transientObject is the container: [transientObject URLComponentExtension]. It won't work if the link is to another class
+		url = [NSString stringWithFormat:@"http://ingr-doc/%@/all/%@.%@/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], containerName, [transientObject URLComponentExtension], itemName, ingrcode];
 	}
 	else
 	{
 		url = [NSString stringWithFormat:@"http://ingr-doc/%@/all/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], itemName, ingrcode];
 	}
 	
-	NSLog(@"url = %@", url);
 	return url;
 }
 - (void)html_properties

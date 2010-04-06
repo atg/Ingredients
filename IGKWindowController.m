@@ -482,6 +482,14 @@
 		[backForwardManager goForward:nil];
 }
 
+- (void)loadURLWithoutRecordingHistory:(NSURL *)url
+{
+	[self loadURL:url recordHistory:NO];
+}
+- (void)loadURLRecordHistory:(NSURL *)url
+{
+	[self loadURL:url recordHistory:YES];
+}
 - (void)loadURL:(NSURL *)url recordHistory:(BOOL)recordHistory
 {
 	if ([[url scheme] isEqual:@"special"] && [[url resourceSpecifier] isEqual:@"no-selection"])
@@ -1138,16 +1146,15 @@
 {
 	NSURL *url = [request URL];
 	
-	NSLog(@"Will send request %@", [request URL]);
 	if ([[[[request URL] host] lowercaseString] isEqual:@"ingr-doc"])
 	{
-		NSLog(@"Ingredients doc trapped %@", [request URL]);
 		NSArray *comps = [[url path] pathComponents];
 		if ([comps count] > 3)
 		{
 			NSArray *newcomps = [[NSArray arrayWithObject:@"/"] arrayByAddingObjectsFromArray:[comps subarrayWithRange:NSMakeRange(2, [comps count] - 2)]];
 			NSURL *newURL = [[NSURL alloc] initWithScheme:@"ingr-doc" host:[comps objectAtIndex:1] path:[NSString pathWithComponents:newcomps]];
-			[self loadURL:newURL recordHistory:NO];
+			
+			[self performSelector:@selector(loadURLRecordHistory:) withObject:newURL afterDelay:0.0];
 			return nil;
 		}
 	}
