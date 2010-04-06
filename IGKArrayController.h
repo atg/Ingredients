@@ -26,12 +26,14 @@
 	
 	BOOL sortIsAscending;
 	NSString *sortColumn;
+	NSString *entityToFetch;
 }
 
 @property (assign) NSPredicate *predicate;
 @property (assign) NSArray *smartSortDescriptors;
 @property (assign) NSArray *currentSortDescriptors;
 @property (assign) NSUInteger maxRows;
+@property (assign) NSString *entityToFetch;
 
 //The VIP object, if set, will sit at the very top of the the predicate or anything else
 @property (assign) id vipObject;
