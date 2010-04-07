@@ -10,6 +10,7 @@
 #import "RegexKitLite.h"
 #import "IGKDocRecordManagedObject.h"
 #import "IGKLaunchController.h"
+#import "NSXMLNode+IGKAdditions.h"
 
 
 @interface IGKScraper ()
@@ -918,7 +919,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		
 		//signature (methods only)
 		// <p class="spaceabovemethod"> ... </p>
-		if ([nClass containsObject:@"spaceabovemethod"])
+		if ([nClass containsObject:@"spaceabovemethod"] || [nClass containsObject:@"zshareddeclarationblockjavaobjc"])
 		{
 			NSMutableString *prototype = [[NSMutableString alloc] init];
 			[prototype appendString:[n commentlessStringValue]];
@@ -939,6 +940,48 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		}
 		
 		//parameters
+		void (^parseParameters)(NSUInteger, NSArray *) = ^(NSUInteger j, NSArray *parentChildren) {
+			if ([parentChildren count])
+			{
+				NSXMLElement *o = [parentChildren objectAtIndex:j];
+				
+				NSArray *nChildren = [o children];
+				NSString *lastDT = nil;
+				
+				NSUInteger ind = 1;
+				
+				for (NSXMLElement *m in nChildren)
+				{
+					if ([[[m name] lowercaseString] isEqual:@"dt"])
+					{
+						lastDT = [m commentlessStringValue];
+					}
+					else if ([lastDT length] && [[[m name] lowercaseString] isEqual:@"dd"])
+					{
+						NSString *dd = [m commentlessStringValue];
+						
+						if ([dd length])
+						{
+							if (!ParameterEntity)
+								ParameterEntity = [NSEntityDescription entityForName:@"Parameter" inManagedObjectContext:transientContext];
+							
+							NSManagedObject *parameter = [[NSManagedObject alloc] initWithEntity:ParameterEntity insertIntoManagedObjectContext:transientContext];
+							[parameter setValue:[NSNumber numberWithShort:ind] forKey:@"positionIndex"];
+							[parameter setValue:[lastDT stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
+							[parameter setValue:dd forKey:@"overview"];
+							[parameter setValue:object forKey:@"callable"];
+							
+							ind++;
+						}
+						
+						lastDT = nil;
+					}
+				}
+			}
+			
+		};
+		
+		//Old
 		/* <dl class="termdef">
 		       <dt> ... name ... </dt>
 		       <dd> ... overview ... </dd>
@@ -946,41 +989,24 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		 */
 		if ([nName isEqual:@"dl"] && [nClass containsObject:@"termdef"])
 		{
-			NSArray *nChildren = [n children];
-			NSString *lastDT = nil;
-			
-			NSUInteger ind = 1;
-			
-			for (NSXMLElement *m in nChildren)
-			{
-				if ([[[m name] lowercaseString] isEqual:@"dt"])
-				{
-					lastDT = [m commentlessStringValue];
-				}
-				else if ([lastDT length] && [[[m name] lowercaseString] isEqual:@"dd"])
-				{
-					NSString *dd = [m commentlessStringValue];
-					
-					if ([dd length])
-					{
-						if (!ParameterEntity)
-							ParameterEntity = [NSEntityDescription entityForName:@"Parameter" inManagedObjectContext:transientContext];
-						
-						NSManagedObject *parameter = [[NSManagedObject alloc] initWithEntity:ParameterEntity insertIntoManagedObjectContext:transientContext];
-						[parameter setValue:[NSNumber numberWithShort:ind] forKey:@"positionIndex"];
-						[parameter setValue:[lastDT stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
-						[parameter setValue:dd forKey:@"overview"];
-						[parameter setValue:object forKey:@"callable"];
-						
-						ind++;
-					}
-					
-					lastDT = nil;
-				}
-			}
-			
+			parseParameters(i, children);
 			continue;
 		}
+		
+		//New
+		/* <div class="api parameters">
+		     <h5>Parameters</h5>
+		     <dl class="termdef">
+		       <dt> ... name ... </dt>
+		       <dd> ... overview ... </dd>
+		     </dl>
+		 </div>
+		 */
+		if ([nName isEqual:@"div"] && [nClass containsObject:@"api"] && [nClass containsObject:@"parameters"])
+		{
+			parseParameters(1, [n children]);
+		}
+		
 		
 		//returnType
 		// ???
@@ -1008,21 +1034,13 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		}
 		
 		//discussion
-		
-		//Old
-		/* <h5>Discussion</h5>
-		   <p> ... </p>
-		   <p> ... </p>
-		   ...
-		 */
-		if (i + 1 < count && [nName isEqual:@"h5"] && [[[[n commentlessStringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString] isEqual:@"discussion"])
-		{
+		void (^parseDiscussion)(NSUInteger, NSArray *) = ^(NSUInteger j, NSArray *nchildren) {
 			NSMutableString *discussion = [[NSMutableString alloc] init];
+			NSUInteger nchildrenCount = [nchildren count];
 			
-			NSUInteger j;
-			for (j = i + 1; j < count; j++)
+			for (; j < nchildrenCount; j++)
 			{
-				NSXMLElement *m = [children objectAtIndex:j];
+				NSXMLElement *m = [nchildren objectAtIndex:j];
 				if (![m isKindOfClass:[NSXMLElement class]])
 					continue;
 				if (![[[m name] lowercaseString] isEqual:@"p"])
@@ -1032,6 +1050,17 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			}
 			
 			[object setValue:discussion forKey:@"discussion"];
+		};
+		
+		//Old
+		/* <h5>Discussion</h5>
+		   <p> ... </p>
+		   <p> ... </p>
+		   ...
+		 */
+		if (i + 1 < count && [nName isEqual:@"h5"] && [[[[n commentlessStringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString] isEqual:@"discussion"])
+		{
+			parseDiscussion(i + 1, children);
 		}
 		
 		//New
@@ -1044,28 +1073,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		 */
 		if ([nName isEqual:@"div"] && [nClass containsObject:@"api"] && [nClass containsObject:@"discussion"])
 		{
-			NSXMLElement *nchildren = [n children];
-			NSUInteger nchildrenCount = [nchildren count];
-
-			if (nchildrenCount > 0)
-			{
-				NSMutableString *discussion = [[NSMutableString alloc] init];
-				
-				NSUInteger j;
-				for (j = 1; j < nchildrenCount; j++)
-				{
-					NSXMLElement *m = [nchildren objectAtIndex:j];
-					if (![m isKindOfClass:[NSXMLElement class]])
-						continue;
-					if (![[[m name] lowercaseString] isEqual:@"p"])
-						break;
-					
-					[discussion appendFormat:@"<p>%@</p>", [m commentlessStringValue]];
-				}
-				
-				[object setValue:discussion forKey:@"discussion"];
-			}
-			
+			parseDiscussion(1, [n children]);
 		}
 		
 				
@@ -1098,6 +1106,39 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		}
 		
 		//seealsos
+		void (^parseSeealsos)(NSUInteger, NSArray *) = ^(NSUInteger j, NSArray *parentChildren) {
+			if ([parentChildren count])
+			{
+				NSXMLElement *ul = [parentChildren objectAtIndex:j];
+				if ([[[ul name] lowercaseString] isEqual:@"ul"])
+				{				
+					for (NSXMLElement *li in [ul children])
+					{
+						NSXMLElement *codeElement = [[li children] lastObject];
+						NSXMLElement *a = [[codeElement children] lastObject];
+						
+						if (![a isKindOfClass:[NSXMLElement class]])
+							continue;
+						NSString *href = [[a attributeForName:@"href"] commentlessStringValue];
+						NSString *strval = [a commentlessStringValue];
+						
+						if (!href || !strval)
+							continue;
+						
+						if (!SeeAlsoEntity)
+							SeeAlsoEntity = [NSEntityDescription entityForName:@"SeeAlso" inManagedObjectContext:transientContext];
+						
+						NSManagedObject *seealso = [[NSManagedObject alloc] initWithEntity:SeeAlsoEntity insertIntoManagedObjectContext:transientContext];
+						[seealso setValue:href forKey:@"href"];
+						strval = [strval stringByReplacingOccurrencesOfString:@"\u2013" withString:@"-"];
+						
+						[seealso setValue:[strval stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
+						[seealso setValue:object forKey:@"container"];
+					}
+				}
+			}
+		};
+		
 		/* <h5 class="tight">See Also</h5>
 		   <ul class="availability">
 			   <li class="availability">
@@ -1107,36 +1148,46 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			   </li>
 		   </ul>
 		 */
+		//Old
 		if (i + 1 < count && [nName isEqual:@"h5"] && [[[[n commentlessStringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString] isEqual:@"see also"])
 		{			
-			NSXMLElement *ul = [children objectAtIndex:i + 1];
-			if ([[[ul name] lowercaseString] isEqual:@"ul"])
-			{				
-				for (NSXMLElement *li in [ul children])
-				{
-					NSXMLElement *codeElement = [[li children] lastObject];
-					NSXMLElement *a = [[codeElement children] lastObject];
-					
-					if (![a isKindOfClass:[NSXMLElement class]])
-						continue;
-					NSString *href = [[a attributeForName:@"href"] commentlessStringValue];
-					NSString *strval = [a commentlessStringValue];
-					
-					if (!href || !strval)
-						continue;
-					
-					if (!SeeAlsoEntity)
-						SeeAlsoEntity = [NSEntityDescription entityForName:@"SeeAlso" inManagedObjectContext:transientContext];
-					
-					NSManagedObject *seealso = [[NSManagedObject alloc] initWithEntity:SeeAlsoEntity insertIntoManagedObjectContext:transientContext];
-					[seealso setValue:href forKey:@"href"];
-					[seealso setValue:[strval stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
-					[seealso setValue:object forKey:@"container"];
-				}
-			}
+			parseSeealsos(i + 1, children);
+		}
+		//New
+		if ([nName isEqual:@"div"] && [nClass containsObject:@"api"] && [nClass containsObject:@"seealso"])
+		{
+			parseSeealsos(1, [n children]);
 		}
 		
 		//samplecodeprojects
+		void (^parseSamplecodeprojects)(NSUInteger, NSArray *) = ^(NSUInteger j, NSArray *parentChildren) {
+			if ([parentChildren count])
+			{
+				NSXMLElement *ul = [parentChildren objectAtIndex:j];
+				if ([[[ul name] lowercaseString] isEqual:@"ul"])
+				{				
+					for (NSXMLElement *li in [ul children])
+					{					
+						NSXMLElement *spanElement = [[li children] lastObject];
+						NSXMLElement *a = [[spanElement children] lastObject];
+						
+						NSString *href = [[a attributeForName:@"href"] commentlessStringValue];
+						NSString *strval = [a commentlessStringValue];
+						
+						if (!href || !strval)
+							continue;
+						
+						if (!SampleCodeProjectEntity)
+							SampleCodeProjectEntity = [NSEntityDescription entityForName:@"SampleCodeProject" inManagedObjectContext:transientContext];
+						
+						NSManagedObject *seealso = [[NSManagedObject alloc] initWithEntity:SampleCodeProjectEntity insertIntoManagedObjectContext:transientContext];
+						[seealso setValue:href forKey:@"href"];
+						[seealso setValue:[strval stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
+						[seealso setValue:object forKey:@"container"];
+					}
+				}
+			}
+		};
 		/* <h5 class="tight">Related Sample Code</h5>
 		   <ul class="availability">
 			
@@ -1156,32 +1207,19 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		   
 		 </ul>
 		*/
+		//Old
 		if (i + 1 < count && [nName isEqual:@"h5"] && [[[[n commentlessStringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString] isLike:@"*sample code*"])
 		{			
-			NSXMLElement *ul = [children objectAtIndex:i + 1];
-			if ([[[ul name] lowercaseString] isEqual:@"ul"])
-			{				
-				for (NSXMLElement *li in [ul children])
-				{					
-					NSXMLElement *spanElement = [[li children] lastObject];
-					NSXMLElement *a = [[spanElement children] lastObject];
-					
-					NSString *href = [[a attributeForName:@"href"] commentlessStringValue];
-					NSString *strval = [a commentlessStringValue];
-					
-					if (!href || !strval)
-						continue;
-					
-					if (!SampleCodeProjectEntity)
-						SampleCodeProjectEntity = [NSEntityDescription entityForName:@"SampleCodeProject" inManagedObjectContext:transientContext];
-					
-					NSManagedObject *seealso = [[NSManagedObject alloc] initWithEntity:SampleCodeProjectEntity insertIntoManagedObjectContext:transientContext];
-					[seealso setValue:href forKey:@"href"];
-					[seealso setValue:[strval stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
-					[seealso setValue:object forKey:@"container"];
-				}
-			}
+			parseSamplecodeprojects(i + 1, children);
 		}
+		
+		//New
+		//FIXME: For some reason <div class="api relatedSampleCode"> isn't being parsed into children, so this doesn't work for some elements. Yet to work out why it isn't parsed.
+		if ([nName isEqual:@"div"] && [nClass containsObject:@"api"] && [nClass containsObject:@"relatedsamplecode"])
+		{
+			parseSamplecodeprojects(1, [n children]);
+		}
+		
 		
 		//declared_in_header
 		/* <div class="DeclaredIn">
@@ -1211,25 +1249,34 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		 <p> ... </p>
 		 ...
 		 */
+		void (^parseSpecialConsiderations)(NSUInteger, NSArray *) = ^(NSUInteger j, NSArray *parentChildren) {
+			if ([parentChildren count])
+			{
+				NSMutableString *specialConsiderations = [[NSMutableString alloc] init];
+				
+				for (; j < [parentChildren count]; j++)
+				{
+					NSXMLElement *m = [parentChildren objectAtIndex:j];
+					if (![m isKindOfClass:[NSXMLElement class]])
+						continue;
+					if (![[[m name] lowercaseString] isEqual:@"p"])
+						break;
+					
+					[specialConsiderations appendFormat:@"<p>%@</p>", [m commentlessStringValue]];
+				}
+				
+				[object setValue:specialConsiderations forKey:@"specialConsiderations"];
+			}
+		};
+		
 		if (i + 1 < count && [nName isEqual:@"h5"] && [[[[n commentlessStringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString] isEqual:@"special considerations"])
 		{
-			NSMutableString *specialConsiderations = [[NSMutableString alloc] init];
-			
-			NSUInteger j;
-			for (j = i + 1; j < count; j++)
-			{
-				NSXMLElement *m = [children objectAtIndex:j];
-				if (![m isKindOfClass:[NSXMLElement class]])
-					continue;
-				if (![[[m name] lowercaseString] isEqual:@"p"])
-					break;
-				
-				[specialConsiderations appendFormat:@"<p>%@</p>", [m commentlessStringValue]];
-			}
-			
-			[object setValue:specialConsiderations forKey:@"specialConsiderations"];
+			parseSpecialConsiderations(i + 1, children);
 		}
-		
+		else if ([nName isEqual:@"div"] && [nClass containsObject:@"api"] && [nClass containsObject:@"specialconsiderations"])
+		{
+			parseSpecialConsiderations(1, [n children]);
+		}
 	}
 	
 	if (isOnlyAElements)
@@ -1351,6 +1398,10 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 						
 						NSManagedObject *taskgroupItem = [[NSManagedObject alloc] initWithEntity:MetaTaskGroupItemEntity insertIntoManagedObjectContext:transientContext];
 						[taskgroupItem setValue:href forKey:@"href"];
+						
+						//Some bright spark at Apple throught it was a good idea to use an en-dash instead of a hyphen-minus to denote an instance method. This means task items can't be copied from Apple's docs verbatim, as the hyphen won't compile properly.
+						strval = [strval stringByReplacingOccurrencesOfString:@"\u2013" withString:@"-"];
+						
 						[taskgroupItem setValue:[strval stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
 						[taskgroupItem setValue:[NSNumber numberWithInt:taskgroupItemPositionIndex] forKey:@"positionIndex"];
 						[taskgroupItem setValue:taskgroup forKey:@"parentGroup"];
@@ -1460,9 +1511,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			
 			if ([strval isLike:@"//apple_ref/c/data*"])
 				return @"ObjCNotification";
-			
-			//[strval isLike:@"*/c/func*"] || [strval isLike:@"*/c/tdef*"] || [strval isLike:@"*/c/macro*"])
-			
+						
 			return nil;
 		}];
 		
@@ -1476,7 +1525,6 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		
 		NSString *entityName = [arr objectAtIndex:0];
 				
-		//if (!ObjCMethodEntity)
 		int isInstanceMethod = -1;
 		if ([entityName isEqual:@"ObjCMethod_Instance"])
 		{
@@ -1511,23 +1559,6 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		[newItem setValue:transientObject forKey:@"globalContainer"];
 		[newItem setValue:docset forKey:@"docset"];
 	}
-	
-	/*
-	for (NSArray *arr in methods)
-	{
-		if ([arr count] < 2)
-			continue;
-		
-		if (!ObjCNotificationEntity)
-			ObjCNotificationEntity = [NSEntityDescription entityForName:@"ObjCNotification" inManagedObjectContext:transientContext];
-		
-		//IGKDocRecordManagedObject *newNotification = [[IGKDocRecordManagedObject alloc] initWithEntity:ObjCNotificationEntity insertIntoManagedObjectContext:transientContext];
-		
-		[self scrapeMethodChildren:arr index:0 managedObject:newNotification];
-		[newNotification setValue:transientObject forKey:@"container"];
-		[newNotification setValue:docset forKey:@"docset"];
-	}
-	 */
 }
 
 + (NSArray *)splitArray:(NSArray *)array byBlock:(NSString* (^)(id a))block
@@ -1589,412 +1620,3 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 
 
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#pragma mark Trash
-//Some code I'm saving in case I need it later
-
-#if 0
-
-#pragma mark -- Boyers-Moore
-
-//Surprisingly, -[NSString isLike:] is the bottleneck. We make our own.
-
-
-//Oh look - some code from wikipedia. I hope it works
-
-const unichar * IGKStringToChars(NSString *string)
-{
-	unichar *chars = (unichar *)malloc([string length] * sizeof(unichar));
-	
-	return chars;
-}
-const unichar * IGKStringToCharsWithLength(NSString *string, size_t length)
-{
-	unichar *chars = (unichar *)malloc(length * sizeof(unichar));
-	
-	return chars;
-}
-BOOL IGKStringIsLike(const unichar *needle, size_t nlen, const unichar *haystack, size_t hlen)
-{
-    size_t scan = 0;
-    size_t bad_char_skip[USHRT_MAX + 1]; /* Officially called:
-                                          * bad character shift */
-	
-    /* Sanity checks on the parameters */
-    if (nlen <= 0 || !haystack || !needle)
-        return NO;
-	
-    /* ---- Preprocess ---- */
-    /* Initialize the table to default value */
-    /* When a character is encountered that does not occur
-     * in the needle, we can safely skip ahead for the whole
-     * length of the needle.
-     */
-    for (scan = 0; scan <= USHRT_MAX; scan = scan + 1)
-        bad_char_skip[scan] = nlen;
-	
-    /* C arrays have the first byte at [0], therefore:
-     * [nlen - 1] is the last byte of the array. */
-    size_t last = nlen - 1;
-	
-    /* Then populate it with the analysis of the needle */
-    for (scan = 0; scan < last; scan = scan + 1)
-        bad_char_skip[needle[scan]] = last - scan;
-	
-    /* ---- Do the matching ---- */
-	
-    /* Search the haystack, while the needle can still be within it. */
-    while (hlen >= nlen)
-    {
-        /* scan from the end of the needle */
-        for (scan = last; haystack[scan] == needle[scan]; scan = scan - 1)
-            if (scan == 0) /* If the first byte matches, we've found it. */
-                return YES;
-		
-        /* otherwise, we need to skip some bytes and start again. 
-		 Note that here we are getting the skip value based on the last byte
-		 of needle, no matter where we didn't match. So if needle is: "abcd"
-		 then we are skipping based on 'd' and that value will be 4, and
-		 for "abcdd" we again skip on 'd' but the value will be only 1.
-		 The alternative of pretending that the mismatched character was 
-		 the last character is slower in the normal case (Eg. finding 
-		 "abcd" in "...azcd..." gives 4 by using 'd' but only 
-		 4-2==2 using 'z'. */
-        hlen     -= bad_char_skip[haystack[last]];
-        haystack += bad_char_skip[haystack[last]];
-    }
-	
-    return NO;
-}
-void IGKFreeStringChars(const unichar *string)
-{
-	free((void *)string);
-}
-
-
-
-#pragma mark -- NSXMLDocument Indexing
-
-- (void)extractPath:(NSString *)extractPath docset:(NSManagedObject *)docset
-{
-	NSURL *fileurl = [NSURL fileURLWithPath:extractPath];
-	
-	NSError *err = nil;
-	NSXMLDocument *doc = [[NSXMLDocument alloc] initWithContentsOfURL:fileurl options:NSXMLDocumentTidyHTML error:&err];
-	if (!doc)
-		return;
-	
-	NSEntityDescription *methodEntity = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:ctx];
-	
-	NSArray *methodNodes = [[doc rootElement] nodesForXPath:@"//a" error:&err];
-	
-#if 0
-	const unichar *instm_c = IGKStringToChars(@"instm");
-	const unichar *clm_c = IGKStringToChars(@"clm");
-	const unichar *func_c = IGKStringToChars(@"/c/func");
-	const unichar *tdef_c = IGKStringToChars(@"/c/tdef");
-	const unichar *macro_c = IGKStringToChars(@"/c/macro");
-#endif
-	
-	NSSet *containersSet = [[NSMutableSet alloc] init];
-	for (NSXMLNode *a in methodNodes)
-	{
-		if (![a isKindOfClass:[NSXMLElement class]])
-			continue;
-		
-		NSString *name = [[a attributeForName:@"name"] commentlessStringValue];
-		if (name)
-		{
-#if 0
-			size_t namelen = [name length];
-			const unichar *namechars = IGKStringToCharsWithLength(name, namelen);
-			
-			
-			//if (![name isLike:@"*instm*"] && ![name isLike:@"*clm*"] && ![name isLike:@"*/c/func*"] && ![name isLike:@"*/c/tdef*"]  && ![name isLike:@"*/c/macro*"])
-			if (IGKStringIsLike(instm_c, 5, namechars, namelen) ||
-				IGKStringIsLike(clm_c, 3, namechars, namelen) ||
-				IGKStringIsLike(func_c, 7, namechars, namelen) ||
-				IGKStringIsLike(tdef_c, 7, namechars, namelen) ||
-				IGKStringIsLike(macro_c, 8, namechars, namelen)) //Yeah entering lengths like this is really error prone
-			{
-				
-			}
-			
-			IGKFreeStringChars(namechars);
-#endif
-			[containersSet addObject:[a parent]];
-		}
-		
-	}
-	
-#if 0
-	IGKFreeStringChars(instm_c);
-	IGKFreeStringChars(clm_c);
-	IGKFreeStringChars(func_c);
-	IGKFreeStringChars(tdef_c);
-	IGKFreeStringChars(macro_c);
-#endif
-	
-	
-	NSMutableArray *methods = [[NSMutableArray alloc] init];
-	for (NSXMLNode *container in containersSet)
-	{
-		NSArray *arr = [self splitArray:[container children] byBlock:^BOOL(id a) {
-			if (![a isKindOfClass:[NSXMLElement class]])
-				return NO;
-			
-			NSXMLNode *el = [a attributeForName:@"name"];
-			if ([[el commentlessStringValue] isLike:@"*instm*"])
-				return YES;
-			return NO;
-		}];
-		
-		[methods addObjectsFromArray:arr];
-	}
-		
-	dispatch_async(dbQueue, ^{
-		
-		//More parsing, database stuff
-		
-		//NSManagedObject *obj = [self addRecordNamed:name entityName:entityName desc:abstract sourcePath:extractPath];
-		
-		for (NSArray *arr in methods)
-		{
-			NSString *name = nil;
-			NSMutableString *description = nil;
-			NSString *prototype = nil;
-			
-			for (NSXMLElement *n in arr)
-			{
-				if (![n isKindOfClass:[NSXMLElement class]])
-					continue;
-				
-				if ([[n name] isEqual:@"h3"])
-				{
-					[self createMethodNamed:name description:description prototype:prototype methodEntity:methodEntity parent:nil docset:docset];
-					
-					description = [[NSMutableString alloc] init];
-					prototype = nil;
-					name = [n commentlessStringValue];
-					continue;
-				}
-				
-				if ([[n name] isEqual:@"p"])
-				{
-					if ([[[n attributeForName:@"class"] commentlessStringValue] isEqual:@"spaceabovemethod"])
-					{
-						prototype = [n commentlessStringValue];
-					}
-					else
-					{
-						[description appendFormat:@"<p>%@</p>", [n commentlessStringValue]];
-					}
-				}
-			}
-			
-			[self createMethodNamed:name description:description prototype:prototype methodEntity:methodEntity parent:nil docset:docset];
-		}
-		
-	});
-	
-	return;
-	
-	//Let's try to extract the class's name (assuming it is a class of course)	
-	NSError *error = nil;
-	NSString *contents = [NSString stringWithContentsOfFile:extractPath encoding:NSUTF8StringEncoding error:&error];
-	if (error || !contents)
-		return NO;
-	
-	
-	//Parse the item's name and kind
-	NSString *regex_className = @"<a name=\"//apple_ref/occ/([a-z_]+)/([a-zA-Z_][a-zA-Z0-9_]*)";
-	NSArray *className_captures = [contents captureComponentsMatchedByRegex:regex_className];
-	if ([className_captures count] < 3)
-		return NO;
-	
-	NSString *type = [className_captures objectAtIndex:1];
-	NSString *name = [className_captures objectAtIndex:2];
-	
-	/* Common types
-	 cl		- class
-	 intf	- protocol
-	 instm	- old/deprecated classes
-	 intfm	- old/deprecated protocols
-	 cat		- category
-	 binding - bindings listing
-	 */
-	
-	NSString *entityName = nil;
-	if ([type isEqual:@"cl"] || [type isEqual:@"instm"])
-		entityName = @"ObjCClass";
-		
-		else if ([type isEqual:@"cat"])
-			entityName = @"ObjCCategory";
-			
-			else if ([type isEqual:@"intf"] || [type isEqual:@"intfm"])
-				entityName = @"ObjCProtocol";
-				
-				else if ([type isEqual:@"binding"])
-					entityName = @"ObjCBindingsListing";
-					
-					//If we don't understand the entity name, bail
-					if (!entityName)
-						return NO;
-	
-	//Parse the abstract
-	NSString *regex_abstract = @"<a name=\"[^\"]+\" title=\"Overview\"></a>[ \\t\\n]*<h2[^>]+>Overview</h2>(.+?)((<a name=\"[^\"]+\" title=\"[^\"]+\"></a>[ \\t\\n]*<h2 class=\"jump\">)|(<div id=\"pageNavigationLinks\"))"; //@"<div [^>]*id=\"Overview_section\"[^>]*>(.+)</div>\\s*<a name=";
-	NSArray *abstract_captures = [contents captureComponentsMatchedByRegex:regex_abstract
-																   options:(RKLDotAll|RKLCaseless)
-																	 range:NSMakeRange(0, [contents length])
-																	 error:nil];
-	NSString *abstract = nil;
-	if ([abstract_captures count] >= 2)
-		abstract = [abstract_captures objectAtIndex:1];
-		
-		//Deprecation appendicies and bindings listings have no abstract	
-		if ([abstract length] == 0)
-		{
-			abstract = @"";
-		}
-	
-	NSManagedObject *obj = [self addRecordNamed:name entityName:entityName desc:abstract sourcePath:extractPath];
-	[obj setValue:docset forKey:@"docset"];
-	
-	NSString *regex_instanceMethodBlock = @"<h2 class=\"jump\">\\s*Instance Methods\\s*</h2>(.+?)(<h2 class=\"jump\">|<p class=\"content_text\" lang=\"en\" dir=\"ltr\">)";
-	NSString *instanceMethodMatch = [contents stringByMatching:regex_instanceMethodBlock
-													   options:(RKLDotAll|RKLCaseless)
-													   inRange:NSMakeRange(0, [contents length])
-													   capture:0
-														 error:nil];
-	
-	if ([instanceMethodMatch length])
-	{
-		NSEntityDescription *methodEntity = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:ctx];
-		
-		NSString *regex_instanceMethod = [NSString stringWithFormat:@"<a name=\"//apple_ref/occ/instm/%@/([a-zA-Z0-9_$:]+)\" title=\"([a-zA-Z0-9_$:]+)\">", name];
-		NSArray *methods = [instanceMethodMatch componentsSeparatedByRegex:regex_instanceMethod];
-		
-		for (NSString *method in methods)
-		{			
-			//Method name
-			NSString *methodName = [method stringByMatching:@"<h3 class=\"jump instanceMethod\">([^<>]+)</h3>" capture:1];
-			if (methodName == nil)
-				continue;
-			
-			IGKDocRecordManagedObject *newMethod = [[IGKDocRecordManagedObject alloc] initWithEntity:methodEntity insertIntoManagedObjectContext:ctx];
-			
-			//Method abstract
-			NSString *methodAbstract = [method stringByMatching:@"</h3>\\s*<p class=\"spaceabove\">([^<>]+)</p>" capture:1];
-			
-			//Method Signature
-			NSString *methodSignature = [method stringByMatching:@"<p class=\"spaceabovemethod\">(.+?)</p>" capture:1];
-			methodSignature = [methodSignature stringByReplacingOccurrencesOfRegex:@"<a\\s+[^>]+>(.+?)</a>" withString:@"$1"];
-			
-			[newMethod setValue:[methodName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
-			[newMethod setValue:obj forKey:@"container"];
-			[newMethod setValue:obj forKey:@"globalContainer"];
-			[newMethod setValue:docset forKey:@"docset"];
-			[newMethod setValue:methodSignature forKey:@"signature"];
-			
-			if ([methodAbstract length])
-				[newMethod setValue:methodAbstract forKey:@"overview"];
-		}
-	}
-	
-	
-	return YES;
-}
-
-
-#pragma mark -- NSXMLDocument Indexing Helper Methods
-
-- (void)createMethodNamed:(NSString *)name description:(NSString *)description prototype:(NSString *)prototype methodEntity:(NSEntityDescription *)methodEntity parent:(NSManagedObject*)parent docset:(NSManagedObject*)docset
-{
-	if (name == nil)
-		return;
-	
-	IGKDocRecordManagedObject *newMethod = [[IGKDocRecordManagedObject alloc] initWithEntity:methodEntity insertIntoManagedObjectContext:ctx];
-	
-	[newMethod setValue:[name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
-	
-	if ([description length])
-		[newMethod setValue:description forKey:@"overview"];
-	
-	[newMethod setValue:prototype forKey:@"signature"];
-	
-	[newMethod setValue:parent forKey:@"container"];
-	[newMethod setValue:parent forKey:@"globalContainer"];
-	[newMethod setValue:docset forKey:@"docset"];
-}
-
-- (NSArray *)splitArray:(NSArray *)array byBlock:(BOOL (^)(id a))block
-{
-	NSMutableArray *arrays = [[NSMutableArray alloc] init];
-	
-	NSMutableArray *currentArray = [[NSMutableArray alloc] init];
-	[arrays addObject:currentArray];
-	
-	for (id a in array)
-	{
-		if (block(a))
-		{
-			currentArray = [[NSMutableArray alloc] init];
-			[arrays addObject:currentArray];
-		}
-		else
-		{
-			[currentArray addObject:a];
-		}
-	}
-	
-	return arrays;
-}
-- (NSArray *)array:(NSArray *)array findObjectByBlock:(BOOL (^)(id a))block
-{	
-	for (id a in array)
-	{
-		if (block(a))
-		{
-			return a;
-		}
-	}
-	
-	return nil;
-}
-
-
-
-#endif
