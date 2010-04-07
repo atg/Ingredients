@@ -325,7 +325,7 @@
 {
 	NSString *entityName = [[self entity] name];
 	
-	if([entityName isEqual:@"ObjCMethod"])
+	if([entityName isEqual:@"ObjCMethod"] || [entityName isEqual:@"ObjCProperty"])
 		return CHPriorityMethod;
 	
 	else if([entityName isEqual:@"ObjCClass"])
@@ -437,6 +437,9 @@
 		else
 			return CHSymbolButtonObjcMethod | CHSymbolButtonStaticScope;
 	}
+	
+	else if([entityName isEqual:@"ObjCProperty"])
+		return CHSymbolButtonObjcProperty;
 	
 	else if([entityName isEqual:@"CTypedef"])
 		return CHSymbolButtonTypedef;

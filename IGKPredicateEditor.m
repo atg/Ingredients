@@ -80,18 +80,50 @@
 		{
 			requestedEntityName = @"ObjCClass";
 		}
-		else if([requestedEntityName isEqual:@"Protocol"])
-		{
-			requestedEntityName = @"ObjCProtocol";
-		}
 		else if([requestedEntityName isEqual:@"Category"])
 		{
 			requestedEntityName = @"ObjCCategory";
 		}
+		else if([requestedEntityName isEqual:@"Protocol"])
+		{
+			requestedEntityName = @"ObjCProtocol";
+		}
+		else if([requestedEntityName isEqual:@"Bindings"])
+		{
+			requestedEntityName = @"ObjCBindingsListing";
+		}
+		
 		else if([requestedEntityName isEqual:@"Method"])
 		{
 			requestedEntityName = @"ObjCMethod";
 		}
+		else if([requestedEntityName isEqual:@"Property"])
+		{
+			requestedEntityName = @"ObjCProperty";
+		}
+		
+		else if([requestedEntityName isEqual:@"Notification"])
+		{
+			requestedEntityName = @"ObjCNotification";
+		}
+		else if([requestedEntityName isEqual:@"Global"])
+		{
+			requestedEntityName = @"CGlobal";
+		}
+		else if([requestedEntityName isEqual:@"Constant"])
+		{
+			requestedEntityName = @"CConstant";
+		}
+		
+		else if([requestedEntityName isEqual:@"Enum"])
+		{
+			requestedEntityName = @"CEnum";
+		}
+		else if([requestedEntityName isEqual:@"Miscellaneous Type"])
+		{
+			requestedEntityName = @"CTypedef";
+		}
+		
 		else {
 			requestedEntityName = @"DocRecord";
 		}
