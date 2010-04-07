@@ -791,7 +791,6 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			if (hasRecordedMethod)
 				break;
 			hasRecordedMethod = YES;
-			
 			[object setValue:[[n commentlessStringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
 						
 			continue;
@@ -892,11 +891,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			} while (NO);
 		}
 		
-		
-		
 		//overview
 		// <p class="spaceabove"> ... </p> <p class="spaceabove"> ... </p> ...
-		if ([nClass containsObject:@"spaceabove"])
+		if ([nClass containsObject:@"spaceabove"] || [nClass containsObject:@"abstract"])
 		{
 			NSMutableString *overview = [[NSMutableString alloc] init];
 			[overview appendFormat:@"<p>%@</p>", [n commentlessStringValue]];
@@ -907,14 +904,15 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 				NSXMLElement *m = [children objectAtIndex:j];
 				if (![m isKindOfClass:[NSXMLElement class]])
 					continue;
-				if (![[[m attributeForName:@"class"] commentlessStringValue] isEqual:@"spaceabove"])
+				
+				NSString *mclass = [[m attributeForName:@"class"] commentlessStringValue];
+				if (![mclass isEqual:@"spaceabove"] && ![mclass isEqual:@"abstract"])
 					break;
 				
 				[overview appendFormat:@"<p>%@</p>", [m commentlessStringValue]];
 			}
 						
 			[object setValue:overview forKey:@"overview"];
-						
 			continue;
 		}
 		
@@ -1010,7 +1008,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		}
 		
 		//discussion
-		/* <h5 class="tight">Discussion</h5>
+		
+		//Old
+		/* <h5>Discussion</h5>
 		   <p> ... </p>
 		   <p> ... </p>
 		   ...
@@ -1034,6 +1034,41 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			[object setValue:discussion forKey:@"discussion"];
 		}
 		
+		//New
+		/* <div class="api discussion">
+		     <h5>Discussion</h5>
+		     <p> ... </p>
+		     <p> ... </p>
+		     ...
+		   </div>
+		 */
+		if ([nName isEqual:@"div"] && [nClass containsObject:@"api"] && [nClass containsObject:@"discussion"])
+		{
+			NSXMLElement *nchildren = [n children];
+			NSUInteger nchildrenCount = [nchildren count];
+
+			if (nchildrenCount > 0)
+			{
+				NSMutableString *discussion = [[NSMutableString alloc] init];
+				
+				NSUInteger j;
+				for (j = 1; j < nchildrenCount; j++)
+				{
+					NSXMLElement *m = [nchildren objectAtIndex:j];
+					if (![m isKindOfClass:[NSXMLElement class]])
+						continue;
+					if (![[[m name] lowercaseString] isEqual:@"p"])
+						break;
+					
+					[discussion appendFormat:@"<p>%@</p>", [m commentlessStringValue]];
+				}
+				
+				[object setValue:discussion forKey:@"discussion"];
+			}
+			
+		}
+		
+				
 		//availability
 		/* <div class="Availability">
 			   <ul class="availability">
