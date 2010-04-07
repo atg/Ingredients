@@ -13,6 +13,8 @@
 
 }
 
+- (NSString *)docsetURLHost;
+
 //A localized name of the docset, in a way that is suitable for the UI
 - (NSString *)localizedUserInterfaceName;
 

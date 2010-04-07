@@ -9,6 +9,7 @@
 #import "IGKArrayController.h"
 #import "Ingredients_AppDelegate.h"
 #import "IGKDocRecordManagedObject.h"
+#import "IGKApplicationDelegate.h"
 
 @implementation IGKArrayController
 

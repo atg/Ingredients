@@ -7,6 +7,8 @@
 //
 
 #import "IGKMatteSegmentedControl.h"
+#import "NSShadow+MCAdditions.h"
+#import "NSBezierPath+MCAdditions.h"
 
 @interface IGKMatteSegmentedControl ()
 
@@ -121,8 +123,6 @@
 		
 		[[NSColor colorWithCalibratedRed:0.728 green:0.728 blue:0.728 alpha:1.000] set];
 		
-		
-		//NSBezierPath *pressedPath = [[self class] roundedBezierInRect:pressedRect radius:radius hasLeft:isLeft hasRight:isRight];
 		[pressedPath fill];
 				
 		[pressedPath fillWithInnerShadow:insideShadow];
@@ -163,18 +163,6 @@
 	NSPoint topLeft = NSMakePoint(NSMinX(rect), NSMaxY(rect));
 	NSPoint topRight = NSMakePoint(NSMaxX(rect), NSMaxY(rect));
 	NSPoint bottomRight = NSMakePoint(NSMaxX(rect), NSMinY(rect));
-	
-	
-	/*if (hasLeft && !hasRight)
-	{
-		[b moveToPoint:NSMakePoint(NSMidX(rect), NSMaxY(rect))];
-		[b appendBezierPathWithArcFromPoint:topLeft toPoint:bottomLeft radius:radius];
-		[b appendBezierPathWithArcFromPoint:bottomLeft toPoint:bottomRight radius:radius];
-
-	}
-	else
-		[b moveToPoint:topLeft];
-	*/
 	
 	if (hasLeft)
 		[b moveToPoint:NSMakePoint(NSMidX(rect), NSMaxY(rect))];
@@ -234,7 +222,7 @@
 
 
 
-
+#if 0
 - (void)drawSegmentDivider:(NSUInteger)segmentIndex isSelected:(BOOL)isSelected runningX:(float)runningX
 {
 	NSRect rect = [self bounds];
@@ -382,5 +370,6 @@
 		runningX += 1.0;
 	}
 }
+#endif
 
 @end

@@ -12,6 +12,8 @@
 
 @implementation IGKApplicationDelegate
 
+@synthesize windowControllers;
+
 - (id)init
 {
 	if (self = [super init])

@@ -28,6 +28,8 @@
 @property (assign) WebView *webView;
 @property (assign) id delegate;
 
+- (void)backForwardManagerUpdatedLists:(id)bfm;
+
 - (void)visitPage:(WebHistoryItem *)item;
 
 - (IBAction)goBack:(id)sender;

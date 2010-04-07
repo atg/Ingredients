@@ -14,7 +14,7 @@
 - (NSPredicate *)predicate
 {
 	//We want to remove any null comparison predicates from our predicate
-	NSCompoundPredicate *predicate = [super predicate];
+	NSCompoundPredicate *predicate = (NSCompoundPredicate *)[super predicate];
 	NSLog(@"Pre = %@", predicate);
 	
 	if (!predicate)

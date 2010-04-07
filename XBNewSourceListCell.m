@@ -183,7 +183,7 @@ const float actionButtonMargin = 3.0;
 	labelRect.origin.y += 1;
 	if (actionButtonState != 0)
 		labelRect.size.width -= actionButtonDiameter + 2*actionButtonMargin - 2.0;
-	NSBezierPath *bp = [NSBezierPath bezierPathWithRoundedRect:labelRect xRadius:labelRect.size.height/2.0 yRadius:labelRect.size.height/2.0];
+	
 	[[[self class] baseColorForLabel:label] set];
 	
 	

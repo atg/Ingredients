@@ -101,7 +101,6 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	
 	scraperDocset = docset;
 	paths = [[NSMutableArray alloc] init];
-	//pathsCount = [self backgroundSearch:docset];
 	
 	return YES;
 }
@@ -347,9 +346,6 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		NSEntityDescription *enumEntity = nil;
 		NSEntityDescription *structEntity = nil;
 		NSEntityDescription *unionEntity = nil;
-		NSEntityDescription *cppMethodEntity = nil;
-		NSEntityDescription *cppClassStructEntity = nil;
-		NSEntityDescription *cppNamespaceEntity = nil;
 		
 		NSManagedObject *obj = nil;
 		if (entityName)
@@ -547,13 +543,16 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 + (NSArray *)splitArray:(NSArray *)array byBlock:(NSString* (^)(id a))block;
 + (NSArray *)array:(NSArray *)array findObjectByBlock:(BOOL (^)(id a))block;
 
-- (void)createMethodNamed:(NSString *)name description:(NSString *)description prototype:(NSString *)prototype methodEntity:(NSEntityDescription *)methodEntity parent:(NSManagedObject*)parent docset:(NSManagedObject*)docset transientContext:(NSManagedObjectContext *)transientContext;
+- (void)createMethodNamed:(NSString *)name description:(NSString *)description prototype:(NSString *)prototype
+			 methodEntity:(NSEntityDescription *)methodEntity parent:(NSManagedObject*)parent docset:(NSManagedObject*)theDocset;
 
 - (void)scrape;
-- (void)scrapeApplecode:(NSString *)applecode;
 - (void)scrapeMethod;
 - (void)scrapeAbstractMethodContainer;
 - (void)scrapeMethodChildren:(NSArray *)children index:(NSUInteger)index managedObject:(NSManagedObject *)object;
+
+- (void)scrapeApplecode:(NSString *)applecode;
+- (void)scrapeApplecodes:(NSArray *)applecodes;;
 
 @end
 
@@ -609,9 +608,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	if (!doc)
 		return;
 	
-	//Depending on the type of obj, we will need to parse it differently
-	NSEntityDescription *entity = [transientObject entity];
-	
+	//Depending on the type of obj, we will need to parse it differently	
 	if ([transientObject isKindOfEntityNamed:@"ObjCAbstractMethodContainer"])
 	{
 		[self scrapeAbstractMethodContainer];
@@ -1285,11 +1282,11 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		if (![firstChild respondsToSelector:@selector(parent)])
 			return;
 		
-		NSXMLElement *parent = [firstChild parent];
+		NSXMLElement *parent = (NSXMLElement *)[firstChild parent];
 		if (![parent respondsToSelector:@selector(parent)])
 			return;
 		
-		NSXMLElement *grandparent = [parent parent];
+		NSXMLElement *grandparent = (NSXMLElement *)[parent parent];
 		if (![parent respondsToSelector:@selector(children)])
 			return;
 		

@@ -36,8 +36,6 @@
 - (BOOL)findPaths;
 - (void)index;
 
-+ (id)extractManagedObjectFully:(NSManagedObject *)persistobj context:(NSManagedObjectContext *)transientContext;
-
 @end
 
 

@@ -9,6 +9,8 @@
 #import <Cocoa/Cocoa.h>
 #import <dispatch/dispatch.h>
 
+@class IGKDocRecordManagedObject;
+
 @interface IGKArrayController : NSObject<NSTableViewDataSource, NSTableViewDelegate>
 {
 	IBOutlet NSTableView *tableView;
@@ -19,7 +21,7 @@
 	NSArray *smartSortDescriptors;
 	NSArray *currentSortDescriptors;
 	
-	NSArray *fetchedObjects;
+	NSMutableArray *fetchedObjects;
 	
 	id vipObject;
 	BOOL fetchContainsVipObject;
@@ -39,7 +41,8 @@
 @property (assign) id vipObject;
 
 - (void)refresh;
-- (void)refreshAndSelectFirst:(BOOL)selectFirst renderSelection:(BOOL)renderSelection;
+- (void)refreshAndSelectObject:(IGKDocRecordManagedObject *)obj renderSelection:(BOOL)renderSelection;
+- (void)refreshAndSelectIndex:(NSInteger)idx renderSelection:(BOOL)renderSelection;
 
 - (id)objectAtRow:(NSInteger)row;
 - (id)selection;

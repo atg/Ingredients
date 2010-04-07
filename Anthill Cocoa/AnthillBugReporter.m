@@ -271,8 +271,11 @@ NSString *UKCrashReporterFindTenFiveCrashReportPath(NSString* appName, NSString*
 	NSString *crashLogPath = nil;
 	NSString *crashLog = nil;
 	crashLogPath = UKCrashReporterFindTenFiveCrashReportPath(appName, crashLogsFolder);
+	
+	NSStringEncoding enc = NSUTF8StringEncoding;
+	NSError *err = nil;
 	if (crashLogPath)
-		crashLog = [NSString stringWithContentsOfFile:crashLogPath];
+		crashLog = [NSString stringWithContentsOfFile:crashLogPath usedEncoding:&enc error:&err];
 		
 	NSString *urlString = installationURL;
 	if ([urlString length] && ![[urlString substringWithRange:NSMakeRange([urlString length]-1, 1)] isEqual:@"/"])

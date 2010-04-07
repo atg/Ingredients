@@ -9,6 +9,7 @@
 #import "IGKHTMLGenerator.h"
 #import "IGKScraper.h"
 #import "IGKDocRecordManagedObject.h"
+#import "RegexKitLite.h"
 
 BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 {
@@ -37,6 +38,8 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 - (void)html_parametersForCallable:(IGKDocRecordManagedObject *)object;
 
 - (void)html_generic;
+
+- (NSString *)hrefToActualFragment:(IGKDocRecordManagedObject *)mo;
 
 @end
 
@@ -211,7 +214,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		[outputString appendString:@"<ul>\n"];
 		
 		NSArray *taskgroupItems = [[[taskgroup valueForKey:@"items"] allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
-		for (NSManagedObject *taskgroupItem in taskgroupItems)
+		for (IGKDocRecordManagedObject *taskgroupItem in taskgroupItems)
 		{
 			NSString *hrefAndNameAndType = [self hrefToActualFragment:taskgroupItem];
 			
@@ -517,7 +520,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 			[outputString appendString:@"\t\t\t\t<th>See also</th>\n"];
 		else if (i > 0 && i - 1 < [seealsos count])
 		{
-			NSManagedObject *mo = [seealsos objectAtIndex:i - 1];
+			IGKDocRecordManagedObject *mo = [seealsos objectAtIndex:i - 1];
 			[outputString appendFormat:@"\t\t\t\t<td><code><a href='%@' class='stealth'>%@</a></code></td>\n", [self hrefToActualFragment:mo], [mo valueForKey:@"name"]];
 		}
 		else if ([seealsos count])

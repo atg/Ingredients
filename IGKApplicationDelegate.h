@@ -26,7 +26,11 @@
 	dispatch_queue_t backgroundQueue;
 }
 
+@property (readonly) NSMutableArray *windowControllers;
+
 - (BOOL)hasMultipleWindowControllers;
+
+- (dispatch_queue_t)backgroundQueue;
 
 - (IBAction)showPreferences:(id)sender;
 - (IBAction)showWindow:(id)sender;

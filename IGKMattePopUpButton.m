@@ -7,7 +7,8 @@
 //
 
 #import "IGKMattePopUpButton.h"
-
+#import "NSShadow+MCAdditions.h"
+#import "NSBezierPath+MCAdditions.h"
 
 @implementation IGKMattePopUpButtonCell
 

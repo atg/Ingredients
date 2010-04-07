@@ -139,7 +139,6 @@ typedef enum {
 - (IBAction)executeAdvancedSearch:(id)sender;
 - (IBAction)changeViewModeTagged:(id)sender;
 - (IBAction)backForward:(id)sender;
-- (IBAction)changeViewMode:(id)sender;
 
 - (IBAction)openInSafari:(id)sender;
 

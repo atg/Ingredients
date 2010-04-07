@@ -15,7 +15,4 @@
 
 + (NSBezierPath *)roundedBezierInRect:(NSRect)rect radius:(float)radius hasLeft:(BOOL)hasLeft hasRight:(BOOL)hasRight;
 
-- (void)drawSegmentDivider:(NSUInteger)segmentIndex isSelected:(BOOL)isSelected runningX:(float)runningX;
-- (float)drawSegmentSegment:(NSUInteger)segmentIndex isSelected:(BOOL)isSelected runningX:(float)runningX;
-
 @end

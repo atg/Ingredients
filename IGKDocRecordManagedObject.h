@@ -27,6 +27,12 @@ typedef enum {
 + (IGKDocRecordManagedObject *)resolveURL:(NSURL *)url inContext:(NSManagedObjectContext *)ctx tableOfContentsMask:(IGKHTMLDisplayTypeMask *)tocMaskPointer;
 - (NSURL *)docURL:(IGKHTMLDisplayTypeMask)tocMask;
 
++ (NSString *)entityNameFromURLComponentExtension:(NSString *)ext;
+- (NSString *)URLComponentExtension;
+
+- (NSString *)URLComponent;
+- (NSURL *)docURL:(IGKHTMLDisplayTypeMask)tocMask;
+
 - (BOOL)isKindOfEntityNamed:(NSString *)entityName;
 - (BOOL)hasKey:(NSString *)key;
 - (id)valueForSoftKey:(NSString *)key;

@@ -13,6 +13,7 @@
 #import "IGKArrayController.h"
 #import "IGKBackForwardManager.h"
 #import "IGKPredicateEditor.h"
+#import "IGKDocRecordManagedObject.h"
 
 @interface IGKWindowController ()
 
@@ -29,7 +30,7 @@
 - (void)tableOfContentsChangedSelection;
 - (void)registerDisplayTypeInTableView:(IGKHTMLDisplayType)type title:(NSString *)title;
 
-- (void)loadManagedObject:(IGKDocRecordManagedObject *)mo tableOfContentsMask:(IGKHTMLDisplayTypeMask)tableOfContentsMask;
+- (void)loadManagedObject:(IGKDocRecordManagedObject *)mo tableOfContentsMask:(IGKHTMLDisplayTypeMask)tm;
 
 - (void)setMode:(int)modeIndex;
 - (IGKArrayController *)currentArrayController;
@@ -45,6 +46,10 @@
 - (void)loadDocs;
 - (void)loadDocIntoBrowser;
 - (void)setUpForWebView:(WebView *)sender frame:(WebFrame *)frame;
+
+- (void)reloadTableOfContents;
+
+- (void)loadURL:(NSURL *)url recordHistory:(BOOL)recordHistory;
 
 @end
 
@@ -521,14 +526,14 @@
 		[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:url]];
 	}
 }
-- (void)loadManagedObject:(IGKDocRecordManagedObject *)mo tableOfContentsMask:(IGKHTMLDisplayTypeMask)tableOfContentsMask
+- (void)loadManagedObject:(IGKDocRecordManagedObject *)mo tableOfContentsMask:(IGKHTMLDisplayTypeMask)tm
 {
 	currentObjectIDInBrowser = [mo objectID];
 	
 	IGKHTMLGenerator *generator = [[IGKHTMLGenerator alloc] init];
 	[generator setContext:[[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext]];
 	[generator setManagedObject:mo];
-	[generator setDisplayTypeMask:tableOfContentsMask];
+	[generator setDisplayTypeMask:tm];
 	
 	acceptableDisplayTypes = [generator acceptableDisplayTypes];
 	
@@ -1073,9 +1078,9 @@
 	
 	tableOfContentsMask = dtmask;
 	
-	[self loadManagedObject:currentSelectionObject tableOfContentsMask:[self tableOfContentsSelectedDisplayTypeMask]];
+	[self loadManagedObject:(IGKDocRecordManagedObject *)currentSelectionObject tableOfContentsMask:[self tableOfContentsSelectedDisplayTypeMask]];
 	
-	[self recordHistoryForURL:[currentSelectionObject docURL:[self tableOfContentsSelectedDisplayTypeMask]] title:[currentSelectionObject valueForKey:@"name"]];
+	[self recordHistoryForURL:[(IGKDocRecordManagedObject *)currentSelectionObject docURL:[self tableOfContentsSelectedDisplayTypeMask]] title:[currentSelectionObject valueForKey:@"name"]];
 }
 
 - (IBAction)openInSafari:(id)sender

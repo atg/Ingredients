@@ -42,7 +42,7 @@ typedef enum {
 }
 
 @property (assign) id<IGKTableOfContentsDelegate> delegate;
-@property (readonly) NSIndexSet *selectedRowIndexes;
+@property (readonly) NSMutableIndexSet *selectedRowIndexes;
 
 - (void)reloadData;
 - (NSUInteger)rowIndexForPoint:(NSPoint)p;
