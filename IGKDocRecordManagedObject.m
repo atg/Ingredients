@@ -315,11 +315,25 @@
 	return [[NSURL alloc] initWithScheme:@"ingr-doc" host:host path:path];
 }
 
+- (NSString *)documentPath
+{
+	return [[self valueForKey:@"heavyNonQueryables"] valueForKey:@"documentPath"];
+}
+- (void)setDocumentPath:(NSString *)docpath
+{
+	[[self valueForKey:@"heavyNonQueryables"] setValue:docpath forKey:@"documentPath"];
+}
+
 - (void)awakeFromInsert
 {
 	[super awakeFromInsert];
 	
 	[self setValue:[NSNumber numberWithShort:[self priorityval]] forKey:@"priority"];
+	
+	//DocRecordHeavyNonQueryables is an entity that holds medium-sized attributes of DocRecord that aren't directly queried (they aren't filtered in a WHERE clause)
+	NSEntityDescription *heavyNonQEntity = [NSEntityDescription entityForName:@"DocRecordHeavyNonQueryables" inManagedObjectContext:[self managedObjectContext]];
+	NSManagedObject *heavyNonQs = [[NSManagedObject alloc] initWithEntity:heavyNonQEntity insertIntoManagedObjectContext:[self managedObjectContext]];
+	[self setValue:heavyNonQs forKey:@"heavyNonQueryables"];
 }
 - (CHRecordPriority)priorityval
 {
@@ -362,24 +376,6 @@
 		return CHPriorityType;
 	
 	return CHPriorityOther;
-}
-
-- (BOOL)isKindOfEntityNamed:(NSString *)entityName
-{
-	NSManagedObjectContext *ctx = [self managedObjectContext];
-	return [[self entity] isKindOfEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:ctx]];
-}
-- (BOOL)hasKey:(NSString *)key
-{
-	NSDictionary *properties = [[self entity] propertiesByName];
-	return ([properties objectForKey:key] != nil);
-}
-- (id)valueForSoftKey:(NSString *)key
-{
-	if (![self hasKey:key])
-		return nil;
-	
-	return [self valueForKey:key];
 }
 
 - (NSString *)xcontainername

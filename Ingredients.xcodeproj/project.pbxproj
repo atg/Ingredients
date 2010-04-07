@@ -14,6 +14,8 @@
 		7507CF4511598197008449DE /* IGKPredicateEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = 7507CF4311598197008449DE /* IGKPredicateEditor.h */; };
 		7507CF4611598197008449DE /* IGKPredicateEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7507CF4411598197008449DE /* IGKPredicateEditor.m */; };
 		750DFBCF114671CC004C5D08 /* IGKMattePopUpButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 750DFBCE114671CC004C5D08 /* IGKMattePopUpButton.m */; };
+		75195FBA116D49B00034590C /* IGKManagedObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 75195FB8116D49B00034590C /* IGKManagedObject.h */; };
+		75195FBB116D49B00034590C /* IGKManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 75195FB9116D49B00034590C /* IGKManagedObject.m */; };
 		751D2AD21126E4A100403E64 /* IGKArrayController.h in Headers */ = {isa = PBXBuildFile; fileRef = 751D2AD01126E4A100403E64 /* IGKArrayController.h */; };
 		751D2AD31126E4A100403E64 /* IGKArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 751D2AD11126E4A100403E64 /* IGKArrayController.m */; };
 		751D2D181126F1F400403E64 /* no_selection.html in Resources */ = {isa = PBXBuildFile; fileRef = 751D2D171126F1F400403E64 /* no_selection.html */; };
@@ -178,6 +180,8 @@
 		7507CF4411598197008449DE /* IGKPredicateEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKPredicateEditor.m; sourceTree = "<group>"; };
 		750DFBCD114671CC004C5D08 /* IGKMattePopUpButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKMattePopUpButton.h; sourceTree = "<group>"; };
 		750DFBCE114671CC004C5D08 /* IGKMattePopUpButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKMattePopUpButton.m; sourceTree = "<group>"; };
+		75195FB8116D49B00034590C /* IGKManagedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKManagedObject.h; sourceTree = "<group>"; };
+		75195FB9116D49B00034590C /* IGKManagedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKManagedObject.m; sourceTree = "<group>"; };
 		751D2AD01126E4A100403E64 /* IGKArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKArrayController.h; sourceTree = "<group>"; };
 		751D2AD11126E4A100403E64 /* IGKArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKArrayController.m; sourceTree = "<group>"; };
 		751D2D171126F1F400403E64 /* no_selection.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = no_selection.html; sourceTree = "<group>"; };
@@ -619,6 +623,8 @@
 				770B37EC0679A11B001EADE2 /* Ingredients_DataModel.xcdatamodel */,
 				758027A61147E9BF00FCE783 /* IngredientsRevisedDataModel.xcdatamodel */,
 				75F672A9110E254A005F299C /* IGKDocRecordManagedObject.h */,
+				75195FB8116D49B00034590C /* IGKManagedObject.h */,
+				75195FB9116D49B00034590C /* IGKManagedObject.m */,
 				75F672AA110E254A005F299C /* IGKDocRecordManagedObject.m */,
 				75B23906113FB4D300EC1D2B /* IGKDocSetManagedObject.h */,
 				75B23907113FB4D300EC1D2B /* IGKDocSetManagedObject.m */,
@@ -658,6 +664,7 @@
 				75943C0B11441AE0004126E7 /* IGKBackForwardManager.h in Headers */,
 				75A9AA9C11495DA300E539F2 /* IGKEaseInOutAnimatedView.h in Headers */,
 				7507CF4511598197008449DE /* IGKPredicateEditor.h in Headers */,
+				75195FBA116D49B00034590C /* IGKManagedObject.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -822,6 +829,7 @@
 				75943C0C11441AE0004126E7 /* IGKBackForwardManager.m in Sources */,
 				75A9AA9D11495DA300E539F2 /* IGKEaseInOutAnimatedView.m in Sources */,
 				7507CF4611598197008449DE /* IGKPredicateEditor.m in Sources */,
+				75195FBB116D49B00034590C /* IGKManagedObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

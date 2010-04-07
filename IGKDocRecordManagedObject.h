@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "IGKHTMLGenerator.h"
+#import "IGKManagedObject.h"
 
 //Priorities of different objects when sorting the list in case of a tiebreak. From lowest priority to highest
 typedef enum {
@@ -20,7 +21,7 @@ typedef enum {
 	CHPriorityClass,
 } CHRecordPriority;
 
-@interface IGKDocRecordManagedObject : NSManagedObject {
+@interface IGKDocRecordManagedObject : IGKManagedObject {
 
 }
 
@@ -32,10 +33,6 @@ typedef enum {
 
 - (NSString *)URLComponent;
 - (NSURL *)docURL:(IGKHTMLDisplayTypeMask)tocMask;
-
-- (BOOL)isKindOfEntityNamed:(NSString *)entityName;
-- (BOOL)hasKey:(NSString *)key;
-- (id)valueForSoftKey:(NSString *)key;
 
 - (NSImage *)normalIcon;
 - (NSImage *)selectedIcon;

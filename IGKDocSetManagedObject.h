@@ -7,9 +7,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "IGKDocRecordManagedObject.h"
+#import "IGKManagedObject.h"
 
-@interface IGKDocSetManagedObject : IGKDocRecordManagedObject {
+@interface IGKDocSetManagedObject : IGKManagedObject {
 
 }
 
