@@ -17,7 +17,8 @@
 - (id)init
 {
 	if (self = [super init])
-	{		
+	{
+		
 #ifndef NDEBUG
 		if (NSRunAlertPanel(@"Start Over(ish)?", @"Should I clear out the app support folder and preferences?", @"Clear", @"Keep", nil)) {
 						
