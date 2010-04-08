@@ -15,7 +15,6 @@
 {
 	//We want to remove any null comparison predicates from our predicate
 	NSCompoundPredicate *predicate = (NSCompoundPredicate *)[super predicate];
-	NSLog(@"Pre = %@", predicate);
 	
 	if (!predicate)
 		return nil;
@@ -41,11 +40,9 @@
 		
 		if([[left keyPath] isEqual:@"xkind"])
 		{
-			//NSLog(@"Rught: %@", [right constantValue]);
 			requestedEntityName = [right constantValue];
 			continue;
 		}
-		
 
 		if ([right expressionType] != NSConstantValueExpressionType)
 		{
@@ -59,13 +56,8 @@
 		{
 			[newSubpredicates addObject:cmpP];
 		}
-		
-
-		
 	}
-	
-	NSLog(@"newSubpredicates = %@", newSubpredicates);
-	
+		
 	return [[NSCompoundPredicate alloc] initWithType:[predicate compoundPredicateType] subpredicates:newSubpredicates];
 }
 
