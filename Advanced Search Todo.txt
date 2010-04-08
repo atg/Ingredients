@@ -1,0 +1,18 @@
+Name :: text field
+    Done: Search in the "name" field. Entity agnostic
+
+Superclass :: text field
+    Done: Search in the "superclass" field. Entity agnostic
+
+Container :: text field
+    Alex: Add fetched property for "containername" that gets related container's name.
+    JN: Search with predicate "globalContainer.name contains[cd] %@"
+
+Conforms to :: text field
+    Alex: Move "conformsto" to DocRecord. Change light indexer so that "conformsto" is stored as "=NSCoding=NSObject=NSCopying=" etc.
+    JN: In the predicate, do a "%K contains[cd] %@", but remember to remove any "=" characters from the query.
+
+Kind :: popup menu with options
+   Somebody: The menu options are "Class", "Category", "Protocol", "Method", "Function", "Macro", "C type" (more?)
+   
+   JN: Extract this out of the predicate. Take a note of it. Set it as part of the fetch request's entity.

@@ -11,11 +11,12 @@
 
 @implementation IGKSometimesCenteredTextCell
 
-- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
+- (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
     cellFrame.origin.y += [self tag];
 	
-	[super drawWithFrame:cellFrame inView:controlView];
+	[super drawInteriorWithFrame:cellFrame inView:controlView];
 }
+
 
 @end
