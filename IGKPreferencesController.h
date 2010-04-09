@@ -23,6 +23,9 @@
 	
 	IBOutlet NSView *updatesView;
 	IBOutlet NSToolbarItem *updatesToolbarItem;
+	
+	NSMutableArray *developerDirectories;
+	NSMutableArray *docsets;
 }
 
 - (NSManagedObjectContext *)managedObjectContext;
