@@ -8,16 +8,8 @@
 
 #import "IGKDocSetManagedObject.h"
 
-@implementation IGKDocSetManagedObject
-
-- (NSString *)docsetURLHost
+NSString *IGKDocSetShortPlatformName(NSString *platformFamily)
 {
-	return [NSString stringWithFormat:@"%@/%@", [self shortPlatformName], [self shortVersionName]];
-}
-- (NSString *)shortPlatformName
-{
-	NSString *platformFamily = [self valueForKey:@"platformFamily"];
-	
 	if ([platformFamily isEqual:@"macosx"])
 		return @"mac";
 	else if ([platformFamily isEqual:@"iphoneos"])
@@ -25,26 +17,23 @@
 	
 	return platformFamily;
 }
-- (NSString *)shortVersionName
+NSString *IGKDocSetShortVersionName(NSString *platformVersion)
 {
-	NSString *platformVersion = [self valueForKey:@"platformVersion"];
 	if (![platformVersion length])
 		return @"unknown";
 	
 	return platformVersion;
 }
-- (NSString *)localizedUserInterfaceName
+NSString *IGKDocSetLocalizedUserInterfaceName(NSString *platformFamily, NSString *version)
 {
 	/* The name should be
-		Platform [Version]
-	   eg
-		iPhone 3.2
-		Mac 10.6
+	 Platform [Version]
+	 eg
+	 iPhone 3.2
+	 Mac 10.6
 	 */
 	
 	//*** Platform ***
-	
-	NSString *platformFamily = [self valueForKey:@"platformFamily"];
 	NSString *platform = nil;
 	if ([platformFamily isEqual:@"macosx"])
 		platform = @"Mac ";
@@ -53,17 +42,34 @@
 	else if (![platformFamily length])
 		platform = @"Unknown ";
 	else
-		platform = [platformFamily stringByAppendingString:@" "];
-	
+		platform = [platformFamily stringByAppendingString:@" "];	
 	
 	//*** Version ***
-	
-	NSString *version = [self valueForKey:@"platformVersion"];
 	if (version == nil)
 		version = @"";
 	
-	
-	return [platform stringByAppendingString:version];
+	NSString *localizedName = [platform stringByAppendingString:version];
+	NSLog(@"[platform stringByAppendingString:version] = %@", localizedName);
+	return localizedName;
+}
+
+@implementation IGKDocSetManagedObject
+
+- (NSString *)docsetURLHost
+{
+	return [NSString stringWithFormat:@"%@/%@", [self shortPlatformName], [self shortVersionName]];
+}
+- (NSString *)shortPlatformName
+{
+	return IGKDocSetShortPlatformName([self valueForKey:@"platformFamily"]);
+}
+- (NSString *)shortVersionName
+{
+	return IGKDocSetShortVersionName([self valueForKey:@"platformVersion"]);
+}
+- (NSString *)localizedUserInterfaceName
+{
+	return IGKDocSetLocalizedUserInterfaceName([self valueForKey:@"platformFamily"], [self valueForKey:@"platformVersion"]);
 }
 
 @end

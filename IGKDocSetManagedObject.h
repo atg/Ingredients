@@ -9,6 +9,10 @@
 #import <Cocoa/Cocoa.h>
 #import "IGKManagedObject.h"
 
+NSString *IGKDocSetShortPlatformName(NSString *platformFamily);
+NSString *IGKDocSetShortVersionName(NSString *platformVersion);
+NSString *IGKDocSetLocalizedUserInterfaceName(NSString *platformFamily, NSString *version);
+
 @interface IGKDocSetManagedObject : IGKManagedObject {
 
 }

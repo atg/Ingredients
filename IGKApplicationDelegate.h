@@ -27,6 +27,7 @@
 }
 
 @property (readonly) NSMutableArray *windowControllers;
+@property (readonly) id preferencesController;
 
 - (BOOL)hasMultipleWindowControllers;
 
@@ -45,6 +46,8 @@
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, retain, readonly) NSManagedObjectContext *backgroundManagedObjectContext;
+
+- (BOOL)deleteStoreFromDisk:(NSString *)urlpath;
 
 - (IBAction)saveAction:sender;
 - (IBAction)newWindow:(id)sender;

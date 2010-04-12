@@ -20,6 +20,7 @@
 	IBOutlet NSToolbarItem *docsetsToolbarItem;
 	IBOutlet NSTableView *developerDirectoriesTableView;
 	IBOutlet NSTableView *docsetsTableView;
+	IBOutlet NSView *docsetsChangedStatusView;
 	
 	IBOutlet NSView *updatesView;
 	IBOutlet NSToolbarItem *updatesToolbarItem;
@@ -39,10 +40,17 @@
 - (IBAction)addDeveloperDirectory:(id)sender;
 - (IBAction)removeSelectedDeveloperDirectories:(id)sender;
 
+- (IBAction)relaunch:(id)sender;
+
 //Updates logic
 - (IBAction)checkForUpdates:(id)sender;
 
+- (void)addDeveloperDirectoryPath:(NSString *)path;
+- (int)addDocsetWithPath:(NSString *)path localizedUserInterfaceName:(NSString *)localizedUserInterfaceName developerDirectory:(NSString *)devDir;
+
 - (void)setUpdateMatrixTag:(NSInteger)updateMatrixTag;
 - (NSInteger)updateMatrixTag;
+
++ (IGKPreferencesController *)sharedPreferencesController;
 
 @end

@@ -12,6 +12,10 @@
 
 - (void)switchToView:(NSView *)view item:(NSToolbarItem *)toolbarItem animate:(BOOL)animate;
 
+- (void)addDeveloperDirectoryPath:(NSString *)path;
+- (void)reloadTableViews;
+- (void)saveChanges;
+
 @end
 
 @implementation IGKPreferencesController
@@ -22,6 +26,8 @@
 	{
 		developerDirectories = [[NSMutableArray alloc] init];
 		docsets = [[NSMutableArray alloc] init];
+		
+		[self reloadTableViews];
 	}
 	
 	return self;
@@ -86,10 +92,10 @@
 - (void)reloadTableViews
 {
 	if ([[NSUserDefaults standardUserDefaults] valueForKey:@"developerDirectories"])
-		developerDirectories = [[NSUserDefaults standardUserDefaults] valueForKey:@"developerDirectories"];
+		developerDirectories = [[[NSUserDefaults standardUserDefaults] valueForKey:@"developerDirectories"] mutableCopy];
 	
 	if ([[NSUserDefaults standardUserDefaults] valueForKey:@"docsets"])
-		docsets = [[NSUserDefaults standardUserDefaults] valueForKey:@"docsets"];
+		docsets = [[[NSUserDefaults standardUserDefaults] valueForKey:@"docsets"] mutableCopy];
 	
 	[developerDirectoriesTableView reloadData];
 	[docsetsTableView reloadData];
@@ -118,21 +124,54 @@
 			return;
 		}
 		
-		NSMutableDictionary *devDir = [[NSMutableDictionary alloc] init];
-		[devDir setValue:path forKey:@"path"];
-		
-		[developerDirectories addObject:devDir];
-		[self saveChanges];
+		[self addDeveloperDirectoryPath:path];
 		
 		[self reloadTableViews];
 	}];
+}
+- (void)addDeveloperDirectoryPath:(NSString *)path
+{
+	NSMutableDictionary *devDir = [[NSMutableDictionary alloc] init];
+	[devDir setValue:path forKey:@"path"];
+	
+	for (NSDictionary *dict in developerDirectories)
+	{
+		if ([[dict valueForKey:@"path"] isEqual:path])
+			return;
+	}
+	
+	[developerDirectories addObject:devDir];
+	[self saveChanges];
+}
+- (int)addDocsetWithPath:(NSString *)path localizedUserInterfaceName:(NSString *)localizedUserInterfaceName developerDirectory:(NSString *)devDir
+{	
+	NSLog(@"path = %@", path);
+	NSLog(@"localizedUserInterfaceName = %d", localizedUserInterfaceName);
+	NSLog(@"devDir = %@", devDir);
+	
+	NSMutableDictionary *docset = [[NSMutableDictionary alloc] init];
+	[docset setValue:[NSNumber numberWithBool:YES] forKey:@"isEnabled"];
+	[docset setValue:path forKey:@"path"];
+	[docset setValue:localizedUserInterfaceName forKey:@"name"];
+	[docset setValue:devDir forKey:@"developerDirectory"];
+	
+	for (NSDictionary *dict in docsets)
+	{
+		if ([[dict valueForKey:@"path"] isEqual:path])
+			return ([[dict valueForKey:@"isEnabled"] boolValue] ? 1 : 0);
+	}
+	
+	[docsets addObject:docset];
+	[self saveChanges];
+	
+	return -1;
 }
 - (IBAction)removeSelectedDeveloperDirectories:(id)sender
 {
 	NSIndexSet *selectedIndicies = [developerDirectoriesTableView selectedRowIndexes];
 	if ([selectedIndicies count] >= [developerDirectories count])
 	{
-		NSAlert *alert = [NSAlert alertWithMessageText:@"Are you sure you want to remove all developer directories?" defaultButton:@"Remove" alternateButton:@"Don't Remove" otherButton:nil informativeTextWithFormat:@"No documentation will be visible."];
+		NSAlert *alert = [NSAlert alertWithMessageText:@"Are you sure you want to remove all developer directories?" defaultButton:@"Remove" alternateButton:@"Don't Remove" otherButton:nil informativeTextWithFormat:@""];
 		[alert beginSheetModalForWindow:[self window] modalDelegate:self didEndSelector:@selector(removeLastAlertDidEnd:returnCode:contextInfo:) contextInfo:nil];
 	}
 	else
@@ -158,11 +197,71 @@
 
 - (void)saveChanges
 {
+	[self saveChangesNeedsRelaunch:NO];
+}
+- (void)saveChangesNeedsRelaunch:(BOOL)needsRelaunch
+{
+	BOOL devDirsChanged = NO;
+	if (![[[NSUserDefaults standardUserDefaults] valueForKey:@"developerDirectories"] isEqual:developerDirectories])
+		devDirsChanged = YES;
+	
+	BOOL docsetsChanged = NO;
+	if (![[[NSUserDefaults standardUserDefaults] valueForKey:@"docsets"] isEqual:docsets])
+		docsetsChanged = YES;
+	
 	[[NSUserDefaults standardUserDefaults] setValue:developerDirectories forKey:@"developerDirectories"];
 	[[NSUserDefaults standardUserDefaults] setValue:docsets forKey:@"docsets"];
 	
+	if (needsRelaunch)
+	{
+		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"needsReindex"];
+	}
+	
 	[[NSUserDefaults standardUserDefaults] synchronize];
+	
+	if (needsRelaunch)
+	{
+		if (devDirsChanged || docsetsChanged)
+			[[docsetsChangedStatusView animator] setHidden:NO];
+	}
 }
+- (IBAction)relaunch:(id)sender
+{
+	Class SUUpdaterClass = NSClassFromString(@"SUUpdater");
+	if (SUUpdaterClass == Nil)
+		return;
+	
+	// Copy the relauncher into a temporary directory so we can get to it after the new version's installed.
+	NSString *relaunchPath = nil;
+	NSString *relaunchPathToCopy = [[NSBundle bundleForClass:SUUpdaterClass] pathForResource:@"relaunch" ofType:@""];
+	NSLog(@"relaunchPathToCopy = %@", relaunchPathToCopy);
+	if (![relaunchPathToCopy length])
+		return;
+	
+	NSString *targetPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[relaunchPathToCopy lastPathComponent]];
+	NSLog(@"targetPath = %@", targetPath);
+	
+	if (![targetPath length])
+		return;
+	
+	// Only the paranoid survive: if there's already a stray copy of relaunch there, we would have problems.
+	NSError *error = nil;
+	[[NSFileManager defaultManager] removeItemAtPath:targetPath error:nil];
+	if ([[NSFileManager defaultManager] copyItemAtPath:relaunchPathToCopy toPath:targetPath error:&error])
+		relaunchPath = [targetPath retain];
+	
+	if (!relaunchPath || ![[NSFileManager defaultManager] fileExistsAtPath:relaunchPath])
+	{
+		NSBeep();
+		return;
+	}		
+	
+	NSString *pathToRelaunch = [[NSBundle mainBundle] bundlePath];
+	[NSTask launchedTaskWithLaunchPath:relaunchPath arguments:[NSArray arrayWithObjects:pathToRelaunch, [NSString stringWithFormat:@"%d", [[NSProcessInfo processInfo] processIdentifier]], nil]];
+	
+	[NSApp terminate:self];
+}
+
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
@@ -210,7 +309,7 @@
 		}
 		else if ([[tableColumn identifier] isEqual:@"developerDirectory"])
 		{
-			return [docset valueForKey:@"developerDirectoryPath"];
+			return [docset valueForKey:@"developerDirectory"];
 		}
 	}
 	
@@ -226,7 +325,7 @@
 			[docset setValue:[NSNumber numberWithBool:[object boolValue]] forKey:@"isEnabled"];
 			
 			[docsets replaceObjectAtIndex:row withObject:docset];
-			[self saveChanges];
+			[self saveChangesNeedsRelaunch:YES];
 			
 			[self reloadTableViews];
 		}
@@ -274,6 +373,56 @@
 		return 2;
 	else
 		return 3;
+}
+
+#pragma mark Singleton
+
+static IGKPreferencesController *sharedPreferencesController = nil;
+
++ (IGKPreferencesController *)sharedPreferencesController
+{
+    @synchronized(self) {
+        if (sharedPreferencesController == nil) {
+            [[self alloc] init]; // assignment not done here
+        }
+    }
+    return sharedPreferencesController;
+}
+
++ (id)allocWithZone:(NSZone *)zone
+{
+    @synchronized(self) {
+        if (sharedPreferencesController == nil) {
+            sharedPreferencesController = [super allocWithZone:zone];
+            return sharedPreferencesController;  // assignment and return on first allocation
+        }
+    }
+    return sharedPreferencesController; //on subsequent allocation attempts return nil
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    return self;
+}
+
+- (id)retain
+{
+    return self;
+}
+
+- (NSUInteger)retainCount
+{
+    return UINT_MAX;  //denotes an object that cannot be released
+}
+
+- (void)release
+{
+    //do nothing
+}
+
+- (id)autorelease
+{
+    return self;
 }
 
 @end

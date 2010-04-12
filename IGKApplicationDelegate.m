@@ -13,6 +13,7 @@
 @implementation IGKApplicationDelegate
 
 @synthesize windowControllers;
+@synthesize preferencesController;
 
 - (id)init
 {
@@ -43,11 +44,6 @@
 	}
 	
 	return self;
-}
-
-- (NSString *)developerDirectory
-{
-	return @"/Developer/";
 }
 
 - (BOOL)hasMultipleWindowControllers
@@ -133,6 +129,36 @@
 	return managedObjectModel;
 }
 
+- (BOOL)deleteStoreFromDisk:(NSString *)urlpath
+{	
+	//Pointless checks because I'm paranoid about deleting things
+	
+	if (![urlpath length])
+		return NO;
+	
+	BOOL isdir = NO;
+	NSError *error = nil;
+	
+	//Check that the file is not a directory
+	if ([[NSFileManager defaultManager] fileExistsAtPath:urlpath isDirectory:&isdir] && isdir == NO)
+	{			
+		//Check that there's an "Ingredients" component in there somewhere (so we're not going to be deleting ~/ or whatever)
+		if ([[urlpath pathComponents] containsObject:@"Ingredients"])
+		{
+			//Delete the store
+			if ([[NSFileManager defaultManager] removeItemAtPath:urlpath error:&error])
+			{
+				if (!error)
+				{
+					return YES;
+				}
+			}
+		}
+	}
+	
+	return NO;
+}
+
 
 /**
  Returns the persistent store coordinator for the application.  This 
@@ -165,7 +191,20 @@
     }
     
     NSURL *url = [NSURL fileURLWithPath: [applicationSupportDirectory stringByAppendingPathComponent: @"storedata"]];
-    persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel: mom];
+    
+	//There was an error. The user's store is probably an incorrect version. To fix that we delete the store and start again
+	NSString *urlpath = [[url path] stringByStandardizingPath];
+	
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"needsReindex"])
+	{
+		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"needsReindex"];
+		[[NSUserDefaults standardUserDefaults] synchronize];
+		
+		[self deleteStoreFromDisk:urlpath];
+	}
+	
+	
+	persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel: mom];
     if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType 
 												  configuration:nil 
 															URL:url 
@@ -173,10 +212,32 @@
 														  error:&error])
 	{
 		//There was an error. The user's store is probably an incorrect version. To fix that we delete the store and start again
-		//Pointless checks because I'm paranoid about deleting things
-		BOOL isdir = NO;
-		NSString *urlpath = [[url path] stringByStandardizingPath];
 		
+		//Reread the store
+		if ([persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType 
+													 configuration:nil 
+															   URL:url 
+														   options:nil 
+															 error:&error])
+		{
+			return persistentStoreCoordinator;
+		}
+		
+		
+		if ([self deleteStoreFromDisk:urlpath])
+		{
+			//Reread the store
+			if ([persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType 
+														 configuration:nil 
+																   URL:url 
+															   options:nil 
+																 error:&error])
+			{
+				return persistentStoreCoordinator;
+			}
+		}
+		
+		/*
 		//Check that the file is not a directory
 		if ([[NSFileManager defaultManager] fileExistsAtPath:urlpath isDirectory:&isdir] && isdir == NO)
 		{			
@@ -198,7 +259,7 @@
 				}
 			}
 		}
-		
+		*/
 		
 		//That didn't work. Show an unintelligible error message instead.
 		[[NSApplication sharedApplication] presentError:error];;

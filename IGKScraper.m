@@ -12,6 +12,7 @@
 #import "IGKLaunchController.h"
 #import "NSXMLNode+IGKAdditions.h"
 
+#import "IGKDocSetManagedObject.h"
 
 @interface IGKScraper ()
 
@@ -26,7 +27,7 @@
 
 NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentation";
 
-- (id)initWithDocsetURL:(NSURL *)theDocsetURL managedObjectContext:(NSManagedObjectContext *)moc launchController:(IGKLaunchController*)lc dbQueue:(dispatch_queue_t)dbq
+- (id)initWithDocsetURL:(NSURL *)theDocsetURL managedObjectContext:(NSManagedObjectContext *)moc launchController:(IGKLaunchController*)lc dbQueue:(dispatch_queue_t)dbq developerDirectory:(NSString *)devDir
 {
 	if (self = [super init])
 	{
@@ -34,6 +35,8 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		docsetpath = [docsetURL path];
 		url = [docsetURL URLByAppendingPathComponent:kIGKDocsetPrefixPath];
 		ctx = moc;
+		
+		developerDirectory = devDir;
 		
 		launchController = lc;
 		dbQueue = dbq;
@@ -47,10 +50,37 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	//Get the info.plist
 	NSDictionary *infoPlist = [[NSDictionary alloc] initWithContentsOfURL:[docsetURL URLByAppendingPathComponent:@"Contents/Info.plist"]];
 	NSString *bundleIdentifier = [infoPlist objectForKey:@"CFBundleIdentifier"];
-	
+	NSLog(@"A");
+
 	//Reject Xcode documentation
 	if (!bundleIdentifier || [bundleIdentifier isEqual:@"com.apple.adc.documentation.AppleXcode.DeveloperTools"])
 		return NO;
+	NSLog(@"B");
+
+	
+	NSString *localizedUserInterfaceName = IGKDocSetLocalizedUserInterfaceName([infoPlist objectForKey:@"DocSetPlatformFamily"], [infoPlist objectForKey:@"DocSetPlatformVersion"]);
+	
+	NSLog(@"localizedUserInterfaceName = %d", localizedUserInterfaceName);
+	NSLog(@"localizedUserInterfaceName2 = %@", localizedUserInterfaceName);
+	
+	//Register it with preferences
+	int result = [[NSClassFromString(@"IGKPreferencesController") sharedPreferencesController] addDocsetWithPath:[docsetURL path]
+																					  localizedUserInterfaceName:localizedUserInterfaceName
+																							  developerDirectory:developerDirectory];
+	
+	/*
+	 if result == -1
+	 No docset already exists
+	 if result == 0
+	 Docset already exists but is disabled
+	 if result == 1
+	 Docset already exists and is enable
+	 */
+	NSLog(@"result = %d", result);
+	if (result == 0)
+	{
+		return NO;
+	}
 	
 	NSString *version = [infoPlist objectForKey:@"CFBundleVersion"];
 	if (bundleIdentifier && version)
@@ -70,6 +100,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			return NO;
 		}
 	}
+	
 	
 	
 	//*** Create a docset object ***
@@ -97,7 +128,6 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	
 	[docset setValue:[docsetURL absoluteString] forKey:@"url"];
 	[docset setValue:[docsetURL path] forKey:@"path"];
-	
 	
 	scraperDocset = docset;
 	paths = [[NSMutableArray alloc] init];
