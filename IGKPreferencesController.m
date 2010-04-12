@@ -332,6 +332,15 @@
 	}
 }
 
+- (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
+{
+	//Disallow selection for the docsets table view
+	if (tableView == docsetsTableView && row != -1)
+		return NO;
+	
+	return YES;
+}
+
 #pragma mark Updates Logic
 
 - (NSString *)appVersion
