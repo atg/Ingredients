@@ -213,17 +213,6 @@
 	{
 		//There was an error. The user's store is probably an incorrect version. To fix that we delete the store and start again
 		
-		//Reread the store
-		if ([persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType 
-													 configuration:nil 
-															   URL:url 
-														   options:nil 
-															 error:&error])
-		{
-			return persistentStoreCoordinator;
-		}
-		
-		
 		if ([self deleteStoreFromDisk:urlpath])
 		{
 			//Reread the store
