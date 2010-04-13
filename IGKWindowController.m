@@ -159,10 +159,13 @@
 	
 	sideSearchResults = [[NSMutableArray alloc] init];
 	
+	BOOL didIndex = YES;
+	
 	if (shouldIndex)
 		[self startIndexing];
 	else
 	{
+		didIndex = NO;
 		[self loadNoSelectionRecordHistory:YES];
 	}
 	
@@ -258,10 +261,55 @@
 	[[browserWebView preferences] setDefaultFontSize:16];
 	[[browserWebView preferences] setDefaultFixedFontSize:16];
 	
+	if (!didIndex)
+	{
+		[self didFinishIndexingOrLoading];
+	}
+	
 	[self tableViewSelectionDidChange:nil];
 	
 	//Simulate user defaults changing
 	[self userDefaultsDidChange:nil];
+}
+- (void)didFinishIndexingOrLoading
+{	
+	[docsetsController addObserver:self forKeyPath:@"arrangedObjects" options:NSKeyValueObservingOptionNew context:NULL];
+	//[self performSelector:@selector(didFinishIndexingOrLoadingDelayed) withObject:nil afterDelay:0.0];	
+}
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+	if ([keyPath isEqual:@"arrangedObjects"])
+	{
+		[self didFinishIndexingOrLoadingDelayed];
+	}
+}
+- (void)didFinishIndexingOrLoadingDelayed
+{
+	NSString *selectedFilterDocsetPath = [[NSClassFromString(@"IGKPreferencesController") sharedPreferencesController] selectedFilterDocsetPath];
+	if (selectedFilterDocsetPath)
+	{
+		for (id docset in [docsetsController arrangedObjects])
+		{
+			if ([[docset valueForKey:@"path"] isEqual:selectedFilterDocsetPath])
+			{
+				selectedFilterDocset = docset;
+				
+				for (NSMenuItem *m in [docsetsFilterPopupButton itemArray])
+				{
+					if ([m representedObject] == docset)
+					{
+						NSLog(@"Found an item");
+						
+						[docsetsFilterPopupButton selectItem:m];
+					}
+				}
+				
+				BOOL successful = [docsetsController setSelectedObjects:[NSArray arrayWithObject:docset]];
+				
+				break;
+			}
+		}
+	}
 }
 
 - (void)close
@@ -572,7 +620,7 @@
 	}
 	
 	[self setMode:newMode];
-	
+		
 	[self loadDocs];
 }
 - (NSNumber *)ui_currentModeIndex
@@ -698,6 +746,7 @@
 	
 	[docsetsController fetch:nil];
 	
+	[self didFinishIndexingOrLoading];
 	
 	//*** Show the top bar ***
 	
@@ -752,6 +801,8 @@
 - (IBAction)changeSelectedFilterDocset:(id)sender
 {
 	selectedFilterDocset = [[sender selectedItem] representedObject];
+	
+	[[NSClassFromString(@"IGKPreferencesController") sharedPreferencesController] selectedFilterDocsetForPath:[selectedFilterDocset valueForKey:@"path"]];
 	
 	[self executeSearch:sideSearchViewField];
 }

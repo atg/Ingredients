@@ -108,6 +108,7 @@ typedef enum {
 	IBOutlet NSProgressIndicator *savingProgressIndicator;
 	IGKSourceListWallpaperView *wallpaperView;
 	
+	IBOutlet NSPopUpButton *docsetsFilterPopupButton;
 	IBOutlet NSArrayController *docsetsController;
 	
 	int currentModeIndex;

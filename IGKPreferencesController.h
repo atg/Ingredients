@@ -37,6 +37,9 @@
 - (IBAction)switchToUpdates:(id)sender;
 
 //Docsets logic
+- (NSString *)selectedFilterDocsetPath;
+- (void)selectedFilterDocsetForPath:(NSString *)path;
+
 - (IBAction)addDeveloperDirectory:(id)sender;
 - (IBAction)removeSelectedDeveloperDirectories:(id)sender;
 

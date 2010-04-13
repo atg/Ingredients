@@ -103,6 +103,52 @@
 
 #pragma mark Docsets Logic
 
+- (void)selectedFilterDocsetForPath:(NSString *)path
+{
+	NSLog(@"path = %@", path);
+	
+	BOOL changedSomething = NO;
+	
+	for (NSDictionary *docset in [docsets copy])
+	{
+		BOOL isDocset = [[docset valueForKey:@"path"] isEqual:path];
+		
+		if ([[docset valueForKey:@"isSelected"] boolValue] != isDocset)
+		{
+			NSLog(@"Changing %@", docset);
+			
+			NSDictionary *newDocset = [docset mutableCopy];
+			[newDocset setValue:[NSNumber numberWithBool:isDocset] forKey:@"isSelected"];
+			
+			[docsets replaceObjectAtIndex:[docsets indexOfObject:docset] withObject:newDocset];
+			
+			changedSomething = YES;
+		}
+	}
+	
+	NSLog(@"changedSomething = %d", changedSomething);
+	if (changedSomething)
+	{
+		[self saveChangesNeedsRelaunch:NO];
+		
+		[self reloadTableViews];
+	}
+}
+
+- (NSString *)selectedFilterDocsetPath
+{
+	NSLog(@"docsets = %@", docsets);
+	for (NSDictionary *docset in docsets)
+	{
+		if ([[docset valueForKey:@"isSelected"] boolValue])
+		{
+			return [docset valueForKey:@"path"];
+		}
+	}
+	
+	return nil;
+}
+
 - (IBAction)addDeveloperDirectory:(id)sender
 {
 	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
@@ -328,6 +374,7 @@
 	}
 }
 
+/*
 - (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
 {
 	//Disallow selection for the docsets table view
@@ -336,6 +383,7 @@
 	
 	return YES;
 }
+*/
 
 #pragma mark Updates Logic
 
