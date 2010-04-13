@@ -104,9 +104,7 @@
 #pragma mark Docsets Logic
 
 - (void)selectedFilterDocsetForPath:(NSString *)path
-{
-	NSLog(@"path = %@", path);
-	
+{	
 	BOOL changedSomething = NO;
 	
 	for (NSDictionary *docset in [docsets copy])
@@ -114,9 +112,7 @@
 		BOOL isDocset = [[docset valueForKey:@"path"] isEqual:path];
 		
 		if ([[docset valueForKey:@"isSelected"] boolValue] != isDocset)
-		{
-			NSLog(@"Changing %@", docset);
-			
+		{			
 			NSDictionary *newDocset = [docset mutableCopy];
 			[newDocset setValue:[NSNumber numberWithBool:isDocset] forKey:@"isSelected"];
 			
@@ -126,7 +122,6 @@
 		}
 	}
 	
-	NSLog(@"changedSomething = %d", changedSomething);
 	if (changedSomething)
 	{
 		[self saveChangesNeedsRelaunch:NO];
@@ -137,7 +132,6 @@
 
 - (NSString *)selectedFilterDocsetPath
 {
-	NSLog(@"docsets = %@", docsets);
 	for (NSDictionary *docset in docsets)
 	{
 		if ([[docset valueForKey:@"isSelected"] boolValue])
@@ -276,13 +270,10 @@
 	// Copy the relauncher into a temporary directory so we can get to it after the new version's installed.
 	NSString *relaunchPath = nil;
 	NSString *relaunchPathToCopy = [[NSBundle bundleForClass:SUUpdaterClass] pathForResource:@"relaunch" ofType:@""];
-	NSLog(@"relaunchPathToCopy = %@", relaunchPathToCopy);
 	if (![relaunchPathToCopy length])
 		return;
 	
-	NSString *targetPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[relaunchPathToCopy lastPathComponent]];
-	NSLog(@"targetPath = %@", targetPath);
-	
+	NSString *targetPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[relaunchPathToCopy lastPathComponent]];	
 	if (![targetPath length])
 		return;
 	

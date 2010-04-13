@@ -297,9 +297,7 @@
 				for (NSMenuItem *m in [docsetsFilterPopupButton itemArray])
 				{
 					if ([m representedObject] == docset)
-					{
-						NSLog(@"Found an item");
-						
+					{						
 						[docsetsFilterPopupButton selectItem:m];
 					}
 				}
