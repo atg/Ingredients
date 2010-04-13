@@ -20,6 +20,7 @@
 
 @synthesize webView;
 @synthesize delegate;
+@synthesize menuStack;
 
 - (id)init
 {
@@ -27,6 +28,7 @@
 	{
 		backStack = [[NSMutableArray alloc] init];
 		forwardStack = [[NSMutableArray alloc] init];
+		
 	}
 	return self;
 }
@@ -48,6 +50,9 @@
 	{
 		[self willChangeValueForKey:@"backStack"];
 		[backStack addObject:currentItem];
+		[[WebHistory optionalSharedHistory] addItems:[NSArray arrayWithObject:item]];
+		
+		NSLog(@"Items: %@", [[WebHistory optionalSharedHistory] orderedItemsLastVisitedOnDay:[NSCalendarDate date]]);
 		[self didChangeValueForKey:@"backStack"];
 	}
 	
@@ -137,7 +142,7 @@
 	
 	if ([delegate respondsToSelector:@selector(backForwardManagerUpdatedLists:)])
 		[delegate backForwardManagerUpdatedLists:self];
-		
+	
 	//Load the page we're going back to
 	[self loadItem:currentItem];
 }
@@ -185,7 +190,7 @@
 	
 	if ([delegate respondsToSelector:@selector(backForwardManagerUpdatedLists:)])
 		[delegate backForwardManagerUpdatedLists:self];
-		
+	
 	//Load the page we're going forward to
 	[self loadItem:currentItem];
 }
