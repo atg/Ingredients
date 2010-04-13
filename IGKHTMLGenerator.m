@@ -472,11 +472,12 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	if ([object valueForKey:@"availability"] || [object valueForKey:@"declared_in_header"])
 		maxrowcount = 1;
 	
-	if ([[object valueForKey:@"seealsos"] count])
-		maxrowcount = [[object valueForKey:@"seealsos"] count];
+	if ([object valueForKey:@"conformsto"] || [object valueForKey:@"superclass"])
+		maxrowcount = 1;
 	
-	if ([[object valueForKey:@"samplecodeprojects"] count] > maxrowcount)
-		maxrowcount = [[object valueForKey:@"samplecodeprojects"] count];
+	maxrowcount = MAX(maxrowcount, [[object valueForKey:@"seealsos"] count]);
+	
+	maxrowcount = MAX(maxrowcount, [[object valueForKey:@"samplecodeprojects"] count]);
 	
 	//If there's rows to be rendered, then add a table element
 	if (maxrowcount > 0)
@@ -511,7 +512,46 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 				if (i == 0)
 					[outputString appendString:@"\t\t\t\t<th>Declared in</th>\n"];
 				else
-					[outputString appendFormat:@"\t\t\t\t<td rowspan='%d'><code><a href='#' class='stealth'>%@</a></code></td>\n", maxrowcount, [object valueForKey:@"declared_in_header"]];
+				{	
+					NSString *declaredIn = [object valueForKey:@"declared_in_header"];
+					NSString *declaredInURL = [NSString stringWithFormat:@"http://ingr-doc/%@/all/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], declaredIn, @"headerfile"];
+
+					[outputString appendFormat:@"\t\t\t\t<td rowspan='%d'><code><a href='%@' class='stealth'>%@</a></code></td>\n", maxrowcount, declaredInURL, declaredIn];
+				}
+			}
+			
+			if ([object valueForKey:@"superclass"])
+			{
+				if (i == 0)
+					[outputString appendString:@"\t\t\t\t<th>Superclass</th>\n"];
+				else
+				{
+					NSString *superclass = [object valueForKey:@"superclass"];
+					NSString *superclassURL = [NSString stringWithFormat:@"http://ingr-doc/%@/all/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], superclass, @"class"];
+					[outputString appendFormat:@"\t\t\t\t<td rowspan='%d'><code><a href='%@' class='stealth'>%@</a></code></td>\n", maxrowcount, superclassURL, superclass];
+				}
+			}
+			
+			if ([object valueForKey:@"conformsto"])
+			{
+				if (i == 0)
+					[outputString appendString:@"\t\t\t\t<th>Conforms to</th>\n"];
+				else
+				{
+					NSString *conformstoOmnibus = [object valueForKey:@"conformsto"];
+					conformstoOmnibus = [conformstoOmnibus stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"="]];
+					
+					NSArray *conformstoProtocols = [conformstoOmnibus componentsSeparatedByString:@"="];
+					[outputString appendFormat:@"\t\t\t\t<td rowspan='%d'>", maxrowcount];
+					
+					for (NSString *conformstoProtocol in conformstoProtocols)
+					{
+						NSString *conformstoURL = [NSString stringWithFormat:@"http://ingr-doc/%@/all/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], conformstoProtocol, @"protocol"];
+						[outputString appendFormat:@"<code><a href='%@' class='stealth'>%@</a></code><br>\n", conformstoURL, conformstoProtocol];
+					}
+					
+					[outputString appendString:@"</td>\n"];
+				}
 			}
 		}
 		

@@ -118,7 +118,6 @@
 		[containerFetchRequest setEntity:[NSEntityDescription entityForName:containerEntity inManagedObjectContext:ctx]];
 		[containerFetchRequest setPredicate:[NSPredicate predicateWithFormat:@"name == %@ && docset == %@", containerName, docset]];
 		
-		NSError *err = nil;
 		NSArray *containers = [ctx executeFetchRequest:containerFetchRequest error:&err];
 		
 		if (err || ![containers count])
@@ -135,7 +134,41 @@
 	NSString *itemExtension = [itemComponent pathExtension];
 	if (![itemName length] || ![itemExtension length])
 		return nil;
-
+	
+	if ([itemExtension isEqual:@"headerfile"])
+	{
+		//Get the path of the docset
+		// .../Developer/Documentation/DocSets/foo.docset
+		NSString *docsetPath = [docset valueForKey:@"path"];
+		
+		//Get the path of the SDK
+		// .../Developer/SDKs/bar.sdk
+		NSString *developerDirectoryPath = [[[docsetPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
+		NSString *sdkPath = [[developerDirectoryPath stringByAppendingPathComponent:@"SDKs"] stringByAppendingPathComponent:[docset sdkComponent]];
+		
+		//Search in the SDK for itemName
+		NSArray *subpaths = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:sdkPath error:&err];
+		
+		if (err || ![subpaths count])
+			return nil;
+		
+		NSString *itemNameLower = [itemName lowercaseString];
+		
+		for (NSString *subpath in subpaths)
+		{
+			if ([[[subpath lastPathComponent] lowercaseString] isEqual:itemNameLower])
+			{
+				NSString *fullpath = [sdkPath stringByAppendingPathComponent:subpath];
+				
+				//Open the header in some application
+				[[NSWorkspace sharedWorkspace] openFile:fullpath];
+				
+				return nil;
+			}
+		}
+				
+		return nil;
+	}
 	
 	NSString *itemEntity = [self entityNameFromURLComponentExtension:itemExtension];
 	if (![itemEntity length])

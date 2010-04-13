@@ -55,6 +55,10 @@ NSString *IGKDocSetLocalizedUserInterfaceName(NSString *platformFamily, NSString
 
 @implementation IGKDocSetManagedObject
 
+- (NSString *)sdkComponent
+{
+	return [NSString stringWithFormat:@"%@%@.sdk", [self valueForKey:@"platformFamily"], [self valueForKey:@"platformVersion"]];
+}
 - (NSString *)docsetURLHost
 {
 	return [NSString stringWithFormat:@"%@/%@", [self shortPlatformName], [self shortVersionName]];

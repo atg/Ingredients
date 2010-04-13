@@ -17,6 +17,10 @@ NSString *IGKDocSetLocalizedUserInterfaceName(NSString *platformFamily, NSString
 
 }
 
+// macosx10.6.sdk
+- (NSString *)sdkComponent;
+
+// Mac/10.6
 - (NSString *)docsetURLHost;
 
 //A localized name of the docset, in a way that is suitable for the UI
