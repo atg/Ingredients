@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 @class IGKLaunchController;
+@class WebHistory;
 
 @interface IGKApplicationDelegate : NSObject
 {
@@ -20,6 +21,7 @@
 	NSManagedObjectModel *managedObjectModel;
 	NSManagedObjectContext *managedObjectContext;
 	NSManagedObjectContext *backgroundManagedObjectContext;
+	WebHistory *history;
 	
 	id preferencesController;
 	

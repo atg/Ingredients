@@ -9,6 +9,7 @@
 #import "IGKApplicationDelegate.h"
 #import "IGKWindowController.h"
 #import "IGKLaunchController.h"
+#import <WebKit/WebKit.h>
 
 @implementation IGKApplicationDelegate
 
@@ -19,11 +20,11 @@
 {
 	if (self = [super init])
 	{
-		
+		NSString *appSupportPath = [@"~/Library/Application Support/Ingredients/" stringByExpandingTildeInPath];
 #ifndef NDEBUG
 		if (NSRunAlertPanel(@"Start Over(ish)?", @"Should I clear out the app support folder and preferences?", @"Clear", @"Keep", nil)) {
-						
-			NSString *appSupportPath = [@"~/Library/Application Support/Ingredients/" stringByExpandingTildeInPath];			
+			
+			
 			[[NSFileManager defaultManager] removeItemAtPath:appSupportPath error:nil];
 			
 			NSString *prefsPath = [@"~/Library/Preferences/net.fileability.ingredients" stringByExpandingTildeInPath];			
@@ -33,7 +34,7 @@
 		
 		//Load core data
 		[self managedObjectContext];
-				
+		
 		launchController = [[IGKLaunchController alloc] init];
 		launchController.appController = self;
 		
@@ -41,6 +42,11 @@
 		
 		BOOL isIndexing = [launchController launch];
 		[self newWindowIsIndexing:isIndexing];
+		
+		//init history
+		history = [[WebHistory alloc] init];
+		[history loadFromURL:[NSURL fileURLWithPath:[[self applicationSupportDirectory] stringByAppendingPathComponent:@"history"]] error:nil];
+		[WebHistory setOptionalSharedHistory:history];
 	}
 	
 	return self;
@@ -227,28 +233,28 @@
 		}
 		
 		/*
-		//Check that the file is not a directory
-		if ([[NSFileManager defaultManager] fileExistsAtPath:urlpath isDirectory:&isdir] && isdir == NO)
-		{			
-			//Check that there's an "Ingredients" component in there somewhere (so we're not going to be deleting ~/ or whatever)
-			if ([[urlpath pathComponents] containsObject:@"Ingredients"])
-			{
-				//Delete the store
-				if ([[NSFileManager defaultManager] removeItemAtPath:urlpath error:&error])
-				{
-					//Reread the store
-					if ([persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType 
-																 configuration:nil 
-																		   URL:url 
-																	   options:nil 
-																		 error:&error])
-					{
-						return persistentStoreCoordinator;
-					}
-				}
-			}
-		}
-		*/
+		 //Check that the file is not a directory
+		 if ([[NSFileManager defaultManager] fileExistsAtPath:urlpath isDirectory:&isdir] && isdir == NO)
+		 {			
+		 //Check that there's an "Ingredients" component in there somewhere (so we're not going to be deleting ~/ or whatever)
+		 if ([[urlpath pathComponents] containsObject:@"Ingredients"])
+		 {
+		 //Delete the store
+		 if ([[NSFileManager defaultManager] removeItemAtPath:urlpath error:&error])
+		 {
+		 //Reread the store
+		 if ([persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType 
+		 configuration:nil 
+		 URL:url 
+		 options:nil 
+		 error:&error])
+		 {
+		 return persistentStoreCoordinator;
+		 }
+		 }
+		 }
+		 }
+		 */
 		
 		//That didn't work. Show an unintelligible error message instead.
 		[[NSApplication sharedApplication] presentError:error];;
@@ -349,6 +355,14 @@
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
 	
+	// Save history
+	NSError *error2 = nil;
+	[[WebHistory optionalSharedHistory] saveToURL:[NSURL fileURLWithPath:[[self applicationSupportDirectory] stringByAppendingPathComponent:@"history"]] error:&error2];
+	NSLog(@"Error: %@", [error2 localizedDescription]);
+	
+	
+	
+	
     if (!managedObjectContext) return NSTerminateNow;
 	
     if (![managedObjectContext commitEditing]) {
@@ -391,7 +405,7 @@
 		
     }
 	
-    return NSTerminateNow;
+	return NSTerminateNow;
 }
 
 @end
