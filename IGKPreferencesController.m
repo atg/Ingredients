@@ -144,11 +144,7 @@
 	[self saveChanges];
 }
 - (int)addDocsetWithPath:(NSString *)path localizedUserInterfaceName:(NSString *)localizedUserInterfaceName developerDirectory:(NSString *)devDir
-{	
-	NSLog(@"path = %@", path);
-	NSLog(@"localizedUserInterfaceName = %d", localizedUserInterfaceName);
-	NSLog(@"devDir = %@", devDir);
-	
+{
 	NSMutableDictionary *docset = [[NSMutableDictionary alloc] init];
 	[docset setValue:[NSNumber numberWithBool:YES] forKey:@"isEnabled"];
 	[docset setValue:path forKey:@"path"];

@@ -619,7 +619,7 @@
 	}
 	NSString *entityToFetch = [[NSString alloc] init];
 	NSPredicate *predicateResults = [searchViewPredicateEditor predicateWithEntityNamed:&entityToFetch];
-	NSLog(@"Entity to fetch: %@", entityToFetch);
+
 	if (predicateResults)
 	{
 		[subpredicates addObject:predicateResults];

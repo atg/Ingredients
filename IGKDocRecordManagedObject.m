@@ -427,7 +427,7 @@
 
 - (NSString *)xsuperclassname
 {
-	return [self valueForSoftKey:@"superclass"];
+	return [self valueForSoftKey:@"superclassName"];
 }
 
 - (NSString *)xconforms

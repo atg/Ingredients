@@ -50,18 +50,12 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	//Get the info.plist
 	NSDictionary *infoPlist = [[NSDictionary alloc] initWithContentsOfURL:[docsetURL URLByAppendingPathComponent:@"Contents/Info.plist"]];
 	NSString *bundleIdentifier = [infoPlist objectForKey:@"CFBundleIdentifier"];
-	NSLog(@"A");
 
 	//Reject Xcode documentation
 	if (!bundleIdentifier || [bundleIdentifier isEqual:@"com.apple.adc.documentation.AppleXcode.DeveloperTools"])
 		return NO;
-	NSLog(@"B");
-
 	
 	NSString *localizedUserInterfaceName = IGKDocSetLocalizedUserInterfaceName([infoPlist objectForKey:@"DocSetPlatformFamily"], [infoPlist objectForKey:@"DocSetPlatformVersion"]);
-	
-	NSLog(@"localizedUserInterfaceName = %d", localizedUserInterfaceName);
-	NSLog(@"localizedUserInterfaceName2 = %@", localizedUserInterfaceName);
 	
 	//Register it with preferences
 	int result = [[NSClassFromString(@"IGKPreferencesController") sharedPreferencesController] addDocsetWithPath:[docsetURL path]
@@ -76,7 +70,6 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	 if result == 1
 	 Docset already exists and is enable
 	 */
-	NSLog(@"result = %d", result);
 	if (result == 0)
 	{
 		return NO;
@@ -384,7 +377,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			[obj setValue:docset forKey:@"docset"];
 			
 			if ([superclass length])
-				[obj setValue:superclass forKey:@"superclass"];
+				[obj setValue:superclass forKey:@"superclassName"];
 			if ([conformsTo count])
 			{
 				NSString *conformsToString = [NSString stringWithFormat:@"=%@=", [[conformsTo allObjects] componentsJoinedByString:@"="]];

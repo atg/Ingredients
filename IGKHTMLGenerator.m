@@ -472,7 +472,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	if ([object valueForKey:@"availability"] || [object valueForKey:@"declared_in_header"])
 		maxrowcount = 1;
 	
-	if ([object valueForKey:@"conformsto"] || [object valueForKey:@"superclass"])
+	if ([object valueForKey:@"conformsto"] || [object valueForKey:@"superclassName"])
 		maxrowcount = 1;
 	
 	maxrowcount = MAX(maxrowcount, [[object valueForKey:@"seealsos"] count]);
@@ -520,13 +520,13 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 				}
 			}
 			
-			if ([object valueForKey:@"superclass"])
+			if ([object valueForKey:@"superclassName"])
 			{
 				if (i == 0)
 					[outputString appendString:@"\t\t\t\t<th>Superclass</th>\n"];
 				else
 				{
-					NSString *superclass = [object valueForKey:@"superclass"];
+					NSString *superclass = [object valueForKey:@"superclassName"];
 					NSString *superclassURL = [NSString stringWithFormat:@"http://ingr-doc/%@/all/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], superclass, @"class"];
 					[outputString appendFormat:@"\t\t\t\t<td rowspan='%d'><code><a href='%@' class='stealth'>%@</a></code></td>\n", maxrowcount, superclassURL, superclass];
 				}

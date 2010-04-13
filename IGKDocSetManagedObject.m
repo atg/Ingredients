@@ -49,7 +49,6 @@ NSString *IGKDocSetLocalizedUserInterfaceName(NSString *platformFamily, NSString
 		version = @"";
 	
 	NSString *localizedName = [platform stringByAppendingString:version];
-	NSLog(@"[platform stringByAppendingString:version] = %@", localizedName);
 	return localizedName;
 }
 

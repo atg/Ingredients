@@ -78,7 +78,6 @@
 	//Alloc/Init a shared instance if needed
 	[NSClassFromString(@"IGKPreferencesController") sharedPreferencesController];
 	
-	NSLog(@"[[self developerDirectoryDescriptionsFromDefaults] count] = %d", [[self developerDirectoryDescriptionsFromDefaults] count]);
 	if ([[self developerDirectoryDescriptionsFromDefaults] count] == 0)
 	{
 		//First we have to make sure we have a developer directory
@@ -91,7 +90,6 @@
 		[self applyDeveloperDirectory:devdir];
 	}
 	
-	NSLog(@"[[self developerDirectoryDescriptionsFromDefaults] count] = %d", [[self developerDirectoryDescriptionsFromDefaults] count]);
 	for (NSDictionary *description in [self developerDirectoryDescriptionsFromDefaults])
 	{ 
 		NSString *devdir = [description valueForKey:@"path"];
@@ -130,9 +128,7 @@
 			}
 		}
 	}
-	
-	NSLog(@"docsetPaths = %@", docsetPaths);
-		
+			
 	dbQueue = dispatch_get_main_queue();
 	
 	totalPathsCount = 0;
@@ -147,7 +143,6 @@
 		
 		for (NSString *docsetPath in [container valueForKey:@"docsetPaths"])
 		{
-			NSLog(@"Testing = %@", docsetPath);
 			IGKScraper *scraper = [[IGKScraper alloc] initWithDocsetURL:[NSURL fileURLWithPath:docsetPath]
 												   managedObjectContext:[appController backgroundManagedObjectContext]
 													   launchController:self
