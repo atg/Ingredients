@@ -961,6 +961,11 @@
 	
 	if (![mo isKindOfEntityNamed:@"ObjCAbstractMethodContainer"])
 	{
+		rightFilterBarTaskGroupedItems = [[NSMutableArray alloc] init];
+		rightFilterBarNameGroupedItems = [[NSArray alloc] init];
+		rightFilterBarKindGroupedItems = [[NSMutableArray alloc] init];
+		rightFilterBarItems = [[NSMutableArray alloc] init];
+		
 		[rightFilterBarTable reloadData];
 		return;
 	}
@@ -1269,6 +1274,20 @@
 			//[cell setTag:-2];
 		}
 	}
+}
+- (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
+{
+	if (tableView == rightFilterBarTable)
+	{
+		id currentRow = [rightFilterBarItems objectAtIndex:row];
+		
+		if ([currentRow respondsToSelector:@selector(characterAtIndex:)])
+		{
+			return NO;
+		}
+	}
+	
+	return YES;
 }
 /*
 - (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
