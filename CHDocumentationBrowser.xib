@@ -23,13 +23,13 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="189"/>
-			<integer value="716"/>
-			<integer value="590"/>
+			<integer value="765"/>
 			<integer value="63"/>
 			<integer value="743"/>
+			<integer value="232"/>
+			<integer value="590"/>
+			<integer value="189"/>
 			<integer value="370"/>
-			<integer value="19"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3316,6 +3316,7 @@
 													<string key="NSContents">Text Cell</string>
 													<reference key="NSSupport" ref="369575145"/>
 													<reference key="NSControlView" ref="342947104"/>
+													<int key="NSTag">-2</int>
 													<reference key="NSBackgroundColor" ref="936577122"/>
 													<reference key="NSTextColor" ref="923575253"/>
 												</object>
@@ -5722,9 +5723,11 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>759.IBPluginDependency</string>
 					<string>760.IBPluginDependency</string>
 					<string>761.IBPluginDependency</string>
+					<string>762.CustomClassName</string>
 					<string>762.IBPluginDependency</string>
 					<string>764.IBPluginDependency</string>
 					<string>765.IBPluginDependency</string>
+					<string>766.CustomClassName</string>
 					<string>766.IBPluginDependency</string>
 					<string>768.IBPluginDependency</string>
 					<string>83.IBEditorWindowLastContentRect</string>
@@ -5758,7 +5761,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>IGKEaseInOutAnimatedView</string>
-					<string>{{310, 394}, {756, 602}}</string>
+					<string>{{261, 394}, {756, 602}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{593, 365}, {247, 404}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -5796,7 +5799,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<integer value="0"/>
 					<string>{{458, 388}, {166, 60}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{236, 156}, {830, 530}}</string>
+					<string>{{187, 156}, {830, 530}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -5809,7 +5812,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.brandonwalkin.BWToolkit</string>
-					<string>{{418, 390}, {635, 466}}</string>
+					<string>{{382, 390}, {635, 466}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.brandonwalkin.BWToolkit</string>
@@ -5849,7 +5852,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<reference ref="239672116"/>
 					<real value="0.0"/>
 					<real value="0.0"/>
-					<string>{{824, 452}, {247, 404}}</string>
+					<string>{{770, 452}, {247, 404}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{1072, 597}, {93, 22}}</string>
 					<string>{{1119, 170}, {187, 242}}</string>
@@ -5904,12 +5907,14 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>IGKShyTableView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>IGKSometimesCenteredTextCell2</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{431, 51}, {635, 466}}</string>
+					<string>{{382, 51}, {635, 466}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -6075,10 +6080,15 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 				<object class="IBPartialClassDescription">
 					<string key="className">IGKSometimesCenteredTextCell</string>
 					<string key="superclassName">NSTextFieldCell</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+					<object class="IBClassDescriptionSource" key="sourceIdentifier" id="519005926">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">IGKSometimesCenteredTextCell.h</string>
 					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">IGKSometimesCenteredTextCell2</string>
+					<string key="superclassName">NSTextFieldCell</string>
+					<reference key="sourceIdentifier" ref="519005926"/>
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">IGKTableOfContentsView</string>

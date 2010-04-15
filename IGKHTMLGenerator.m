@@ -259,6 +259,64 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	return containsInDocument;
 }
++ (NSString *)extractApplecodeFromHref:(NSString *)href itemName:(NSString **)itemName
+{
+	NSString *regex = @"//apple_ref/(occ|c)/([^/]+)/([^/]+)(/([^/]+))?";
+	NSArray *captures = [href captureComponentsMatchedByRegex:regex];
+	if ([captures count] < 4)
+		return nil;
+	
+	NSString *applecode = [captures objectAtIndex:2];
+	
+	NSString *capturedName = nil;
+	if ([captures count] >= 6)
+	{
+		capturedName = [captures objectAtIndex:5];
+	}
+	else
+	{
+		capturedName = [captures objectAtIndex:3];
+	}
+	
+	if (itemName)
+		*itemName = capturedName;
+	
+	return applecode;
+}
++ (NSString *)applecodeToIngrcode:(NSString *)applecode itemName:(NSString *)itemName
+{
+	NSString *ingrcode = nil;
+	
+	if ([applecode isEqual:@"cl"])
+		ingrcode = @"class";
+	else if ([applecode isEqual:@"cat"])
+		ingrcode = @"category";
+	else if ([applecode isEqual:@"intf"])
+		ingrcode = @"protocol";
+	else if ([applecode isEqual:@"instm"] || [applecode isEqual:@"intfm"])
+		ingrcode = @"instance-method";
+	else if ([applecode isEqual:@"clm"] || [applecode isEqual:@"intfcm"])
+		ingrcode = @"class-method";
+	else if ([applecode isEqual:@"intfp"] || [applecode isEqual:@"instp"])
+		ingrcode = @"property";
+	else if ([applecode isEqual:@"tdef"])
+		ingrcode = @"type";
+	else if ([applecode isEqual:@"func"])
+		ingrcode = @"function";
+	else if ([applecode isEqual:@"econst"] || [applecode isEqual:@"data"] || [applecode isEqual:@"tag"])
+	{
+		if ([applecode isEqual:@"data"] && [itemName isLike:@"*Notification"])
+			ingrcode = @"notification";
+		else
+			ingrcode = @"constant";
+	}
+	else if ([applecode isEqual:@"constant_group"])
+	{
+		ingrcode = @"global";
+	}
+	
+	return ingrcode;
+}
 + (NSString *)hrefToActualFragment:(IGKDocRecordManagedObject *)mo transientObject:(NSManagedObject *)_transientObject displayTypeMask:(IGKHTMLDisplayTypeMask)_displayTypeMask
 {
 	NSString *href = [mo valueForKey:@"href"];
@@ -291,34 +349,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		itemName = n;
 	}
 	
-	NSString *ingrcode = nil;
-	if ([applecode isEqual:@"cl"])
-		ingrcode = @"class";
-	else if ([applecode isEqual:@"cat"])
-		ingrcode = @"category";
-	else if ([applecode isEqual:@"intf"])
-		ingrcode = @"protocol";
-	else if ([applecode isEqual:@"instm"] || [applecode isEqual:@"intfm"])
-		ingrcode = @"instance-method";
-	else if ([applecode isEqual:@"clm"] || [applecode isEqual:@"intfcm"])
-		ingrcode = @"class-method";
-	else if ([applecode isEqual:@"intfp"] || [applecode isEqual:@"instp"])
-		ingrcode = @"property";
-	else if ([applecode isEqual:@"tdef"])
-		ingrcode = @"type";
-	else if ([applecode isEqual:@"func"])
-		ingrcode = @"function";
-	else if ([applecode isEqual:@"econst"] || [applecode isEqual:@"data"] || [applecode isEqual:@"tag"])
-	{
-		if ([applecode isEqual:@"data"] && [itemName isLike:@"*Notification"])
-			ingrcode = @"notification";
-		else
-			ingrcode = @"constant";
-	}
-	else if ([applecode isEqual:@"constant_group"])
-	{
-		ingrcode = @"global";
-	}
+	NSString *ingrcode = [[self class] applecodeToIngrcode:applecode itemName:itemName];
 	
 	if ([self containsInDocument:mo transientObject:_transientObject displayTypeMask:_displayTypeMask containerName:containerName itemName:itemName ingrcode:ingrcode])
 		return [NSString stringWithFormat:@"#%@.%@", itemName, ingrcode];

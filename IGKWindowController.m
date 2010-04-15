@@ -988,10 +988,20 @@
 		for (NSManagedObject *taskitem in taskitems)
 		{
 			NSMutableDictionary *taskitemDict = [[NSMutableDictionary alloc] init];
-			[taskitemDict setValue:[taskitem valueForKey:@"name"] forKey:@"name"];				
 			[taskitemDict setValue:[IGKHTMLGenerator hrefToActualFragment:taskitem transientObject:transientObject displayTypeMask:acceptableDisplayTypes]
 							forKey:@"href"];
-						
+			
+			NSString *taskitemHref = [taskitem valueForKey:@"href"];
+			
+			NSString *taskitemName = nil;
+			NSString *applecode = [IGKHTMLGenerator extractApplecodeFromHref:taskitemHref itemName:&taskitemName];
+			NSString *ingrcode = [IGKHTMLGenerator applecodeToIngrcode:applecode itemName:taskitemName];
+			NSString *entityName = [IGKDocRecordManagedObject entityNameFromURLComponentExtension:ingrcode];
+			CHSymbolButtonImageMask iconmask = [IGKDocRecordManagedObject iconMaskForEntity:entityName isInstanceMethod:[ingrcode isEqual:@"instance-method"]];
+			
+			[taskitemDict setValue:[NSNumber numberWithUnsignedLongLong:iconmask] forKey:@"iconMask"];
+			[taskitemDict setValue:taskitemName forKey:@"name"];				
+			
 			[rightFilterBarTaskGroupedItems addObject:taskitemDict];
 		}
 	}
@@ -1239,6 +1249,44 @@
 		[self rightFilterTableChangedSelection];
 	}
 }
+- (void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+	if (tableView == rightFilterBarTable)
+	{
+		id currentRow = [rightFilterBarItems objectAtIndex:row];
+		
+		if ([currentRow respondsToSelector:@selector(characterAtIndex:)])
+		{
+			//[cell setAlignment:NSCenterTextAlignment];
+			[cell setFont:[NSFont boldSystemFontOfSize:13]];//[NSFont fontWithName:@"Menlo-Bold" size:12]];
+			//[(NSCell *)cell setTag:10];
+		}
+		else
+		{
+			//[cell setAlignment:NSNaturalTextAlignment];
+			[cell setFont:[NSFont fontWithName:@"Menlo" size:12]];
+			//[(NSCell *)cell setTag:-2];
+			//[cell setTag:-2];
+		}
+	}
+}
+/*
+- (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
+{
+	if (tableView == rightFilterBarTable)
+	{
+		id currentRow = [rightFilterBarItems objectAtIndex:row];
+		
+		if ([currentRow respondsToSelector:@selector(characterAtIndex:)])
+		{
+			return 28;
+		}
+	}
+	
+	return [tableView rowHeight];
+}
+ */
+
 - (void)rightFilterTableChangedSelection
 {
 	NSInteger selind = [rightFilterBarTable selectedRow];
@@ -1260,7 +1308,14 @@
 		NSString *href = [kvobject valueForKey:@"href"];
 		NSLog(@"[kvobject valueForKey:@\"href\"] = %@", href);
 		
-		[browserWebView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"window.location.hash = '%@';", href]];
+		if ([href isLike:@"#*"])
+		{
+			[browserWebView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"window.location.hash = '%@';", href]];
+		}
+		else
+		{
+			[browserWebView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"window.location = '%@';", href]];
+		}
 	}
 }
 

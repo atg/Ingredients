@@ -63,6 +63,8 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask);
 - (NSString *)html;
 
 + (BOOL)containsInDocument:(IGKDocRecordManagedObject *)mo transientObject:(NSManagedObject *)_transientObject displayTypeMask:(IGKHTMLDisplayTypeMask)_displayTypeMask containerName:(NSString *)containerName itemName:(NSString *)itemName ingrcode:(NSString *)ingrcode;
++ (NSString *)extractApplecodeFromHref:(NSString *)href itemName:(NSString **)itemName;
++ (NSString *)applecodeToIngrcode:(NSString *)applecode itemName:(NSString *)itemName;
 
 - (id)transientObject;
 

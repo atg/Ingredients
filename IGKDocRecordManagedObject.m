@@ -8,7 +8,6 @@
 
 #import "IGKDocRecordManagedObject.h"
 #import "IGKDocSetManagedObject.h"
-#import "CHSymbolButtonImage.h"
 
 @interface IGKDocRecordManagedObject ()
 
@@ -446,10 +445,13 @@
 
 - (CHSymbolButtonImageMask)iconMask
 {
+	NSString *entityName = [[self entity] name];
+	return [[self class] iconMaskForEntity:entityName isInstanceMethod:[[self valueForSoftKey:@"isInstanceMethod"] boolValue]];
+}
++ (CHSymbolButtonImageMask)iconMaskForEntity:(NSString *)entityName isInstanceMethod:(BOOL)instanceMethod
+{
 	//FIXME: Maybe it would be better to use an NSDictionary -> NSNumber here instead
 	
-	NSString *entityName = [[self entity] name];
-
 	if([entityName isEqual:@"ObjCClass"])
 		return CHSymbolButtonObjcClass;
 	
@@ -461,7 +463,7 @@
 	
 	else if([entityName isEqual:@"ObjCMethod"])
 	{
-		if ([[self valueForKey:@"isInstanceMethod"] boolValue])
+		if (instanceMethod)
 			return CHSymbolButtonObjcMethod;
 		else
 			return CHSymbolButtonObjcMethod | CHSymbolButtonStaticScope;

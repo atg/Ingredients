@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "IGKHTMLGenerator.h"
 #import "IGKManagedObject.h"
+#import "CHSymbolButtonImage.h"
 
 //Priorities of different objects when sorting the list in case of a tiebreak. From lowest priority to highest
 typedef enum {
@@ -41,5 +42,7 @@ typedef enum {
 
 - (NSString *)xcontainername;
 - (IGKDocRecordManagedObject *)xcontainer;
+
++ (CHSymbolButtonImageMask)iconMaskForEntity:(NSString *)entityName isInstanceMethod:(BOOL)instanceMethod;
 
 @end
