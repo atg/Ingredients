@@ -110,6 +110,9 @@ code
 	margin-top: 24px;
 	padding-bottom: 10px;
 	
+	position: relative;
+	top: -1px;
+	
 	text-align: left;
 	border-top-style: solid;
 	border-top-width: 1px;

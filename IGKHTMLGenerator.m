@@ -87,6 +87,11 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	transientContext = fullScraper.transientContext;
 	transientObject = (IGKDocRecordManagedObject *)(fullScraper.transientObject);
 }
+- (id)transientObject
+{
+	return transientObject;
+}
+
 - (void)finalize
 {
 	[fullScraper cleanUp];
@@ -228,6 +233,34 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 }
 - (NSString *)hrefToActualFragment:(IGKDocRecordManagedObject *)mo
 {
+	return [[self class] hrefToActualFragment:mo transientObject:transientObject displayTypeMask:displayTypeMask];
+}
++ (BOOL)containsInDocument:(IGKDocRecordManagedObject *)mo transientObject:(NSManagedObject *)_transientObject displayTypeMask:(IGKHTMLDisplayTypeMask)_displayTypeMask containerName:(NSString *)containerName itemName:(NSString *)itemName ingrcode:(NSString *)ingrcode
+{
+	BOOL containsInDocument = NO;
+	
+	if (![containerName isEqual:[_transientObject valueForKey:@"name"]] || [itemName isEqual:[_transientObject valueForKey:@"name"]])
+		return NO;
+	
+	if (_displayTypeMask & IGKHTMLDisplayType_All)
+		containsInDocument = YES;
+	
+	else if ([ingrcode isEqual:@"instance-method"] || [ingrcode isEqual:@"class-method"])
+		containsInDocument = (_displayTypeMask & IGKHTMLDisplayType_Methods);
+	
+	else if ([ingrcode isEqual:@"property"])
+		containsInDocument = (_displayTypeMask & IGKHTMLDisplayType_Properties);
+	
+	else if ([ingrcode isEqual:@"notification"])
+		containsInDocument = (_displayTypeMask & IGKHTMLDisplayType_Notifications);
+	
+	else
+		containsInDocument = (_displayTypeMask & IGKHTMLDisplayType_Misc);
+	
+	return containsInDocument;
+}
++ (NSString *)hrefToActualFragment:(IGKDocRecordManagedObject *)mo transientObject:(NSManagedObject *)_transientObject displayTypeMask:(IGKHTMLDisplayTypeMask)_displayTypeMask
+{
 	NSString *href = [mo valueForKey:@"href"];
 		
 	// NSString.html#//apple_ref/occ/instm/NSString/stringByAppendingPathComponent:
@@ -287,37 +320,18 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		ingrcode = @"global";
 	}
 	
-	if ([containerName isEqual:[transientObject valueForKey:@"name"]] || [itemName isEqual:[transientObject valueForKey:@"name"]])
-	{
-		BOOL containsInDocument = NO;
-		if (displayTypeMask & IGKHTMLDisplayType_All)
-			containsInDocument = YES;
-		
-		else if ([ingrcode isEqual:@"instance-method"] || [ingrcode isEqual:@"class-method"])
-			containsInDocument = (displayTypeMask & IGKHTMLDisplayType_Methods);
-		
-		else if ([ingrcode isEqual:@"property"])
-			containsInDocument = (displayTypeMask & IGKHTMLDisplayType_Properties);
-		
-		else if ([ingrcode isEqual:@"notification"])
-			containsInDocument = (displayTypeMask & IGKHTMLDisplayType_Notifications);
-		
-		else
-			containsInDocument = (displayTypeMask & IGKHTMLDisplayType_Misc);
-		
-		if (containsInDocument)
-			return [NSString stringWithFormat:@"#%@.%@", itemName, ingrcode];
-	}
+	if ([self containsInDocument:mo transientObject:_transientObject displayTypeMask:_displayTypeMask containerName:containerName itemName:itemName ingrcode:ingrcode])
+		return [NSString stringWithFormat:@"#%@.%@", itemName, ingrcode];
 	
 	NSString *url = nil;
 	if (containerName)
 	{
 		//FIXME: This assumes that transientObject is the container: [transientObject URLComponentExtension]. It won't work if the link is to another class
-		url = [NSString stringWithFormat:@"http://ingr-doc/%@/all/%@.%@/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], containerName, [transientObject URLComponentExtension], itemName, ingrcode];
+		url = [NSString stringWithFormat:@"http://ingr-doc/%@/all/%@.%@/%@.%@", [[_transientObject valueForKey:@"Docset"] docsetURLHost], containerName, [_transientObject URLComponentExtension], itemName, ingrcode];
 	}
 	else
 	{
-		url = [NSString stringWithFormat:@"http://ingr-doc/%@/all/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], itemName, ingrcode];
+		url = [NSString stringWithFormat:@"http://ingr-doc/%@/all/%@.%@", [[_transientObject valueForKey:@"Docset"] docsetURLHost], itemName, ingrcode];
 	}
 	
 	return url;

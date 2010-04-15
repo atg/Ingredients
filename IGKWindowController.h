@@ -20,13 +20,19 @@
 
 typedef enum {
 	
-	CHDocumentationBrowserUIMode_BrowserOnly=0,
-	CHDocumentationBrowserUIMode_TwoUp=1,
-	CHDocumentationBrowserUIMode_AdvancedSearch=2,
+	CHDocumentationBrowserUIMode_BrowserOnly = 0,
+	CHDocumentationBrowserUIMode_TwoUp = 1,
+	CHDocumentationBrowserUIMode_AdvancedSearch = 2,
 	
-	CHDocumentationBrowserUIMode_NeedsSetup=20
+	CHDocumentationBrowserUIMode_NeedsSetup = 20
 	
 } CHDocumentationBrowserUIMode;
+
+typedef enum {
+	CHDocumentationBrowserFilterGroupByTasks = 0,
+	CHDocumentationBrowserFilterGroupByName = 1,
+	CHDocumentationBrowserFilterGroupByKind = 2
+} CHDocumentationBrowserFilterGroupByMode;
 
 @interface IGKWindowController : NSWindowController<IGKTableOfContentsDelegate>
 {
@@ -46,6 +52,8 @@ typedef enum {
 	IBOutlet NSSegmentedControl *backForwardButton;
 	IBOutlet IGKBackForwardManager *backForwardManager;
 	
+	IBOutlet NSSplitView *browserSplitView;
+	
 	IBOutlet NSView *browserView;
 	IBOutlet NSTextField *browserViewTitle;
 	IBOutlet NSTextField *browserViewPath;
@@ -55,6 +63,17 @@ typedef enum {
 	IBOutlet NSTextField *urlField;
 	IBOutlet NSView *browserTopbar;
 	IBOutlet NSView *browserToolbar;
+	
+	//*** Filter Bar ***
+	NSMutableArray *rightFilterBarTaskGroupedItems;
+	NSArray *rightFilterBarNameGroupedItems;
+	NSMutableArray *rightFilterBarKindGroupedItems;
+	
+	NSMutableArray *rightFilterBarItems;
+	IBOutlet NSView *rightFilterBarView;
+	IBOutlet NSSearchField *rightFilterBarSearchField;
+	IBOutlet NSPopUpButton *rightFilterBarGroupByMenu;
+	IBOutlet NSTableView *rightFilterBarTable;
 	
 	
 	//*** No Selection ***
@@ -135,6 +154,9 @@ typedef enum {
 - (IBAction)noselectionSearchField:(id)sender;
 
 - (IBAction)changeSelectedFilterDocset:(id)sender;
+
+- (IBAction)rightFilterSearchField:(id)sender;
+- (IBAction)rightFilterGroupByMenu:(id)sender;
 
 - (IBAction)executeSearch:(id)sender;
 - (IBAction)executeAdvancedSearch:(id)sender;

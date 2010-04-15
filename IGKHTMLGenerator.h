@@ -62,6 +62,10 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask);
 
 - (NSString *)html;
 
++ (BOOL)containsInDocument:(IGKDocRecordManagedObject *)mo transientObject:(NSManagedObject *)_transientObject displayTypeMask:(IGKHTMLDisplayTypeMask)_displayTypeMask containerName:(NSString *)containerName itemName:(NSString *)itemName ingrcode:(NSString *)ingrcode;
+
+- (id)transientObject;
+
 - (IGKHTMLDisplayTypeMask)acceptableDisplayTypes;
 
 @end

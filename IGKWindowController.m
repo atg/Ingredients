@@ -14,6 +14,7 @@
 #import "IGKBackForwardManager.h"
 #import "IGKPredicateEditor.h"
 #import "IGKDocRecordManagedObject.h"
+#import "CHSymbolButtonImage.h"
 
 @interface IGKWindowController ()
 
@@ -588,6 +589,8 @@
 	//Load the HTML into the webview
 	[[browserWebView mainFrame] loadHTMLString:html
 									   baseURL:[[NSBundle mainBundle] resourceURL]];
+	
+	[self reloadRightFilterBarTable:mo transient:[generator transientObject]];
 }
 - (void)recordHistoryForURL:(NSURL *)url title:(NSString *)title
 {
@@ -702,9 +705,9 @@
 	[browserTopbar setFrame:topBarFrame];
 	[browserTopbar setHidden:YES];
 	
-	NSRect browserViewFrame = [browserWebViewContainer frame];
+	NSRect browserViewFrame = [browserSplitView frame];
 	browserViewFrame.size.height += topBarFrame.size.height;
-	[browserWebViewContainer setFrame:browserViewFrame];
+	[browserSplitView setFrame:browserViewFrame];
 	
 	[twoPaneSplitView setColorIsEnabled:YES];
 	[twoPaneSplitView setColor:[NSColor colorWithCalibratedRed:0.166 green:0.166 blue:0.166 alpha:1.000]];
@@ -754,14 +757,14 @@
 	[browserTopbar setHidden:NO];
 	
 	//Geometry for the browser container
-	NSRect browserViewFrame = [browserWebViewContainer frame];
+	NSRect browserViewFrame = [browserSplitView frame];
 	browserViewFrame.size.height -= topBarFrame.size.height;
 	
 	//Animate
 	[NSAnimationContext beginGrouping];
 	
 	[[browserTopbar animator] setFrame:topBarFrame];
-	[[browserWebViewContainer animator] setFrame:browserViewFrame];
+	[[browserSplitView animator] setFrame:browserViewFrame];
 	
 	[NSAnimationContext endGrouping];
 }
@@ -773,24 +776,27 @@
 
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)command
 {
-	if ([NSStringFromSelector(command) isEqual:@"moveUp:"])
+	if (control == sideSearchViewField)
 	{
-		[[self currentArrayController] selectPrevious:nil];
-		return YES;
-	}
-	else if ([NSStringFromSelector(command) isEqual:@"moveDown:"])
-	{
-		[[self currentArrayController] selectNext:nil];
-		return YES;
-	}
-	else if ([NSStringFromSelector(command) isEqual:@"insertNewline:"])
-	{
-		if ([self currentArrayController] == sideSearchController)
-			[[browserWebView window] makeFirstResponder:browserWebView];
-	}
-	else if ([NSStringFromSelector(command) isEqual:@"cancelOperation:"])
-	{
-		
+		if ([NSStringFromSelector(command) isEqual:@"moveUp:"])
+		{
+			[[self currentArrayController] selectPrevious:nil];
+			return YES;
+		}
+		else if ([NSStringFromSelector(command) isEqual:@"moveDown:"])
+		{
+			[[self currentArrayController] selectNext:nil];
+			return YES;
+		}
+		else if ([NSStringFromSelector(command) isEqual:@"insertNewline:"])
+		{
+			if ([self currentArrayController] == sideSearchController)
+				[[browserWebView window] makeFirstResponder:browserWebView];
+		}
+		else if ([NSStringFromSelector(command) isEqual:@"cancelOperation:"])
+		{
+			
+		}
 	}
 	
 	return NO;
@@ -846,17 +852,17 @@
 		if (superview)
 		{
 			[noselectionView removeFromSuperview];
-			[browserWebViewContainer setFrame:[noselectionView frame]];
-			[superview addSubview:browserWebViewContainer];
+			[browserSplitView setFrame:[noselectionView frame]];
+			[superview addSubview:browserSplitView];
 		}
 	}
 	else
 	{
-		id superview = [browserWebViewContainer superview];
+		id superview = [browserSplitView superview];
 		if (superview)
 		{
-			[browserWebViewContainer removeFromSuperview];
-			[noselectionView setFrame:[browserWebViewContainer frame]];
+			[browserSplitView removeFromSuperview];
+			[noselectionView setFrame:[browserSplitView frame]];
 			[superview addSubview:noselectionView];
 		}
 	}
@@ -949,10 +955,195 @@
 	[tableOfContentsTypes addObject:[NSNumber numberWithLongLong:type]];
 	[tableOfContentsTitles addObject:title];
 }
+- (void)reloadRightFilterBarTable:(IGKDocRecordManagedObject *)mo transient:(IGKDocRecordManagedObject *)transientObject
+{	
+	[rightFilterBarSearchField setStringValue:@""];
+	
+	if (![mo isKindOfEntityNamed:@"ObjCAbstractMethodContainer"])
+	{
+		[rightFilterBarTable reloadData];
+		return;
+	}
+	
+	
+	//*** Task grouped items ***
+	rightFilterBarTaskGroupedItems = [[NSMutableArray alloc] init];
+	
+	NSSortDescriptor *positionIndexSort = [[NSSortDescriptor alloc] initWithKey:@"positionIndex" ascending:YES];
+	NSArray *taskgroups = [[transientObject valueForSoftKey:@"taskgroups"] sortedArrayUsingDescriptors:[NSArray arrayWithObject:positionIndexSort]];
+	
+	for (NSManagedObject *taskgroup in taskgroups)
+	{
+		NSString *name = [taskgroup valueForKey:@"name"];
+		if (![name length])
+			continue;
+		
+		NSArray *taskitems = [[taskgroup valueForKey:@"items"] sortedArrayUsingDescriptors:[NSArray arrayWithObject:positionIndexSort]];
+		
+		if (![taskitems count])
+			continue;
+		
+		[rightFilterBarTaskGroupedItems addObject:name];
+		
+		for (NSManagedObject *taskitem in taskitems)
+		{
+			NSMutableDictionary *taskitemDict = [[NSMutableDictionary alloc] init];
+			[taskitemDict setValue:[taskitem valueForKey:@"name"] forKey:@"name"];				
+			[taskitemDict setValue:[IGKHTMLGenerator hrefToActualFragment:taskitem transientObject:transientObject displayTypeMask:acceptableDisplayTypes]
+							forKey:@"href"];
+						
+			[rightFilterBarTaskGroupedItems addObject:taskitemDict];
+		}
+	}
+	
+	
+	//*** Name grouped items ***
+	rightFilterBarKindGroupedItems = [[NSMutableArray alloc] init];
+	
+	NSSortDescriptor *nameSort = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+	
+	NSSet *properties = [mo valueForSoftKey:@"properties"];
+	
+	if (properties)
+	{
+		NSArray *sortDescriptors = [NSArray arrayWithObject:nameSort];
+		NSArray *sortedProperties = [properties sortedArrayUsingDescriptors:sortDescriptors];
+		
+		for (NSManagedObject *property in sortedProperties)
+		{
+			[rightFilterBarKindGroupedItems addObject:[self makeDictionaryFromManagedObject:property transientObject:transientObject]];
+		}
+	}
+	
+	NSSet *methods = [mo valueForSoftKey:@"methods"];
+	if (methods)
+	{		
+		NSSortDescriptor *instanceMethodSort = [[NSSortDescriptor alloc] initWithKey:@"isInstanceMethod" ascending:YES];
+		
+		for (NSManagedObject *method in [methods sortedArrayUsingDescriptors:[NSArray arrayWithObjects:instanceMethodSort, nameSort, nil]])
+		{
+			[rightFilterBarKindGroupedItems addObject:[self makeDictionaryFromManagedObject:method transientObject:transientObject]];
+		}
+	}
+	
+	rightFilterBarNameGroupedItems = [rightFilterBarKindGroupedItems sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2){
+		
+		NSString *str1 = obj1;				
+		if (![obj1 respondsToSelector:@selector(characterAtIndex:)])
+			str1 = [obj1 valueForKey:@"name"];
+		
+		NSString *str2 = obj2;
+		if (![obj2 respondsToSelector:@selector(characterAtIndex:)])
+			str2 = [obj2 valueForKey:@"name"];
+		
+		return [str1 localizedCompare:str2];
+	}];
+	
+	rightFilterBarItems = [[self currentFilterBarAllItems] mutableCopy];
+	
+	[rightFilterBarTable reloadData];
+}
+- (NSDictionary *)makeDictionaryFromManagedObject:(IGKDocRecordManagedObject *)mo transientObject:(IGKDocRecordManagedObject *)transientObject
+{
+	NSMutableDictionary *taskitemDict = [[NSMutableDictionary alloc] init];
+	[taskitemDict setValue:[mo valueForKey:@"name"] forKey:@"name"];				
+	
+	NSString *ingrcode = [mo URLComponentExtension];
+	BOOL containsInDocument = [IGKHTMLGenerator containsInDocument:mo transientObject:transientObject displayTypeMask:acceptableDisplayTypes containerName:[transientObject valueForKey:@"name"] itemName:[mo valueForKey:@"name"] ingrcode:ingrcode];
+	
+	if (containsInDocument)
+		[taskitemDict setValue:[NSString stringWithFormat:@"#%@.%@", [mo valueForKey:@"name"], ingrcode] forKey:@"href"];
+	else
+		[taskitemDict setValue:[mo docURL:IGKHTMLDisplayType_All] forKey:@"href"];
+	
+	[taskitemDict setValue:[NSNumber numberWithUnsignedLongLong:[mo iconMask]] forKey:@"iconMask"];
+	
+	return taskitemDict;
+}
+- (IBAction)rightFilterGroupByMenu:(id)sender
+{
+	[self rightFilterSearchField:rightFilterBarSearchField];
+}
+- (NSArray *)currentFilterBarAllItems
+{
+	CHDocumentationBrowserFilterGroupByMode groupBy = [[rightFilterBarGroupByMenu selectedItem] tag];
+	if (groupBy == CHDocumentationBrowserFilterGroupByTasks)
+	{
+		return rightFilterBarTaskGroupedItems;
+	}
+	else if (groupBy == CHDocumentationBrowserFilterGroupByName)
+	{			
+		return rightFilterBarNameGroupedItems;
+	}
+	else if (groupBy == CHDocumentationBrowserFilterGroupByKind)
+	{
+		return rightFilterBarKindGroupedItems;
+	}
+	
+	return nil;
+}
+- (IBAction)rightFilterSearchField:(id)sender
+{
+	//Filter rightFilterBarAllItems by name and put into rightFilterBarItems
+	NSString *queryString = [sender stringValue];
+	
+	//If there's no query string, show all objects
+	if (![queryString length])
+	{
+		[rightFilterBarItems setArray:[self currentFilterBarAllItems]];
+		[rightFilterBarTable reloadData];
+		
+		return;
+	}
+	
+	[rightFilterBarItems removeAllObjects];
+	
+	for (id obj in [self currentFilterBarAllItems])
+	{
+		//If it's an NSString
+		if ([obj respondsToSelector:@selector(characterAtIndex:)])
+		{
+			//Check if the last object was a string
+			if ([[rightFilterBarItems lastObject] respondsToSelector:@selector(characterAtIndex:)])
+			{
+				//If so, remove it
+				[rightFilterBarItems removeLastObject];
+			}
+			
+			//Add the new string
+			[rightFilterBarItems addObject:obj];
+			
+			continue;
+		}
+		
+		//Otherwise, add to the array if obj contains queryString
+		if ([[obj valueForKey:@"name"] isCaseInsensitiveLike:[NSString stringWithFormat:@"*%@*", queryString]])
+		{
+			[rightFilterBarItems addObject:obj];
+		}
+	}
+	
+	//Check if the last object was a string
+	if ([[rightFilterBarItems lastObject] respondsToSelector:@selector(characterAtIndex:)])
+	{
+		//If so, remove it
+		[rightFilterBarItems removeLastObject];
+	}
+	
+	[rightFilterBarTable reloadData];
+}
+
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
 	if (tableView == tableOfContentsTableView)
+	{
 		return [tableOfContentsTitles count];
+	}
+	else if (tableView == rightFilterBarTable)
+	{
+		return [rightFilterBarItems count];
+	}
+	
 	return 0;
 }
 
@@ -997,6 +1188,35 @@
 			return [NSImage imageNamed:imageName];
 		}
 	}
+	else if (tableView == rightFilterBarTable)
+	{
+		id item = [rightFilterBarItems objectAtIndex:row];
+		
+		if ([[tableColumn identifier] isEqual:@"name"])
+		{
+			if ([item respondsToSelector:@selector(characterAtIndex:)])
+				return item;
+			
+			return [item valueForKey:@"name"];
+		}
+		
+		if ([[tableColumn identifier] isEqual:@"normalIcon"])
+		{
+			BOOL isSelected = [[tableView selectedRowIndexes] containsIndex:row];
+
+			if ([item respondsToSelector:@selector(objectForKey:)])
+			{
+				NSNumber *iconMask = [item objectForKey:@"iconMask"];
+				CHSymbolButtonImageMask iconMaskC = [iconMask unsignedLongLongValue];
+				NSArray *iconMaskImages = [CHSymbolButtonImage symbolImageWithMask:iconMaskC];
+				
+				return (isSelected ? [iconMaskImages objectAtIndex:1] : [iconMaskImages objectAtIndex:0]);
+			}
+		}
+		
+		return nil;
+	}
+	
 	return nil;
 }	
 
@@ -1014,7 +1234,36 @@
 	{
 		[self sideSearchTableChangedSelection];
 	}
+	else if ([aNotification object] == rightFilterBarTable)
+	{
+		[self rightFilterTableChangedSelection];
+	}
 }
+- (void)rightFilterTableChangedSelection
+{
+	NSInteger selind = [rightFilterBarTable selectedRow];
+	if (selind == -1)
+		return;
+
+	id kvobject = [rightFilterBarItems objectAtIndex:selind];
+	
+	if ([kvobject respondsToSelector:@selector(characterAtIndex:)])
+	{
+		
+	}
+	else if ([kvobject isKindOfClass:[NSManagedObject class]])
+	{
+		//[browserWebView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"window.location.hash = '%@';", [kvobject URLComponent]]]
+	}
+	else
+	{
+		NSString *href = [kvobject valueForKey:@"href"];
+		NSLog(@"[kvobject valueForKey:@\"href\"] = %@", href);
+		
+		[browserWebView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"window.location.hash = '%@';", href]];
+	}
+}
+
 - (void)tableOfContentsChangedSelection
 {
 	[self loadDocIntoBrowser];
@@ -1167,8 +1416,8 @@
 	if (superview)
 	{
 		[noselectionView removeFromSuperview];
-		[browserWebViewContainer setFrame:[noselectionView frame]];
-		[superview addSubview:browserWebViewContainer];
+		[browserSplitView setFrame:[noselectionView frame]];
+		[superview addSubview:browserSplitView];
 	}
 	
 	[self loadURL:[NSURL URLWithString:url] recordHistory:YES];
@@ -1243,6 +1492,8 @@
 	if (sender != browserWebView || frame != [browserWebView mainFrame])
 		return;
 	
+	BOOL rightFilterBarIsShown = NO;
+	
 	NSURL *url = [[[frame dataSource] request] URL];
 	if (!url || [[url scheme] isEqual:@"file"])
 	{
@@ -1253,6 +1504,11 @@
 
 		NSRect r2 = [browserWebViewContainer frame];
 		[browserWebView setFrame:NSMakeRect(0, 0, r2.size.width, r2.size.height/* - [browserTopbar frame].size.height*/)];
+		
+		if (![[NSUserDefaults standardUserDefaults] boolForKey:@"IGKRightFilterBarIsHidden"])
+		{
+			rightFilterBarIsShown = YES;
+		}
 	}
 	else
 	{
@@ -1264,6 +1520,37 @@
 		NSRect r2 = [browserWebViewContainer frame];
 		[browserWebView setFrame:NSMakeRect(0, r.size.height, r2.size.width, r2.size.height - r.size.height/* - [browserTopbar frame].size.height*/)];
 	}
+	
+	
+	//Hide or show the filter bar
+	NSView *sideview = [[browserSplitView subviews] objectAtIndex:1];
+	
+	if (rightFilterBarIsShown)
+	{
+		NSRect r = [browserSplitView frame];
+		r.size.width = [[browserSplitView superview] frame].size.width;
+		[browserSplitView setFrame:r];
+		[browserSplitView setEnabled:YES];
+		
+		if (![rightFilterBarView superview])
+		{
+			[rightFilterBarView setFrame:[sideview bounds]];
+			[sideview addSubview:rightFilterBarView];
+		}
+	}
+	else
+	{
+		NSRect r = [browserSplitView frame];
+		r.size.width = [[browserSplitView superview] frame].size.width + [[[browserSplitView subviews] objectAtIndex:1] frame].size.width + [browserSplitView dividerThickness];
+		[browserSplitView setFrame:r];
+		[browserSplitView setEnabled:NO];
+		
+		if ([rightFilterBarView superview])
+		{
+			[rightFilterBarView removeFromSuperview];
+		}
+	}
+	
 	
 	if ([[frame dataSource] pageTitle] == nil)
 		[browserViewTitle setStringValue:@""];
