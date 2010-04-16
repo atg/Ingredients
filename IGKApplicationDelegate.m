@@ -11,6 +11,8 @@
 #import "IGKLaunchController.h"
 #import <WebKit/WebKit.h>
 
+const NSInteger IGKStoreVersion = 2;
+
 @implementation IGKApplicationDelegate
 
 @synthesize windowControllers;
@@ -201,11 +203,24 @@
 	//There was an error. The user's store is probably an incorrect version. To fix that we delete the store and start again
 	NSString *urlpath = [[url path] stringByStandardizingPath];
 	
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"needsReindex"])
+	BOOL needsReindex = [[NSUserDefaults standardUserDefaults] boolForKey:@"needsReindex"];
+	if (needsReindex)
 	{
 		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"needsReindex"];
+	}
+	
+	BOOL isOutOfDate = NO;
+	NSInteger storeVersion = [[NSUserDefaults standardUserDefaults] integerForKey:@"storeVersion"];
+	isOutOfDate = storeVersion < IGKStoreVersion;
+	
+	if (isOutOfDate)
+	{
+		[[NSUserDefaults standardUserDefaults] setInteger:IGKStoreVersion forKey:@"storeVersion"];
+	}
+	
+	if (needsReindex || isOutOfDate)
+	{
 		[[NSUserDefaults standardUserDefaults] synchronize];
-		
 		[self deleteStoreFromDisk:urlpath];
 	}
 	

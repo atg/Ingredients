@@ -65,6 +65,8 @@ typedef enum {
 	IBOutlet NSView *browserToolbar;
 	
 	//*** Filter Bar ***
+	BOOL isNonFilterBarType;
+	
 	NSMutableArray *rightFilterBarTaskGroupedItems;
 	NSArray *rightFilterBarNameGroupedItems;
 	NSMutableArray *rightFilterBarKindGroupedItems;
@@ -135,7 +137,7 @@ typedef enum {
 	BOOL awaken;
 	BOOL shouldIndex;
 	BOOL isIndexing;
-	
+		
 	NSManagedObjectID *currentObjectIDInBrowser;
 	
 	NSArray *selectedFilterDocset;
@@ -172,5 +174,7 @@ typedef enum {
 - (IBAction)toggleRightFilterBar:(id)sender;
 - (BOOL)rightFilterBarShown;
 - (void)setRightFilterBarShown:(BOOL)shown;
+
+- (BOOL)filterBarTableRowIsGroup:(NSInteger)row;
 
 @end

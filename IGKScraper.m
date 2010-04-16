@@ -385,6 +385,8 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			}
 		}
 		
+		int lastWasProperty = 0;
+		
 		for (NSArray *captures in items)
 		{
 			if ([captures count] > 4)
@@ -397,6 +399,21 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 					//Method
 					BOOL isProperty = [itemType isEqual:@"intfp"] || [itemType isEqual:@"instp"];
 					BOOL isInstanceMethod = isProperty || [itemType isEqual:@"instm"] || [itemType isEqual:@"intfm"];
+					
+					if (isProperty)
+					{
+						lastWasProperty = 1;
+					}
+					else if (lastWasProperty == 1)
+					{
+						lastWasProperty = 2;
+						continue;
+					}
+					else if (lastWasProperty == 2)
+					{
+						lastWasProperty = 0;
+						continue;
+					}
 					
 					IGKDocRecordManagedObject *newMethod = [[IGKDocRecordManagedObject alloc] initWithEntity:isProperty ? propertyEntity : methodEntity insertIntoManagedObjectContext:ctx];
 					
@@ -1520,6 +1537,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			{
 				if (lastWasPropertyTrue)
 				{
+					NSLog(@"LAST WAS PROPERTY = %@", strval);
 					lastWasProperty = YES;
 					return nil;
 				}

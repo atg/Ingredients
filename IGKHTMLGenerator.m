@@ -239,8 +239,9 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 {
 	BOOL containsInDocument = NO;
 	
-	if (![containerName isEqual:[_transientObject valueForKey:@"name"]] || [itemName isEqual:[_transientObject valueForKey:@"name"]])
-		return NO;
+	//I used to have some code here to check if an item is in its container. However this doesn't play well with categories (which will show up as a container of NSObject) so I had to ditch it
+	//if (![containerName isEqual:[_transientObject valueForKey:@"name"]] || [itemName isEqual:[_transientObject valueForKey:@"name"]])
+	//	return NO;
 	
 	if (_displayTypeMask & IGKHTMLDisplayType_All)
 		containsInDocument = YES;

@@ -271,6 +271,8 @@
 	
 	//Simulate user defaults changing
 	[self userDefaultsDidChange:nil];
+	
+	[self setRightFilterBarShown:NO];
 }
 - (void)didFinishIndexingOrLoading
 {	
@@ -544,6 +546,8 @@
 }
 - (void)loadURL:(NSURL *)url recordHistory:(BOOL)recordHistory
 {
+	isNonFilterBarType = YES;
+	
 	if ([[url scheme] isEqual:@"special"] && [[url resourceSpecifier] isEqual:@"no-selection"])
 	{
 		[browserWebView stopLoading:nil];
@@ -689,6 +693,8 @@
 
 - (void)startIndexing
 {
+	[self setRightFilterBarShown:NO];
+	
 	isIndexing = YES;
 	
 	wallpaperView = [[IGKSourceListWallpaperView alloc] initWithFrame:[[[twoPaneSplitView subviews] objectAtIndex:0] bounds]];
@@ -959,14 +965,20 @@
 {	
 	[rightFilterBarSearchField setStringValue:@""];
 	
+	isNonFilterBarType = NO;
+	
 	if (![mo isKindOfEntityNamed:@"ObjCAbstractMethodContainer"])
 	{
+		isNonFilterBarType = YES;
+		[self setRightFilterBarShown:NO];
+		
 		rightFilterBarTaskGroupedItems = [[NSMutableArray alloc] init];
 		rightFilterBarNameGroupedItems = [[NSArray alloc] init];
 		rightFilterBarKindGroupedItems = [[NSMutableArray alloc] init];
 		rightFilterBarItems = [[NSMutableArray alloc] init];
 		
 		[rightFilterBarTable reloadData];
+		
 		return;
 	}
 	
@@ -993,6 +1005,16 @@
 		for (NSManagedObject *taskitem in taskitems)
 		{
 			NSMutableDictionary *taskitemDict = [[NSMutableDictionary alloc] init];
+			
+			/*
+			 BOOL containsInDocument = [IGKHTMLGenerator containsInDocument:mo transientObject:transientObject displayTypeMask:acceptableDisplayTypes containerName:[transientObject valueForKey:@"name"] itemName:[mo valueForKey:@"name"] ingrcode:ingrcode];
+			 
+			 if (containsInDocument)
+				[taskitemDict setValue:[NSString stringWithFormat:@"#%@.%@", [mo valueForKey:@"name"], ingrcode] forKey:@"href"];
+			 else
+				[taskitemDict setValue:[mo docURL:IGKHTMLDisplayType_All] forKey:@"href"];
+			*/		 
+			
 			[taskitemDict setValue:[IGKHTMLGenerator hrefToActualFragment:taskitem transientObject:transientObject displayTypeMask:acceptableDisplayTypes]
 							forKey:@"href"];
 			
@@ -1217,7 +1239,7 @@
 		
 		if ([[tableColumn identifier] isEqual:@"normalIcon"])
 		{
-			BOOL isSelected = [[tableView selectedRowIndexes] containsIndex:row];
+			BOOL isSelected = NO;//[[tableView selectedRowIndexes] containsIndex:row];
 
 			if ([item respondsToSelector:@selector(objectForKey:)])
 			{
@@ -1254,6 +1276,15 @@
 		[self rightFilterTableChangedSelection];
 	}
 }
+- (BOOL)filterBarTableRowIsGroup:(NSInteger)row
+{
+	id currentRow = [rightFilterBarItems objectAtIndex:row];
+	
+	if ([currentRow respondsToSelector:@selector(characterAtIndex:)])
+		return YES;
+	
+	return NO;
+}
 - (void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
 	if (tableView == rightFilterBarTable)
@@ -1264,6 +1295,8 @@
 		{
 			//[cell setAlignment:NSCenterTextAlignment];
 			[cell setFont:[NSFont boldSystemFontOfSize:13]];//[NSFont fontWithName:@"Menlo-Bold" size:12]];
+			if ([cell respondsToSelector:@selector(setTextColor:)])
+				[cell setTextColor:[NSColor colorWithCalibratedWhite:0.20 alpha:1.0]];
 			//[(NSCell *)cell setTag:10];
 		}
 		else
@@ -1272,6 +1305,10 @@
 			[cell setFont:[NSFont fontWithName:@"Menlo" size:12]];
 			//[(NSCell *)cell setTag:-2];
 			//[cell setTag:-2];
+			
+			if ([cell respondsToSelector:@selector(setTextColor:)])
+				[cell setTextColor:[NSColor blackColor]];
+			
 		}
 	}
 }
@@ -1325,7 +1362,6 @@
 	else
 	{
 		NSString *href = [kvobject valueForKey:@"href"];
-		NSLog(@"[kvobject valueForKey:@\"href\"] = %@", href);
 		
 		if ([href isLike:@"#*"])
 		{
@@ -1579,9 +1615,13 @@
 		NSRect r2 = [browserWebViewContainer frame];
 		[browserWebView setFrame:NSMakeRect(0, 0, r2.size.width, r2.size.height/* - [browserTopbar frame].size.height*/)];
 		
-		if (![[NSUserDefaults standardUserDefaults] boolForKey:@"IGKRightFilterBarIsHidden"])
+		NSURL *mainURL = [[[frame dataSource] request] mainDocumentURL];
+		if ([[mainURL lastPathComponent] isEqual:@"Resources"])
 		{
-			rightFilterBarIsShown = YES;
+			if (![[NSUserDefaults standardUserDefaults] boolForKey:@"IGKRightFilterBarIsHidden"])
+			{
+				rightFilterBarIsShown = YES;
+			}
 		}
 	}
 	else
@@ -1599,7 +1639,7 @@
 	//Hide or show the filter bar, but only if the user hasn't explicitly hidden it
 	BOOL userHasHiddenRightFilterBar = [[NSUserDefaults standardUserDefaults] boolForKey:@"rightFilterBarIsHidden"];
 	
-	if (userHasHiddenRightFilterBar)
+	if (userHasHiddenRightFilterBar || isNonFilterBarType)
 		[self setRightFilterBarShown:NO];
 	else
 		[self setRightFilterBarShown:rightFilterBarIsShown];		
@@ -1628,6 +1668,7 @@
 	
 	if (shown)
 	{
+		
 		NSRect r = [browserSplitView frame];
 		r.size.width = [[browserSplitView superview] frame].size.width;
 		[browserSplitView setFrame:r];
