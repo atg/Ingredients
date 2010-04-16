@@ -1596,10 +1596,37 @@
 	}
 	
 	
-	//Hide or show the filter bar
+	//Hide or show the filter bar, but only if the user hasn't explicitly hidden it
+	BOOL userHasHiddenRightFilterBar = [[NSUserDefaults standardUserDefaults] boolForKey:@"rightFilterBarIsHidden"];
+	
+	if (userHasHiddenRightFilterBar)
+		[self setRightFilterBarShown:NO];
+	else
+		[self setRightFilterBarShown:rightFilterBarIsShown];		
+	
+	
+	if ([[frame dataSource] pageTitle] == nil)
+		[browserViewTitle setStringValue:@""];
+	else
+		[browserViewTitle setStringValue:[[frame dataSource] pageTitle]];
+}
+- (IBAction)toggleRightFilterBar:(id)sender
+{
+	BOOL shown = ![self rightFilterBarShown];
+	[self setRightFilterBarShown:shown];
+	
+	[[NSUserDefaults standardUserDefaults] setBool:!shown forKey:@"rightFilterBarIsHidden"];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+}
+- (BOOL)rightFilterBarShown
+{
+	return ([rightFilterBarView superview] != nil);
+}
+- (void)setRightFilterBarShown:(BOOL)shown
+{
 	NSView *sideview = [[browserSplitView subviews] objectAtIndex:1];
 	
-	if (rightFilterBarIsShown)
+	if (shown)
 	{
 		NSRect r = [browserSplitView frame];
 		r.size.width = [[browserSplitView superview] frame].size.width;
@@ -1615,7 +1642,7 @@
 	else
 	{
 		NSRect r = [browserSplitView frame];
-		r.size.width = [[browserSplitView superview] frame].size.width + [[[browserSplitView subviews] objectAtIndex:1] frame].size.width + [browserSplitView dividerThickness];
+		r.size.width = [[browserSplitView superview] frame].size.width + [[[browserSplitView subviews] objectAtIndex:1] frame].size.width + 1;// + [browserSplitView dividerThickness];
 		[browserSplitView setFrame:r];
 		[browserSplitView setEnabled:NO];
 		
@@ -1624,12 +1651,6 @@
 			[rightFilterBarView removeFromSuperview];
 		}
 	}
-	
-	
-	if ([[frame dataSource] pageTitle] == nil)
-		[browserViewTitle setStringValue:@""];
-	else
-		[browserViewTitle setStringValue:[[frame dataSource] pageTitle]];
 }
 
 @end

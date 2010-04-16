@@ -169,4 +169,8 @@ typedef enum {
 
 - (void)tableViewSelectionDidChange:(NSNotification *)aNotification;
 
+- (IBAction)toggleRightFilterBar:(id)sender;
+- (BOOL)rightFilterBarShown;
+- (void)setRightFilterBarShown:(BOOL)shown;
+
 @end
