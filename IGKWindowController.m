@@ -158,6 +158,8 @@
 	[self setMode:CHDocumentationBrowserUIMode_TwoUp];
 	sideSearchQuery = @"";
 	
+	//	[sideSearchIndicator startAnimation:self];
+	
 	sideSearchResults = [[NSMutableArray alloc] init];
 	
 	BOOL didIndex = YES;
@@ -169,7 +171,7 @@
 		didIndex = NO;
 		[self loadNoSelectionRecordHistory:YES];
 	}
-	
+		
 	[searchViewTable setTarget:self];
 	[searchViewTable setDoubleAction:@selector(advancedSearchDoubleAction:)];
 	

@@ -16,4 +16,6 @@
 //Private
 - (void)innerCommentlessStringValueInto:(NSMutableString *)str;
 
+- (NSArray *)nodesMatchingPredicate:(BOOL (^)(NSXMLNode*))predicate;
+
 @end

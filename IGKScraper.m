@@ -198,7 +198,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		
 		count++;
 		
-		[paths addObject:subpath];//[kIGKDocsetPrefixPath stringByAppendingPathComponent:subpath]];//[urlpath stringByAppendingPathComponent:subpath]];
+		[paths addObject:subpath];
 	}
 	
 	return [paths count];
@@ -696,9 +696,11 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	[self scrapeApplecodes:[NSArray arrayWithObject:applecode]];
 }
 - (void)scrapeApplecodes:(NSArray *)applecodes
-{
-	NSError *err = nil;
-	NSArray *methodNodes = [[doc rootElement] nodesForXPath:@"//a" error:&err];
+{	
+	//NSArray *methodNodes1 = [[doc rootElement] nodesForXPath:@"//a" error:nil];
+	NSArray *methodNodes = [[doc rootElement] nodesMatchingPredicate:^BOOL(NSXMLNode *node) {
+		return [[node name] isEqual:@"a"];
+	}];
 	
 	NSMutableArray *fullApplecodePatterns = [[NSMutableArray alloc] init];
 	for (NSString *applecode in applecodes)
@@ -747,7 +749,12 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 - (void)scrapeMethod
 {
 	NSError *err = nil;
-	NSArray *methodNodes = [[doc rootElement] nodesForXPath:@"//a" error:&err];
+	
+	//NSArray *methodNodes1 = [[doc rootElement] nodesForXPath:@"//a" error:&err];
+	NSArray *methodNodes = [[doc rootElement] nodesMatchingPredicate:^BOOL(NSXMLNode *node) {
+		return [[node name] isEqual:@"a"];
+	}];
+	
 	
 	//Search through all anchors in the document, and record their parent elements
 	NSMutableSet *containersSet = [[NSMutableSet alloc] init];
@@ -1460,10 +1467,21 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	[transientObject setValue:[NSSet set] forKey:@"taskgroups"];
 	
 	NSError *err = nil;
-	NSArray *methodNodes = [[doc rootElement] nodesForXPath:@"//a" error:&err];
+		
+	// NSArray *methodNodes1 = [[doc rootElement] nodesForXPath:@"//a" error:&err];
+	NSArray *methodNodes = [[doc rootElement] nodesMatchingPredicate:^BOOL(NSXMLNode *node) {
+		return [[node name] isEqual:@"a"];
+	}];
 	
-	//Find <div id="Overview_section" class="zClassDescription">
+	
+	//Find <div id="Overview_section" class="zClassDescription">	
 	NSArray *overviewSectionNodes = [[doc rootElement] nodesForXPath:@"//div[@id='Overview_section']" error:&err];
+	//FIXME: This (faster) version isn't working for some reason. It should be equivalent
+	/*
+	NSArray *overviewSectionNodes1 = [[doc rootElement] nodesMatchingPredicate:^BOOL(NSXMLNode *node) {
+		return [[node name] isEqual:@"div"] && [[node attributeForName:@"id"] isEqual:@"Overview_section"];
+	}];
+	*/
 	for (NSXMLElement *el in overviewSectionNodes)
 	{
 		if (![el isKindOfClass:[NSXMLElement class]])
@@ -1477,8 +1495,15 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	}
 	
 	
-	//Find <div id="Tasks_section" class="zMethodsByTask">
+	//Find <div id="Tasks_section" class="zMethodsByTask">	
 	NSArray *tasksSectionNodes = [[doc rootElement] nodesForXPath:@"//div[@id='Tasks_section']" error:&err];
+	
+	//FIXME: Same deal as above. This (faster) version isn't working for some reason. It should be equivalent
+	/*
+	NSArray *tasksSectionNodes1 = [[doc rootElement] nodesMatchingPredicate:^BOOL(NSXMLNode *node) {
+		return [[node name] isEqual:@"div"] && [[node attributeForName:@"id"] isEqual:@"Tasks_section"];
+	}];
+	*/
 	for (NSXMLElement *el in tasksSectionNodes)
 	{
 		if (![el isKindOfClass:[NSXMLElement class]])
@@ -1537,7 +1562,6 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			{
 				if (lastWasPropertyTrue)
 				{
-					NSLog(@"LAST WAS PROPERTY = %@", strval);
 					lastWasProperty = YES;
 					return nil;
 				}

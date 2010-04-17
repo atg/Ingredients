@@ -9,6 +9,22 @@
 #import "NSXMLNode+IGKAdditions.h"
 
 
+void IGKPutChildrenMatchingPredicateIntoArray(NSXMLElement *element, BOOL (^predicate)(NSXMLNode*), NSMutableArray *elements)
+{
+	if (![element isKindOfClass:[NSXMLElement class]])
+		return;
+	
+	//If the node matches the predicate, add it to the array
+	if (predicate(element))
+		[elements addObject:element];
+	
+	for (NSXMLNode *node in [element children])
+	{
+		//Recursively put any matching children of node into the nodes array
+		IGKPutChildrenMatchingPredicateIntoArray(node, predicate, elements);
+	}
+}
+
 @implementation NSXMLNode (IGKAdditions)
 
 - (NSString *)commentlessStringValue
@@ -39,6 +55,15 @@
 			[n innerCommentlessStringValueInto:str];
 		}
 	}
+}
+
+- (NSArray *)nodesMatchingPredicate:(BOOL (^)(NSXMLNode*))predicate
+{
+	NSMutableArray *nodes = [[NSMutableArray alloc] initWithCapacity:50];
+	
+	IGKPutChildrenMatchingPredicateIntoArray((NSXMLElement *)self, predicate, nodes);
+	
+	return nodes;
 }
 
 @end

@@ -27,10 +27,7 @@
 }
 
 - (void)fetch:(void (^)(NSArray *managedObjectIDs, BOOL fetchContainsVip))completionBlock
-{	
-	//TODO: Eventually we want to fetch on another thread. There are still some synchronization issues to sort out
-	
-	
+{
 	if (!predicate)
 		return;
 	

@@ -24,6 +24,8 @@
 		751D2DC91127354E00403E64 /* IGKNoSelectionOuterView.h in Headers */ = {isa = PBXBuildFile; fileRef = 751D2DC71127354E00403E64 /* IGKNoSelectionOuterView.h */; };
 		751D2DCA1127354E00403E64 /* IGKNoSelectionOuterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 751D2DC81127354E00403E64 /* IGKNoSelectionOuterView.m */; };
 		751E45D61125E6CE00CD544A /* tictactoe_style.css in Resources */ = {isa = PBXBuildFile; fileRef = 751E45D51125E6CE00CD544A /* tictactoe_style.css */; };
+		752321CA1179DE5400BAEA90 /* IGKBackgroundProgressBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 752321C81179DE5400BAEA90 /* IGKBackgroundProgressBar.h */; };
+		752321CB1179DE5400BAEA90 /* IGKBackgroundProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 752321C91179DE5400BAEA90 /* IGKBackgroundProgressBar.m */; };
 		754AA3FA1140267300321EAF /* AnthillBugReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 754AA3F91140267300321EAF /* AnthillBugReporter.m */; };
 		754AA3FC1140267D00321EAF /* AnthillReporter.nib in Resources */ = {isa = PBXBuildFile; fileRef = 754AA3FB1140267D00321EAF /* AnthillReporter.nib */; };
 		755F427E112323C600AA16F5 /* tictactoe.html in Resources */ = {isa = PBXBuildFile; fileRef = 755F427D112323C600AA16F5 /* tictactoe.html */; };
@@ -192,6 +194,8 @@
 		751D2DC71127354E00403E64 /* IGKNoSelectionOuterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKNoSelectionOuterView.h; sourceTree = "<group>"; };
 		751D2DC81127354E00403E64 /* IGKNoSelectionOuterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKNoSelectionOuterView.m; sourceTree = "<group>"; };
 		751E45D51125E6CE00CD544A /* tictactoe_style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = tictactoe_style.css; sourceTree = "<group>"; };
+		752321C81179DE5400BAEA90 /* IGKBackgroundProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKBackgroundProgressBar.h; sourceTree = "<group>"; };
+		752321C91179DE5400BAEA90 /* IGKBackgroundProgressBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKBackgroundProgressBar.m; sourceTree = "<group>"; };
 		754AA3F81140267300321EAF /* AnthillBugReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnthillBugReporter.h; path = "Anthill Cocoa/AnthillBugReporter.h"; sourceTree = "<group>"; };
 		754AA3F91140267300321EAF /* AnthillBugReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnthillBugReporter.m; path = "Anthill Cocoa/AnthillBugReporter.m"; sourceTree = "<group>"; };
 		754AA3FB1140267D00321EAF /* AnthillReporter.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = AnthillReporter.nib; path = "Anthill Cocoa/AnthillReporter.nib"; sourceTree = "<group>"; };
@@ -394,6 +398,8 @@
 				7507CF4411598197008449DE /* IGKPredicateEditor.m */,
 				757654081179243D0099D318 /* IGKFilterBarTableView.h */,
 				757654091179243D0099D318 /* IGKFilterBarTableView.m */,
+				752321C81179DE5400BAEA90 /* IGKBackgroundProgressBar.h */,
+				752321C91179DE5400BAEA90 /* IGKBackgroundProgressBar.m */,
 			);
 			name = "Views & Cells";
 			sourceTree = "<group>";
@@ -672,6 +678,7 @@
 				7507CF4511598197008449DE /* IGKPredicateEditor.h in Headers */,
 				75195FBA116D49B00034590C /* IGKManagedObject.h in Headers */,
 				7576540A1179243D0099D318 /* IGKFilterBarTableView.h in Headers */,
+				752321CA1179DE5400BAEA90 /* IGKBackgroundProgressBar.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -838,6 +845,7 @@
 				7507CF4611598197008449DE /* IGKPredicateEditor.m in Sources */,
 				75195FBB116D49B00034590C /* IGKManagedObject.m in Sources */,
 				7576540B1179243D0099D318 /* IGKFilterBarTableView.m in Sources */,
+				752321CB1179DE5400BAEA90 /* IGKBackgroundProgressBar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
