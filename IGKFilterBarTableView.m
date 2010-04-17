@@ -15,8 +15,8 @@
 {
 	if ([[self dataSource] filterBarTableRowIsGroup:row])
 	{
-		NSRect r = NSInsetRect([self rectOfRow:row], 4, 1);
-		r.origin.y += 1.0;
+		NSRect r = NSInsetRect([self rectOfRow:row], 6, 3);
+		r.origin.y += 2.0;
 		return r;
 	}
 	

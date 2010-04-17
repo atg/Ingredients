@@ -1296,9 +1296,9 @@
 		if ([currentRow respondsToSelector:@selector(characterAtIndex:)])
 		{
 			//[cell setAlignment:NSCenterTextAlignment];
-			[cell setFont:[NSFont boldSystemFontOfSize:13]];//[NSFont fontWithName:@"Menlo-Bold" size:12]];
+			[cell setFont:[NSFont boldSystemFontOfSize:11.5]];//[NSFont fontWithName:@"Menlo-Bold" size:12]];
 			if ([cell respondsToSelector:@selector(setTextColor:)])
-				[cell setTextColor:[NSColor colorWithCalibratedWhite:0.20 alpha:1.0]];
+				[cell setTextColor:[NSColor colorWithCalibratedWhite:0.0 alpha:0.80]];
 			//[(NSCell *)cell setTag:10];
 		}
 		else
