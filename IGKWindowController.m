@@ -70,8 +70,6 @@
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSavingProgressSheet:) name:@"IGKWillSaveIndex" object:nil];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDefaultsDidChange:) name:NSUserDefaultsDidChangeNotification object:nil];
-
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ruleEditorRowsDidChange:) name:NSRuleEditorRowsDidChangeNotification object:searchViewPredicateEditor];
 	}
 	
 	return self;
@@ -257,6 +255,7 @@
 	[advancedController setSmartSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];	
 	
 	[searchViewPredicateEditor addRow:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ruleEditorRowsDidChange:) name:NSRuleEditorRowsDidChangeNotification object:searchViewPredicateEditor];
 	
 	//[[WebPreferences standardPreferences] setMinimumFontSize:12];
 	//[[WebPreferences standardPreferences] setMinimumLogicalFontSize:12];
