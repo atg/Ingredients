@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="339"/>
+			<integer value="483"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -410,25 +410,6 @@
 												<reference key="NSOnImage" ref="893455832"/>
 												<reference key="NSMixedImage" ref="424226900"/>
 												<int key="NSTag">3</int>
-											</object>
-											<object class="NSMenuItem" id="30033296">
-												<reference key="NSMenu" ref="216314426"/>
-												<string key="NSTitle">Use Selection for Find</string>
-												<string key="NSKeyEquiv">e</string>
-												<int key="NSKeyEquivModMask">1048576</int>
-												<int key="NSMnemonicLoc">2147483647</int>
-												<reference key="NSOnImage" ref="893455832"/>
-												<reference key="NSMixedImage" ref="424226900"/>
-												<int key="NSTag">7</int>
-											</object>
-											<object class="NSMenuItem" id="827334636">
-												<reference key="NSMenu" ref="216314426"/>
-												<string key="NSTitle">Jump to Selection</string>
-												<string key="NSKeyEquiv">j</string>
-												<int key="NSKeyEquivModMask">1048576</int>
-												<int key="NSMnemonicLoc">2147483647</int>
-												<reference key="NSOnImage" ref="893455832"/>
-												<reference key="NSMixedImage" ref="424226900"/>
 											</object>
 										</object>
 									</object>
@@ -1164,46 +1145,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">performFindPanelAction:</string>
-						<reference key="source" ref="909243075"/>
-						<reference key="destination" ref="160366792"/>
-					</object>
-					<int key="connectionID">513</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">performFindPanelAction:</string>
-						<reference key="source" ref="909243075"/>
-						<reference key="destination" ref="30033296"/>
-					</object>
-					<int key="connectionID">514</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">performFindPanelAction:</string>
-						<reference key="source" ref="909243075"/>
-						<reference key="destination" ref="914446540"/>
-					</object>
-					<int key="connectionID">515</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">centerSelectionInVisibleArea:</string>
-						<reference key="source" ref="909243075"/>
-						<reference key="destination" ref="827334636"/>
-					</object>
-					<int key="connectionID">516</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">performFindPanelAction:</string>
-						<reference key="source" ref="909243075"/>
-						<reference key="destination" ref="248661547"/>
-					</object>
-					<int key="connectionID">517</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
 						<string key="label">showHelp:</string>
 						<reference key="source" ref="909243075"/>
 						<reference key="destination" ref="954120217"/>
@@ -1289,6 +1230,30 @@
 						<reference key="destination" ref="316787670"/>
 					</object>
 					<int key="connectionID">615</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">doFindPanelAction:</string>
+						<reference key="source" ref="909243075"/>
+						<reference key="destination" ref="914446540"/>
+					</object>
+					<int key="connectionID">616</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">findPanelNext:</string>
+						<reference key="source" ref="909243075"/>
+						<reference key="destination" ref="160366792"/>
+					</object>
+					<int key="connectionID">617</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">findPanelPrevious:</string>
+						<reference key="source" ref="909243075"/>
+						<reference key="destination" ref="248661547"/>
+					</object>
+					<int key="connectionID">618</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1814,8 +1779,6 @@
 							<reference ref="914446540"/>
 							<reference ref="160366792"/>
 							<reference ref="248661547"/>
-							<reference ref="30033296"/>
-							<reference ref="827334636"/>
 						</object>
 						<reference key="parent" ref="69846141"/>
 					</object>
@@ -1832,16 +1795,6 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">486</int>
 						<reference key="object" ref="248661547"/>
-						<reference key="parent" ref="216314426"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">487</int>
-						<reference key="object" ref="30033296"/>
-						<reference key="parent" ref="216314426"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">488</int>
-						<reference key="object" ref="827334636"/>
 						<reference key="parent" ref="216314426"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -2079,8 +2032,6 @@
 					<string>484.IBPluginDependency</string>
 					<string>485.IBPluginDependency</string>
 					<string>486.IBPluginDependency</string>
-					<string>487.IBPluginDependency</string>
-					<string>488.IBPluginDependency</string>
 					<string>518.IBPluginDependency</string>
 					<string>519.IBEditorWindowLastContentRect</string>
 					<string>519.IBPluginDependency</string>
@@ -2163,7 +2114,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{184, 836}, {448, 20}}</string>
+					<string>{{39, 517}, {448, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2172,7 +2123,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{339, 553}, {254, 283}}</string>
+					<string>{{194, 234}, {254, 283}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2212,9 +2163,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{593, 553}, {238, 103}}</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>{{448, 274}, {181, 63}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2277,7 +2226,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">615</int>
+			<int key="maxID">618</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2376,10 +2325,16 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>changeViewModeTagged:</string>
+							<string>doFindPanelAction:</string>
+							<string>findPanelNext:</string>
+							<string>findPanelPrevious:</string>
 							<string>toggleRightFilterBar:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 						</object>
@@ -2535,8 +2490,13 @@
 							<string>backForward:</string>
 							<string>changeSelectedFilterDocset:</string>
 							<string>changeViewModeTagged:</string>
+							<string>closeFindPanel:</string>
 							<string>executeAdvancedSearch:</string>
 							<string>executeSearch:</string>
+							<string>findPanelNext:</string>
+							<string>findPanelPrevious:</string>
+							<string>findPanelSearchField:</string>
+							<string>findPanelSegmentedControl:</string>
 							<string>noselectionSearchField:</string>
 							<string>openInSafari:</string>
 							<string>rightFilterGroupByMenu:</string>
@@ -2545,6 +2505,11 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -2575,6 +2540,12 @@
 							<string>contentView</string>
 							<string>docsetsController</string>
 							<string>docsetsFilterPopupButton</string>
+							<string>findBackForwardStepper</string>
+							<string>findCloseButton</string>
+							<string>findRegexToggle</string>
+							<string>findSearchField</string>
+							<string>findView</string>
+							<string>findWindow</string>
 							<string>noselectionPopupButton</string>
 							<string>noselectionSearchField</string>
 							<string>noselectionView</string>
@@ -2592,6 +2563,7 @@
 							<string>searchViewTableScrollView</string>
 							<string>sideSearchContainer</string>
 							<string>sideSearchController</string>
+							<string>sideSearchIndicator</string>
 							<string>sideSearchView</string>
 							<string>sideSearchViewField</string>
 							<string>sideSearchViewResults</string>
@@ -2619,6 +2591,12 @@
 							<string>NSView</string>
 							<string>NSArrayController</string>
 							<string>NSPopUpButton</string>
+							<string>NSSegmentedControl</string>
+							<string>NSButton</string>
+							<string>NSButton</string>
+							<string>NSTextField</string>
+							<string>NSView</string>
+							<string>NSWindow</string>
 							<string>NSPopUpButton</string>
 							<string>NSTextField</string>
 							<string>NSView</string>
@@ -2636,6 +2614,7 @@
 							<string>NSScrollView</string>
 							<string>NSView</string>
 							<string>IGKArrayController</string>
+							<string>NSView</string>
 							<string>NSView</string>
 							<string>NSSearchField</string>
 							<string>NSTableView</string>

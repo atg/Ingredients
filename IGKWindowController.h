@@ -64,6 +64,7 @@ typedef enum {
 	IBOutlet NSView *browserTopbar;
 	IBOutlet NSView *browserToolbar;
 	
+	
 	//*** Filter Bar ***
 	BOOL isNonFilterBarType;
 	
@@ -110,6 +111,15 @@ typedef enum {
 	NSUInteger tableOfContentsMask;
 	NSMutableArray *tableOfContentsTypes;
 	NSMutableArray *tableOfContentsTitles;
+	
+	
+	//*** In-file Find ***
+	IBOutlet NSWindow *findWindow;
+	IBOutlet NSView *findView;
+	IBOutlet NSTextField *findSearchField;
+	IBOutlet NSButton *findCloseButton;
+	IBOutlet NSButton *findRegexToggle;
+	IBOutlet NSSegmentedControl *findBackForwardStepper;
 	
 	
 	//*** Advanced Search ***
@@ -177,5 +187,12 @@ typedef enum {
 - (void)setRightFilterBarShown:(BOOL)shown;
 
 - (BOOL)filterBarTableRowIsGroup:(NSInteger)row;
+
+//Find Panel
+- (IBAction)closeFindPanel:(id)sender;
+- (IBAction)findPanelSearchField:(id)sender;
+- (IBAction)findPanelSegmentedControl:(id)sender;
+- (IBAction)findPanelPrevious:(id)sender;
+- (IBAction)findPanelNext:(id)sender;
 
 @end

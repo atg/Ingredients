@@ -29,6 +29,10 @@
 	BOOL sortIsAscending;
 	NSString *sortColumn;
 	NSString *entityToFetch;
+	
+	IBOutlet id delegate;
+	BOOL isSearching;
+	NSTimeInterval startedSearchTimeInterval;
 }
 
 @property (assign) NSPredicate *predicate;

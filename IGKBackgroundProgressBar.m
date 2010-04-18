@@ -70,7 +70,7 @@ const CGFloat framesPerSecond = 30.0;
 	
 	phase += pixelsPerSecond / framesPerSecond;
 	
-	[self setNeedsDisplay:YES];
+	[self display];
 	[self performSelector:@selector(doAnimation) withObject:nil afterDelay:1.0 / framesPerSecond];
 }
 - (IBAction)startAnimation:(id)sender
@@ -81,6 +81,7 @@ const CGFloat framesPerSecond = 30.0;
 - (IBAction)stopAnimation:(id)sender
 {
 	shouldStop = YES;
+	[self display]; //-display instead of -setNeedsDisplay: because the main thread may be blocked immediately after this call, so the drawing has to be done *now*
 }
 
 @end

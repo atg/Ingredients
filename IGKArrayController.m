@@ -11,6 +11,8 @@
 #import "IGKDocRecordManagedObject.h"
 #import "IGKApplicationDelegate.h"
 
+const NSTimeInterval timeoutInterval = 0.15;
+
 @implementation IGKArrayController
 
 @synthesize predicate;
@@ -44,6 +46,11 @@
 	NSPredicate *copiedPredicate = [predicate copy];
 	NSArray *copiedCurrentSortDescriptors = [currentSortDescriptors copy];
 	NSManagedObjectID *vipObjectID = [vipObject objectID];
+	
+	NSLog(@"START");
+	isSearching = YES;
+	startedSearchTimeInterval = [NSDate timeIntervalSinceReferenceDate];
+	[self performSelector:@selector(doTimeout) withObject:nil afterDelay:timeoutInterval];
 	
 	dispatch_async(queue, ^{
 		
@@ -84,8 +91,13 @@
 		//Run the completion block on the main thread
 		dispatch_async(dispatch_get_main_queue(), ^{
 			
-			completionBlock(objectIDs, containsVIP);
+			NSLog(@"END");
+			isSearching = NO;
 			
+			if ([delegate respondsToSelector:@selector(arrayControllerFinishedSearching:)])
+				[delegate arrayControllerFinishedSearching:self];
+			
+			completionBlock(objectIDs, containsVIP);
 		});
 	});
 }
@@ -93,6 +105,22 @@
 {
 	[self refreshAndSelectIndex:0 renderSelection:YES];
 }
+
+- (void)doTimeout
+{
+	NSLog(@"Do timeout");
+	NSLog(@"isSearching = %d", isSearching);
+	if (!isSearching)
+		return;
+	NSLog(@"startedSearchTimeInterval + timeoutInterval = %lf, [NSDate timeIntervalSinceReferenceDate] = %lf", startedSearchTimeInterval + timeoutInterval, [NSDate timeIntervalSinceReferenceDate]);
+	if (startedSearchTimeInterval + timeoutInterval >= [NSDate timeIntervalSinceReferenceDate])
+		return;
+	
+	NSLog(@"[delegate respondsToSelector:@selector(arrayControllerTimedOut:)] = %d", [delegate respondsToSelector:@selector(arrayControllerTimedOut:)]);
+	if ([delegate respondsToSelector:@selector(arrayControllerTimedOut:)])
+		[delegate arrayControllerTimedOut:self];
+}
+
 
 //This method is PRIVATE!
 - (void)fetchFromRefresh:(NSManagedObjectContext *)ctx managedObjectIDs:(NSArray *)managedObjectIDs fetchContainsVip:(BOOL)fetchContainsVip

@@ -53,6 +53,10 @@
 		756F9FB5110BEB5600E6F291 /* CHLeftSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 756F9FA0110BEA8D00E6F291 /* CHLeftSplitView.m */; };
 		756F9FFB110C805C00E6F291 /* IGKScraper.h in Headers */ = {isa = PBXBuildFile; fileRef = 756F9FF9110C805C00E6F291 /* IGKScraper.h */; };
 		756F9FFC110C805C00E6F291 /* IGKScraper.m in Sources */ = {isa = PBXBuildFile; fileRef = 756F9FFA110C805C00E6F291 /* IGKScraper.m */; };
+		75751B25117B599E0017B58B /* IGKFindWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 75751B23117B599E0017B58B /* IGKFindWindow.h */; };
+		75751B26117B599E0017B58B /* IGKFindWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 75751B24117B599E0017B58B /* IGKFindWindow.m */; };
+		75751B90117B641D0017B58B /* IGKResizeDelegatedView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75751B8E117B641D0017B58B /* IGKResizeDelegatedView.h */; };
+		75751B91117B641D0017B58B /* IGKResizeDelegatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75751B8F117B641D0017B58B /* IGKResizeDelegatedView.m */; };
 		7576540A1179243D0099D318 /* IGKFilterBarTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 757654081179243D0099D318 /* IGKFilterBarTableView.h */; };
 		7576540B1179243D0099D318 /* IGKFilterBarTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 757654091179243D0099D318 /* IGKFilterBarTableView.m */; };
 		75901BEE1129FC2100BA0316 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 75901BEC1129FC2100BA0316 /* Credits.rtf */; };
@@ -101,6 +105,8 @@
 		75A9AAE111495F2900E539F2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75A9AAA811495F2300E539F2 /* QuartzCore.framework */; };
 		75A9DA6711411C49003F8437 /* NSXMLNode+IGKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A9DA6511411C49003F8437 /* NSXMLNode+IGKAdditions.h */; };
 		75A9DA6811411C49003F8437 /* NSXMLNode+IGKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A9DA6611411C49003F8437 /* NSXMLNode+IGKAdditions.m */; };
+		75ACEC59117A539600260366 /* IGKFindBackgroundView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75ACEC57117A539600260366 /* IGKFindBackgroundView.h */; };
+		75ACEC5A117A539600260366 /* IGKFindBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75ACEC58117A539600260366 /* IGKFindBackgroundView.m */; };
 		75B23908113FB4D300EC1D2B /* IGKDocSetManagedObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B23906113FB4D300EC1D2B /* IGKDocSetManagedObject.h */; };
 		75B23909113FB4D300EC1D2B /* IGKDocSetManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B23907113FB4D300EC1D2B /* IGKDocSetManagedObject.m */; };
 		75B23F4711401DD700EC1D2B /* PFMoveApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B23F4611401DD700EC1D2B /* PFMoveApplication.m */; };
@@ -226,6 +232,10 @@
 		756F9FA0110BEA8D00E6F291 /* CHLeftSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHLeftSplitView.m; sourceTree = "<group>"; };
 		756F9FF9110C805C00E6F291 /* IGKScraper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKScraper.h; sourceTree = "<group>"; };
 		756F9FFA110C805C00E6F291 /* IGKScraper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKScraper.m; sourceTree = "<group>"; };
+		75751B23117B599E0017B58B /* IGKFindWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKFindWindow.h; sourceTree = "<group>"; };
+		75751B24117B599E0017B58B /* IGKFindWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKFindWindow.m; sourceTree = "<group>"; };
+		75751B8E117B641D0017B58B /* IGKResizeDelegatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKResizeDelegatedView.h; sourceTree = "<group>"; };
+		75751B8F117B641D0017B58B /* IGKResizeDelegatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKResizeDelegatedView.m; sourceTree = "<group>"; };
 		757654081179243D0099D318 /* IGKFilterBarTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKFilterBarTableView.h; sourceTree = "<group>"; };
 		757654091179243D0099D318 /* IGKFilterBarTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKFilterBarTableView.m; sourceTree = "<group>"; };
 		758027A61147E9BF00FCE783 /* IngredientsRevisedDataModel.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = IngredientsRevisedDataModel.xcdatamodel; sourceTree = "<group>"; };
@@ -271,6 +281,8 @@
 		75A9AAA811495F2300E539F2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		75A9DA6511411C49003F8437 /* NSXMLNode+IGKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSXMLNode+IGKAdditions.h"; sourceTree = "<group>"; };
 		75A9DA6611411C49003F8437 /* NSXMLNode+IGKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSXMLNode+IGKAdditions.m"; sourceTree = "<group>"; };
+		75ACEC57117A539600260366 /* IGKFindBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKFindBackgroundView.h; sourceTree = "<group>"; };
+		75ACEC58117A539600260366 /* IGKFindBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKFindBackgroundView.m; sourceTree = "<group>"; };
 		75B23906113FB4D300EC1D2B /* IGKDocSetManagedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKDocSetManagedObject.h; sourceTree = "<group>"; };
 		75B23907113FB4D300EC1D2B /* IGKDocSetManagedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKDocSetManagedObject.m; sourceTree = "<group>"; };
 		75B23F4511401DD700EC1D2B /* PFMoveApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PFMoveApplication.h; path = LetsMove/PFMoveApplication.h; sourceTree = "<group>"; };
@@ -400,6 +412,12 @@
 				757654091179243D0099D318 /* IGKFilterBarTableView.m */,
 				752321C81179DE5400BAEA90 /* IGKBackgroundProgressBar.h */,
 				752321C91179DE5400BAEA90 /* IGKBackgroundProgressBar.m */,
+				75ACEC57117A539600260366 /* IGKFindBackgroundView.h */,
+				75ACEC58117A539600260366 /* IGKFindBackgroundView.m */,
+				75751B23117B599E0017B58B /* IGKFindWindow.h */,
+				75751B24117B599E0017B58B /* IGKFindWindow.m */,
+				75751B8E117B641D0017B58B /* IGKResizeDelegatedView.h */,
+				75751B8F117B641D0017B58B /* IGKResizeDelegatedView.m */,
 			);
 			name = "Views & Cells";
 			sourceTree = "<group>";
@@ -679,6 +697,9 @@
 				75195FBA116D49B00034590C /* IGKManagedObject.h in Headers */,
 				7576540A1179243D0099D318 /* IGKFilterBarTableView.h in Headers */,
 				752321CA1179DE5400BAEA90 /* IGKBackgroundProgressBar.h in Headers */,
+				75ACEC59117A539600260366 /* IGKFindBackgroundView.h in Headers */,
+				75751B25117B599E0017B58B /* IGKFindWindow.h in Headers */,
+				75751B90117B641D0017B58B /* IGKResizeDelegatedView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -846,6 +867,9 @@
 				75195FBB116D49B00034590C /* IGKManagedObject.m in Sources */,
 				7576540B1179243D0099D318 /* IGKFilterBarTableView.m in Sources */,
 				752321CB1179DE5400BAEA90 /* IGKBackgroundProgressBar.m in Sources */,
+				75ACEC5A117A539600260366 /* IGKFindBackgroundView.m in Sources */,
+				75751B26117B599E0017B58B /* IGKFindWindow.m in Sources */,
+				75751B91117B641D0017B58B /* IGKResizeDelegatedView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

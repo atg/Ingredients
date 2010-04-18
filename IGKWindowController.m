@@ -157,7 +157,7 @@
 	currentModeIndex = CHDocumentationBrowserUIMode_NeedsSetup;
 	[self setMode:CHDocumentationBrowserUIMode_TwoUp];
 	sideSearchQuery = @"";
-	
+		
 	//	[sideSearchIndicator startAnimation:self];
 	
 	sideSearchResults = [[NSMutableArray alloc] init];
@@ -873,6 +873,8 @@
 			[noselectionView setFrame:[browserSplitView frame]];
 			[superview addSubview:noselectionView];
 		}
+		
+		[self closeFindPanel:nil];
 	}
 }
 
@@ -1694,6 +1696,93 @@
 			[rightFilterBarView removeFromSuperview];
 		}
 	}
+}
+
+
+#pragma mark Search Timeout
+
+- (void)arrayControllerTimedOut:(IGKArrayController *)ac
+{
+	NSLog(@"ac == sideSearchController = %@ = %@", ac, sideSearchController);
+	if (ac == sideSearchController)
+		[sideSearchIndicator startAnimation:nil];
+}
+- (void)arrayControllerFinishedSearching:(IGKArrayController *)ac
+{
+	if (ac == sideSearchController)
+		[sideSearchIndicator stopAnimation:nil];
+}
+
+#pragma mark Find
+
+- (void)windowDidResize:(NSNotification *)notification
+{
+	[self relayoutFindPanel];
+}
+- (void)viewResized:(id)resizedView
+{
+	[self relayoutFindPanel];
+}
+
+- (IBAction)doFindPanelAction:(id)sender
+{
+	[self relayoutFindPanel];
+	
+	[[self window] addChildWindow:findWindow ordered:NSWindowAbove];
+	[findWindow makeKeyAndOrderFront:nil];
+	[[self window] makeMainWindow];
+}
+- (IBAction)closeFindPanel:(id)sender
+{
+	[[self window] removeChildWindow:findWindow];
+	[findWindow close];
+}
+
+- (IBAction)findPanelSearchField:(id)sender
+{
+	[self findPanelNext:sender];
+}
+- (IBAction)findPanelSegmentedControl:(id)sender
+{
+	if ([sender selectedSegment] == 1)
+	{
+		[self findPanelNext:sender];
+	}
+	else
+	{
+		[self findPanelPrevious:sender];
+	}
+}
+- (IBAction)findPanelPrevious:(id)sender
+{
+	[browserWebView searchFor:[findSearchField stringValue] direction:NO caseSensitive:NO wrap:YES];
+}
+- (IBAction)findPanelNext:(id)sender
+{
+	[browserWebView searchFor:[findSearchField stringValue] direction:YES caseSensitive:NO wrap:YES];
+}
+
+- (void)relayoutFindPanel
+{
+	if (![browserWebView window])
+		[self closeFindPanel:self];
+	
+	NSRect newFindViewFrame = [findView frame];
+	newFindViewFrame.origin.y = [browserWebViewContainer frame].size.height - newFindViewFrame.size.height + 1;
+	newFindViewFrame.origin.x = [browserWebViewContainer frame].size.width - newFindViewFrame.size.width - 20.0 - 15.0;
+	
+	NSRect webViewConvertedFrame = [browserWebView convertRect:[browserWebView bounds] toView:[[self window] contentView]];
+	
+	NSRect newFrame = [findWindow frame];
+	newFrame.origin = [[self window] frame].origin;
+	newFrame.origin.y += [browserWebViewContainer frame].size.height - newFrame.size.height + 1;
+	newFrame.origin.x += NSMaxX(webViewConvertedFrame) - 20.0 - 15.0 - newFindViewFrame.size.width; //[browserWebViewContainer frame].size.width - newFindViewFrame.size.width - 20.0 - 15.0 + [[self window] frame].size.width - [browserSplitView frame].size.width;
+	
+	NSRect stepperFrame = [findBackForwardStepper frame];
+	stepperFrame.size.height = 20.0;
+	[findBackForwardStepper setFrame:stepperFrame];
+	
+	[findWindow setFrame:newFrame display:YES];
 }
 
 @end
