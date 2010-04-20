@@ -1516,6 +1516,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		break;
 	}
 	
+	
 	//Search through all anchors in the document, and record their parent elements
 	NSMutableSet *containersSet = [[NSMutableSet alloc] init];
 	for (NSXMLElement *a in methodNodes)
