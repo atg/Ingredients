@@ -254,11 +254,9 @@
 	
 	[advancedController setSmartSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];	
 	
+	if ([searchViewPredicateEditor numberOfRows] > 0)
+		[searchViewPredicateEditor removeRowsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [searchViewPredicateEditor numberOfRows])] includeSubrows:YES];
 	[searchViewPredicateEditor addRow:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ruleEditorRowsDidChange:) name:NSRuleEditorRowsDidChangeNotification object:searchViewPredicateEditor];
-	
-	//[[WebPreferences standardPreferences] setMinimumFontSize:12];
-	//[[WebPreferences standardPreferences] setMinimumLogicalFontSize:12];
 	
 	[[browserWebView preferences] setDefaultFontSize:16];
 	[[browserWebView preferences] setDefaultFixedFontSize:16];
@@ -474,6 +472,8 @@
 	}
 	else if (modeIndex == CHDocumentationBrowserUIMode_AdvancedSearch)
 	{
+		[self closeFindPanel:nil];
+		
 		[[searchViewField window] makeFirstResponder:searchViewField];
 	}
 }
@@ -712,9 +712,9 @@
 	[browserTopbar setFrame:topBarFrame];
 	[browserTopbar setHidden:YES];
 	
-	NSRect browserViewFrame = [browserSplitView frame];
+	NSRect browserViewFrame = [browserSplitViewContainer frame];
 	browserViewFrame.size.height += topBarFrame.size.height;
-	[browserSplitView setFrame:browserViewFrame];
+	[browserSplitViewContainer setFrame:browserViewFrame];
 	
 	[twoPaneSplitView setColorIsEnabled:YES];
 	[twoPaneSplitView setColor:[NSColor colorWithCalibratedRed:0.166 green:0.166 blue:0.166 alpha:1.000]];
@@ -764,14 +764,14 @@
 	[browserTopbar setHidden:NO];
 	
 	//Geometry for the browser container
-	NSRect browserViewFrame = [browserSplitView frame];
+	NSRect browserViewFrame = [browserSplitViewContainer frame];
 	browserViewFrame.size.height -= topBarFrame.size.height;
 	
 	//Animate
 	[NSAnimationContext beginGrouping];
 	
 	[[browserTopbar animator] setFrame:topBarFrame];
-	[[browserSplitView animator] setFrame:browserViewFrame];
+	[[browserSplitViewContainer animator] setFrame:browserViewFrame];
 	
 	[NSAnimationContext endGrouping];
 }
@@ -818,8 +818,8 @@
 	[self executeSearch:sideSearchViewField];
 }
 
-- (void)ruleEditorRowsDidChange:(NSNotification *)notification
-{
+- (IBAction)predicateEditor:(id)sender
+{	
 	//Work out the new height of the rule editor
 	NSUInteger numRows = [searchViewPredicateEditor numberOfRows];
 	CGFloat height = numRows * [searchViewPredicateEditor rowHeight];
@@ -859,17 +859,17 @@
 		if (superview)
 		{
 			[noselectionView removeFromSuperview];
-			[browserSplitView setFrame:[noselectionView frame]];
-			[superview addSubview:browserSplitView];
+			[browserSplitViewContainer setFrame:[noselectionView frame]];
+			[superview addSubview:browserSplitViewContainer];
 		}
 	}
 	else
 	{
-		id superview = [browserSplitView superview];
+		id superview = [browserSplitViewContainer superview];
 		if (superview)
 		{
-			[browserSplitView removeFromSuperview];
-			[noselectionView setFrame:[browserSplitView frame]];
+			[browserSplitViewContainer removeFromSuperview];
+			[noselectionView setFrame:[browserSplitViewContainer frame]];
 			[superview addSubview:noselectionView];
 		}
 		
@@ -1491,7 +1491,7 @@
 	
 	[self loadManagedObject:(IGKDocRecordManagedObject *)currentSelectionObject tableOfContentsMask:[self tableOfContentsSelectedDisplayTypeMask]];
 	
-	[self recordHistoryForURL:[(IGKDocRecordManagedObject *)currentSelectionObject docURL:[self tableOfContentsSelectedDisplayTypeMask]] title:[currentSelectionObject valueForKey:@"name"]];
+	[self recordHistoryForURL:[(IGKDocRecordManagedObject *)currentSelectionObject docURL:[self tableOfContentsSelectedDisplayTypeMask]] title:[currentSelectionObject pageTitle:[self tableOfContentsSelectedDisplayTypeMask]]];
 }
 
 - (IBAction)openInSafari:(id)sender
@@ -1529,8 +1529,8 @@
 	if (superview)
 	{
 		[noselectionView removeFromSuperview];
-		[browserSplitView setFrame:[noselectionView frame]];
-		[superview addSubview:browserSplitView];
+		[browserSplitViewContainer setFrame:[noselectionView frame]];
+		[superview addSubview:browserSplitViewContainer];
 	}
 	
 	[self loadURL:[NSURL URLWithString:url] recordHistory:YES];
@@ -1702,7 +1702,6 @@
 
 - (void)arrayControllerTimedOut:(IGKArrayController *)ac
 {
-	NSLog(@"ac == sideSearchController = %@ = %@", ac, sideSearchController);
 	if (ac == sideSearchController)
 		[sideSearchIndicator startAnimation:nil];
 }
@@ -1725,9 +1724,13 @@
 
 - (IBAction)doFindPanelAction:(id)sender
 {
+	if (![self isInValidStateForFindPanel])
+		return;
+	
 	[self relayoutFindPanel];
 	
 	[[self window] addChildWindow:findWindow ordered:NSWindowAbove];
+	[findWindow setParentWindow:[self window]];
 	[findWindow makeKeyAndOrderFront:nil];
 	[[self window] makeMainWindow];
 }
@@ -1754,17 +1757,39 @@
 }
 - (IBAction)findPanelPrevious:(id)sender
 {
+	if (![self isInValidStateForFindPanel])
+		return;
+	
 	[browserWebView searchFor:[findSearchField stringValue] direction:NO caseSensitive:NO wrap:YES];
 }
 - (IBAction)findPanelNext:(id)sender
 {
+	if (![self isInValidStateForFindPanel])
+		return;
+	
 	[browserWebView searchFor:[findSearchField stringValue] direction:YES caseSensitive:NO wrap:YES];
+}
+
+- (BOOL)isInValidStateForFindPanel
+{
+	if (![browserWebView window])
+	{
+		[self closeFindPanel:self];
+		return NO;
+	}
+	if (currentModeIndex == CHDocumentationBrowserUIMode_AdvancedSearch)
+	{
+		[self closeFindPanel:self];
+		return NO;
+	}
+	
+	return YES;
 }
 
 - (void)relayoutFindPanel
 {
-	if (![browserWebView window])
-		[self closeFindPanel:self];
+	if (![self isInValidStateForFindPanel])
+		return;
 	
 	NSRect newFindViewFrame = [findView frame];
 	newFindViewFrame.origin.y = [browserWebViewContainer frame].size.height - newFindViewFrame.size.height + 1;

@@ -23,29 +23,59 @@
 	return self;
 }
 
-/*
-- (BOOL)resignFirstResponder
+
+//This is a bit of a hack to ensure the parent's window controller gets action messages. We forward everything we don't respond to, to the parent's window controller
+- (id)actionForwardee
 {
-	if (![self parentWindow])
-		return;
-	if (ignoreResponderChanges)
-		return;
+	return [[self parentWindow] windowController];
+}
+- (BOOL)respondsToSelector:(SEL)aSelector
+{
+	if ([super respondsToSelector:aSelector])
+		return YES;
+	if ([[self actionForwardee] respondsToSelector:aSelector])
+		return YES;
+	return NO;
+}
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
+{
+	if ([super respondsToSelector:aSelector])
+		return [super methodSignatureForSelector:aSelector];
 	
-	[controller setShown:NO];
-	return [super resignFirstResponder];
+	id forwardee = [self actionForwardee];
+	if ([forwardee respondsToSelector:aSelector])
+		return [forwardee methodSignatureForSelector:aSelector];
+	
+	return [super methodSignatureForSelector:aSelector];
+}
+- (void)forwardInvocation:(NSInvocation *)anInvocation
+{
+	id forwardee = [self actionForwardee];
+	
+	if ([forwardee respondsToSelector:[anInvocation selector]])
+	{
+		[anInvocation invokeWithTarget:forwardee];
+	}
+	else
+	{
+		[super forwardInvocation:anInvocation];
+	}
 }
 
-- (void)resignMainWindow
+- (void)becomeKeyWindow
 {
-	if (![self parentWindow])
-		return;
-	if (ignoreResponderChanges)
-		return;
+	[super becomeKeyWindow];
 	
-	[controller setShown:NO];
-	[super resignMainWindow];
+	//If this window becomes key, we should make the parent window main
+	[[self parentWindow] makeMainWindow];
 }
-*/
+- (void)becomeMainWindow
+{
+	[super becomeMainWindow];
+	
+	//Ditto here. For some reason Apple sends -becomeKeyWindow first then -becomeMainWindow
+	[[self parentWindow] makeMainWindow];
+}
 
 - (BOOL)canBecomeKeyWindow
 {

@@ -262,22 +262,22 @@ const float ToCRowHeight = 31.0;
 {
 	if (window)
 	{
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKey:) name:NSWindowDidBecomeKeyNotification object:window];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidResignKey:) name:NSWindowDidResignKeyNotification object:window];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeMain:) name:NSWindowDidBecomeMainNotification object:window];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidResignMain:) name:NSWindowDidResignMainNotification object:window];
 	}
 	else
 	{
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeKeyNotification object:[self window]];
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidResignKeyNotification object:[self window]];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeMainNotification object:[self window]];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidResignMainNotification object:[self window]];
 	}
 }
-- (void)windowDidBecomeKey:(NSNotification *)notif
+- (void)windowDidBecomeMain:(NSNotification *)notif
 {
 	[splitView setColor:[NSColor colorWithCalibratedRed:0.591 green:0.626 blue:0.684 alpha:1.000]];
 	
 	[self setNeedsDisplay:YES];
 }
-- (void)windowDidResignKey:(NSNotification *)notif
+- (void)windowDidResignMain:(NSNotification *)notif
 {
 	[splitView setColor:[NSColor colorWithCalibratedRed:0.647 green:0.647 blue:0.647 alpha:1.000]];
 	
@@ -285,7 +285,7 @@ const float ToCRowHeight = 31.0;
 }
 - (BOOL)isActive
 {
-	return [[self window] isKeyWindow];
+	return [[self window] isMainWindow];
 }
 
 

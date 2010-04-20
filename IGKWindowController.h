@@ -52,6 +52,7 @@ typedef enum {
 	IBOutlet NSSegmentedControl *backForwardButton;
 	IBOutlet IGKBackForwardManager *backForwardManager;
 	
+	IBOutlet NSView *browserSplitViewContainer;
 	IBOutlet NSSplitView *browserSplitView;
 	
 	IBOutlet NSView *browserView;
@@ -187,6 +188,8 @@ typedef enum {
 - (void)setRightFilterBarShown:(BOOL)shown;
 
 - (BOOL)filterBarTableRowIsGroup:(NSInteger)row;
+
+- (IBAction)predicateEditor:(id)sender;
 
 //Find Panel
 - (IBAction)closeFindPanel:(id)sender;

@@ -190,6 +190,26 @@
 	return [items objectAtIndex:0];
 }
 
+- (NSString *)pageTitle:(IGKHTMLDisplayTypeMask)mask
+{	
+	NSString *name = [self valueForKey:@"name"];
+	NSMutableArray *tocComponents = [[self class] tocComponentsForMask:mask];
+	
+	//Remove "all"
+	[tocComponents removeObject:@"all"];
+	
+	//Titleize
+	NSArray *tocComponentsArray = [tocComponents valueForKey:@"capitalizedString"];
+	
+	//Join using commas
+	NSString *tocComponentsString = [tocComponentsArray componentsJoinedByString:@", "];
+		
+	if ([tocComponentsString length])
+		return [name stringByAppendingFormat:@" (%@)", tocComponentsString];
+	else
+		return name;
+}
+
 + (NSString *)entityNameFromURLComponentExtension:(NSString *)ext
 {
 	if ([ext isEqual:@"class"])
@@ -288,19 +308,8 @@
 	
 	return [n stringByAppendingFormat:@".%@", [self URLComponentExtension]];
 }
-- (NSURL *)docURL:(IGKHTMLDisplayTypeMask)tocMask
++ (NSMutableArray *)tocComponentsForMask:(IGKHTMLDisplayTypeMask)tocMask
 {
-	IGKDocSetManagedObject *docset = [self valueForKey:@"docset"];
-	NSString *host = [docset shortPlatformName];;
-	
-	NSString *containerComponent = nil;
-	if ([self hasKey:@"container"])
-		containerComponent = [[self valueForKey:@"container"] URLComponent];
-	
-	NSString *itemComponent = [self URLComponent];
-	
-	
-	NSString *tocComponent = nil;
 	NSMutableArray *tocComponents = [[NSMutableArray alloc] init];
 	if (tocMask & IGKHTMLDisplayType_All)
 		[tocComponents addObject:@"all"];
@@ -323,6 +332,23 @@
 	
 	if (![tocComponents count])
 		[tocComponents addObject:@"all"];
+	
+	return tocComponents;
+}
+- (NSURL *)docURL:(IGKHTMLDisplayTypeMask)tocMask
+{
+	IGKDocSetManagedObject *docset = [self valueForKey:@"docset"];
+	NSString *host = [docset shortPlatformName];;
+	
+	NSString *containerComponent = nil;
+	if ([self hasKey:@"container"])
+		containerComponent = [[self valueForKey:@"container"] URLComponent];
+	
+	NSString *itemComponent = [self URLComponent];
+	
+	
+	NSString *tocComponent = nil;
+	NSArray *tocComponents = [[self class] tocComponentsForMask:tocMask];
 	
 	tocComponent = [tocComponents componentsJoinedByString:@"."];
 	
