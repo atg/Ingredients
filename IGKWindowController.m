@@ -86,6 +86,7 @@
 	NSArray *backList = [backForwardManager backList];
 	if (![backList count])
 	{
+		[backForwardButton setEnabled:NO forSegment:0];
 		[backForwardButton setMenu:nil forSegment:0];
 		return;
 	}
@@ -99,12 +100,15 @@
 	}
 	
 	[backForwardButton setMenu:newBackMenu forSegment:0];
+	
+	[backForwardButton setEnabled:YES forSegment:0];
 }
 - (void)setUpForwardMenu
 {
 	NSArray *forwardList = [backForwardManager forwardList];
 	if (![forwardList count])
 	{
+		[backForwardButton setEnabled:NO forSegment:1];
 		[backForwardButton setMenu:nil forSegment:1];
 		return;
 	}
@@ -118,6 +122,8 @@
 	}
 	
 	[backForwardButton setMenu:newForwardMenu forSegment:1];
+	
+	[backForwardButton setEnabled:YES forSegment:1];
 }
 - (void)backMenuItem:(NSMenuItem *)sender
 {	
@@ -169,7 +175,10 @@
 		didIndex = NO;
 		[self loadNoSelectionRecordHistory:YES];
 	}
-		
+	
+	[backForwardButton setEnabled:NO forSegment:0];
+	[backForwardButton setEnabled:NO forSegment:1];
+	
 	[searchViewTable setTarget:self];
 	[searchViewTable setDoubleAction:@selector(advancedSearchDoubleAction:)];
 	
