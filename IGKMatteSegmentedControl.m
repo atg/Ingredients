@@ -145,7 +145,6 @@
 		
 		if (image)
 		{
-			NSLog(@"[self isEnabledForSegment:segment] = %d", [self isEnabledForSegment:segment]);
 			[image drawAtPoint:NSMakePoint(floor(runningY + width / 2.0 - [image size].width / 2.0 - 1.0 + segment), ceil([self bounds].size.height / 2.0 - [image size].height / 2.0 + 1.0))
 					  fromRect:NSZeroRect
 					 operation:NSCompositeSourceOver

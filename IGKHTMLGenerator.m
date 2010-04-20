@@ -533,7 +533,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	NSArray *seealsos = [[[object valueForKey:@"seealsos"] allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
 	//NSArray *seealsos = [[ valueForKey:@"name"] sortedArrayUsingSelector:@selector(localizedCompare:)];
-	NSArray *samplecodeprojects = [[[[object valueForKey:@"samplecodeprojects"] allObjects] valueForKey:@"name"] sortedArrayUsingSelector:@selector(localizedCompare:)];
+	NSArray *samplecodeprojects = [[[object valueForKey:@"samplecodeprojects"] allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];// [[[[object valueForKey:@"samplecodeprojects"] allObjects] valueForKey:@"name"] sortedArrayUsingSelector:@selector(localizedCompare:)];
 	
 	for (i = 0; i < maxrowcount + 1; i++)
 	{
@@ -601,24 +601,48 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 			}
 		}
 		
+		
 		//See also
 		if (i == 0 && [seealsos count])
+		{
 			[outputString appendString:@"\t\t\t\t<th>See also</th>\n"];
+		}
 		else if (i > 0 && i - 1 < [seealsos count])
 		{
 			IGKDocRecordManagedObject *mo = [seealsos objectAtIndex:i - 1];
 			[outputString appendFormat:@"\t\t\t\t<td><code><a href='%@' class='stealth'>%@</a></code></td>\n", [self hrefToActualFragment:mo], [mo valueForKey:@"name"]];
 		}
 		else if ([seealsos count])
+		{
 			[outputString appendString:@"\t\t\t\t<td></td>\n"];
+		}
 		
-		//See also
+		
+		//Sample projects
 		if (i == 0 && [samplecodeprojects count])
 			[outputString appendString:@"\t\t\t\t<th>Sample projects</th>\n"];
 		else if (i > 0 && i - 1 < [samplecodeprojects count])
-			[outputString appendFormat:@"\t\t\t\t<td><code><a href='#' class='stealth'>%@</a></code></td>\n", [samplecodeprojects objectAtIndex:i - 1]];
+		{
+			NSManagedObject *mo = [samplecodeprojects objectAtIndex:i - 1];
+
+			//For example: http://developer.apple.com/Mac/library/samplecode/iSpend/
+			//No idea how long this URL will last until Apple does a "reshuffle". If you are an Apple employee reading this, please attempt to find and restrain whoever's in charge of reshuffling URLs. The internet thanks you :)
+			NSString *urlname = [[mo valueForKey:@"href"] stringByMatching:@"samplecode/([^/]+)" capture:1];
+			if ([urlname length])
+			{
+				NSString *href = [NSString stringWithFormat:@"http://developer.apple.com/%@/library/samplecode/%@", [transientObject valueForKeyPath:@"docset.shortPlatformName"], urlname];
+				
+				[outputString appendFormat:@"\t\t\t\t<td><code><a href='%@' class='stealth'>%@</a></code></td>\n", href, [mo valueForKey:@"name"]];
+			}
+			else
+			{
+				[outputString appendString:@"\t\t\t\t<td></td>\n"];
+			}
+		}
 		else if ([samplecodeprojects count])
+		{
 			[outputString appendString:@"\t\t\t\t<td></td>\n"];
+		}
 		
 		[outputString appendString:@"\t\t\t</tr>\n"];
 	}
