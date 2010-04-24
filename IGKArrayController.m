@@ -233,8 +233,10 @@ const NSTimeInterval timeoutInterval = 0.15;
 }
 
 - (void)tableView:(NSTableView *)tv sortDescriptorsDidChange:(NSArray *)oldDescriptors
-{
+{	
 	currentSortDescriptors = [tableView sortDescriptors];
+	NSArray *generatedSortDescriptors = [currentSortDescriptors copy];
+	
 	if (![currentSortDescriptors count])
 	{
 		currentSortDescriptors = smartSortDescriptors;
@@ -301,6 +303,23 @@ const NSTimeInterval timeoutInterval = 0.15;
 	}
 	
 	[self refresh];
+	
+	
+	NSSortDescriptor *desc = [generatedSortDescriptors count] ? [generatedSortDescriptors objectAtIndex:0] : nil;
+	for (NSTableColumn *column in [tableView tableColumns])
+	{
+		NSImage *image = nil;
+		
+		if ([[desc key] isEqual:[column identifier]])
+		{
+			if ([desc ascending])
+				image = [NSImage imageNamed:@"NSAscendingSortIndicator"];
+			else
+				image = [NSImage imageNamed:@"NSDescendingSortIndicator"];
+		}
+		
+		[tableView setIndicatorImage:image inTableColumn:column];
+	}
 }
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tv

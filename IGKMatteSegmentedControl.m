@@ -63,7 +63,7 @@
 	[image drawInRect:NSMakeRect(0, 0, rect.size.width, rect.size.height)
 			  fromRect:NSZeroRect
 			 operation:NSCompositeSourceOver
-			  fraction:1.0
+			  fraction:[[self window] isMainWindow] ? 1.0 : 0.7
 	   respectFlipped:YES
 				hints:nil];
 }

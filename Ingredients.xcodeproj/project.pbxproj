@@ -138,6 +138,9 @@
 		75C9FE90110F53E400C9B51C /* IGKHTMLGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C9FE8E110F53E400C9B51C /* IGKHTMLGenerator.h */; };
 		75C9FE91110F53E400C9B51C /* IGKHTMLGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C9FE8F110F53E400C9B51C /* IGKHTMLGenerator.m */; };
 		75C9FF05110F868300C9B51C /* main.css in Resources */ = {isa = PBXBuildFile; fileRef = 75C9FF03110F868300C9B51C /* main.css */; };
+		75DF96DE117E32E100403233 /* IGKMattePopUpButtonView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DF96DC117E32E100403233 /* IGKMattePopUpButtonView.h */; };
+		75DF96DF117E32E100403233 /* IGKMattePopUpButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DF96DD117E32E100403233 /* IGKMattePopUpButtonView.m */; };
+		75DF96EA117E350600403233 /* IGKMatteFocusedGradientBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DF96E9117E350600403233 /* IGKMatteFocusedGradientBox.m */; };
 		75F67031110CCD31005F299C /* RegexKitLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F6702F110CCD31005F299C /* RegexKitLite.h */; };
 		75F67032110CCD31005F299C /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F67030110CCD31005F299C /* RegexKitLite.m */; };
 		75F67044110CD033005F299C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 75F67043110CD033005F299C /* libicucore.dylib */; };
@@ -317,6 +320,10 @@
 		75C9FE8E110F53E400C9B51C /* IGKHTMLGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKHTMLGenerator.h; sourceTree = "<group>"; };
 		75C9FE8F110F53E400C9B51C /* IGKHTMLGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKHTMLGenerator.m; sourceTree = "<group>"; };
 		75C9FF03110F868300C9B51C /* main.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = main.css; path = HTML_Example/main.css; sourceTree = "<group>"; };
+		75DF96DC117E32E100403233 /* IGKMattePopUpButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKMattePopUpButtonView.h; sourceTree = "<group>"; };
+		75DF96DD117E32E100403233 /* IGKMattePopUpButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKMattePopUpButtonView.m; sourceTree = "<group>"; };
+		75DF96E8117E350600403233 /* IGKMatteFocusedGradientBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKMatteFocusedGradientBox.h; sourceTree = "<group>"; };
+		75DF96E9117E350600403233 /* IGKMatteFocusedGradientBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKMatteFocusedGradientBox.m; sourceTree = "<group>"; };
 		75F6702F110CCD31005F299C /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
 		75F67030110CCD31005F299C /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		75F67043110CD033005F299C /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
@@ -574,6 +581,10 @@
 				759030221139BFF500550A86 /* IGKMatteSegmentedControl.m */,
 				750DFBCD114671CC004C5D08 /* IGKMattePopUpButton.h */,
 				750DFBCE114671CC004C5D08 /* IGKMattePopUpButton.m */,
+				75DF96DC117E32E100403233 /* IGKMattePopUpButtonView.h */,
+				75DF96DD117E32E100403233 /* IGKMattePopUpButtonView.m */,
+				75DF96E8117E350600403233 /* IGKMatteFocusedGradientBox.h */,
+				75DF96E9117E350600403233 /* IGKMatteFocusedGradientBox.m */,
 			);
 			name = "Matte White UI";
 			sourceTree = "<group>";
@@ -700,6 +711,7 @@
 				75ACEC59117A539600260366 /* IGKFindBackgroundView.h in Headers */,
 				75751B25117B599E0017B58B /* IGKFindWindow.h in Headers */,
 				75751B90117B641D0017B58B /* IGKResizeDelegatedView.h in Headers */,
+				75DF96DE117E32E100403233 /* IGKMattePopUpButtonView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -870,6 +882,7 @@
 				75ACEC5A117A539600260366 /* IGKFindBackgroundView.m in Sources */,
 				75751B26117B599E0017B58B /* IGKFindWindow.m in Sources */,
 				75751B91117B641D0017B58B /* IGKResizeDelegatedView.m in Sources */,
+				75DF96DF117E32E100403233 /* IGKMattePopUpButtonView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -887,6 +900,7 @@
 				75943BD1114407D1004126E7 /* IGKPreferencesController.m in Sources */,
 				756D7A8E1145BB11001C05D7 /* IngredientsCommand.m in Sources */,
 				750DFBCF114671CC004C5D08 /* IGKMattePopUpButton.m in Sources */,
+				75DF96EA117E350600403233 /* IGKMatteFocusedGradientBox.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

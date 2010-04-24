@@ -93,6 +93,10 @@
 		{
 			requestedEntityName = @"ObjCProperty";
 		}
+		else if([requestedEntityName isEqual:@"Function"])
+		{
+			requestedEntityName = @"CFunction";
+		}
 		
 		else if([requestedEntityName isEqual:@"Notification"])
 		{

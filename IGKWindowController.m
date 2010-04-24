@@ -75,6 +75,11 @@
 	return self;
 }
 
+- (NSManagedObjectContext *)managedObjectContext
+{
+	return [[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext];
+}
+
 - (void)backForwardManagerUpdatedLists:(id)bfm
 {
 	[self setUpBackMenu];
@@ -91,12 +96,17 @@
 		return;
 	}
 	
+	NSTimeInterval t = [NSDate timeIntervalSinceReferenceDate];
 	NSMenu *newBackMenu = [[NSMenu alloc] initWithTitle:@"Back"];
 	for (WebHistoryItem *item in backList)
 	{
+		//NSURL *url = [NSURL URLWithString:[item URLString]];
+		//IGKDocRecordManagedObject *mo = [IGKDocRecordManagedObject resolveURL:url inContext:[self managedObjectContext] tableOfContentsMask:NULL];
+		
 		NSMenuItem *menuItem = [newBackMenu addItemWithTitle:[item title] action:@selector(backMenuItem:) keyEquivalent:@""];
 		[menuItem setRepresentedObject:item];
 		[menuItem setTarget:self];
+		//[menuItem setImage:[mo normalIcon]];
 	}
 	
 	[backForwardButton setMenu:newBackMenu forSegment:0];
@@ -116,9 +126,13 @@
 	NSMenu *newForwardMenu = [[NSMenu alloc] initWithTitle:@"Forward"];
 	for (WebHistoryItem *item in forwardList)
 	{
+		//NSURL *url = [NSURL URLWithString:[item URLString]];
+		//IGKDocRecordManagedObject *mo = [IGKDocRecordManagedObject resolveURL:url inContext:[self managedObjectContext] tableOfContentsMask:NULL];
+		
 		NSMenuItem *menuItem = [newForwardMenu addItemWithTitle:[item title] action:@selector(forwardMenuItem:) keyEquivalent:@""];
 		[menuItem setRepresentedObject:item];
 		[menuItem setTarget:self];
+		//[menuItem setImage:[mo normalIcon]];
 	}
 	
 	[backForwardButton setMenu:newForwardMenu forSegment:1];
@@ -560,6 +574,7 @@
 	
 	if ([[url scheme] isEqual:@"special"] && [[url resourceSpecifier] isEqual:@"no-selection"])
 	{
+		//[self setBrowserActive:NO];
 		[browserWebView stopLoading:nil];
 		[self loadNoSelectionRecordHistory:YES];
 	}
@@ -608,7 +623,6 @@
 }
 - (void)recordHistoryForURL:(NSURL *)url title:(NSString *)title
 {
-	
 	WebHistoryItem *item = [[WebHistoryItem alloc] initWithURLString:[url absoluteString] title:title lastVisitedTimeInterval:[NSDate timeIntervalSinceReferenceDate]];
 	[backForwardManager visitPage:item];
 }
@@ -1534,6 +1548,7 @@
 	if (!url)
 		return;
 	
+	/*
 	id superview = [noselectionView superview];
 	if (superview)
 	{
@@ -1541,7 +1556,10 @@
 		[browserSplitViewContainer setFrame:[noselectionView frame]];
 		[superview addSubview:browserSplitViewContainer];
 	}
+	 */
+	[self setBrowserActive:YES];
 	
+	[self loadURL:[NSURL URLWithString:@"about:blank"] recordHistory:NO];
 	[self loadURL:[NSURL URLWithString:url] recordHistory:YES];
 	//[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
 }
@@ -1601,7 +1619,8 @@
 }
 - (void)webView:(WebView *)sender didReceiveTitle:(NSString *)title forFrame:(WebFrame *)frame
 {
-	[self recordHistoryForURL:[[[frame dataSource] request] URL] title:title];
+	if (![[[[frame dataSource] request] URL] isEqual:[NSURL URLWithString:@"about:blank"]])
+		[self recordHistoryForURL:[[[frame dataSource] request] URL] title:title];
 	
 	[self setUpForWebView:sender frame:frame];
 }
@@ -1613,6 +1632,8 @@
 {
 	if (sender != browserWebView || frame != [browserWebView mainFrame])
 		return;
+	
+	//[self setBrowserActive:YES];
 	
 	BOOL rightFilterBarIsShown = NO;
 	
@@ -1665,7 +1686,9 @@
 - (IBAction)toggleRightFilterBar:(id)sender
 {
 	BOOL shown = ![self rightFilterBarShown];
-	[self setRightFilterBarShown:shown];
+	
+	if ([self isInValidStateForRightFilterBar])
+		[self setRightFilterBarShown:shown];
 	
 	[[NSUserDefaults standardUserDefaults] setBool:!shown forKey:@"rightFilterBarIsHidden"];
 	[[NSUserDefaults standardUserDefaults] synchronize];
@@ -1790,6 +1813,31 @@
 	{
 		[self closeFindPanel:self];
 		return NO;
+	}
+	
+	return YES;
+}
+- (BOOL)isInValidStateForRightFilterBar
+{
+	if (![browserWebView window] || isNonFilterBarType || currentModeIndex == CHDocumentationBrowserUIMode_AdvancedSearch)
+	{
+		[self setRightFilterBarShown:NO];
+		return NO;
+	}
+	
+	return YES;
+}
+
+- (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)anItem
+{
+	if ([anItem action] == @selector(doFindPanelAction:) || [anItem action] == @selector(findPanelNext:) || [anItem action] == @selector(findPanelPrevious:))
+	{
+		return [self isInValidStateForFindPanel];
+	}
+	
+	if ([anItem action] == @selector(toggleRightFilterBar:))
+	{
+		return [self isInValidStateForRightFilterBar];
 	}
 	
 	return YES;

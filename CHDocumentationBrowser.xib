@@ -23,11 +23,12 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="20"/>
-			<integer value="40"/>
-			<integer value="90"/>
+			<integer value="114"/>
+			<integer value="714"/>
 			<integer value="820"/>
+			<integer value="19"/>
 			<integer value="1"/>
+			<integer value="40"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -283,7 +284,7 @@
 														<string key="NSIdentifier">name</string>
 														<double key="NSWidth">486</double>
 														<double key="NSMinWidth">40</double>
-														<double key="NSMaxWidth">1000</double>
+														<double key="NSMaxWidth">10000</double>
 														<object class="NSTableHeaderCell" key="NSHeaderCell">
 															<int key="NSCellFlags">75628096</int>
 															<int key="NSCellFlags2">2048</int>
@@ -1142,7 +1143,7 @@
 																		<int key="NSvFlags">257</int>
 																		<string key="NSFrame">{{590, 4}, {18, 18}}</string>
 																		<reference key="NSSuperview" ref="772006176"/>
-																		<reference key="NSNextKeyView" ref="1072132678"/>
+																		<reference key="NSNextKeyView" ref="824240286"/>
 																		<int key="NSTag">-1</int>
 																		<bool key="NSEnabled">YES</bool>
 																		<object class="NSRuleEditorButtonCell" key="NSCell">
@@ -1424,16 +1425,16 @@
 																<int key="NSRuleOptionPlusButtonRowType">0</int>
 																<bool key="NSRuleOptionEditable">YES</bool>
 															</object>
-															<object class="NSRuleEditorViewSliceRow" id="1072132678">
+															<object class="NSRuleEditorViewSliceRow" id="824240286">
 																<reference key="NSNextResponder" ref="797117643"/>
 																<int key="NSvFlags">290</int>
 																<object class="NSMutableArray" key="NSSubviews">
 																	<bool key="EncodedWithXMLCoder">YES</bool>
-																	<object class="NSButton" id="835656656">
-																		<reference key="NSNextResponder" ref="1072132678"/>
+																	<object class="NSButton" id="117306315">
+																		<reference key="NSNextResponder" ref="824240286"/>
 																		<int key="NSvFlags">257</int>
 																		<string key="NSFrame">{{590, 4}, {18, 18}}</string>
-																		<reference key="NSSuperview" ref="1072132678"/>
+																		<reference key="NSSuperview" ref="824240286"/>
 																		<reference key="NSNextKeyView" ref="634523087"/>
 																		<int key="NSTag">-1</int>
 																		<bool key="NSEnabled">YES</bool>
@@ -1458,9 +1459,9 @@
 																					</object>
 																				</object>
 																			</object>
-																			<reference key="NSControlView" ref="835656656"/>
+																			<reference key="NSControlView" ref="117306315"/>
 																			<string key="NSAction">_addOption:</string>
-																			<reference key="NSTarget" ref="1072132678"/>
+																			<reference key="NSTarget" ref="824240286"/>
 																			<int key="NSButtonFlags">-2038284033</int>
 																			<int key="NSButtonFlags2">36</int>
 																			<reference key="NSAlternateImage" ref="28"/>
@@ -1469,12 +1470,12 @@
 																			<int key="NSPeriodicInterval">75</int>
 																		</object>
 																	</object>
-																	<object class="NSButton" id="369641954">
-																		<reference key="NSNextResponder" ref="1072132678"/>
+																	<object class="NSButton" id="936256084">
+																		<reference key="NSNextResponder" ref="824240286"/>
 																		<int key="NSvFlags">257</int>
 																		<string key="NSFrame">{{570, 4}, {18, 18}}</string>
-																		<reference key="NSSuperview" ref="1072132678"/>
-																		<reference key="NSNextKeyView" ref="835656656"/>
+																		<reference key="NSSuperview" ref="824240286"/>
+																		<reference key="NSNextKeyView" ref="117306315"/>
 																		<int key="NSTag">-1</int>
 																		<bool key="NSEnabled">YES</bool>
 																		<object class="NSRuleEditorButtonCell" key="NSCell">
@@ -1498,9 +1499,9 @@
 																					</object>
 																				</object>
 																			</object>
-																			<reference key="NSControlView" ref="369641954"/>
+																			<reference key="NSControlView" ref="936256084"/>
 																			<string key="NSAction">_deleteOption:</string>
-																			<reference key="NSTarget" ref="1072132678"/>
+																			<reference key="NSTarget" ref="824240286"/>
 																			<int key="NSButtonFlags">-2038284033</int>
 																			<int key="NSButtonFlags2">36</int>
 																			<reference key="NSAlternateImage" ref="28"/>
@@ -1510,10 +1511,10 @@
 																		</object>
 																	</object>
 																	<object class="NSPopUpButton" id="827631884">
-																		<reference key="NSNextResponder" ref="1072132678"/>
+																		<reference key="NSNextResponder" ref="824240286"/>
 																		<int key="NSvFlags">256</int>
 																		<string key="NSFrame">{{37, 3}, {68, 19}}</string>
-																		<reference key="NSSuperview" ref="1072132678"/>
+																		<reference key="NSSuperview" ref="824240286"/>
 																		<reference key="NSNextKeyView" ref="305649775"/>
 																		<int key="NSTag">-1</int>
 																		<bool key="NSEnabled">YES</bool>
@@ -1568,10 +1569,10 @@
 																		</object>
 																	</object>
 																	<object class="NSPopUpButton" id="305649775">
-																		<reference key="NSNextResponder" ref="1072132678"/>
+																		<reference key="NSNextResponder" ref="824240286"/>
 																		<int key="NSvFlags">256</int>
 																		<string key="NSFrame">{{111, 3}, {46, 19}}</string>
-																		<reference key="NSSuperview" ref="1072132678"/>
+																		<reference key="NSSuperview" ref="824240286"/>
 																		<reference key="NSNextKeyView" ref="545788805"/>
 																		<int key="NSTag">-1</int>
 																		<bool key="NSEnabled">YES</bool>
@@ -1615,11 +1616,11 @@
 																		</object>
 																	</object>
 																	<object class="NSPopUpButton" id="545788805">
-																		<reference key="NSNextResponder" ref="1072132678"/>
+																		<reference key="NSNextResponder" ref="824240286"/>
 																		<int key="NSvFlags">256</int>
 																		<string key="NSFrame">{{163, 3}, {155, 19}}</string>
-																		<reference key="NSSuperview" ref="1072132678"/>
-																		<reference key="NSNextKeyView" ref="369641954"/>
+																		<reference key="NSSuperview" ref="824240286"/>
+																		<reference key="NSNextKeyView" ref="936256084"/>
 																		<int key="NSTag">-1</int>
 																		<bool key="NSEnabled">YES</bool>
 																		<object class="NSPopUpButtonCell" key="NSCell" id="957390690">
@@ -1744,6 +1745,20 @@
 																						<object class="NSConstantValueExpression" key="NSRepObject">
 																							<int key="NSExpressionType">0</int>
 																							<string key="NSConstantValue">Property</string>
+																						</object>
+																						<reference key="NSTarget" ref="957390690"/>
+																					</object>
+																					<object class="NSMenuItem" id="416657943">
+																						<reference key="NSMenu" ref="1023097651"/>
+																						<string key="NSTitle">Function</string>
+																						<string key="NSKeyEquiv"/>
+																						<int key="NSMnemonicLoc">2147483647</int>
+																						<reference key="NSOnImage" ref="820522189"/>
+																						<reference key="NSMixedImage" ref="221356170"/>
+																						<string key="NSAction">_popUpItemAction:</string>
+																						<object class="NSConstantValueExpression" key="NSRepObject">
+																							<int key="NSExpressionType">0</int>
+																							<string key="NSConstantValue">Function</string>
 																						</object>
 																						<reference key="NSTarget" ref="957390690"/>
 																					</object>
@@ -1882,7 +1897,7 @@
 																<string key="NSRuleOptionFrames.2">{{163, 3}, {155, 19}}</string>
 																<object class="NSMutableArray" key="NSRuleOptionItems">
 																	<bool key="EncodedWithXMLCoder">YES</bool>
-																	<object class="NSMutableDictionary" id="886836122">
+																	<object class="NSMutableDictionary" id="303897828">
 																		<bool key="EncodedWithXMLCoder">YES</bool>
 																		<object class="NSArray" key="dict.sortedKeys">
 																			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1909,7 +1924,7 @@
 																			</object>
 																		</object>
 																	</object>
-																	<object class="NSMutableDictionary" id="143837194">
+																	<object class="NSMutableDictionary" id="867426012">
 																		<bool key="EncodedWithXMLCoder">YES</bool>
 																		<object class="NSArray" key="dict.sortedKeys">
 																			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1922,7 +1937,7 @@
 																			<reference ref="1067796920"/>
 																		</object>
 																	</object>
-																	<object class="NSMutableDictionary" id="144466319">
+																	<object class="NSMutableDictionary" id="533049943">
 																		<bool key="EncodedWithXMLCoder">YES</bool>
 																		<object class="NSArray" key="dict.sortedKeys">
 																			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1940,8 +1955,8 @@
 																<string key="NSRuleOptionInitialFrames.0">{{37, 3}, {68, 19}}</string>
 																<string key="NSRuleOptionInitialFrames.1">{{111, 3}, {46, 19}}</string>
 																<string key="NSRuleOptionInitialFrames.2">{{163, 3}, {155, 19}}</string>
-																<reference key="NSRuleOptionAddButton" ref="835656656"/>
-																<reference key="NSRuleOptionSubtractButton" ref="369641954"/>
+																<reference key="NSRuleOptionAddButton" ref="117306315"/>
+																<reference key="NSRuleOptionSubtractButton" ref="936256084"/>
 																<int key="NSRuleOptionRowType">0</int>
 																<int key="NSRuleOptionPlusButtonRowType">0</int>
 																<bool key="NSRuleOptionEditable">YES</bool>
@@ -2075,9 +2090,9 @@
 																			<bool key="EncodedWithXMLCoder">YES</bool>
 																			<object class="NSMutableArray">
 																				<bool key="EncodedWithXMLCoder">YES</bool>
-																				<reference ref="886836122"/>
-																				<reference ref="143837194"/>
-																				<reference ref="144466319"/>
+																				<reference ref="303897828"/>
+																				<reference ref="867426012"/>
+																				<reference ref="533049943"/>
 																			</object>
 																			<object class="NSMutableArray">
 																				<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2101,7 +2116,7 @@
 													<reference ref="201117219"/>
 													<reference ref="320354674"/>
 													<reference ref="772006176"/>
-													<reference ref="1072132678"/>
+													<reference ref="824240286"/>
 												</object>
 												<object class="NSArray" key="NSPredicateTemplates">
 													<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3260,7 +3275,7 @@
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomView" id="785441920">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3631,6 +3646,7 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{247, 404}</string>
+				<reference key="NSSuperview"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSWindowTemplate" id="100759695">
@@ -5450,6 +5466,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 							<reference ref="958210734"/>
 							<reference ref="669115388"/>
 							<reference ref="877832491"/>
+							<reference ref="416657943"/>
 						</object>
 						<reference key="parent" ref="1067796920"/>
 					</object>
@@ -5894,6 +5911,11 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 						<reference key="object" ref="406242088"/>
 						<reference key="parent" ref="141167733"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">851</int>
+						<reference key="object" ref="416657943"/>
+						<reference key="parent" ref="1023097651"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -5931,6 +5953,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>194.IBPluginDependency</string>
 					<string>195.IBPluginDependency</string>
 					<string>2.IBPluginDependency</string>
+					<string>20.CustomClassName</string>
 					<string>20.IBPluginDependency</string>
 					<string>232.IBPluginDependency</string>
 					<string>233.IBPluginDependency</string>
@@ -5945,6 +5968,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>26.IBPluginDependency</string>
 					<string>27.IBPluginDependency</string>
 					<string>301.IBEditorWindowLastContentRect</string>
+					<string>327.CustomClassName</string>
 					<string>327.IBPluginDependency</string>
 					<string>328.CustomClassName</string>
 					<string>328.IBPluginDependency</string>
@@ -5976,6 +6000,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>409.IBPluginDependency</string>
 					<string>410.IBPluginDependency</string>
 					<string>414.IBPluginDependency</string>
+					<string>42.CustomClassName</string>
 					<string>42.IBPluginDependency</string>
 					<string>421.IBPluginDependency</string>
 					<string>422.IBPluginDependency</string>
@@ -6022,6 +6047,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>713.IBPluginDependency</string>
 					<string>714.IBEditorWindowLastContentRect</string>
 					<string>714.IBPluginDependency</string>
+					<string>716.CustomClassName</string>
 					<string>716.IBPluginDependency</string>
 					<string>717.IBPluginDependency</string>
 					<string>718.IBPluginDependency</string>
@@ -6070,6 +6096,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>841.IBPluginDependency</string>
 					<string>842.IBPluginDependency</string>
 					<string>85.IBPluginDependency</string>
+					<string>851.IBPluginDependency</string>
 					<string>90.IBPluginDependency</string>
 					<string>91.IBPluginDependency</string>
 					<string>92.IBPluginDependency</string>
@@ -6109,6 +6136,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>IGKMatteFocusedGradientBox</string>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -6123,6 +6151,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{1334, 527}, {137, 117}}</string>
+					<string>IGKMattePopUpButtonView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>IGKMattePopUpButtonCell</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -6154,6 +6183,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>IGKMatteFocusedGradientBox</string>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -6192,7 +6222,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>{{736, 452}, {247, 404}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{1072, 597}, {93, 22}}</string>
-					<string>{{1119, 170}, {187, 242}}</string>
+					<string>{{501, 137}, {187, 261}}</string>
 					<string>{{1334, 527}, {137, 117}}</string>
 					<string>{{458, 415}, {143, 22}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -6200,6 +6230,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{593, 365}, {247, 404}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>IGKMatteFocusedGradientBox</string>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -6272,6 +6303,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>IGKPredicateEditor</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 				</object>
@@ -6292,7 +6324,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">850</int>
+			<int key="maxID">851</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -6429,11 +6461,27 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">IGKMatteFocusedGradientBox</string>
+					<string key="superclassName">BWGradientBox</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">IGKMatteFocusedGradientBox.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">IGKMattePopUpButtonCell</string>
 					<string key="superclassName">NSPopUpButtonCell</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">IGKMattePopUpButton.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">IGKMattePopUpButtonView</string>
+					<string key="superclassName">NSPopUpButton</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">IGKMattePopUpButtonView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
