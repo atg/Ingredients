@@ -797,6 +797,8 @@
 	[[browserSplitViewContainer animator] setFrame:browserViewFrame];
 	
 	[NSAnimationContext endGrouping];
+	
+	[browserWebView stringByEvaluatingJavaScriptFromString:@"completed();"];
 }
 
 - (void)setAdvancedFilterPredicate:(NSPredicate *)pred

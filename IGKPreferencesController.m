@@ -20,13 +20,15 @@
 
 @implementation IGKPreferencesController
 
+@synthesize startIntoDocsets;
+
 - (id)init
 {
 	if (self = [super initWithWindowNibName:@"IGKPreferences"])
 	{
 		developerDirectories = [[NSMutableArray alloc] init];
 		docsets = [[NSMutableArray alloc] init];
-		
+				
 		[self reloadTableViews];
 	}
 	
@@ -35,7 +37,12 @@
 - (void)windowDidLoad
 {
 	[self reloadTableViews];
-	[self switchToView:generalView item:generalToolbarItem animate:NO];
+	[self switchToView:startIntoDocsets ? docsetsView : generalView item:generalToolbarItem animate:NO];
+
+	if (startIntoDocsets)
+	{
+		[[[self window] toolbar] setSelectedItemIdentifier:@"Docsets"];
+	}
 }
 - (void)showWindow:(id)sender
 {

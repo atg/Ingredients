@@ -291,6 +291,15 @@
         
         return true;
     }
+	
+	function completed() {
+		var h1title = document.getElementById('h1title');
+		var ptitle = document.getElementById('ptitle');
+		
+		h1title.innerHTML = 'Ready!';
+		ptitle.innerHTML = 'Ingredients has finished indexing your Cocoa docs.';
+		plast.innerHTML = '';
+	}
         
     </script>
 	
@@ -298,11 +307,11 @@
 
 <body>
     
-    <h1>Hi there!</h1>
+    <h1 id='h1title'>Hi there!</h1>
     
-    <p>Ingredients is currently indexing your Cocoa docs. This will only take a couple of minutes.</p>
+    <p id='ptitle'>Ingredients is currently indexing your Cocoa docs. This will only take a couple of minutes.</p>
     
-    <p class="last">How about a quick game of tic-tac-toe while you wait?</p>
+    <p id='plast' class="last">How about a quick game of tic-tac-toe while you wait?</p>
     
 	<div id="infobox" style="display: none;">This is some info text</div>
 	

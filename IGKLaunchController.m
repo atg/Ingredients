@@ -30,6 +30,8 @@
 	
 	//Otherwise, ask the user to point us to their developer directory
 	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+	[openPanel setTitle:@"Choose developer directory"];
+	[openPanel setMessage:@"Please choose a developer directory."];
 	[openPanel setCanChooseFiles:NO];
 	[openPanel setCanChooseDirectories:YES];
 	
@@ -128,7 +130,14 @@
 			}
 		}
 	}
-			
+	
+	/*
+	[self addDocsetsInPath:@"/Library/Developer/Shared/Documentation/DocSets/"
+				   toArray:docsetPaths
+					   set:docsetPathsSet
+		developerDirectory:@"Other"];
+	*/
+	
 	dbQueue = dispatch_get_main_queue();
 	
 	totalPathsCount = 0;

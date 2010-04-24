@@ -25,11 +25,12 @@ const NSInteger IGKStoreVersion = 2;
 		NSString *appSupportPath = [@"~/Library/Application Support/Ingredients/" stringByExpandingTildeInPath];
 #ifndef NDEBUG
 		if (NSRunAlertPanel(@"Start Over(ish)?", @"Should I clear out the app support folder and preferences?", @"Clear", @"Keep", nil)) {
-			
+			NSLog(@"appSupportPath = %@", appSupportPath);
 			
 			[[NSFileManager defaultManager] removeItemAtPath:appSupportPath error:nil];
 			
 			NSString *prefsPath = [@"~/Library/Preferences/net.fileability.ingredients" stringByExpandingTildeInPath];			
+			NSLog(@"prefsPath = %@", prefsPath);
 			[[NSFileManager defaultManager] removeItemAtPath:prefsPath error:nil];
 		}
 #endif
@@ -43,12 +44,33 @@ const NSInteger IGKStoreVersion = 2;
 		windowControllers = [[NSMutableArray alloc] init];
 		
 		BOOL isIndexing = [launchController launch];
-		[self newWindowIsIndexing:isIndexing];
+		
+		docsetCount = 1;
+		//If we're not indexing and there's no docsets in sight, show the preferences dialog
+		if (!isIndexing)
+		{
+			NSError *err = nil;
+			NSFetchRequest *docsetCountFetch = [[NSFetchRequest alloc] init];
+			[docsetCountFetch setEntity:[NSEntityDescription entityForName:@"Docset" inManagedObjectContext:managedObjectContext]];
+			docsetCount = [managedObjectContext countForFetchRequest:docsetCountFetch error:&err];
+		}
 		
 		//init history
 		history = [[WebHistory alloc] init];
 		[history loadFromURL:[NSURL fileURLWithPath:[[self applicationSupportDirectory] stringByAppendingPathComponent:@"history"]] error:nil];
 		[WebHistory setOptionalSharedHistory:history];
+		
+		if (docsetCount > 0)
+		{
+			[self newWindowIsIndexing:isIndexing];
+		}
+		else
+		{
+			preferencesController = [[NSClassFromString(@"IGKPreferencesController") alloc] init];
+			[preferencesController setStartIntoDocsets:YES];
+			
+			[self showPreferences:nil];
+		}
 	}
 	
 	return self;
@@ -85,6 +107,9 @@ const NSInteger IGKStoreVersion = 2;
 }
 - (void)newWindowIsIndexing:(BOOL)isIndexing
 {
+	if (docsetCount == 0)
+		return;
+	
 	if (![self hasMultipleWindowControllers] && [windowControllers count])
 	{
 		[self showWindow:nil];

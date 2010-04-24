@@ -27,7 +27,11 @@
 	
 	NSMutableArray *developerDirectories;
 	NSMutableArray *docsets;
+	
+	BOOL startIntoDocsets;
 }
+
+@property (assign) BOOL startIntoDocsets;
 
 - (NSManagedObjectContext *)managedObjectContext;
 

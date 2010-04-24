@@ -26,6 +26,8 @@
 	id preferencesController;
 	
 	dispatch_queue_t backgroundQueue;
+	
+	NSUInteger docsetCount;
 }
 
 @property (readonly) NSMutableArray *windowControllers;

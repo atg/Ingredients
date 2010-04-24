@@ -100,7 +100,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	NSEntityDescription *docsetEntity = [NSEntityDescription entityForName:@"Docset" inManagedObjectContext:ctx];
 	
 	NSManagedObject *docset = [[IGKDocRecordManagedObject alloc] initWithEntity:docsetEntity insertIntoManagedObjectContext:ctx];
-	
+		
 	if (bundleIdentifier)
 		[docset setValue:bundleIdentifier forKey:@"bundleIdentifier"];
 	if (version)
@@ -112,16 +112,23 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		[docset setValue:[infoPlist objectForKey:@"DocSetFeedName"] forKey:@"feedName"];
 	if ([infoPlist objectForKey:@"DocSetFeedURL"])
 		[docset setValue:[infoPlist objectForKey:@"DocSetFeedURL"] forKey:@"feedURL"];
+	
 	if ([infoPlist objectForKey:@"DocSetPlatformFamily"])
 		[docset setValue:[infoPlist objectForKey:@"DocSetPlatformFamily"] forKey:@"platformFamily"];
+	else if ([infoPlist objectForKey:@"DocSetFeedName"])
+		[docset setValue:[infoPlist objectForKey:@"DocSetFeedName"] forKey:@"platformFamily"];
+	
 	if ([infoPlist objectForKey:@"DocSetPlatformVersion"])
 		[docset setValue:[infoPlist objectForKey:@"DocSetPlatformVersion"] forKey:@"platformVersion"];
+	else if ([infoPlist objectForKey:@"CFBundleVersion"])
+		[docset setValue:[infoPlist objectForKey:@"CFBundleVersion"] forKey:@"platformVersion"];
+	
 	if ([infoPlist objectForKey:@"DocSetFallbackURL"])
 		[docset setValue:[infoPlist objectForKey:@"DocSetFallbackURL"] forKey:@"fallbackURL"];
 	
 	[docset setValue:[docsetURL absoluteString] forKey:@"url"];
 	[docset setValue:[docsetURL path] forKey:@"path"];
-	
+		
 	scraperDocset = docset;
 	paths = [[NSMutableArray alloc] init];
 	
