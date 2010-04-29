@@ -958,6 +958,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Ingredients_Prefix.pch;
+				IBC_PLUGINS = "$(SRCROOT)/BWToolkit.ibplugin";
 				INFOPLIST_FILE = "Ingredients-Info.plist";
 				INSTALL_PATH = "";
 				LD_DYLIB_INSTALL_NAME = "$(DYLIB_INSTALL_NAME_BASE:standardizepath)/$(EXECUTABLE_PATH)";
@@ -978,6 +979,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Ingredients_Prefix.pch;
+				IBC_PLUGINS = "$(SRCROOT)/BWToolkit.ibplugin";
 				INFOPLIST_FILE = "Ingredients-Info.plist";
 				INSTALL_PATH = "";
 				LD_DYLIB_INSTALL_NAME = "$(DYLIB_INSTALL_NAME_BASE:standardizepath)/$(EXECUTABLE_PATH)";
