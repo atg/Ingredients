@@ -8,6 +8,7 @@
 
 #import "IGKWindow.h"
 #import "IGKMultiSelector.h"
+#import "IGKWindowController.h"
 
 @implementation IGKWindow
 
@@ -28,6 +29,17 @@
 	}
 	
 	return self;
+}
+
+#pragma mark --- Applescript support ---
+- (id)handleSearchScriptCommand:(NSScriptCommand*)scriptCommand
+{
+	NSString* searchString = nil;
+	
+	searchString = [[scriptCommand arguments] objectForKey:@"searchString"];
+	NSAssert(searchString != nil, @"No search string found for search script command");
+	[(IGKWindowController*)[self windowController] executeSearchWithString:searchString];
+	return nil;
 }
 
 @end

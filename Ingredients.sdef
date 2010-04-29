@@ -62,12 +62,25 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 		<!-- specific suite(s) for the application follow... -->
 	<suite name="Ingredients" code="ingg" description="Terminology for Ingredients.">
 	    
-		<command name="search_for" code="inggSrch" description="Perform a search.">
-			<cocoa class="IngredientsSearchCommand"/>
+		<class name="documentation window" code="DWin" description="A window.">
+			<cocoa class="IGKWindow"/>
+			<responds-to command="search">
+				<cocoa method="handleSearchScriptCommand:"/>
+			</responds-to>
+		</class>
+		
+		<command name="search" code="inggSrch" description="Perform a search.">
+			<cocoa class="NSScriptCommand"/>
+			<direct-parameter description="The window in which to perform the search">
+				<type type="documentation window"/>
+			</direct-parameter>
+			<parameter name="query" code="STxt" type="text" optional="no" description="The text to search for">
+				<cocoa key="searchString"/>
+			</parameter>
 			<!-- <result type="integer" description="returns the number forty two"/> -->
 		</command>
 		
-		<command name="visit_url" code="inggSrch" description="Visit an http:, doc://docset/kind/name or special: URL.">
+		<command name="visit_url" code="inggVURL" description="Visit an http:, doc://docset/kind/name or special: URL.">
 			<cocoa class="IngredientsVisitCommand"/>
 			<!-- <result type="integer" description="returns the number forty two"/> -->
 		</command>

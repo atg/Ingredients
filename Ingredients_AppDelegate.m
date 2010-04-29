@@ -23,4 +23,20 @@
 	return kitController;
 }
 
+#pragma mark --- Applescript support ---
+- (BOOL)application:(NSApplication *)sender delegateHandlesKey:(NSString *)key
+{
+	if ([key isEqualToString:@"orderedWindows"])
+		return YES;
+	else
+		return NO;
+}
+
+//NSApplication's default implementation for this ends up returning a bunch of offscreen
+//windows and such, but we only want to return documentation windows, so we override that here
+- (NSArray*)orderedWindows
+{
+	return [kitController valueForKeyPath:@"windowControllers.window"];
+}
+
 @end

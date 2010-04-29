@@ -503,10 +503,7 @@
 
 - (IBAction)executeSearch:(id)sender
 {
-	if (currentModeIndex == CHDocumentationBrowserUIMode_AdvancedSearch)
-		[self executeAdvancedSearch:[sender stringValue]];
-	else
-		[self executeSideSearch:[sender stringValue]];
+	[self executeSearchWithString:[sender stringValue]];
 }
 
 - (IBAction)changeViewModeTagged:(id)sender
@@ -655,6 +652,14 @@
 - (NSNumber *)ui_currentModeIndex
 {
 	return [NSNumber numberWithInt:currentModeIndex];
+}
+
+- (void)executeSearchWithString:(NSString *)query
+{
+	if (currentModeIndex == CHDocumentationBrowserUIMode_AdvancedSearch)
+		[self executeAdvancedSearch:query];
+	else
+		[self executeSideSearch:query];	
 }
 
 - (void)executeSideSearch:(NSString *)query

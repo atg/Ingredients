@@ -179,6 +179,7 @@ typedef enum {
 
 - (IBAction)openInSafari:(id)sender;
 
+- (void)executeSearchWithString:(NSString *)query;
 - (void)setBrowserActive:(BOOL)active;
 
 - (void)tableViewSelectionDidChange:(NSNotification *)aNotification;
