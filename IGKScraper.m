@@ -353,8 +353,13 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	}
 	
 	//Declared in
+	NSString *declaredIn = nil;
 	NSString *declaredInRegex = @"Declared in.+?<span class=\"content_text\">([^<]+)<";
-	
+	NSArray *declaredInCaptureSet = [contents captureComponentsMatchedByRegex:declaredInRegex];
+	if ([declaredInCaptureSet count] >= 2)
+	{
+		declaredIn = [declaredInCaptureSet objectAtIndex:1];
+	}
 	
 	NSString *linkRegex = @"name=\"//apple_ref/((occ/(instm|clm|intfm|intfcm|intfp|instp)/[a-zA-Z_:][a-zA-Z0-9:_]*/([a-zA-Z:_][a-zA-Z0-9:_]*))|(c/([a-zA-Z0-9_]+)/([a-zA-Z:_][a-zA-Z0-9:_]*)))\"([^<>]+role=\"([a-zA-Z0-9_]+)\")?";
 	
@@ -385,6 +390,10 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			
 			if ([superclass length])
 				[obj setValue:superclass forKey:@"superclassName"];
+			
+			if ([declaredIn length])
+				[obj setValue:declaredIn forKey:@"declared_in_header"];
+			
 			if ([conformsTo count])
 			{
 				NSString *conformsToString = [NSString stringWithFormat:@"=%@=", [[conformsTo allObjects] componentsJoinedByString:@"="]];
