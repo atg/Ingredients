@@ -53,6 +53,7 @@ code
 	margin-top: 15px;
 	margin-bottom: 15px;
 }
+
 #description code
 {
 	font-size: 11px;
@@ -252,6 +253,169 @@ tr.first td
 td code
 {
 	font-size: 12px;
+}
+
+/* @end */
+
+/* @group Annotations */
+
+.annotations h3
+{
+	margin-bottom: 14px;
+}
+.annotations h3 span
+{
+	margin-right: 5px;
+}
+
+/*
+.annotations
+{
+	border-right-style: none;
+	border-left-style: none;
+	
+	border-top: 1px solid #d8d8d8;	
+	margin-top: 14px;
+	
+	border-bottom: 1px solid #d8d8d8;
+	margin-bottom: 14px;
+}
+.annotations.active
+{
+	background-color: #eaf4f9;
+	border-top-color: #d3e4ed;
+	border-bottom-color: #d3e4ed;
+	
+	padding-left: 20px;
+	padding-right: 20px;
+}
+*/
+
+.annotations .annotation
+{
+	margin-left: 20px;
+}
+.annotations .annotation h4
+{
+	padding: 0;
+	margin: 0;
+	
+	font-family: "Menlo";
+	letter-spacing: -1px;
+		
+	text-transform: none;
+	
+	padding-top: 6px;
+	margin-top: 20px;
+	padding-bottom: 4px;
+	
+	text-align: left;
+}
+.annotations .annotation .submitter
+{
+	padding-left: 10px;
+	font-weight: bold;
+	font-style: italic;
+	
+	font-size: 14px;
+}
+.annotations .annotation .annotation-description
+{
+	margin-bottom: -12px;
+}
+
+.inlinebutton
+{
+	background-color: #7f7f7f;
+	border: none;
+	-webkit-border-radius: 4px;
+	
+	color: white;
+	position: relative;
+	top: -1px;
+	
+	font-size: 12px;
+	text-shadow: rgba(0,0,0,0.35) 0 1px 0;
+}
+.inlinebutton:hover
+{
+	background-color: #04a5eb;
+}
+.inlinebutton:active
+{
+	background-color: #4bc8ff;
+}
+.add-annotation-box
+{
+	background-color: rgba(0,0,0,0.06);
+	
+	padding: 20px;
+}
+.add-annotation-box p.annotation-field
+{
+	margin: 0;
+	margin-bottom: 5px;
+}
+.add-annotation-box .inlinebutton
+{
+	margin-bottom: 18px;
+}
+
+.annotations-inner
+{
+	display: none;
+}
+.add-annotation-box
+{
+	display: none;
+}
+
+.add-annotation-box .right
+{
+	float: right;
+}
+.add-annotation-box
+{
+	font-size: 14px;
+	width: 550px;
+	margin-bottom: 14px;
+	margin-top: -6px;
+	padding-bottom: 0px;
+}
+
+.add-annotation-box span.key
+{
+	opacity: 1;
+	color: #7f7f7f;
+	
+	font-weight: bold;
+}
+.add-annotation-box span.value strong
+{
+	font-weight: normal;
+}
+
+.add-annotation-box input
+{
+	padding: 3px;
+}
+.add-annotation-box textarea
+{
+	padding: 3px;
+	margin: -15px 0 0;
+	max-width: 540px;
+}
+
+.add-annotation-box textarea, .add-annotation-box input
+{
+	border: 1px solid #b2b2b2;
+	
+	font-size: 13px;
+}
+
+.add-annotation-box textarea
+{
+	width: 100%;
 }
 
 /* @end */

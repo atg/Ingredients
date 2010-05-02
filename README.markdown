@@ -1,5 +1,9 @@
 Ingredients is a documentation viewer for Cocoa. Everything of note is contained in IngredientsKit.framework.
 
+## Licence
+
+Ingredients is licenced under the BSD licence.
+
 ## Build Instructions
 > You want the build instructions? You can't *handle* the build instructions!
 
