@@ -793,7 +793,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			NSString *methodName = [transientObject valueForKey:@"name"];
 			
 			//This is a bit ropey
-			if ([strval isLike:[@"*" stringByAppendingString:methodName]])
+			if ([strval length] >= [methodName length] && [[strval substringFromIndex:[strval length] - [methodName length]] isEqual:methodName])
 			{
 				[containersSet addObject:[a parent]];
 				
