@@ -10,6 +10,7 @@
 #import "IGKScraper.h"
 #import "IGKDocRecordManagedObject.h"
 #import "RegexKitLite.h"
+#import "IGKWordMembership.h"
 
 BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 {
@@ -18,6 +19,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 
 @interface IGKHTMLGenerator ()
 
+- (NSString *)addHyperlinks:(NSString *)unhappyText;
 - (NSString *)escape:(NSString *)unescapedText;
 - (NSString *)processAvailability:(NSString *)availability;
 
@@ -50,6 +52,13 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 @synthesize context;
 @synthesize managedObject;
 @synthesize displayTypeMask;
+
+//Take a passage of text sans hyperlinks, cross-reference each word against the database, and build a new string
+- (NSString *)addHyperlinks:(NSString *)unhappyText
+{
+	NSString *happyText = [[IGKWordMembership sharedManager] addHyperlinksToPassage:unhappyText];
+	return happyText;
+}
 
 //Take an unescaped string and add escapes for <, >, &, ", '
 - (NSString *)escape:(NSString *)unescapedText
@@ -198,7 +207,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	[outputString appendFormat:@"<h1>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];
 	
 	if ([transientObject valueForKey:@"overview"])
-		[outputString appendString:[transientObject valueForKey:@"overview"]];	
+		[outputString appendString:[self addHyperlinks:[transientObject valueForKey:@"overview"]]];	
 	
 	[self html_metadataTable:transientObject];
 	
@@ -426,16 +435,16 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	BOOL isnotif = [object isKindOfEntityNamed:@"ObjCNotification"];
 	
 	if ([object valueForKey:@"overview"])
-		[outputString appendFormat:@"\t\t<div class='description'>%@</div>\n", [object valueForKey:@"overview"]];
+		[outputString appendFormat:@"\t\t<div class='description'>%@</div>\n", [self addHyperlinks:[object valueForKey:@"overview"]]];
 	
 	if ([object valueForKey:@"signature"])
-		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [object valueForKey:@"signature"]];
+		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [self addHyperlinks:[object valueForKey:@"signature"]]];
 	
 	if (hasParameters)
 		[self html_parametersForCallable:object];
 	
 	if ([object valueForKey:@"discussion"])
-		[outputString appendFormat:@"\t\t<hr>\n\n\t\t<div class='discussion'>%@</div>\n\n\t\t<hr>\n\n", [object valueForKey:@"discussion"]];
+		[outputString appendFormat:@"\t\t<hr>\n\n\t\t<div class='discussion'>%@</div>\n\n\t\t<hr>\n\n", [self addHyperlinks:[object valueForKey:@"discussion"]]];
 	
 	[self html_metadataTable:object];
 	
@@ -455,13 +464,13 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 			NSArray *parameters = [[[object valueForKey:@"parameters"] allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
 			for (NSManagedObject *parameter in parameters)
 			{
-				[outputString appendFormat:@"\t\t\t<p class='parameter'><strong>%@</strong> %@</p>\n", [parameter valueForKey:@"name"], [parameter valueForKey:@"overview"]];
+				[outputString appendFormat:@"\t\t\t<p class='parameter'><strong>%@</strong> %@</p>\n", [parameter valueForKey:@"name"], [self addHyperlinks:[parameter valueForKey:@"overview"]]];
 			}
 		}
 		
 		if (hasReturnDescription)
 		{
-			[outputString appendFormat:@"\t\t\t<p class='returns'><strong>Returns</strong> %@</p>\n", [object valueForKey:@"returnDescription"]];
+			[outputString appendFormat:@"\t\t\t<p class='returns'><strong>Returns</strong> %@</p>\n", [self addHyperlinks:[object valueForKey:@"returnDescription"]]];
 		}
 		
 		[outputString appendString:@"\t\t</div>\n"];
@@ -724,15 +733,15 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	[outputString appendFormat:@"<h1>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];
 	
 	if ([transientObject valueForKey:@"discussion"])
-		[outputString appendString:[transientObject valueForKey:@"discussion"]];
+		[outputString appendString:[self addHyperlinks:[transientObject valueForKey:@"discussion"]]];
 	else if ([transientObject valueForKey:@"overview"])
-		[outputString appendString:[transientObject valueForKey:@"overview"]];
+		[outputString appendString:[self addHyperlinks:[transientObject valueForKey:@"overview"]]];
 	
 	
 	[outputString appendString:@"<div class='methods'>"];
 	
 	if ([transientObject valueForKey:@"signature"])
-		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [transientObject valueForKey:@"signature"]];
+		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [self addHyperlinks:[transientObject valueForKey:@"signature"]]];
 	
 	if ([transientObject isKindOfEntityNamed:@"Callable"])
 		[self html_parametersForCallable:transientObject];

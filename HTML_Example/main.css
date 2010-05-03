@@ -190,6 +190,48 @@ code
 {
 	font-size: 12px;
 }
+
+.methods a.semistealth
+{
+	/*color: inherit; /*rgb(26, 83, 148);*/
+	text-decoration: underline;
+	color: rgb(83, 83, 83) /*rgb(192, 192, 192)*/;
+}
+.methods a.semistealth span
+{
+	color: #323232;
+}
+.methods a.semistealth:visited
+{
+	color: inherit; /*rgb(26, 83, 148);*/
+	text-decoration: none;
+}
+.methods a.semistealth:hover
+{
+	color: white;
+	text-decoration: underline;
+}
+.methods a.semistealth span:hover
+{
+	background-color: rgba(125, 157, 202, 1.0);
+	-webkit-border-radius: 4px;
+	text-shadow: rgba(0,0,0,0.3) 0 1px 0;	
+
+	padding: 1px 2px;
+	margin: 1px -2px;
+	
+	color: white;
+}
+.methods a.semistealth:active
+{
+	text-decoration: underline;
+	color: white;
+}
+.methods a.semistealth:active span
+{
+	background-color: #7d9dca;	
+}
+
 .methods a.stealth
 {
 	color: inherit;

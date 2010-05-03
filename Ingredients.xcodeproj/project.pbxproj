@@ -111,6 +111,8 @@
 		75A9DA6811411C49003F8437 /* NSXMLNode+IGKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A9DA6611411C49003F8437 /* NSXMLNode+IGKAdditions.m */; };
 		75ACEC59117A539600260366 /* IGKFindBackgroundView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75ACEC57117A539600260366 /* IGKFindBackgroundView.h */; };
 		75ACEC5A117A539600260366 /* IGKFindBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75ACEC58117A539600260366 /* IGKFindBackgroundView.m */; };
+		75ADECEA118E0B9500C57C77 /* IGKWordMembership.h in Headers */ = {isa = PBXBuildFile; fileRef = 75ADECE8118E0B9500C57C77 /* IGKWordMembership.h */; };
+		75ADECEB118E0B9500C57C77 /* IGKWordMembership.m in Sources */ = {isa = PBXBuildFile; fileRef = 75ADECE9118E0B9500C57C77 /* IGKWordMembership.m */; };
 		75B23908113FB4D300EC1D2B /* IGKDocSetManagedObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B23906113FB4D300EC1D2B /* IGKDocSetManagedObject.h */; };
 		75B23909113FB4D300EC1D2B /* IGKDocSetManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B23907113FB4D300EC1D2B /* IGKDocSetManagedObject.m */; };
 		75B23F4711401DD700EC1D2B /* PFMoveApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B23F4611401DD700EC1D2B /* PFMoveApplication.m */; };
@@ -294,6 +296,8 @@
 		75A9DA6611411C49003F8437 /* NSXMLNode+IGKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSXMLNode+IGKAdditions.m"; sourceTree = "<group>"; };
 		75ACEC57117A539600260366 /* IGKFindBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKFindBackgroundView.h; sourceTree = "<group>"; };
 		75ACEC58117A539600260366 /* IGKFindBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKFindBackgroundView.m; sourceTree = "<group>"; };
+		75ADECE8118E0B9500C57C77 /* IGKWordMembership.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKWordMembership.h; sourceTree = "<group>"; };
+		75ADECE9118E0B9500C57C77 /* IGKWordMembership.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKWordMembership.m; sourceTree = "<group>"; };
 		75B23906113FB4D300EC1D2B /* IGKDocSetManagedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKDocSetManagedObject.h; sourceTree = "<group>"; };
 		75B23907113FB4D300EC1D2B /* IGKDocSetManagedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKDocSetManagedObject.m; sourceTree = "<group>"; };
 		75B23F4511401DD700EC1D2B /* PFMoveApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PFMoveApplication.h; path = LetsMove/PFMoveApplication.h; sourceTree = "<group>"; };
@@ -388,6 +392,8 @@
 				0C35D867118B657F0013DDFD /* IKGAnnotationManager.m */,
 				0C35D86C118B65920013DDFD /* IKGAnnotation.h */,
 				0C35D86D118B65920013DDFD /* IKGAnnotation.m */,
+				75ADECE8118E0B9500C57C77 /* IGKWordMembership.h */,
+				75ADECE9118E0B9500C57C77 /* IGKWordMembership.m */,
 				75BD17791143E92700E67594 /* Preferences */,
 				756F9FF6110C803D00E6F291 /* Scraping */,
 				0C7C02E3110DFFF300412666 /* Views & Cells */,
@@ -726,6 +732,7 @@
 				75DF96DE117E32E100403233 /* IGKMattePopUpButtonView.h in Headers */,
 				0C35D868118B657F0013DDFD /* IKGAnnotationManager.h in Headers */,
 				0C35D86E118B65920013DDFD /* IKGAnnotation.h in Headers */,
+				75ADECEA118E0B9500C57C77 /* IGKWordMembership.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -899,6 +906,7 @@
 				75DF96DF117E32E100403233 /* IGKMattePopUpButtonView.m in Sources */,
 				0C35D869118B657F0013DDFD /* IKGAnnotationManager.m in Sources */,
 				0C35D86F118B65920013DDFD /* IKGAnnotation.m in Sources */,
+				75ADECEB118E0B9500C57C77 /* IGKWordMembership.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

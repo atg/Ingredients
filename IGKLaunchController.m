@@ -9,6 +9,7 @@
 #import "IGKLaunchController.h"
 #import "IGKScraper.h"
 #import "IGKApplicationDelegate.h"
+#import "IGKWordMembership.h"
 
 @interface IGKLaunchController ()
 
@@ -235,6 +236,7 @@
 		[[appController backgroundManagedObjectContext] save:nil];
 		[[appController backgroundManagedObjectContext] reset];
 		
+		[self finishedLoading];
 		
 		dispatch_async(dispatch_get_main_queue(), ^{
 			
@@ -242,6 +244,52 @@
 			[[NSNotificationCenter defaultCenter] postNotificationName:@"IGKHasIndexedAllPaths" object:self];
 		});
 	});
+}
+
+- (void)finishedLoading
+{
+	NSManagedObjectContext *ctx = [appController managedObjectContext];
+	dispatch_queue_t queue = [appController backgroundQueue];
+	
+	if (!queue)
+		return;
+	
+	dispatch_async(queue, ^{
+		
+		//Oh god, Core Data was *NOT* meant to be used like this
+		NSEntityDescription *docRecordEntity = [NSEntityDescription entityForName:@"DocRecord" inManagedObjectContext:ctx];
+		NSPropertyDescription *nameProperty = [[docRecordEntity propertiesByName] valueForKey:@"name"];
+		
+		NSFetchRequest *fetchEverything = [[NSFetchRequest alloc] init];
+		[fetchEverything setEntity:docRecordEntity];
+		[fetchEverything setResultType:NSDictionaryResultType];
+		[fetchEverything setReturnsDistinctResults:YES];
+		[fetchEverything setPropertiesToFetch:[NSArray arrayWithObject:nameProperty]];
+		
+		NSArray *objects = [ctx executeFetchRequest:fetchEverything error:nil];
+		
+		NSLog(@"All names: %d", [objects count]);
+		
+		IGKWordMembership *wordMembershipManager = [IGKWordMembership sharedManagerWithCapacity:[objects count]];
+		NSCharacterSet *uppercaseCharacters = [NSCharacterSet uppercaseLetterCharacterSet];
+		for (NSDictionary *dict in objects)
+		{
+			NSString *name = [dict valueForKey:@"name"];
+			if (![name length])
+				continue;
+			
+			unichar firstLetter = [name characterAtIndex:0];
+			
+			//To avoid littering the documents with links, we only want to include names that start with an uppercase letter
+			if (firstLetter < 'A' || firstLetter > 'Z')
+				continue;
+			
+			[wordMembershipManager addWord:name];
+		}
+		
+		NSLog(@"Unique uppercase names: %d", [[wordMembershipManager valueForKey:@"words"] count]);
+	});
+	
 }
 
 - (double)fraction

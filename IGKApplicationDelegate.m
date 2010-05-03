@@ -53,6 +53,8 @@ const NSInteger IGKStoreVersion = 2;
 			NSFetchRequest *docsetCountFetch = [[NSFetchRequest alloc] init];
 			[docsetCountFetch setEntity:[NSEntityDescription entityForName:@"Docset" inManagedObjectContext:managedObjectContext]];
 			docsetCount = [managedObjectContext countForFetchRequest:docsetCountFetch error:&err];
+			
+			[launchController finishedLoading];
 		}
 		
 		//init history
