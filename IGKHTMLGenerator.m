@@ -200,12 +200,12 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	else if ([[transientObject entity] isKindOfEntity:ObjCMethod])
 	{
 		[outputString appendString:@"<a name='overview'>"];
-		[outputString appendString:@"<div class='overview'>"];
+		//[outputString appendString:@"<div class='overview'>"];
 		
-		[outputString appendFormat:@"<h1>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];
-		[outputString appendString:@"</div>"];
+		//[outputString appendFormat:@"<h1>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];
+		//[outputString appendString:@"</div>"];
 		
-		[outputString appendString:@"<div class='methods' class='single'>\n"];
+		[outputString appendString:@"<div class='methods single'>\n"];
 		
 		[self html_method:transientObject hasParameters:YES];
 		
@@ -496,8 +496,26 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	if (hasParameters)
 		[self html_parametersForCallable:object];
 	
+	BOOL needsFinalHR = NO;
 	if ([object valueForKey:@"discussion"])
-		[outputString appendFormat:@"\t\t<hr>\n\n\t\t<div class='discussion'>%@</div>\n\n\t\t<hr>\n\n", [self addHyperlinks:[object valueForKey:@"discussion"]]];
+	{
+		needsFinalHR = YES;
+		[outputString appendFormat:@"\t\t<hr>\n\n\t\t<div class='discussion'>%@</div>\n\n", [self addHyperlinks:[object valueForKey:@"discussion"]]];
+		
+	}
+	
+	if ([object valueForKey:@"codesample"])
+	{
+		needsFinalHR = YES;
+		[outputString appendFormat:@"\t\t<p class='prototype codesample'><code>%@</code></p>\n",
+		 [self addHyperlinks:[self reformatCode:[object valueForKey:@"codesample"]]]];
+	}
+	
+	if (needsFinalHR)
+	{
+		[outputString appendString:@"\t\t<hr>\n\n"];
+	}
+	
 	
 	[self html_metadataTable:object];
 	

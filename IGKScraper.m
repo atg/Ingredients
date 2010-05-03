@@ -1103,6 +1103,18 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 				NSXMLElement *m = [nchildren objectAtIndex:j];
 				if (![m isKindOfClass:[NSXMLElement class]])
 					continue;
+				
+				if ([[[m name] lowercaseString] isEqual:@"div"])
+				{
+					//This could be a codesample
+					NSArray *divClass = [[[[m attributeForName:@"class"] commentlessStringValue] lowercaseString] componentsSeparatedByString:@" "];
+					if (![divClass containsObject:@"codesample"])
+						break;
+					
+					[object setValue:[m commentlessStringValue] forKey:@"codesample"];
+					continue;
+				}
+				
 				if (![[[m name] lowercaseString] isEqual:@"p"])
 					break;
 				
