@@ -177,6 +177,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	//Find out if managedObject is an ObjCAbstractMethodContainer
 	NSEntityDescription *ObjCAbstractMethodContainer = [NSEntityDescription entityForName:@"ObjCAbstractMethodContainer" inManagedObjectContext:transientContext];
 	NSEntityDescription *ObjCMethod = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:transientContext];
+	NSEntityDescription *ObjCBindingsListing = [NSEntityDescription entityForName:@"ObjCBindingsListing" inManagedObjectContext:transientContext];
 	if ([[transientObject entity] isKindOfEntity:ObjCAbstractMethodContainer])
 	{
 		//Append the main content
@@ -198,11 +199,21 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	}
 	else if ([[transientObject entity] isKindOfEntity:ObjCMethod])
 	{
+		[outputString appendString:@"<a name='overview'>"];
+		[outputString appendString:@"<div class='overview'>"];
+		
+		[outputString appendFormat:@"<h1>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];
+		[outputString appendString:@"</div>"];
+		
 		[outputString appendString:@"<div class='methods' class='single'>\n"];
 		
 		[self html_method:transientObject hasParameters:YES];
 		
 		[outputString appendString:@"</div>\n"];
+	}
+	else if ([[transientObject entity] isKindOfEntity:ObjCBindingsListing])
+	{		
+		[self html_bindingsListing:transientObject];
 	}
 	else
 	{
@@ -445,6 +456,25 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 - (void)html_delegate
 {
 	
+}
+
+- (void)html_bindingsListing:(IGKDocRecordManagedObject *)object
+{
+	[outputString appendString:@"<a name='overview'>"];
+	[outputString appendString:@"<div class='overview'>"];
+	
+	
+	if ([[transientObject valueForKey:@"classname"] length])
+		[outputString appendFormat:@"<h1>%@ Bindings</h1>", [self escape:[transientObject valueForKey:@"classname"]]];	
+	
+	
+	[outputString appendString:@"<div class='methods'>"];
+	NSArray *bindings = [[object valueForKey:@"bindings"] allObjects];
+	NSLog(@"bindings = %@", bindings);
+	[outputString appendString:@"</div>"];
+	
+	
+	[outputString appendString:@"</div>"];
 }
 
 - (void)html_method:(IGKDocRecordManagedObject *)object hasParameters:(BOOL)hasParameters
@@ -750,7 +780,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 
 - (void)html_generic
 {
-	[outputString appendString:@"<div class='#overview'>"];
+	[outputString appendString:@"<a name='overview'>"];
 	[outputString appendString:@"<div class='overview'>"];
 	
 	[outputString appendFormat:@"<h1>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];
