@@ -193,9 +193,8 @@ code
 
 .methods a.semistealth
 {
-	/*color: inherit; /*rgb(26, 83, 148);*/
 	text-decoration: underline;
-	color: rgb(83, 83, 83) /*rgb(192, 192, 192)*/;
+	color: rgb(83, 83, 83);
 }
 .methods a.semistealth span
 {
@@ -203,8 +202,8 @@ code
 }
 .methods a.semistealth:visited
 {
-	color: inherit; /*rgb(26, 83, 148);*/
-	text-decoration: none;
+	color: inherit;
+	text-decoration: underline;
 }
 .methods a.semistealth:hover
 {

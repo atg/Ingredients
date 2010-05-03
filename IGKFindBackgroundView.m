@@ -29,12 +29,48 @@
 	boxRect.size.height += radius + 8.0;
 	
 	NSBezierPath *strokePath = [NSBezierPath bezierPathWithRoundedRect:boxRect xRadius:radius yRadius:radius];
-	[[NSColor colorWithCalibratedWhite:0.56 alpha:1.0] set];
+	if ([self isActive])
+		[[NSColor colorWithCalibratedWhite:0.56 alpha:1.0] set];
+	else
+		[[NSColor colorWithCalibratedWhite:0.577 alpha:1.000] set];
+	
 	[strokePath fill];
 	
 	NSBezierPath *fillPath = [NSBezierPath bezierPathWithRoundedRect:NSInsetRect(boxRect, 1.0, 1.0) xRadius:radius - 1.0 yRadius:radius - 1.0];
-	[[NSColor colorWithCalibratedWhite:0.82 alpha:1.0] set];
+	if ([self isActive])
+		[[NSColor colorWithCalibratedWhite:0.82 alpha:1.0] set];
+	else
+		[[NSColor colorWithCalibratedWhite:0.859 alpha:1.000] set];
+	
 	[fillPath fill];
+}
+
+#pragma mark Redrawing when the parent window becomes Active/Inactive
+
+- (void)viewDidMoveToParentWindow:(NSWindow *)parentWindow
+{
+	if (parentWindow)
+	{
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeMain:) name:NSWindowDidBecomeMainNotification object:parentWindow];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidResignMain:) name:NSWindowDidResignMainNotification object:parentWindow];
+	}
+	else
+	{
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeMainNotification object:parentWindow];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidResignMainNotification object:parentWindow];
+	}
+}
+- (void)windowDidBecomeMain:(NSNotification *)notif
+{	
+	[self setNeedsDisplay:YES];
+}
+- (void)windowDidResignMain:(NSNotification *)notif
+{	
+	[self setNeedsDisplay:YES];
+}
+- (BOOL)isActive
+{
+	return [[[self window] parentWindow] isMainWindow];
 }
 
 @end

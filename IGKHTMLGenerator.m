@@ -53,6 +53,29 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 @synthesize managedObject;
 @synthesize displayTypeMask;
 
+//Take a piece of code and make it look nicer
+- (NSString *)reformatCode:(NSString *)code
+{	
+	//I totally just made this word up
+	BOOL isStructurous = [code isLike:@"*typedef enum*"] || [code isLike:@"*enum*"] ||
+	                     [code isLike:@"*typedef struct*"] || [code isLike:@"*struct*"] ||
+	                     [code isLike:@"*typedef union*"] || [code isLike:@"*union*"];
+	
+	//If this type is not structurous, don't do any reformatting
+	if (!isStructurous)
+		return code;
+		
+	//Trim any whitespace
+	code = [code stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	
+	//Do substitutions
+	code = [code stringByReplacingOccurrencesOfString:@"\n" withString:@"<br>"];
+	code = [code stringByReplacingOccurrencesOfString:@"\t" withString:@"&nbsp;&nbsp;&nbsp;&nbsp;"];
+	code = [code stringByReplacingOccurrencesOfString:@" " withString:@"&nbsp;"];
+
+	return code;
+}
+
 //Take a passage of text sans hyperlinks, cross-reference each word against the database, and build a new string
 - (NSString *)addHyperlinks:(NSString *)unhappyText
 {
@@ -741,7 +764,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	[outputString appendString:@"<div class='methods'>"];
 	
 	if ([transientObject valueForKey:@"signature"])
-		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [self addHyperlinks:[transientObject valueForKey:@"signature"]]];
+		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [self addHyperlinks:[self reformatCode:[transientObject valueForKey:@"signature"]]]];
 	
 	if ([transientObject isKindOfEntityNamed:@"Callable"])
 		[self html_parametersForCallable:transientObject];

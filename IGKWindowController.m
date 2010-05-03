@@ -1616,24 +1616,17 @@
 	else if ([[[[request URL] host] lowercaseString] isEqual:@"ingr-link"])
 	{
 		NSArray *comps = [[url path] pathComponents];
-		NSLog(@"comps = %@", comps);
 		if ([comps count] == 2)
 		{
 			NSString *term = [comps objectAtIndex:1];
-			
-			NSLog(@"term = %@", term);
-			
+						
 			NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
 			[fetch setPredicate:[NSPredicate predicateWithFormat:@"name=%@", term]];
 			[fetch setEntity:[NSEntityDescription entityForName:@"DocRecord" inManagedObjectContext:[self managedObjectContext]]];
-			NSLog(@"[self managedObjectContext] = %@", [self managedObjectContext]);
-			NSLog(@"[NSEntityDescription entityForName:@\"DocRecord\" inManagedObjectContext:[self managedObjectContext]] = %d", [NSEntityDescription entityForName:@"DocRecord" inManagedObjectContext:[self managedObjectContext]]);
 			
 			NSArray *items = [[self managedObjectContext] executeFetchRequest:fetch error:nil];
-			NSLog(@"items = %@", items);
 			for (id item in items)
 			{
-				NSLog(@"%@", [item docURL:IGKHTMLDisplayType_All]);
 				[self performSelector:@selector(loadURLRecordHistory:) withObject:[item docURL:IGKHTMLDisplayType_All] afterDelay:0.0];
 				break;
 			}
@@ -1813,6 +1806,7 @@
 	
 	[[self window] addChildWindow:findWindow ordered:NSWindowAbove];
 	[findWindow setParentWindow:[self window]];
+	[[[[findWindow contentView] subviews] lastObject] viewDidMoveToParentWindow:[self window]];
 	[findWindow makeKeyAndOrderFront:nil];
 	[[self window] makeMainWindow];
 }

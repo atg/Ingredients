@@ -52,7 +52,6 @@
 		[backStack addObject:currentItem];
 		[[WebHistory optionalSharedHistory] addItems:[NSArray arrayWithObject:item]];
 		
-		NSLog(@"Items: %@", [[WebHistory optionalSharedHistory] orderedItemsLastVisitedOnDay:[NSCalendarDate date]]);
 		[self didChangeValueForKey:@"backStack"];
 	}
 	
