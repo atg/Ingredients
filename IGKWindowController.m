@@ -577,6 +577,7 @@
 	}
 	else if ([[url scheme] isEqual:@"ingr-doc"])
 	{
+		NSLog(@"Load URL = %@, record history = %d", url, recordHistory);
 		NSManagedObjectContext *ctx = [[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext];
 		
 		tableOfContentsMask = IGKHTMLDisplayType_None;
@@ -586,7 +587,8 @@
 		{
 			[self setBrowserActive:YES];
 			[self loadManagedObject:result tableOfContentsMask:tableOfContentsMask];
-			//[self recordHistoryForURL:[result docURL] title:[result valueForKey:@"name"]];
+			if (recordHistory)
+				[self recordHistoryForURL:url title:[result valueForKey:@"name"]];
 		}
 		
 		[self reloadTableOfContents];
@@ -804,6 +806,9 @@
 	[NSAnimationContext endGrouping];
 	
 	[browserWebView stringByEvaluatingJavaScriptFromString:@"completed();"];
+
+	
+	[[self window] makeFirstResponder:sideSearchViewField];
 }
 
 - (void)setAdvancedFilterPredicate:(NSPredicate *)pred
