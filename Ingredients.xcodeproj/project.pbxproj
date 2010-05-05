@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0C35D868118B657F0013DDFD /* IKGAnnotationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C35D866118B657F0013DDFD /* IKGAnnotationManager.h */; };
-		0C35D869118B657F0013DDFD /* IKGAnnotationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C35D867118B657F0013DDFD /* IKGAnnotationManager.m */; };
-		0C35D86E118B65920013DDFD /* IKGAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C35D86C118B65920013DDFD /* IKGAnnotation.h */; };
-		0C35D86F118B65920013DDFD /* IKGAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C35D86D118B65920013DDFD /* IKGAnnotation.m */; };
+		0C35D868118B657F0013DDFD /* IGKAnnotationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C35D866118B657F0013DDFD /* IGKAnnotationManager.h */; };
+		0C35D869118B657F0013DDFD /* IGKAnnotationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C35D867118B657F0013DDFD /* IGKAnnotationManager.m */; };
+		0C35D86E118B65920013DDFD /* IGKAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C35D86C118B65920013DDFD /* IGKAnnotation.h */; };
+		0C35D86F118B65920013DDFD /* IGKAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C35D86D118B65920013DDFD /* IGKAnnotation.m */; };
+		0C402C161191C691001564B5 /* NSString+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C402C151191C691001564B5 /* NSString+Utilities.m */; };
 		0C7C02E6110E000800412666 /* XBNewSourceListCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C7C02E4110E000800412666 /* XBNewSourceListCell.h */; };
 		0C7C02E7110E000800412666 /* XBNewSourceListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7C02E5110E000800412666 /* XBNewSourceListCell.m */; };
 		0C7C02ED110E006000412666 /* CHSymbolButtonImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C7C02EB110E006000412666 /* CHSymbolButtonImage.h */; };
@@ -185,10 +186,12 @@
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		0C35D866118B657F0013DDFD /* IKGAnnotationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKGAnnotationManager.h; sourceTree = "<group>"; };
-		0C35D867118B657F0013DDFD /* IKGAnnotationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKGAnnotationManager.m; sourceTree = "<group>"; };
-		0C35D86C118B65920013DDFD /* IKGAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKGAnnotation.h; sourceTree = "<group>"; };
-		0C35D86D118B65920013DDFD /* IKGAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKGAnnotation.m; sourceTree = "<group>"; };
+		0C35D866118B657F0013DDFD /* IGKAnnotationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKAnnotationManager.h; sourceTree = "<group>"; };
+		0C35D867118B657F0013DDFD /* IGKAnnotationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKAnnotationManager.m; sourceTree = "<group>"; };
+		0C35D86C118B65920013DDFD /* IGKAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKAnnotation.h; sourceTree = "<group>"; };
+		0C35D86D118B65920013DDFD /* IGKAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKAnnotation.m; sourceTree = "<group>"; };
+		0C402C141191C691001564B5 /* NSString+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Utilities.h"; sourceTree = "<group>"; };
+		0C402C151191C691001564B5 /* NSString+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Utilities.m"; sourceTree = "<group>"; };
 		0C7C02E4110E000800412666 /* XBNewSourceListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBNewSourceListCell.h; sourceTree = "<group>"; };
 		0C7C02E5110E000800412666 /* XBNewSourceListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBNewSourceListCell.m; sourceTree = "<group>"; };
 		0C7C02EB110E006000412666 /* CHSymbolButtonImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHSymbolButtonImage.h; sourceTree = "<group>"; };
@@ -388,10 +391,10 @@
 				751D2AD11126E4A100403E64 /* IGKArrayController.m */,
 				75943C0911441AE0004126E7 /* IGKBackForwardManager.h */,
 				75943C0A11441AE0004126E7 /* IGKBackForwardManager.m */,
-				0C35D866118B657F0013DDFD /* IKGAnnotationManager.h */,
-				0C35D867118B657F0013DDFD /* IKGAnnotationManager.m */,
-				0C35D86C118B65920013DDFD /* IKGAnnotation.h */,
-				0C35D86D118B65920013DDFD /* IKGAnnotation.m */,
+				0C35D866118B657F0013DDFD /* IGKAnnotationManager.h */,
+				0C35D867118B657F0013DDFD /* IGKAnnotationManager.m */,
+				0C35D86C118B65920013DDFD /* IGKAnnotation.h */,
+				0C35D86D118B65920013DDFD /* IGKAnnotation.m */,
 				75ADECE8118E0B9500C57C77 /* IGKWordMembership.h */,
 				75ADECE9118E0B9500C57C77 /* IGKWordMembership.m */,
 				75BD17791143E92700E67594 /* Preferences */,
@@ -496,6 +499,8 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				0C402C141191C691001564B5 /* NSString+Utilities.h */,
+				0C402C151191C691001564B5 /* NSString+Utilities.m */,
 				75BD17C71143F38800E67594 /* SQPreferencesBackgroundComponent.h */,
 				75BD17C51143F37E00E67594 /* SQPreferencesBackgroundComponent.m */,
 				75C9FF03110F868300C9B51C /* main.css */,
@@ -730,8 +735,8 @@
 				75751B25117B599E0017B58B /* IGKFindWindow.h in Headers */,
 				75751B90117B641D0017B58B /* IGKResizeDelegatedView.h in Headers */,
 				75DF96DE117E32E100403233 /* IGKMattePopUpButtonView.h in Headers */,
-				0C35D868118B657F0013DDFD /* IKGAnnotationManager.h in Headers */,
-				0C35D86E118B65920013DDFD /* IKGAnnotation.h in Headers */,
+				0C35D868118B657F0013DDFD /* IGKAnnotationManager.h in Headers */,
+				0C35D86E118B65920013DDFD /* IGKAnnotation.h in Headers */,
 				75ADECEA118E0B9500C57C77 /* IGKWordMembership.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -904,8 +909,8 @@
 				75751B26117B599E0017B58B /* IGKFindWindow.m in Sources */,
 				75751B91117B641D0017B58B /* IGKResizeDelegatedView.m in Sources */,
 				75DF96DF117E32E100403233 /* IGKMattePopUpButtonView.m in Sources */,
-				0C35D869118B657F0013DDFD /* IKGAnnotationManager.m in Sources */,
-				0C35D86F118B65920013DDFD /* IKGAnnotation.m in Sources */,
+				0C35D869118B657F0013DDFD /* IGKAnnotationManager.m in Sources */,
+				0C35D86F118B65920013DDFD /* IGKAnnotation.m in Sources */,
 				75ADECEB118E0B9500C57C77 /* IGKWordMembership.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -925,6 +930,7 @@
 				756D7A8E1145BB11001C05D7 /* IngredientsCommand.m in Sources */,
 				750DFBCF114671CC004C5D08 /* IGKMattePopUpButton.m in Sources */,
 				75DF96EA117E350600403233 /* IGKMatteFocusedGradientBox.m in Sources */,
+				0C402C161191C691001564B5 /* NSString+Utilities.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

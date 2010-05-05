@@ -9,8 +9,12 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface IKGAnnotationManager : NSObject {
-
+@interface IGKAnnotationManager : NSObject {
+	NSMutableArray *annotations;
 }
+
+@property (assign) NSMutableArray *annotations;
+
++ (IGKAnnotationManager *)sharedAnnotationManager;
 
 @end
