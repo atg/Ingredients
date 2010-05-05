@@ -7,9 +7,27 @@
 //
 
 #import "IGKAnnotationManager.h"
-
+#import "IGKAnnotation.h"
 
 @implementation IGKAnnotationManager
+
+@synthesize annotations;
+
+- (void)loadAnnotationsAtPath:(NSString *)path
+{
+	[annotations removeAllObjects];
+	NSDictionary *annotationDic = [NSDictionary dictionaryWithContentsOfURL:[NSURL fileURLWithPath:path]];
+	// Root object should be a dic..will allow for some meta data like version info etc..
+	// annotations should be an array whose keypath is dic.annotations
+	
+	NSArray *annotationsFromDic = [annotationDic objectForKey:@"annotations"];
+	for(NSDictionary *anAnnotation in annotationsFromDic)
+	{
+		IGKAnnotation *newAnnotation = [[IGKAnnotation alloc] initWithDict:anAnnotation];
+		[annotations addObject:newAnnotation];
+	}
+	
+}
 
 #pragma mark Singleton
 

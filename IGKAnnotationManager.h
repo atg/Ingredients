@@ -10,8 +10,10 @@
 
 
 @interface IGKAnnotationManager : NSObject {
-
+	NSMutableArray *annotations;
 }
+
+@property (assign) NSMutableArray *annotations;
 
 + (IGKAnnotationManager *)sharedAnnotationManager;
 

@@ -21,6 +21,7 @@
 @property (assign) NSString *uuid;
 @property (assign) NSString *annotation;
 
+- (id)initWithDict:(NSDictionary *)dic;
 
 
 @end
