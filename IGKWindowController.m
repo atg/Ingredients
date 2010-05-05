@@ -1781,15 +1781,19 @@
 
 - (IBAction)toggleFullscreen:(id)sender
 {
+	NSMutableDictionary *fsOptions = [[NSMutableDictionary alloc] init];
+	NSInteger presentationOptions = (NSApplicationPresentationAutoHideDock|NSApplicationPresentationAutoHideMenuBar);
+	[fsOptions setObject:[NSNumber numberWithInt:presentationOptions] forKey:NSFullScreenModeApplicationPresentationOptions];
+	
 	if(isInFullscreen)
 	{
-		[[[self window] contentView] exitFullScreenModeWithOptions:nil];
+		[[[self window] contentView] exitFullScreenModeWithOptions:fsOptions];
 		isInFullscreen = NO;
 	}
 	else 
 	{
 		[[[self window] contentView] enterFullScreenMode:[[self window] screen] 
-											 withOptions:nil];
+											 withOptions:fsOptions];
 		
 		isInFullscreen = YES;
 	}

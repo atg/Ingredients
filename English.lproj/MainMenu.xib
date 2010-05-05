@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="339"/>
+			<integer value="29"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -738,7 +738,7 @@
 									<reference key="NSOnImage" ref="893455832"/>
 									<reference key="NSMixedImage" ref="424226900"/>
 								</object>
-								<object class="NSMenuItem" id="221295743">
+								<object class="NSMenuItem" id="755607502">
 									<reference key="NSMenu" ref="877676881"/>
 									<bool key="NSIsDisabled">YES</bool>
 									<bool key="NSIsSeparator">YES</bool>
@@ -748,9 +748,9 @@
 									<reference key="NSOnImage" ref="893455832"/>
 									<reference key="NSMixedImage" ref="424226900"/>
 								</object>
-								<object class="NSMenuItem" id="249465831">
+								<object class="NSMenuItem" id="113201222">
 									<reference key="NSMenu" ref="877676881"/>
-									<string key="NSTitle">Enter Fullscreen</string>
+									<string key="NSTitle">Toggle Fullscreen</string>
 									<string key="NSKeyEquiv">F</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -1278,7 +1278,7 @@
 					<object class="IBActionConnection" key="connection">
 						<string key="label">toggleFullscreen:</string>
 						<reference key="source" ref="909243075"/>
-						<reference key="destination" ref="249465831"/>
+						<reference key="destination" ref="113201222"/>
 					</object>
 					<int key="connectionID">621</int>
 				</object>
@@ -1517,8 +1517,8 @@
 							<reference ref="479945429"/>
 							<reference ref="316787670"/>
 							<reference ref="433804832"/>
-							<reference ref="221295743"/>
-							<reference ref="249465831"/>
+							<reference ref="755607502"/>
+							<reference ref="113201222"/>
 						</object>
 						<reference key="parent" ref="147235865"/>
 					</object>
@@ -1964,12 +1964,12 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">619</int>
-						<reference key="object" ref="221295743"/>
+						<reference key="object" ref="755607502"/>
 						<reference key="parent" ref="877676881"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">620</int>
-						<reference key="object" ref="249465831"/>
+						<reference key="object" ref="113201222"/>
 						<reference key="parent" ref="877676881"/>
 					</object>
 				</object>
@@ -2160,7 +2160,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{279, 248}, {205, 123}}</string>
+					<string>{{279, 248}, {210, 123}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
