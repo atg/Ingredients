@@ -10,6 +10,7 @@
 #import "IGKWindowController.h"
 #import "IGKLaunchController.h"
 #import <WebKit/WebKit.h>
+#import "IGKAnnotationManager.h"
 
 const NSInteger IGKStoreVersion = 2;
 
@@ -73,6 +74,9 @@ const NSInteger IGKStoreVersion = 2;
 			
 			[self showPreferences:nil];
 		}
+		
+		// init the annotations...
+		[[IGKAnnotationManager sharedAnnotationManager] loadAnnotations];
 	}
 	
 	return self;
@@ -402,7 +406,8 @@ const NSInteger IGKStoreVersion = 2;
 	[[WebHistory optionalSharedHistory] saveToURL:[NSURL fileURLWithPath:[[self applicationSupportDirectory] stringByAppendingPathComponent:@"history"]] error:&error2];
 	NSLog(@"Error: %@", [error2 localizedDescription]);
 	
-	
+	// Save annotations
+	[[IGKAnnotationManager sharedAnnotationManager] saveAnnotations];
 	
 	
     if (!managedObjectContext) return NSTerminateNow;

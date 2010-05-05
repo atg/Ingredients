@@ -15,6 +15,26 @@ const int IGKAnnotationVersion = 1;
 
 @synthesize annotations;
 
+- (BOOL)loadAnnotations
+{
+	
+	NSString *loadPath = [[[[NSApp delegate] kitController] applicationSupportDirectory] stringByAppendingPathComponent:@"Annotations.plist"];
+	if([[NSFileManager defaultManager] fileExistsAtPath:loadPath])
+	{
+		[self loadAnnotationsAtPath:loadPath];
+		return YES;
+	}
+	
+	return NO;
+}
+
+- (void)saveAnnotations
+{
+	NSString *savePath = [[[[NSApp delegate] kitController] applicationSupportDirectory] stringByAppendingPathComponent:@"Annotations.plist"];
+	[self saveAnnotationsAtPath:savePath];
+}
+
+
 - (void)loadAnnotationsAtPath:(NSString *)path
 {
 	[annotations removeAllObjects];
@@ -52,6 +72,7 @@ const int IGKAnnotationVersion = 1;
 {
 	IGKAnnotation *newAnnotation = [[IGKAnnotation alloc] initAndGenerateUUID];
 	[annotations addObject:newAnnotation];
+	[self saveAnnotations];
 	
 	return newAnnotation;
 }

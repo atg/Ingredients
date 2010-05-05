@@ -17,5 +17,7 @@ const int IGKAnnotationVersion;
 @property (assign) NSMutableArray *annotations;
 
 + (IGKAnnotationManager *)sharedAnnotationManager;
+- (BOOL)loadAnnotations;
+- (void)saveAnnotations;
 
 @end
