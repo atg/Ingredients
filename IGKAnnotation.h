@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface IKGAnnotation : NSObject {
+@interface IGKAnnotation : NSObject {
 	NSString *docurl;
 	NSString *submitter_name;
 	NSString *uuid;

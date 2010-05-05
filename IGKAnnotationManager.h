@@ -9,8 +9,10 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface IKGAnnotationManager : NSObject {
+@interface IGKAnnotationManager : NSObject {
 
 }
+
++ (IGKAnnotationManager *)sharedAnnotationManager;
 
 @end

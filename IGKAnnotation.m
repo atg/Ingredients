@@ -6,10 +6,10 @@
 //  Copyright 2010 SilverCocoa. All rights reserved.
 //
 
-#import "IKGAnnotation.h"
+#import "IGKAnnotation.h"
 #import "NSString+Utilities.h"
 
-@implementation IKGAnnotation
+@implementation IGKAnnotation
 
 @synthesize docurl;
 @synthesize submitter_name;
@@ -49,8 +49,6 @@
 }
 
 
-
-@implementation IKGAnnotation
 
 
 @end
