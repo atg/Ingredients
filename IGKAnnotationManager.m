@@ -9,6 +9,8 @@
 #import "IGKAnnotationManager.h"
 #import "IGKAnnotation.h"
 
+const int IGKAnnotationVersion = 1;
+
 @implementation IGKAnnotationManager
 
 @synthesize annotations;
@@ -27,6 +29,31 @@
 		[annotations addObject:newAnnotation];
 	}
 	
+}
+
+- (void)saveAnnotationsAtPath:(NSString *)path
+{
+	NSMutableDictionary *saveDic = [[NSMutableDictionary alloc] init];
+	NSMutableArray *saveArray = [[NSMutableArray alloc] init];
+	
+	[saveDic setObject:[NSNumber numberWithInt:IGKAnnotationVersion] forKey:@"version"];
+	
+	for(IGKAnnotation *anAnnotation in annotations)
+	{
+		[saveArray addObject:[anAnnotation annotationAsDict]];
+	}
+	[saveDic setObject:saveArray forKey:@"annotations"];
+	
+	[saveDic writeToURL:[NSURL fileURLWithPath:path] atomically:YES];
+	
+}
+
+- (IGKAnnotation *)addAnnotation
+{
+	IGKAnnotation *newAnnotation = [[IGKAnnotation alloc] initAndGenerateUUID];
+	[annotations addObject:newAnnotation];
+	
+	return newAnnotation;
 }
 
 #pragma mark Singleton

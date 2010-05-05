@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+const int IGKAnnotationVersion;
 
 @interface IGKAnnotationManager : NSObject {
 	NSMutableArray *annotations;
