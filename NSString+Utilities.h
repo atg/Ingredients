@@ -7,28 +7,13 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import <SystemConfiguration/SystemConfiguration.h>
 
-NSString *CHDeveloperDirectory();
 
 @interface NSString (Utilities)
 
-+ (NSString *)computerName;
-+ (NSString *)volumeName;
 
 - (BOOL)startsWith:(NSString *)s;
 + (NSString *)stringByGeneratingUUID;
 
-- (NSString *)copiesOf:(NSUInteger)numCopies;
-
-- (BOOL)caseInsensitiveContains:(NSString *)needle;
-
-- (NSString *)bashQuotedString;
-
-- (NSRange)rangeOfNearestWordTo:(NSRange)range;
-
-- (NSString *)relativePathRelativeTo:(NSString *)basePath;
-
-- (void)enumerateChars:(void (^)(unichar, BOOL *))block;
 
 @end

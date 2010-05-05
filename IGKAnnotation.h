@@ -21,7 +21,6 @@
 @property (assign) NSString *uuid;
 @property (assign) NSString *annotation;
 
-}
 
 
 @end
