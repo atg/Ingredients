@@ -70,6 +70,8 @@
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSavingProgressSheet:) name:@"IGKWillSaveIndex" object:nil];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDefaultsDidChange:) name:NSUserDefaultsDidChangeNotification object:nil];
+		
+		isInFullscreen = NO;
 	}
 	
 	return self;
@@ -1775,6 +1777,23 @@
 			[rightFilterBarView removeFromSuperview];
 		}
 	}
+}
+
+- (IBAction)toggleFullscreen:(id)sender
+{
+	if(isInFullscreen)
+	{
+		[[[self window] contentView] exitFullScreenModeWithOptions:nil];
+		isInFullscreen = NO;
+	}
+	else 
+	{
+		[[[self window] contentView] enterFullScreenMode:[[self window] screen] 
+											 withOptions:nil];
+		
+		isInFullscreen = YES;
+	}
+
 }
 
 

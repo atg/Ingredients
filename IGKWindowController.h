@@ -149,6 +149,7 @@ typedef enum {
 	BOOL awaken;
 	BOOL shouldIndex;
 	BOOL isIndexing;
+	BOOL isInFullscreen;
 		
 	NSManagedObjectID *currentObjectIDInBrowser;
 	
@@ -187,6 +188,8 @@ typedef enum {
 - (IBAction)toggleRightFilterBar:(id)sender;
 - (BOOL)rightFilterBarShown;
 - (void)setRightFilterBarShown:(BOOL)shown;
+
+- (IBAction)toggleFullscreen:(id)sender;
 
 - (BOOL)filterBarTableRowIsGroup:(NSInteger)row;
 
