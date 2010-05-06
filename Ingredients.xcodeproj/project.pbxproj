@@ -12,6 +12,7 @@
 		0C35D86E118B65920013DDFD /* IGKAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C35D86C118B65920013DDFD /* IGKAnnotation.h */; };
 		0C35D86F118B65920013DDFD /* IGKAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C35D86D118B65920013DDFD /* IGKAnnotation.m */; };
 		0C402C161191C691001564B5 /* NSString+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C402C151191C691001564B5 /* NSString+Utilities.m */; };
+		0C402D09119321AB001564B5 /* IGKForwardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C402D08119321AB001564B5 /* IGKForwardView.m */; };
 		0C7C02E6110E000800412666 /* XBNewSourceListCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C7C02E4110E000800412666 /* XBNewSourceListCell.h */; };
 		0C7C02E7110E000800412666 /* XBNewSourceListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7C02E5110E000800412666 /* XBNewSourceListCell.m */; };
 		0C7C02ED110E006000412666 /* CHSymbolButtonImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C7C02EB110E006000412666 /* CHSymbolButtonImage.h */; };
@@ -192,6 +193,8 @@
 		0C35D86D118B65920013DDFD /* IGKAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKAnnotation.m; sourceTree = "<group>"; };
 		0C402C141191C691001564B5 /* NSString+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Utilities.h"; sourceTree = "<group>"; };
 		0C402C151191C691001564B5 /* NSString+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Utilities.m"; sourceTree = "<group>"; };
+		0C402D07119321AB001564B5 /* IGKForwardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKForwardView.h; sourceTree = "<group>"; };
+		0C402D08119321AB001564B5 /* IGKForwardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKForwardView.m; sourceTree = "<group>"; };
 		0C7C02E4110E000800412666 /* XBNewSourceListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XBNewSourceListCell.h; sourceTree = "<group>"; };
 		0C7C02E5110E000800412666 /* XBNewSourceListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBNewSourceListCell.m; sourceTree = "<group>"; };
 		0C7C02EB110E006000412666 /* CHSymbolButtonImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHSymbolButtonImage.h; sourceTree = "<group>"; };
@@ -446,6 +449,8 @@
 				75751B24117B599E0017B58B /* IGKFindWindow.m */,
 				75751B8E117B641D0017B58B /* IGKResizeDelegatedView.h */,
 				75751B8F117B641D0017B58B /* IGKResizeDelegatedView.m */,
+				0C402D07119321AB001564B5 /* IGKForwardView.h */,
+				0C402D08119321AB001564B5 /* IGKForwardView.m */,
 			);
 			name = "Views & Cells";
 			sourceTree = "<group>";
@@ -931,6 +936,7 @@
 				750DFBCF114671CC004C5D08 /* IGKMattePopUpButton.m in Sources */,
 				75DF96EA117E350600403233 /* IGKMatteFocusedGradientBox.m in Sources */,
 				0C402C161191C691001564B5 /* NSString+Utilities.m in Sources */,
+				0C402D09119321AB001564B5 /* IGKForwardView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

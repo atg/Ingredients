@@ -18,6 +18,7 @@ const NSInteger IGKStoreVersion = 2;
 
 @synthesize windowControllers;
 @synthesize preferencesController;
+@synthesize fullscreenWindowController;
 
 - (id)init
 {

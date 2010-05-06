@@ -10,18 +10,20 @@
 
 @class IGKLaunchController;
 @class WebHistory;
+@class IGKWindowController;
 
 @interface IGKApplicationDelegate : NSObject
 {
 	NSMutableArray *windowControllers;
 	
 	IGKLaunchController *launchController;
-	
+	IGKWindowController *fullscreenWindowController;
 	NSPersistentStoreCoordinator *persistentStoreCoordinator;
 	NSManagedObjectModel *managedObjectModel;
 	NSManagedObjectContext *managedObjectContext;
 	NSManagedObjectContext *backgroundManagedObjectContext;
 	WebHistory *history;
+	
 	
 	id preferencesController;
 	
@@ -32,7 +34,7 @@
 
 @property (readonly) NSMutableArray *windowControllers;
 @property (readonly) id preferencesController;
-
+@property (assign) IGKWindowController *fullscreenWindowController;
 - (BOOL)hasMultipleWindowControllers;
 
 - (dispatch_queue_t)backgroundQueue;
