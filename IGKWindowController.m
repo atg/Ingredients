@@ -1784,6 +1784,7 @@
 	NSMutableDictionary *fsOptions = [[NSMutableDictionary alloc] init];
 	NSInteger presentationOptions = (NSApplicationPresentationAutoHideDock|NSApplicationPresentationAutoHideMenuBar);
 	[fsOptions setObject:[NSNumber numberWithInt:presentationOptions] forKey:NSFullScreenModeApplicationPresentationOptions];
+	[fsOptions setObject:[NSNumber numberWithBool:YES] forKey:NSFullScreenModeAllScreens];
 	
 	if(isInFullscreen)
 	{
