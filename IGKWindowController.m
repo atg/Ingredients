@@ -1755,13 +1755,7 @@
 	if (userHasHiddenRightFilterBar || isNonFilterBarType)
 		[self setRightFilterBarShown:NO];
 	else
-		[self setRightFilterBarShown:rightFilterBarIsShown];		
-	
-	
-	if ([[frame dataSource] pageTitle] == nil)
-		[browserViewTitle setStringValue:@""];
-	else
-		[browserViewTitle setStringValue:[[frame dataSource] pageTitle]];
+		[self setRightFilterBarShown:rightFilterBarIsShown];
 }
 - (IBAction)toggleRightFilterBar:(id)sender
 {
