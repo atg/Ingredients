@@ -14,7 +14,7 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
 	[NSGraphicsContext saveGraphicsState];
-	CGContextSetAlpha([[NSGraphicsContext currentContext] graphicsPort], [[self window] isMainWindow] ? 1.0 : 0.7);
+	CGContextSetAlpha([[NSGraphicsContext currentContext] graphicsPort], [self isActive] ? 1.0 : 0.7);
 	
 	//NSRect rect = [self bounds];
 	//NSImage *image = [[NSImage alloc] initWithSize:rect.size];
@@ -32,6 +32,10 @@
 				hints:nil];*/
 	
 	[NSGraphicsContext restoreGraphicsState];
+}
+- (BOOL)isActive
+{
+	return [[self window] isMainWindow] || [[[self window] contentView] isInFullScreenMode];
 }
 
 @end

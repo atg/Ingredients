@@ -11,11 +11,15 @@
 
 @implementation IGKMatteFocusedGradientBox
 
+- (BOOL)isActive
+{
+	return [[self window] isMainWindow] || [[[self window] contentView] isInFullScreenMode];
+}
 - (void)drawRect:(NSRect)dirtyRect
 {
 	[super drawRect:dirtyRect];
 	
-	if (![[self window] isMainWindow])
+	if (![self isActive])
 	{
 		[[NSColor colorWithCalibratedWhite:1.0 alpha:0.2] set];
 		NSRectFillUsingOperation([self bounds], NSCompositeSourceOver);

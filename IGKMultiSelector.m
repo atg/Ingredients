@@ -31,11 +31,15 @@
 	[self setNeedsDisplay:YES];
 }
 
+- (BOOL)isActive
+{
+	return [[self window] isMainWindow] || [[[self window] contentView] isInFullScreenMode];
+}
 - (void)drawRect:(NSRect)rect
 {
 	rect = [self bounds];
 	
-	BOOL isMain = [[self window] isMainWindow];
+	BOOL isMain = [self isActive];
 	
 	NSDrawThreePartImage(rect,
 						 [NSImage imageNamed:@"MultiSel_window_frame_button_active_left"],

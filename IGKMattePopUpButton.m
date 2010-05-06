@@ -77,7 +77,7 @@
 	[image drawInRect:NSMakeRect(0, 0, rect.size.width, rect.size.height)
 			 fromRect:NSZeroRect
 			operation:NSCompositeSourceOver
-			 fraction:[[controlView window] isMainWindow] ? 1.0 : 0.75
+			 fraction:[[controlView window] isMainWindow] || [[[controlView window] contentView] isInFullScreenMode] ? 1.0 : 0.75
 	   respectFlipped:YES
 				hints:nil];
 }

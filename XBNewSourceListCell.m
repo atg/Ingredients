@@ -304,7 +304,7 @@ const float actionButtonMargin = 3.0;
 		NSRect cogRect = circleRect; //NSInsetRect(circleRect, 2.0, 2.0);
 		NSImage *cog = nil;
 		
-		if ([[controlView window] isMainWindow])
+		if ([[controlView window] isMainWindow] || [[[controlView window] contentView] isInFullScreenMode])
 		{
 			if (isHighlighted)
 			{

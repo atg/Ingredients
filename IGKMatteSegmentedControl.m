@@ -63,7 +63,7 @@
 	[image drawInRect:NSMakeRect(0, 0, rect.size.width, rect.size.height)
 			  fromRect:NSZeroRect
 			 operation:NSCompositeSourceOver
-			  fraction:[[self window] isMainWindow] ? 1.0 : 0.7
+			  fraction:[self isActive] ? 1.0 : 0.7
 	   respectFlipped:YES
 				hints:nil];
 }
@@ -192,6 +192,10 @@
 	[b closePath];
 	
 	return b;
+}
+- (BOOL)isActive
+{
+	return [[self window] isMainWindow] || [[[self window] contentView] isInFullScreenMode];
 }
 
 @end

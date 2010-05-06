@@ -70,7 +70,7 @@
 }
 - (BOOL)isActive
 {
-	return [[[self window] parentWindow] isMainWindow];
+	return [[[self window] parentWindow] isMainWindow] || [[[[self window] parentWindow] contentView] isInFullScreenMode];
 }
 
 @end

@@ -285,7 +285,7 @@ const float ToCRowHeight = 31.0;
 }
 - (BOOL)isActive
 {
-	return [[self window] isMainWindow];
+	return [[self window] isMainWindow] || [[[self window] contentView] isInFullScreenMode];
 }
 
 
