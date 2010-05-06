@@ -163,6 +163,7 @@ typedef enum {
 @property (assign) NSNumber *ui_currentModeIndex;
 
 @property (assign) BOOL shouldIndex;
+@property (assign) BOOL isInFullscreen;
 
 @property (assign) NSArray *selectedFilterDocset;
 

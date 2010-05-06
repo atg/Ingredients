@@ -61,6 +61,7 @@
 @synthesize advancedFilterPredicate;
 @synthesize selectedFilterDocset;
 @synthesize shouldIndex;
+@synthesize isInFullscreen;
 
 - (id)init
 {
