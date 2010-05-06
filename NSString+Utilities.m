@@ -47,6 +47,29 @@
 	return uuidString;
 }
 
+- (BOOL)containsString:(NSString *)s
+{
+	return !([self rangeOfString:s].location == NSNotFound);
+}
 
+- (BOOL)caseInsensitiveContainsString:(NSString *)s
+{
+	return !([self rangeOfString:s options:NSCaseInsensitiveSearch].location == NSNotFound);
+}
+
+- (BOOL)caseInsensitiveHasPrefix:(NSString *)s
+{
+	return [[self lowercaseString] hasPrefix:[s lowercaseString]];
+}
+
+- (BOOL)caseInsensitiveHasSuffix:(NSString *)s
+{
+	return [[self lowercaseString] hasSuffix:[s lowercaseString]];
+}
+
+- (BOOL)isCaseInsensitiveEqual:(NSString *)s
+{
+	[self compare:s options:NSCaseInsensitiveSearch] == NSOrderedSame;
+}
 
 @end
