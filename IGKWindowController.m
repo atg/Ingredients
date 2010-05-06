@@ -635,10 +635,10 @@
 	NSString *newTitle;
 	if(parentName)
 	{
-		newTitle = [NSString stringWithFormat:@"%@ › %@ › %@", docsetName, parentName, objectName];
+		newTitle = [NSString stringWithFormat:@"%@ %C %@ %C %@", docsetName, 0x203A, parentName, 0x203A, objectName];
 	}
 	else {
-		newTitle = [NSString stringWithFormat:@"%@ › %@", docsetName, objectName];
+		newTitle = [NSString stringWithFormat:@"%@ %C %@", docsetName, 0x203A, objectName];
 	}
 	
 	[[self window] setTitle:newTitle];
