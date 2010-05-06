@@ -14,7 +14,14 @@
 
 - (id)actionForwardee
 {
-	return [[[NSApp delegate] kitController] fullscreenWindowController];
+	BOOL isFullscreen = NO;
+	NSWindowController *controller = [[self window] windowController];
+	if (!controller || [controller isInFullscreen])
+		isFullscreen = YES;
+	
+	if (isFullscreen)
+		return [[[NSApp delegate] kitController] fullscreenWindowController];
+	return nil;
 }
 - (BOOL)respondsToSelector:(SEL)aSelector
 {
