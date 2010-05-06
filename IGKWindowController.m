@@ -572,6 +572,9 @@
 {
 	isNonFilterBarType = YES;
 	
+	// set default title
+	[[self window] setTitle:@"Documentation"];
+	
 	if ([[url scheme] isEqual:@"special"] && [[url resourceSpecifier] isEqual:@"no-selection"])
 	{
 		//[self setBrowserActive:NO];
@@ -588,10 +591,13 @@
 				
 		if (result)
 		{
+			
 			[self setBrowserActive:YES];
 			[self loadManagedObject:result tableOfContentsMask:tableOfContentsMask];
 			if (recordHistory)
 				[self recordHistoryForURL:url title:[result valueForKey:@"name"]];
+			
+			
 		}
 		
 		[self reloadTableOfContents];
@@ -620,6 +626,23 @@
 	//Load the HTML into the webview
 	[[browserWebView mainFrame] loadHTMLString:html
 									   baseURL:[[NSBundle mainBundle] resourceURL]];
+	
+	
+	// set the window title to something proper...
+	NSString *docsetName = [[mo valueForKey:@"docset"] localizedUserInterfaceName];
+	NSString *objectName = [mo valueForKey:@"name"];
+	NSString *parentName = [[mo valueForSoftKey:@"container"] valueForKey:@"name"];
+	NSString *newTitle;
+	if(parentName)
+	{
+		newTitle = [NSString stringWithFormat:@"%@ › %@ › %@", docsetName, parentName, objectName];
+	}
+	else {
+		newTitle = [NSString stringWithFormat:@"%@ › %@", docsetName, objectName];
+	}
+	
+	[[self window] setTitle:newTitle];
+	
 	
 	[self reloadRightFilterBarTable:mo transient:[generator transientObject]];
 }
@@ -903,6 +926,8 @@
 	}
 	else
 	{
+		// set default title
+		[[self window] setTitle:@"Documentation"];
 		id superview = [browserSplitViewContainer superview];
 		if (superview)
 		{
@@ -1529,6 +1554,8 @@
 	if (objectSelectionHasNotChanged && displayTypeSelectionHasNotChanged)
 		return;
 	
+	
+	
 	tableOfContentsMask = dtmask;
 	
 	[self loadManagedObject:(IGKDocRecordManagedObject *)currentSelectionObject tableOfContentsMask:[self tableOfContentsSelectedDisplayTypeMask]];
@@ -1674,6 +1701,8 @@
 		[self recordHistoryForURL:[[[frame dataSource] request] URL] title:title];
 	
 	[self setUpForWebView:sender frame:frame];
+	
+	if ([title length]) [[self window] setTitle:title];
 }
 - (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame
 {
