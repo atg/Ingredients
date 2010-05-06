@@ -15,5 +15,10 @@
 - (BOOL)startsWith:(NSString *)s;
 + (NSString *)stringByGeneratingUUID;
 
+- (BOOL)containsString:(NSString *)s;
+- (BOOL)caseInsensitiveContainsString:(NSString *)s;
+- (BOOL)caseInsensitiveHasPrefix:(NSString *)s;
+- (BOOL)caseInsensitiveHasSuffix:(NSString *)s;
+- (BOOL)isCaseInsensitiveEqual:(NSString *)s;
 
 @end
