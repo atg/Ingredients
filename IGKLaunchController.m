@@ -14,6 +14,8 @@
 @interface IGKLaunchController ()
 
 - (void)addDocsetsInPath:(NSString *)docsets toArray:(NSMutableArray *)docsetPaths set:(NSMutableSet *)docsetsSet developerDirectory:(NSString *)devDir;
+- (void)stopIndexing;
+- (void)finishedLoading;
 
 @end
 
@@ -196,6 +198,19 @@
 	if (pathReportsReceived < pathReportsExpected)
 		return;
 	
+	if (totalPathsCount == 0)
+	{
+		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+			
+			[[appController backgroundManagedObjectContext] save:nil];
+			[[appController backgroundManagedObjectContext] reset];
+			
+			[self stopIndexing];
+		});
+		
+		return;
+	}
+	
 	//Otherwise send the path count
 	NSLog(@"## Total number of paths: %d", totalPathsCount);
 	for (IGKScraper *scraper in scrapers)
@@ -236,13 +251,18 @@
 		[[appController backgroundManagedObjectContext] save:nil];
 		[[appController backgroundManagedObjectContext] reset];
 		
-		[self finishedLoading];
+		[self stopIndexing];
+	});
+}
+- (void)stopIndexing
+{
+	//Save our changes
+	[self finishedLoading];
+	
+	dispatch_async(dispatch_get_main_queue(), ^{
 		
-		dispatch_async(dispatch_get_main_queue(), ^{
-			
-			//All paths have been reported
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"IGKHasIndexedAllPaths" object:self];
-		});
+		//All paths have been reported
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"IGKHasIndexedAllPaths" object:self];
 	});
 }
 
