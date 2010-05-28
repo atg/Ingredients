@@ -201,10 +201,6 @@
 	if (totalPathsCount == 0)
 	{
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-			
-			[[appController backgroundManagedObjectContext] save:nil];
-			[[appController backgroundManagedObjectContext] reset];
-			
 			[self stopIndexing];
 		});
 		
