@@ -1220,7 +1220,7 @@
 		}
 		
 		//Otherwise, add to the array if obj contains queryString
-		if ([[obj valueForKey:@"name"] isCaseInsensitiveLike:[NSString stringWithFormat:@"*%@*", queryString]])
+		if ([[obj valueForKey:@"name"] caseInsensitiveCompare:queryString])
 		{
 			[rightFilterBarItems addObject:obj];
 		}
@@ -1392,22 +1392,6 @@
 	
 	return YES;
 }
-/*
-- (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
-{
-	if (tableView == rightFilterBarTable)
-	{
-		id currentRow = [rightFilterBarItems objectAtIndex:row];
-		
-		if ([currentRow respondsToSelector:@selector(characterAtIndex:)])
-		{
-			return 28;
-		}
-	}
-	
-	return [tableView rowHeight];
-}
- */
 
 - (IBAction)printAction:(id)sender
 {
@@ -1416,10 +1400,6 @@
 							printInfo:[NSPrintInfo sharedPrintInfo]];
 	[op setShowsPrintPanel:YES];
 	[op runOperation];
-}
-- (void)webView:(WebView *)webView decidePolicyForNewWindowAction:(NSDictionary *)actionInformation request:(NSURLRequest *)request newFrameName:(NSString *)frameName decisionListener:(id < WebPolicyDecisionListener >)listener
-{
-	NSLog(@"DECIDE POLICY");
 }
 
 - (void)rightFilterTableChangedSelection

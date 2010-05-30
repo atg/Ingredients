@@ -937,12 +937,12 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 					if (![pStr length])
 						continue;
 
-					if ([pStr isCaseInsensitiveLike:@"Available*"])
+					if ([pStr caseInsensitiveHasPrefix:@"Available"])
 					{
 						//Available in...
 						[object setValue:pStr forKey:@"availability"];
 					}
-					else if ([pStr isCaseInsensitiveLike:@"Declared in*"])
+					else if ([pStr caseInsensitiveHasPrefix:@"Declared in"])
 					{
 						//Declared in...
 						[object setValue:pStr forKey:@"declared_in_header"];
