@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-const int IGKAnnotationVersion;
+@class IGKAnnotation;
 
 @interface IGKAnnotationManager : NSObject {
 	NSMutableArray *annotations;
@@ -19,5 +19,8 @@ const int IGKAnnotationVersion;
 + (IGKAnnotationManager *)sharedAnnotationManager;
 - (BOOL)loadAnnotations;
 - (void)saveAnnotations;
+
+- (void)addAnnotation:(IGKAnnotation *)newAnnotation;
+- (NSArray *)annotationsForURL:(NSString *)URL;
 
 @end

@@ -17,6 +17,11 @@
 @synthesize annotation;
 @synthesize createdDate;
 
++ (IGKAnnotation *)createAnnotation
+{
+	return [[self alloc] initAndGenerateUUID];
+}
+
 - (id)init
 {
 	if(self = [super init])

@@ -32,6 +32,8 @@
 		751E45D61125E6CE00CD544A /* tictactoe_style.css in Resources */ = {isa = PBXBuildFile; fileRef = 751E45D51125E6CE00CD544A /* tictactoe_style.css */; };
 		752321CA1179DE5400BAEA90 /* IGKBackgroundProgressBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 752321C81179DE5400BAEA90 /* IGKBackgroundProgressBar.h */; };
 		752321CB1179DE5400BAEA90 /* IGKBackgroundProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 752321C91179DE5400BAEA90 /* IGKBackgroundProgressBar.m */; };
+		75301F6D11B2F04A006DA0E3 /* annotations.js in Sources */ = {isa = PBXBuildFile; fileRef = 75301F6C11B2F04A006DA0E3 /* annotations.js */; };
+		75301FA911B2F55D006DA0E3 /* annotations.js in Resources */ = {isa = PBXBuildFile; fileRef = 75301F6C11B2F04A006DA0E3 /* annotations.js */; };
 		754AA3FA1140267300321EAF /* AnthillBugReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 754AA3F91140267300321EAF /* AnthillBugReporter.m */; };
 		754AA3FC1140267D00321EAF /* AnthillReporter.nib in Resources */ = {isa = PBXBuildFile; fileRef = 754AA3FB1140267D00321EAF /* AnthillReporter.nib */; };
 		755F427E112323C600AA16F5 /* tictactoe.html in Resources */ = {isa = PBXBuildFile; fileRef = 755F427D112323C600AA16F5 /* tictactoe.html */; };
@@ -221,6 +223,7 @@
 		751E45D51125E6CE00CD544A /* tictactoe_style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = tictactoe_style.css; sourceTree = "<group>"; };
 		752321C81179DE5400BAEA90 /* IGKBackgroundProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKBackgroundProgressBar.h; sourceTree = "<group>"; };
 		752321C91179DE5400BAEA90 /* IGKBackgroundProgressBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKBackgroundProgressBar.m; sourceTree = "<group>"; };
+		75301F6C11B2F04A006DA0E3 /* annotations.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = annotations.js; path = HTML_Example/annotations.js; sourceTree = "<group>"; };
 		754AA3F81140267300321EAF /* AnthillBugReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnthillBugReporter.h; path = "Anthill Cocoa/AnthillBugReporter.h"; sourceTree = "<group>"; };
 		754AA3F91140267300321EAF /* AnthillBugReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnthillBugReporter.m; path = "Anthill Cocoa/AnthillBugReporter.m"; sourceTree = "<group>"; };
 		754AA3FB1140267D00321EAF /* AnthillReporter.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = AnthillReporter.nib; path = "Anthill Cocoa/AnthillReporter.nib"; sourceTree = "<group>"; };
@@ -543,6 +546,7 @@
 				756D7A8C1145BB11001C05D7 /* IngredientsCommand.m */,
 				755F427D112323C600AA16F5 /* tictactoe.html */,
 				751D2D171126F1F400403E64 /* no_selection.html */,
+				75301F6C11B2F04A006DA0E3 /* annotations.js */,
 				751E45D51125E6CE00CD544A /* tictactoe_style.css */,
 				8D1107310486CEB800E47090 /* Ingredients-Info.plist */,
 				756F9D30110BA72F00E6F291 /* IngredientsKit-Info.plist */,
@@ -818,6 +822,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75301FA911B2F55D006DA0E3 /* annotations.js in Resources */,
 				75943BDD1144085D004126E7 /* IGKPreferences.xib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				756F9D7C110BB42300E6F291 /* MainMenu.xib in Resources */,
@@ -937,6 +942,7 @@
 				75DF96EA117E350600403233 /* IGKMatteFocusedGradientBox.m in Sources */,
 				0C402C161191C691001564B5 /* NSString+Utilities.m in Sources */,
 				0C402D09119321AB001564B5 /* IGKForwardView.m in Sources */,
+				75301F6D11B2F04A006DA0E3 /* annotations.js in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

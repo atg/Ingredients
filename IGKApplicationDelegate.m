@@ -40,6 +40,11 @@ const NSInteger IGKStoreVersion = 2;
 		//Load core data
 		[self managedObjectContext];
 		
+		if (![[NSUserDefaults standardUserDefaults] objectForKey:@"IGKShowAnnotations"])
+		{
+			[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"IGKShowAnnotations"];
+		}
+		
 		launchController = [[IGKLaunchController alloc] init];
 		launchController.appController = self;
 		

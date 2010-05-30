@@ -11,6 +11,8 @@
 #import "IGKDocRecordManagedObject.h"
 #import "RegexKitLite.h"
 #import "IGKWordMembership.h"
+#import "IGKAnnotationManager.h"
+#import "IGKAnnotation.h"
 
 BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 {
@@ -99,7 +101,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 
 - (void)header
 {	
-	[outputString appendFormat:@"<!doctype html>\n<html>\n<head>\n<meta charset='utf-8'>\n<title></title>\n<link rel='stylesheet' href='main.css' type='text/css'>\n</head>\n<body>\n"];
+	[outputString appendFormat:@"<!doctype html>\n<html>\n<head>\n<meta charset='utf-8'>\n<title></title>\n<link rel='stylesheet' href='main.css' type='text/css'>\n<script type='text/javascript' charset='utf-8' src='annotations.js'></script>\n</head>\n<body>\n"];
 }
 - (void)footer
 {
@@ -483,6 +485,52 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		[outputString appendFormat:@"<p class='category'>in <strong>%@</strong></p>", cn_anchor];
 	}
 }
+- (void)html_itemAnnotations:(IGKDocRecordManagedObject *)object
+{
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:@"IGKShowAnnotations"])
+		return;
+	
+	NSURL *itemidURL = [[object objectID] URIRepresentation];
+	NSString *itemidPath = [itemidURL path];
+	
+	NSString *itemid = [itemidPath lastPathComponent];
+	itemid = [itemid stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
+	NSLog(@"itemid = %@", itemid);
+	
+	NSArray *annotations = [[IGKAnnotationManager sharedAnnotationManager] annotationsForURL:[object docURL:IGKHTMLDisplayType_All]];
+	
+	// -[<strong>NSString</strong> <strong>stringWithFormat:</strong>]
+	NSString *itemNameValue = [object valueForKey:@"name"];
+	
+	[outputString appendString:@"<div class='annotations'>\n"];
+		[outputString appendString:@"<h3><span>Annotations</span>\n"];
+			[outputString appendFormat:@"<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-%@' onclick='show_annotations(%@)'>Show</button>\n", itemid, itemid];
+			[outputString appendFormat:@"<button class='inlinebutton add-annotation-button' id='add-annotation-button-%@' onclick='add_annotation(%@)'>Add</button>\n", itemid, itemid];
+		[outputString appendString:@"</h3>\n"];
+		
+		[outputString appendFormat:@"<div class='annotations-inner' id='annotations-inner-%@'>\n", itemid];
+			[outputString appendFormat:@"<div class='add-annotation-box' id='add-annotation-box-%@'>\n", itemid];
+				[outputString appendFormat:@"<p class='annotation-field'><span class='key'>On</span> <span class='value'>%@</span></p>\n", itemNameValue];
+				[outputString appendFormat:@"<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='%@'></p><br>\n", NSFullUserName()];
+				[outputString appendString:@"<p><textarea rows='10' cols='10'></textarea></p>\n"];
+				
+				[outputString appendString:@"<p><button class='inlinebutton create-public-button'>Cancel</button> "];
+				[outputString appendString:@"<button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> "];
+				[outputString appendString:@"<button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>\n"];
+			[outputString appendString:@"</div>\n"];
+			
+			for (IGKAnnotation *a in annotations)
+			{
+				[outputString appendString:@"<div class='annotation'>\n"];
+				[outputString appendFormat:@"<p class='annotation-description'>%@</p>\n", [a annotation]];
+				[outputString appendFormat:@"<p class='submitter'>%@</p>\n", [a submitter_name]];
+				[outputString appendString:@"</div>\n"];
+			}
+		[outputString appendString:@"</div>\n"];
+	[outputString appendString:@"</div>\n"];
+	
+	[outputString appendString:@"<hr>\n"];
+}
 - (void)html_method:(IGKDocRecordManagedObject *)object hasParameters:(BOOL)hasParameters
 {
 	[outputString appendFormat:@"<a name='%@.%@'></a>\n", [object valueForKey:@"name"], [object URLComponentExtension]];
@@ -525,6 +573,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		[outputString appendString:@"\t\t<hr>\n\n"];
 	}
 	
+	[self html_itemAnnotations:object];
 	
 	[self html_metadataTable:object];
 	

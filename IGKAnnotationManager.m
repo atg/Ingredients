@@ -68,13 +68,27 @@ const int IGKAnnotationVersion = 1;
 	
 }
 
-- (IGKAnnotation *)addAnnotation
+- (void)addAnnotation:(IGKAnnotation *)newAnnotation
 {
-	IGKAnnotation *newAnnotation = [[IGKAnnotation alloc] initAndGenerateUUID];
 	[annotations addObject:newAnnotation];
 	[self saveAnnotations];
+}
+
+- (NSArray *)annotationsForURL:(NSString *)URL
+{
+	//FIXME: This could be made faster by using a pregenerated dictionary of URLs -> sorted annotation arrays
 	
-	return newAnnotation;
+	NSMutableArray *subset = [[NSMutableArray alloc] init];
+	
+	for (IGKAnnotation *a in annotations)
+	{
+		if ([[a docurl] isCaseInsensitiveEqual:URL])
+		{
+			[subset addObject:a];
+		}
+	}
+	
+	return [subset sortedArrayUsingSelector:@selector(compare:)];
 }
 
 #pragma mark Singleton
