@@ -1409,6 +1409,19 @@
 }
  */
 
+- (IBAction)printAction:(id)sender
+{
+	NSPrintOperation *op = [NSPrintOperation
+							printOperationWithView:[[[browserWebView mainFrame] frameView] documentView]
+							printInfo:[NSPrintInfo sharedPrintInfo]];
+	[op setShowsPrintPanel:YES];
+	[op runOperation];
+}
+- (void)webView:(WebView *)webView decidePolicyForNewWindowAction:(NSDictionary *)actionInformation request:(NSURLRequest *)request newFrameName:(NSString *)frameName decisionListener:(id < WebPolicyDecisionListener >)listener
+{
+	NSLog(@"DECIDE POLICY");
+}
+
 - (void)rightFilterTableChangedSelection
 {
 	NSInteger selind = [rightFilterBarTable selectedRow];
@@ -1433,7 +1446,7 @@
 	{
 		NSString *href = [kvobject valueForKey:@"href"];
 		
-		if ([href isLike:@"#*"])
+		if ([href hasPrefix:@"#"])
 		{
 			[browserWebView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"window.location.hash = '%@';", href]];
 		}

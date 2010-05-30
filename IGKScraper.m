@@ -49,8 +49,10 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 {
 	//Get the info.plist
 	NSDictionary *infoPlist = [[NSDictionary alloc] initWithContentsOfURL:[docsetURL URLByAppendingPathComponent:@"Contents/Info.plist"]];
+	NSLog(@"Finding paths for %@", docsetURL);
 	NSString *bundleIdentifier = [infoPlist objectForKey:@"CFBundleIdentifier"];
-
+	
+	
 	//Reject Xcode documentation
 	if (!bundleIdentifier || [bundleIdentifier isEqual:@"com.apple.adc.documentation.AppleXcode.DeveloperTools"])
 		return NO;
@@ -157,6 +159,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		return 0;
 	
 	unsigned count = 0;
+	NSLog(@"subpaths = %d for %@", [subpaths count], docsetURL);
 	for (NSString *subpath in subpaths)
 	{
 		//Ignore non-html files
@@ -170,7 +173,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			[lastPathComponent isEqual:@"index_of_book.html"] ||
 			[lastPathComponent isEqual:@"RevisionHistory.html"] ||
 			[lastPathComponent isEqual:@"revision_history.html"] ||
-			[subpath isLike:@"*RefUpdate/*"])
+			[subpath containsString:@"RefUpdate/"])
 		{
 			continue;
 		}
@@ -207,6 +210,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		
 		[paths addObject:subpath];
 	}
+	NSLog(@"\t Found paths = %d", [paths count]);
 	
 	return [paths count];
 }
@@ -540,7 +544,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 							 [itemType isEqual:@"tag"]) //TODO: An item type of "tag" should really be a CEnumRecord entity
 					{
 						//This is such a hacky way to find out if an element is a notification, but it seems the most accurate way
-						BOOL isNotification = ([itemType isEqual:@"data"] && [itemName isLike:@"*Notification"]);
+						BOOL isNotification = ([itemType isEqual:@"data"] && [itemName hasSuffix:@"Notification"]);
 						if (isNotification)
 						{
 							if (!notificationEntity)
@@ -721,7 +725,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	NSMutableArray *fullApplecodePatterns = [[NSMutableArray alloc] init];
 	for (NSString *applecode in applecodes)
 	{
-		[fullApplecodePatterns addObject:[NSString stringWithFormat:@"//apple_ref/%@*", applecode]];
+		[fullApplecodePatterns addObject:[NSString stringWithFormat:@"//apple_ref/%@", applecode]];
 	}
 	
 	//Search through all anchors in the document, and record their parent elements
@@ -740,12 +744,12 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		//(instm|clm|intfm|intfcm|intfp|instp)
 		for (NSString *fullApplecodePattern in fullApplecodePatterns)
 		{
-			if ([strval isLike:fullApplecodePattern])
+			if ([strval hasPrefix:fullApplecodePattern])
 			{
 				NSString *methodName = [transientObject valueForKey:@"name"];
 				
 				//This is a bit ropey
-				if ([strval isLike:[@"*" stringByAppendingString:methodName]])
+				if ([strval hasSuffix:methodName])
 				{					
 					[containersSet addObject:[a parent]];
 					
@@ -786,9 +790,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		NSString *strval = [el commentlessStringValue];
 		
 		//(instm|clm|intfm|intfcm|intfp|instp)
-		if ([strval isLike:@"//apple_ref/occ/instm*"] || [strval isLike:@"//apple_ref/occ/clm*"] ||
-			[strval isLike:@"//apple_ref/occ/intfm*"] || [strval isLike:@"//apple_ref/occ/intfcm*"] ||
-			[strval isLike:@"//apple_ref/occ/intfp*"] || [strval isLike:@"//apple_ref/occ/instp*"])
+		if ([strval hasPrefix:@"//apple_ref/occ/instm"] || [strval hasPrefix:@"//apple_ref/occ/clm"] ||
+			[strval hasPrefix:@"//apple_ref/occ/intfm"] || [strval hasPrefix:@"//apple_ref/occ/intfcm"] ||
+			[strval hasPrefix:@"//apple_ref/occ/intfp"] || [strval hasPrefix:@"//apple_ref/occ/instp"])
 		{
 			NSString *methodName = [transientObject valueForKey:@"name"];
 			
@@ -1280,7 +1284,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		 </ul>
 		*/
 		//Old
-		if (i + 1 < count && [nName isEqual:@"h5"] && [[[[n commentlessStringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString] isLike:@"*sample code*"])
+		if (i + 1 < count && [nName isEqual:@"h5"] && [[[[n commentlessStringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString] containsString:@"sample code"])
 		{			
 			parseSamplecodeprojects(i + 1, children);
 		}
@@ -1578,15 +1582,15 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			BOOL lastWasPropertyTrue = lastWasProperty;
 			lastWasProperty = NO;
 			
-			if ([strval isLike:@"//apple_ref/occ/intfp*"] || [strval isLike:@"//apple_ref/occ/instp*"])
+			if ([strval hasPrefix:@"//apple_ref/occ/intfp"] || [strval hasPrefix:@"//apple_ref/occ/instp"])
 			{
 				lastWasProperty = YES;
 				return @"ObjCProperty";
 			}
 			
 			
-			BOOL isInstanceMethod = [strval isLike:@"//apple_ref/occ/instm*"] || [strval isLike:@"//apple_ref/occ/intfm*"];
-			BOOL isClassMethod = [strval isLike:@"//apple_ref/occ/clm*"] || [strval isLike:@"//apple_ref/occ/intfcm*"];
+			BOOL isInstanceMethod = [strval hasPrefix:@"//apple_ref/occ/instm"] || [strval hasPrefix:@"//apple_ref/occ/intfm"];
+			BOOL isClassMethod = [strval hasPrefix:@"//apple_ref/occ/clm"] || [strval hasPrefix:@"//apple_ref/occ/intfcm"];
 			if (isInstanceMethod || isClassMethod)
 			{
 				if (lastWasPropertyTrue)
@@ -1600,7 +1604,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 				return @"ObjCMethod_Class";
 			}
 			
-			if ([strval isLike:@"//apple_ref/c/data*"])
+			if ([strval hasPrefix:@"//apple_ref/c/data"])
 				return @"ObjCNotification";
 						
 			return nil;
@@ -1641,7 +1645,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		
 		//If this is a notification but the name does not end in 'Notification' then it's some other kind of data - ignore it
 		//TODO: When we get around to handling C constants this will need to be fixed so it's not just ignored
-		if ([entityName isEqual:@"ObjCNotification"] && ![[newItem valueForKey:@"name"] isLike:@"*Notification"])
+		if ([entityName isEqual:@"ObjCNotification"] && ![[newItem valueForKey:@"name"] hasSuffix:@"Notification"])
 		{
 			continue;
 		}

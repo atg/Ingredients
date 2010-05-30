@@ -57,9 +57,9 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 - (NSString *)reformatCode:(NSString *)code
 {	
 	//I totally just made this word up
-	BOOL isStructurous = [code isLike:@"*typedef enum*"] || [code isLike:@"*enum*"] ||
-	                     [code isLike:@"*typedef struct*"] || [code isLike:@"*struct*"] ||
-	                     [code isLike:@"*typedef union*"] || [code isLike:@"*union*"];
+	BOOL isStructurous = [code containsString:@"typedef enum"] || [code containsString:@"enum"] ||
+	                     [code containsString:@"typedef struct"] || [code containsString:@"struct"] ||
+	                     [code containsString:@"typedef union"] || [code containsString:@"union"];
 	
 	//If this type is not structurous, don't do any reformatting
 	if (!isStructurous)
@@ -99,7 +99,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 
 - (void)header
 {	
-	[outputString appendFormat:@"<!doctype html>\n<html>\n<head>\n<meta charset='utf-8'>\n<title></title>\n<link rel='stylesheet' href='main.css' type='text/css' media='screen'>\n</head>\n<body>\n"];
+	[outputString appendFormat:@"<!doctype html>\n<html>\n<head>\n<meta charset='utf-8'>\n<title></title>\n<link rel='stylesheet' href='main.css' type='text/css'>\n</head>\n<body>\n"];
 }
 - (void)footer
 {
@@ -344,7 +344,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		ingrcode = @"function";
 	else if ([applecode isEqual:@"econst"] || [applecode isEqual:@"data"] || [applecode isEqual:@"tag"])
 	{
-		if ([applecode isEqual:@"data"] && [itemName isLike:@"*Notification"])
+		if ([applecode isEqual:@"data"] && [itemName hasSuffix:@"Notification"])
 			ingrcode = @"notification";
 		else
 			ingrcode = @"constant";

@@ -49,12 +49,30 @@
 
 - (BOOL)containsString:(NSString *)s
 {
-	return !([self rangeOfString:s].location == NSNotFound);
+	//BOOL isLike = [self isLike:[NSString stringWithFormat:@"*%@*", s]];
+	NSRange r = [self rangeOfString:s];
+	//NSLog(@"r = %@", NSStringFromRange(r));
+	//NSLog(@"NSNotFound = %lu", NSNotFound);
+	//NSLog(@"r.location != NSNotFound = %@", r.location != NSNotFound);
+	BOOL contains = r.location != NSNotFound;
+	
+	/*if (contains != isLike)
+	{
+		NSLog(@"=== DIFFERENCE ===");
+		NSLog(@"\t self = '%@'", self);
+		NSLog(@"\t s = '%@'", s);
+		NSLog(@"\t contains = %d", contains);
+		NSLog(@"\t isLike = %d", isLike);
+	}*/
+	
+	return contains;
 }
 
 - (BOOL)caseInsensitiveContainsString:(NSString *)s
 {
-	return !([self rangeOfString:s options:NSCaseInsensitiveSearch].location == NSNotFound);
+	NSRange r = [self rangeOfString:s options:NSCaseInsensitiveSearch];
+	BOOL contains = r.location != NSNotFound;
+	return contains;
 }
 
 - (BOOL)caseInsensitiveHasPrefix:(NSString *)s
@@ -69,7 +87,7 @@
 
 - (BOOL)isCaseInsensitiveEqual:(NSString *)s
 {
-	[self compare:s options:NSCaseInsensitiveSearch] == NSOrderedSame;
+	return [self compare:s options:NSCaseInsensitiveSearch] == NSOrderedSame;
 }
 
 @end
