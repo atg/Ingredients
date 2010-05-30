@@ -200,11 +200,6 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	else if ([[transientObject entity] isKindOfEntity:ObjCMethod])
 	{
 		[outputString appendString:@"<a name='overview'>"];
-		//[outputString appendString:@"<div class='overview'>"];
-		
-		//[outputString appendFormat:@"<h1>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];
-		//[outputString appendString:@"</div>"];
-		
 		[outputString appendString:@"<div class='methods single'>\n"];
 		
 		[self html_method:transientObject hasParameters:YES];
@@ -477,13 +472,28 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	[outputString appendString:@"</div>"];
 }
 
+- (void)html_itemCategory:(IGKDocRecordManagedObject *)object
+{
+	// <p class="category">in <strong>iPhone</strong> &rsaquo; <strong>Appkit</strong> &rsaquo; <strong>NSString</strong></p>
+	if ([object hasKey:@"container"])
+	{
+		NSString *cn = [[object valueForKey:@"container"] valueForKey:@"name"];
+		NSString *cn_anchor = [NSString stringWithFormat:@"<a href='http://ingr-link/%@' class='semistealth'><span>%@</span></a>", cn, cn];
+		
+		[outputString appendFormat:@"<p class='category'>in <strong>%@</strong></p>", cn_anchor];
+	}
+}
 - (void)html_method:(IGKDocRecordManagedObject *)object hasParameters:(BOOL)hasParameters
 {
 	[outputString appendFormat:@"<a name='%@.%@'></a>\n", [object valueForKey:@"name"], [object URLComponentExtension]];
 	[outputString appendFormat:@"\t<div class='method'>\n"];
 	
 	if ([object valueForKey:@"name"])
+	{
 		[outputString appendFormat:@"\t\t<h2>%@</h2>\n", [self escape:[object valueForKey:@"name"]]];
+		if (object == transientObject)
+			[self html_itemCategory:object];
+	}
 	
 	BOOL isnotif = [object isKindOfEntityNamed:@"ObjCNotification"];
 	
@@ -501,7 +511,6 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	{
 		needsFinalHR = YES;
 		[outputString appendFormat:@"\t\t<hr>\n\n\t\t<div class='discussion'>%@</div>\n\n", [self addHyperlinks:[object valueForKey:@"discussion"]]];
-		
 	}
 	
 	if ([object valueForKey:@"codesample"])

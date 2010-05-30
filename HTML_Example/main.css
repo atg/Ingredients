@@ -14,6 +14,14 @@ code
 
 /* @group Tasks */
 
+.category
+{
+	margin-top: -4px;
+	text-indent: 20px;
+	font-style: italic;
+	font-size: 13px;
+}
+
 .methods.tasks h2
 {
 	font-size: 17px;
