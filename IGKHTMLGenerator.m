@@ -100,8 +100,12 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 }
 
 - (void)header
-{	
-	[outputString appendFormat:@"<!doctype html>\n<html>\n<head>\n<meta charset='utf-8'>\n<title></title>\n<link rel='stylesheet' href='main.css' type='text/css'>\n<script type='text/javascript' charset='utf-8' src='annotations.js'></script>\n</head>\n<body>\n"];
+{
+	NSError *err = nil;
+	NSString *annotationsGlue = [[NSString alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"annotations" ofType:@"js"] encoding:NSUTF8StringEncoding error:&err];
+	
+	[outputString appendFormat:@"<!doctype html>\n<html>\n<head>\n<meta charset='utf-8'>\n<title></title>\n<link rel='stylesheet' href='main.css' type='text/css'>\n<script type='text/javascript' charset='utf-8'>%@</script>\n</head>\n<body>\n", annotationsGlue];
+	//NSLog(@"outputstring = %@", outputString);
 }
 - (void)footer
 {
@@ -467,7 +471,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	[outputString appendString:@"<div class='methods'>"];
 	NSArray *bindings = [[object valueForKey:@"bindings"] allObjects];
-	NSLog(@"bindings = %@", bindings);
+	//NSLog(@"bindings = %@", bindings);
 	[outputString appendString:@"</div>"];
 	
 	
@@ -495,7 +499,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	NSString *itemid = [itemidPath lastPathComponent];
 	itemid = [itemid stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
-	NSLog(@"itemid = %@", itemid);
+	//NSLog(@"itemid = %@", itemid);
 	
 	NSArray *annotations = [[IGKAnnotationManager sharedAnnotationManager] annotationsForURL:[object docURL:IGKHTMLDisplayType_All]];
 	
@@ -504,8 +508,9 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	[outputString appendString:@"<div class='annotations'>\n"];
 		[outputString appendString:@"<h3><span>Annotations</span>\n"];
-			[outputString appendFormat:@"<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-%@' onclick='show_annotations(%@)'>Show</button>\n", itemid, itemid];
-			[outputString appendFormat:@"<button class='inlinebutton add-annotation-button' id='add-annotation-button-%@' onclick='add_annotation(%@)'>Add</button>\n", itemid, itemid];
+			NSString *hideshowButtonStyle = [annotations count] ? @"" : @"display:none";
+			[outputString appendFormat:@"<button class='inlinebutton small hide-show-annotations-button' id='hide-show-annotations-button-%@' style='%@' onclick='show_annotations(\"%@\")'>Show</button>\n", itemid, hideshowButtonStyle, itemid];
+			[outputString appendFormat:@"<button class='inlinebutton small add-annotation-button' id='add-annotation-button-%@' onclick='add_annotation(\"%@\");'>Add</button>\n", itemid, itemid];
 		[outputString appendString:@"</h3>\n"];
 		
 		[outputString appendFormat:@"<div class='annotations-inner' id='annotations-inner-%@'>\n", itemid];
@@ -514,7 +519,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 				[outputString appendFormat:@"<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='%@'></p><br>\n", NSFullUserName()];
 				[outputString appendString:@"<p><textarea rows='10' cols='10'></textarea></p>\n"];
 				
-				[outputString appendString:@"<p><button class='inlinebutton create-public-button'>Cancel</button> "];
+				[outputString appendString:@"<p class='clearing'>"];//<button class='inlinebutton create-public-button'>Cancel</button> "];
 				[outputString appendString:@"<button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> "];
 				[outputString appendString:@"<button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>\n"];
 			[outputString appendString:@"</div>\n"];

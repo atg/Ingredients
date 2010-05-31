@@ -1,0 +1,1320 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title></title>
+<link rel='stylesheet' href='main.css' type='text/css'>
+<script type='text/javascript' charset='utf-8'>function set_show_button_title(n, title)
+{
+    var button = document.getElementById("hide-show-annotations-button-" + String(n));
+    button.innerHTML = title;
+}
+
+function show_annotations(n)
+{
+    var box = document.getElementById("annotations-inner-" + String(n));
+    if (box.style.display == 'none' || box.style.display == '')
+    {
+        box.style.display = 'block';
+        set_show_button_title(n, 'Hide');
+    }
+    else
+    {
+        box.style.display = 'none';
+        set_show_button_title(n, 'Show');
+    }
+}
+
+
+function add_annotation(n)
+{
+    alert("ADD AN ANNOTATION");
+    var box = document.getElementById("annotations-inner-" + String(n));
+    var addBox = document.getElementById("add-annotation-box-" + String(n));
+
+    var boxIsVisible = box.style.display != 'none' && box.style.display != '';
+    var addBoxIsVisible = addBox.style.display != 'none' && addBox.style.display != '';
+
+    if (boxIsVisible && addBoxIsVisible)
+    {
+        //Hide addBox
+        addBox.style.display = 'none';
+    }
+    else
+    {
+        //Show addBox
+        box.style.display = 'block';
+        addBox.style.display = 'block';
+
+        set_show_button_title(n, 'Hide');
+    }
+}
+function create_annotation(n, isPublic)
+{
+    var button = document.getElementById("hide-show-annotations-button-" + String(n));
+    button.style.display = 'block';
+
+    var docURLField = document.getElementById("annotation-url-" + String(n));
+
+    var annotationTextArea = document.getElementById("annotation-text-area-" + String(n));
+
+    if (!annotationTextArea.value)
+    {
+        window.windowScriptController.beep();
+        return;
+    }
+
+    window.windowScriptController.createAnnotation(docURLField.value, annotationTextArea.value, isPublic);
+}</script>
+</head>
+<body>
+<a name='overview'></a>
+<div class='methods overview'>
+<h1>NSStream</h1><p><a href='http://ingr-link/NSStream' class='semistealth'><span>NSStream</span></a> is an abstract class for objects representing streams. Its interface is common to all Cocoa stream classes, including its concrete subclasses <a href='http://ingr-link/NSInputStream' class='semistealth'><span>NSInputStream</span></a> and <a href='http://ingr-link/NSOutputStream' class='semistealth'><span>NSOutputStream</span></a>.
+</p><p><a href='http://ingr-link/NSStream' class='semistealth'><span>NSStream</span></a> objects provide an easy way to read and write data to and from a variety of media in a device-independent way. You can create stream objects for data located in memory, in a file, or on a network (using sockets), and you can use stream objects without loading all of the data into memory at once.
+</p><p>By default, <a href='http://ingr-link/NSStream' class='semistealth'><span>NSStream</span></a> instances that are not file-based are non-seekable, one-way streams (although custom seekable subclasses are possible). Once the data has been provided or consumed, the data cannot be retrieved from the stream.
+</p>		<table class='info'>
+			<tr>
+				<th>Declared in</th>
+				<th>Superclass</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='1'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+				<td rowspan='1'><code><a href='http://ingr-doc/mac/10.6/all/NSObject.class' class='stealth'>NSObject</a></code></td>
+			</tr>
+		</table>
+</div>
+<a name='tasks'></a>
+<div class='methods tasks'>
+<h2>Creating Streams</h2>
+<ul>
+<li><code><a href='#getStreamsToHost:port:inputStream:outputStream:.class-method' class='stealth'>+ getStreamsToHost:port:inputStream:outputStream:</a></code></li>
+</ul>
+<h2>Configuring Streams</h2>
+<ul>
+<li><code><a href='#propertyForKey:.instance-method' class='stealth'>- propertyForKey:</a></code></li>
+<li><code><a href='#setProperty:forKey:.instance-method' class='stealth'>- setProperty:forKey:</a></code></li>
+<li><code><a href='#delegate.instance-method' class='stealth'>- delegate</a></code></li>
+<li><code><a href='#setDelegate:.instance-method' class='stealth'>- setDelegate:</a></code></li>
+</ul>
+<h2>Using Streams</h2>
+<ul>
+<li><code><a href='#open.instance-method' class='stealth'>- open</a></code></li>
+<li><code><a href='#close.instance-method' class='stealth'>- close</a></code></li>
+</ul>
+<h2>Managing Run Loops</h2>
+<ul>
+<li><code><a href='#scheduleInRunLoop:forMode:.instance-method' class='stealth'>- scheduleInRunLoop:forMode:</a></code></li>
+<li><code><a href='#removeFromRunLoop:forMode:.instance-method' class='stealth'>- removeFromRunLoop:forMode:</a></code></li>
+</ul>
+<h2>Getting Stream Information</h2>
+<ul>
+<li><code><a href='#streamStatus.instance-method' class='stealth'>- streamStatus</a></code></li>
+<li><code><a href='#streamError.instance-method' class='stealth'>- streamError</a></code></li>
+</ul>
+</div>
+<a name='properties'></a>
+<div class='methods' class='properties'>
+</div><a name='methods'></a>
+<div class='methods'>
+<a name='close.instance-method'></a>
+	<div class='method'>
+		<h2>close</h2>
+		<div class='description'><p>Closes the receiver.
+</p></div>
+		<p class='prototype'><code>- (void)close
+</code></p>
+		<hr>
+
+		<div class='discussion'><p>Closing the stream terminates the flow of bytes and releases system resources that were reserved for the stream when it was opened. If the stream has been scheduled on a run loop, closing the stream implicitly removes the stream from the run loop. A stream that is closed can still be queried for its properties.
+</p></div>
+
+		<hr>
+
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C26' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C26)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C26' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C26);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C26'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C26'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>close</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+				<th>See also</th>
+				<th>Sample projects</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='3'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='3'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+				<td><code><a href='#open.instance-method' class='stealth'>- open</a></code></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/CocoaEcho' class='stealth'>CocoaEcho</a></code></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/CocoaSOAP' class='stealth'>CocoaSOAP</a></code></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/PictureSharingBrowser' class='stealth'>PictureSharingBrowser</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='delegate.instance-method'></a>
+	<div class='method'>
+		<h2>delegate</h2>
+		<div class='description'><p>Returns the receiver’s delegate.
+</p></div>
+		<p class='prototype'><code>- (id < <a href='http://ingr-link/NSStreamDelegate' class='semistealth'><span>NSStreamDelegate</span></a> >)delegate
+</code></p>
+		<div class='in-out-vals'>
+			<p class='returns'><strong>Returns</strong> The receiver’s delegate. The delegate must implement the <a href='http://ingr-link/NSStreamDelegate' class='semistealth'><span>NSStreamDelegate</span></a> Protocol.
+</p>
+		</div>
+		<hr>
+
+		<div class='discussion'><p>By default, a stream is its own delegate, and subclasses of <a href='http://ingr-link/NSInputStream' class='semistealth'><span>NSInputStream</span></a> and <a href='http://ingr-link/NSOutputStream' class='semistealth'><span>NSOutputStream</span></a> must maintain this contract.
+</p></div>
+
+		<hr>
+
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C32' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C32)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C32' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C32);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C32'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C32'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>delegate</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+				<th>See also</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='1'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='1'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+				<td><code><a href='#setDelegate:.instance-method' class='stealth'>- setDelegate:</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='getStreamsToHost:port:inputStream:outputStream:.class-method'></a>
+	<div class='method'>
+		<h2>getStreamsToHost:port:inputStream:outputStream:</h2>
+		<div class='description'><p>Creates and returns by reference an <a href='http://ingr-link/NSInputStream' class='semistealth'><span>NSInputStream</span></a> object and <a href='http://ingr-link/NSOutputStream' class='semistealth'><span>NSOutputStream</span></a> object for a socket connection with a given host on a given port.
+</p></div>
+		<p class='prototype'><code>+ (void)getStreamsToHost:(<a href='http://ingr-link/NSHost' class='semistealth'><span>NSHost</span></a> *)host port:(<a href='http://ingr-link/NSInteger' class='semistealth'><span>NSInteger</span></a>)port inputStream:(<a href='http://ingr-link/NSInputStream' class='semistealth'><span>NSInputStream</span></a> **)inputStream outputStream:(<a href='http://ingr-link/NSOutputStream' class='semistealth'><span>NSOutputStream</span></a> **)outputStream
+</code></p>
+		<div class='in-out-vals'>
+			<p class='parameter'><strong>host</strong> The host to which to connect.
+</p>
+			<p class='parameter'><strong>port</strong> The port to connect to on host.
+</p>
+			<p class='parameter'><strong>inputStream</strong> Upon return, contains the input stream. If nil is passed, the stream object is not created.
+</p>
+			<p class='parameter'><strong>outputStream</strong> Upon return, contains the output stream. If nil is passed, the stream object is not created.
+</p>
+		</div>
+		<hr>
+
+		<div class='discussion'><p>If neither port nor host is properly specified, no socket connection is made.
+</p></div>
+
+		<hr>
+
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C20' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C20)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C20' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C20);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C20'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C20'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>getStreamsToHost:port:inputStream:outputStream:</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='1'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='1'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='open.instance-method'></a>
+	<div class='method'>
+		<h2>open</h2>
+		<div class='description'><p>Opens the receiving stream.
+</p></div>
+		<p class='prototype'><code>- (void)open
+</code></p>
+		<hr>
+
+		<div class='discussion'><p>A stream must be created before it can be opened. Once opened, a stream cannot be closed and reopened.
+</p></div>
+
+		<hr>
+
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C35' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C35)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C35' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C35);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C35'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C35'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>open</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+				<th>See also</th>
+				<th>Sample projects</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='3'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='3'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+				<td><code><a href='#close.instance-method' class='stealth'>- close</a></code></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/CocoaEcho' class='stealth'>CocoaEcho</a></code></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/CocoaSOAP' class='stealth'>CocoaSOAP</a></code></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/PictureSharingBrowser' class='stealth'>PictureSharingBrowser</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='propertyForKey:.instance-method'></a>
+	<div class='method'>
+		<h2>propertyForKey:</h2>
+		<div class='description'><p>Returns the receiver’s property for a given key.
+</p></div>
+		<p class='prototype'><code>- (id)propertyForKey:(<a href='http://ingr-link/NSString' class='semistealth'><span>NSString</span></a> *)key
+</code></p>
+		<div class='in-out-vals'>
+			<p class='parameter'><strong>key</strong> The key for one of the receiver's properties. See “Constants” for a description of the available property-key constants and associated values.
+</p>
+			<p class='returns'><strong>Returns</strong> The receiver’s property for the key key.
+</p>
+		</div>
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C41' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C41)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C41' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C41);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C41'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C41'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>propertyForKey:</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+				<th>See also</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='1'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='1'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+				<td><code><a href='#setProperty:forKey:.instance-method' class='stealth'>- setProperty:forKey:</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='removeFromRunLoop:forMode:.instance-method'></a>
+	<div class='method'>
+		<h2>removeFromRunLoop:forMode:</h2>
+		<div class='description'><p>Removes the receiver from a given run loop running in a given mode.
+</p></div>
+		<p class='prototype'><code>- (void)removeFromRunLoop:(<a href='http://ingr-link/NSRunLoop' class='semistealth'><span>NSRunLoop</span></a> *)aRunLoop forMode:(<a href='http://ingr-link/NSString' class='semistealth'><span>NSString</span></a> *)mode
+</code></p>
+		<div class='in-out-vals'>
+			<p class='parameter'><strong>aRunLoop</strong> The run loop on which the receiver was scheduled.
+</p>
+			<p class='parameter'><strong>mode</strong> The mode for the run loop.
+</p>
+		</div>
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C45' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C45)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C45' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C45);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C45'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C45'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>removeFromRunLoop:forMode:</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+				<th>See also</th>
+				<th>Sample projects</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='1'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='1'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+				<td><code><a href='#scheduleInRunLoop:forMode:.instance-method' class='stealth'>- scheduleInRunLoop:forMode:</a></code></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/CocoaEcho' class='stealth'>CocoaEcho</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='scheduleInRunLoop:forMode:.instance-method'></a>
+	<div class='method'>
+		<h2>scheduleInRunLoop:forMode:</h2>
+		<div class='description'><p>Schedules the receiver on a given run loop in a given mode.
+</p></div>
+		<p class='prototype'><code>- (void)scheduleInRunLoop:(<a href='http://ingr-link/NSRunLoop' class='semistealth'><span>NSRunLoop</span></a> *)aRunLoop forMode:(<a href='http://ingr-link/NSString' class='semistealth'><span>NSString</span></a> *)mode
+</code></p>
+		<div class='in-out-vals'>
+			<p class='parameter'><strong>aRunLoop</strong> The run loop on which to schedule the receiver.
+</p>
+			<p class='parameter'><strong>mode</strong> The mode for the run loop.
+</p>
+		</div>
+		<hr>
+
+		<div class='discussion'><p>Unless the client is polling the stream, it is responsible for ensuring that the stream is scheduled on at least one run loop and that at least one of the run loops on which the stream is scheduled is being run.
+</p></div>
+
+		<hr>
+
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C51' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C51)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C51' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C51);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C51'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C51'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>scheduleInRunLoop:forMode:</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+				<th>See also</th>
+				<th>Sample projects</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='3'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='3'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+				<td><code><a href='#removeFromRunLoop:forMode:.instance-method' class='stealth'>- removeFromRunLoop:forMode:</a></code></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/CocoaEcho' class='stealth'>CocoaEcho</a></code></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/CocoaSOAP' class='stealth'>CocoaSOAP</a></code></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/PictureSharingBrowser' class='stealth'>PictureSharingBrowser</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='setDelegate:.instance-method'></a>
+	<div class='method'>
+		<h2>setDelegate:</h2>
+		<div class='description'><p>Sets the receiver’s delegate.
+</p></div>
+		<p class='prototype'><code>- (void)setDelegate:(id < <a href='http://ingr-link/NSStreamDelegate' class='semistealth'><span>NSStreamDelegate</span></a> >)delegate
+</code></p>
+		<div class='in-out-vals'>
+			<p class='parameter'><strong>delegate</strong> The delegate for the receiver.
+</p>
+		</div>
+		<hr>
+
+		<div class='discussion'><p>By default, a stream is its own delegate, and subclasses of <a href='http://ingr-link/NSInputStream' class='semistealth'><span>NSInputStream</span></a> and <a href='http://ingr-link/NSOutputStream' class='semistealth'><span>NSOutputStream</span></a> must maintain this contract. If you override this method in a subclass, passing nil must restore the receiver as its own delegate. Delegates are not retained.
+</p><p>To learn about delegates and delegation, read "“Delegation” in Cocoa Fundamentals Guide" in Cocoa Fundamentals Guide.
+</p></div>
+
+		<hr>
+
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C59' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C59)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C59' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C59);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C59'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C59'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>setDelegate:</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+				<th>See also</th>
+				<th>Sample projects</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='3'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='3'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+				<td><code><a href='#delegate.instance-method' class='stealth'>- delegate</a></code></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/CocoaEcho' class='stealth'>CocoaEcho</a></code></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/CocoaSOAP' class='stealth'>CocoaSOAP</a></code></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/PictureSharingBrowser' class='stealth'>PictureSharingBrowser</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='setProperty:forKey:.instance-method'></a>
+	<div class='method'>
+		<h2>setProperty:forKey:</h2>
+		<div class='description'><p>Attempts to set the value of a given property of the receiver and returns a Boolean value that indicates whether the value is accepted by the receiver.
+</p></div>
+		<p class='prototype'><code>- (<a href='http://ingr-link/BOOL' class='semistealth'><span>BOOL</span></a>)setProperty:(id)property forKey:(<a href='http://ingr-link/NSString' class='semistealth'><span>NSString</span></a> *)key
+</code></p>
+		<div class='in-out-vals'>
+			<p class='parameter'><strong>property</strong> The value for key.
+</p>
+			<p class='parameter'><strong>key</strong> The key for one of the receiver's properties. See “Constants” for a description of the available property-key constants and expected values.
+</p>
+			<p class='returns'><strong>Returns</strong> <a href='http://ingr-link/YES' class='semistealth'><span>YES</span></a> if the value is accepted by the receiver, otherwise <a href='http://ingr-link/NO' class='semistealth'><span>NO</span></a>.
+</p>
+		</div>
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C66' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C66)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C66' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C66);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C66'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C66'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>setProperty:forKey:</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+				<th>See also</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='1'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='1'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+				<td><code><a href='#propertyForKey:.instance-method' class='stealth'>- propertyForKey:</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='streamError.instance-method'></a>
+	<div class='method'>
+		<h2>streamError</h2>
+		<div class='description'><p>Returns an <a href='http://ingr-link/NSError' class='semistealth'><span>NSError</span></a> object representing the stream error.
+</p></div>
+		<p class='prototype'><code>- (<a href='http://ingr-link/NSError' class='semistealth'><span>NSError</span></a> *)streamError
+</code></p>
+		<div class='in-out-vals'>
+			<p class='returns'><strong>Returns</strong> An <a href='http://ingr-link/NSError' class='semistealth'><span>NSError</span></a> object representing the stream error, or nil if no error has been encountered.
+</p>
+		</div>
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C18' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C18)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C18' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C18);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C18'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C18'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>streamError</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='1'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='1'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='streamStatus.instance-method'></a>
+	<div class='method'>
+		<h2>streamStatus</h2>
+		<div class='description'><p>Returns the receiver’s status.
+</p></div>
+		<p class='prototype'><code>- (<a href='http://ingr-link/NSStreamStatus' class='semistealth'><span>NSStreamStatus</span></a>)streamStatus
+</code></p>
+		<div class='in-out-vals'>
+			<p class='returns'><strong>Returns</strong> The receiver’s status.
+</p>
+		</div>
+		<hr>
+
+		<div class='discussion'><p>See “Constants” for a description of the available <a href='http://ingr-link/NSStreamStatus' class='semistealth'><span>NSStreamStatus</span></a> constants.
+</p></div>
+
+		<hr>
+
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C71' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C71)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C71' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C71);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C71'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C71'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>streamStatus</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='1'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='1'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+</div>
+<a name='notifications'></a>
+<div class='methods' class='notifications'>
+</div>
+</body>
+</html>
+2010-05-30 22:18:26.923 Ingredients[7614:a0f] outputstring = 
+
+<!doctype html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title></title>
+<link rel='stylesheet' href='main.css' type='text/css'>
+<script type='text/javascript' charset='utf-8'>function set_show_button_title(n, title)
+{
+    var button = document.getElementById("hide-show-annotations-button-" + String(n));
+    button.innerHTML = title;
+}
+
+function show_annotations(n)
+{
+    var box = document.getElementById("annotations-inner-" + String(n));
+    if (box.style.display == 'none' || box.style.display == '')
+    {
+        box.style.display = 'block';
+        set_show_button_title(n, 'Hide');
+    }
+    else
+    {
+        box.style.display = 'none';
+        set_show_button_title(n, 'Show');
+    }
+}
+
+
+function add_annotation(n)
+{
+    alert("ADD AN ANNOTATION");
+    var box = document.getElementById("annotations-inner-" + String(n));
+    var addBox = document.getElementById("add-annotation-box-" + String(n));
+
+    var boxIsVisible = box.style.display != 'none' && box.style.display != '';
+    var addBoxIsVisible = addBox.style.display != 'none' && addBox.style.display != '';
+
+    if (boxIsVisible && addBoxIsVisible)
+    {
+        //Hide addBox
+        addBox.style.display = 'none';
+    }
+    else
+    {
+        //Show addBox
+        box.style.display = 'block';
+        addBox.style.display = 'block';
+
+        set_show_button_title(n, 'Hide');
+    }
+}
+function create_annotation(n, isPublic)
+{
+    var button = document.getElementById("hide-show-annotations-button-" + String(n));
+    button.style.display = 'block';
+
+    var docURLField = document.getElementById("annotation-url-" + String(n));
+
+    var annotationTextArea = document.getElementById("annotation-text-area-" + String(n));
+
+    if (!annotationTextArea.value)
+    {
+        window.windowScriptController.beep();
+        return;
+    }
+
+    window.windowScriptController.createAnnotation(docURLField.value, annotationTextArea.value, isPublic);
+}</script>
+</head>
+<body>
+<a name='overview'></a>
+<div class='methods overview'>
+<h1>NSStream</h1><p><a href='http://ingr-link/NSStream' class='semistealth'><span>NSStream</span></a> is an abstract class for objects representing streams. Its interface is common to all Cocoa stream classes, including its concrete subclasses <a href='http://ingr-link/NSInputStream' class='semistealth'><span>NSInputStream</span></a> and <a href='http://ingr-link/NSOutputStream' class='semistealth'><span>NSOutputStream</span></a>.
+</p><p><a href='http://ingr-link/NSStream' class='semistealth'><span>NSStream</span></a> objects provide an easy way to read and write data to and from a variety of media in a device-independent way. You can create stream objects for data located in memory, in a file, or on a network (using sockets), and you can use stream objects without loading all of the data into memory at once.
+</p><p>By default, <a href='http://ingr-link/NSStream' class='semistealth'><span>NSStream</span></a> instances that are not file-based are non-seekable, one-way streams (although custom seekable subclasses are possible). Once the data has been provided or consumed, the data cannot be retrieved from the stream.
+</p>		<table class='info'>
+			<tr>
+				<th>Declared in</th>
+				<th>Superclass</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='1'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+				<td rowspan='1'><code><a href='http://ingr-doc/mac/10.6/all/NSObject.class' class='stealth'>NSObject</a></code></td>
+			</tr>
+		</table>
+</div>
+<a name='tasks'></a>
+<div class='methods tasks'>
+<h2>Creating Streams</h2>
+<ul>
+<li><code><a href='#getStreamsToHost:port:inputStream:outputStream:.class-method' class='stealth'>+ getStreamsToHost:port:inputStream:outputStream:</a></code></li>
+</ul>
+<h2>Configuring Streams</h2>
+<ul>
+<li><code><a href='#propertyForKey:.instance-method' class='stealth'>- propertyForKey:</a></code></li>
+<li><code><a href='#setProperty:forKey:.instance-method' class='stealth'>- setProperty:forKey:</a></code></li>
+<li><code><a href='#delegate.instance-method' class='stealth'>- delegate</a></code></li>
+<li><code><a href='#setDelegate:.instance-method' class='stealth'>- setDelegate:</a></code></li>
+</ul>
+<h2>Using Streams</h2>
+<ul>
+<li><code><a href='#open.instance-method' class='stealth'>- open</a></code></li>
+<li><code><a href='#close.instance-method' class='stealth'>- close</a></code></li>
+</ul>
+<h2>Managing Run Loops</h2>
+<ul>
+<li><code><a href='#scheduleInRunLoop:forMode:.instance-method' class='stealth'>- scheduleInRunLoop:forMode:</a></code></li>
+<li><code><a href='#removeFromRunLoop:forMode:.instance-method' class='stealth'>- removeFromRunLoop:forMode:</a></code></li>
+</ul>
+<h2>Getting Stream Information</h2>
+<ul>
+<li><code><a href='#streamStatus.instance-method' class='stealth'>- streamStatus</a></code></li>
+<li><code><a href='#streamError.instance-method' class='stealth'>- streamError</a></code></li>
+</ul>
+</div>
+<a name='properties'></a>
+<div class='methods' class='properties'>
+</div><a name='methods'></a>
+<div class='methods'>
+<a name='close.instance-method'></a>
+	<div class='method'>
+		<h2>close</h2>
+		<div class='description'><p>Closes the receiver.
+</p></div>
+		<p class='prototype'><code>- (void)close
+</code></p>
+		<hr>
+
+		<div class='discussion'><p>Closing the stream terminates the flow of bytes and releases system resources that were reserved for the stream when it was opened. If the stream has been scheduled on a run loop, closing the stream implicitly removes the stream from the run loop. A stream that is closed can still be queried for its properties.
+</p></div>
+
+		<hr>
+
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C133' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C133)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C133' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C133);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C133'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C133'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>close</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+				<th>See also</th>
+				<th>Sample projects</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='3'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='3'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+				<td><code><a href='#open.instance-method' class='stealth'>- open</a></code></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/CocoaEcho' class='stealth'>CocoaEcho</a></code></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/CocoaSOAP' class='stealth'>CocoaSOAP</a></code></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/PictureSharingBrowser' class='stealth'>PictureSharingBrowser</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='delegate.instance-method'></a>
+	<div class='method'>
+		<h2>delegate</h2>
+		<div class='description'><p>Returns the receiver’s delegate.
+</p></div>
+		<p class='prototype'><code>- (id < <a href='http://ingr-link/NSStreamDelegate' class='semistealth'><span>NSStreamDelegate</span></a> >)delegate
+</code></p>
+		<div class='in-out-vals'>
+			<p class='returns'><strong>Returns</strong> The receiver’s delegate. The delegate must implement the <a href='http://ingr-link/NSStreamDelegate' class='semistealth'><span>NSStreamDelegate</span></a> Protocol.
+</p>
+		</div>
+		<hr>
+
+		<div class='discussion'><p>By default, a stream is its own delegate, and subclasses of <a href='http://ingr-link/NSInputStream' class='semistealth'><span>NSInputStream</span></a> and <a href='http://ingr-link/NSOutputStream' class='semistealth'><span>NSOutputStream</span></a> must maintain this contract.
+</p></div>
+
+		<hr>
+
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C139' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C139)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C139' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C139);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C139'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C139'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>delegate</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+				<th>See also</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='1'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='1'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+				<td><code><a href='#setDelegate:.instance-method' class='stealth'>- setDelegate:</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='getStreamsToHost:port:inputStream:outputStream:.class-method'></a>
+	<div class='method'>
+		<h2>getStreamsToHost:port:inputStream:outputStream:</h2>
+		<div class='description'><p>Creates and returns by reference an <a href='http://ingr-link/NSInputStream' class='semistealth'><span>NSInputStream</span></a> object and <a href='http://ingr-link/NSOutputStream' class='semistealth'><span>NSOutputStream</span></a> object for a socket connection with a given host on a given port.
+</p></div>
+		<p class='prototype'><code>+ (void)getStreamsToHost:(<a href='http://ingr-link/NSHost' class='semistealth'><span>NSHost</span></a> *)host port:(<a href='http://ingr-link/NSInteger' class='semistealth'><span>NSInteger</span></a>)port inputStream:(<a href='http://ingr-link/NSInputStream' class='semistealth'><span>NSInputStream</span></a> **)inputStream outputStream:(<a href='http://ingr-link/NSOutputStream' class='semistealth'><span>NSOutputStream</span></a> **)outputStream
+</code></p>
+		<div class='in-out-vals'>
+			<p class='parameter'><strong>host</strong> The host to which to connect.
+</p>
+			<p class='parameter'><strong>port</strong> The port to connect to on host.
+</p>
+			<p class='parameter'><strong>inputStream</strong> Upon return, contains the input stream. If nil is passed, the stream object is not created.
+</p>
+			<p class='parameter'><strong>outputStream</strong> Upon return, contains the output stream. If nil is passed, the stream object is not created.
+</p>
+		</div>
+		<hr>
+
+		<div class='discussion'><p>If neither port nor host is properly specified, no socket connection is made.
+</p></div>
+
+		<hr>
+
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C127' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C127)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C127' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C127);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C127'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C127'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>getStreamsToHost:port:inputStream:outputStream:</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='1'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='1'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='open.instance-method'></a>
+	<div class='method'>
+		<h2>open</h2>
+		<div class='description'><p>Opens the receiving stream.
+</p></div>
+		<p class='prototype'><code>- (void)open
+</code></p>
+		<hr>
+
+		<div class='discussion'><p>A stream must be created before it can be opened. Once opened, a stream cannot be closed and reopened.
+</p></div>
+
+		<hr>
+
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C142' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C142)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C142' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C142);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C142'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C142'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>open</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+				<th>See also</th>
+				<th>Sample projects</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='3'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='3'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+				<td><code><a href='#close.instance-method' class='stealth'>- close</a></code></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/CocoaEcho' class='stealth'>CocoaEcho</a></code></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/CocoaSOAP' class='stealth'>CocoaSOAP</a></code></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/PictureSharingBrowser' class='stealth'>PictureSharingBrowser</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='propertyForKey:.instance-method'></a>
+	<div class='method'>
+		<h2>propertyForKey:</h2>
+		<div class='description'><p>Returns the receiver’s property for a given key.
+</p></div>
+		<p class='prototype'><code>- (id)propertyForKey:(<a href='http://ingr-link/NSString' class='semistealth'><span>NSString</span></a> *)key
+</code></p>
+		<div class='in-out-vals'>
+			<p class='parameter'><strong>key</strong> The key for one of the receiver's properties. See “Constants” for a description of the available property-key constants and associated values.
+</p>
+			<p class='returns'><strong>Returns</strong> The receiver’s property for the key key.
+</p>
+		</div>
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C148' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C148)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C148' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C148);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C148'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C148'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>propertyForKey:</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+				<th>See also</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='1'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='1'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+				<td><code><a href='#setProperty:forKey:.instance-method' class='stealth'>- setProperty:forKey:</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='removeFromRunLoop:forMode:.instance-method'></a>
+	<div class='method'>
+		<h2>removeFromRunLoop:forMode:</h2>
+		<div class='description'><p>Removes the receiver from a given run loop running in a given mode.
+</p></div>
+		<p class='prototype'><code>- (void)removeFromRunLoop:(<a href='http://ingr-link/NSRunLoop' class='semistealth'><span>NSRunLoop</span></a> *)aRunLoop forMode:(<a href='http://ingr-link/NSString' class='semistealth'><span>NSString</span></a> *)mode
+</code></p>
+		<div class='in-out-vals'>
+			<p class='parameter'><strong>aRunLoop</strong> The run loop on which the receiver was scheduled.
+</p>
+			<p class='parameter'><strong>mode</strong> The mode for the run loop.
+</p>
+		</div>
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C152' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C152)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C152' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C152);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C152'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C152'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>removeFromRunLoop:forMode:</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+				<th>See also</th>
+				<th>Sample projects</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='1'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='1'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+				<td><code><a href='#scheduleInRunLoop:forMode:.instance-method' class='stealth'>- scheduleInRunLoop:forMode:</a></code></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/CocoaEcho' class='stealth'>CocoaEcho</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='scheduleInRunLoop:forMode:.instance-method'></a>
+	<div class='method'>
+		<h2>scheduleInRunLoop:forMode:</h2>
+		<div class='description'><p>Schedules the receiver on a given run loop in a given mode.
+</p></div>
+		<p class='prototype'><code>- (void)scheduleInRunLoop:(<a href='http://ingr-link/NSRunLoop' class='semistealth'><span>NSRunLoop</span></a> *)aRunLoop forMode:(<a href='http://ingr-link/NSString' class='semistealth'><span>NSString</span></a> *)mode
+</code></p>
+		<div class='in-out-vals'>
+			<p class='parameter'><strong>aRunLoop</strong> The run loop on which to schedule the receiver.
+</p>
+			<p class='parameter'><strong>mode</strong> The mode for the run loop.
+</p>
+		</div>
+		<hr>
+
+		<div class='discussion'><p>Unless the client is polling the stream, it is responsible for ensuring that the stream is scheduled on at least one run loop and that at least one of the run loops on which the stream is scheduled is being run.
+</p></div>
+
+		<hr>
+
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C158' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C158)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C158' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C158);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C158'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C158'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>scheduleInRunLoop:forMode:</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+				<th>See also</th>
+				<th>Sample projects</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='3'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='3'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+				<td><code><a href='#removeFromRunLoop:forMode:.instance-method' class='stealth'>- removeFromRunLoop:forMode:</a></code></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/CocoaEcho' class='stealth'>CocoaEcho</a></code></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/CocoaSOAP' class='stealth'>CocoaSOAP</a></code></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/PictureSharingBrowser' class='stealth'>PictureSharingBrowser</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='setDelegate:.instance-method'></a>
+	<div class='method'>
+		<h2>setDelegate:</h2>
+		<div class='description'><p>Sets the receiver’s delegate.
+</p></div>
+		<p class='prototype'><code>- (void)setDelegate:(id < <a href='http://ingr-link/NSStreamDelegate' class='semistealth'><span>NSStreamDelegate</span></a> >)delegate
+</code></p>
+		<div class='in-out-vals'>
+			<p class='parameter'><strong>delegate</strong> The delegate for the receiver.
+</p>
+		</div>
+		<hr>
+
+		<div class='discussion'><p>By default, a stream is its own delegate, and subclasses of <a href='http://ingr-link/NSInputStream' class='semistealth'><span>NSInputStream</span></a> and <a href='http://ingr-link/NSOutputStream' class='semistealth'><span>NSOutputStream</span></a> must maintain this contract. If you override this method in a subclass, passing nil must restore the receiver as its own delegate. Delegates are not retained.
+</p><p>To learn about delegates and delegation, read "“Delegation” in Cocoa Fundamentals Guide" in Cocoa Fundamentals Guide.
+</p></div>
+
+		<hr>
+
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C166' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C166)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C166' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C166);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C166'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C166'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>setDelegate:</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+				<th>See also</th>
+				<th>Sample projects</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='3'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='3'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+				<td><code><a href='#delegate.instance-method' class='stealth'>- delegate</a></code></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/CocoaEcho' class='stealth'>CocoaEcho</a></code></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/CocoaSOAP' class='stealth'>CocoaSOAP</a></code></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><code><a href='http://developer.apple.com/mac/library/samplecode/PictureSharingBrowser' class='stealth'>PictureSharingBrowser</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='setProperty:forKey:.instance-method'></a>
+	<div class='method'>
+		<h2>setProperty:forKey:</h2>
+		<div class='description'><p>Attempts to set the value of a given property of the receiver and returns a Boolean value that indicates whether the value is accepted by the receiver.
+</p></div>
+		<p class='prototype'><code>- (<a href='http://ingr-link/BOOL' class='semistealth'><span>BOOL</span></a>)setProperty:(id)property forKey:(<a href='http://ingr-link/NSString' class='semistealth'><span>NSString</span></a> *)key
+</code></p>
+		<div class='in-out-vals'>
+			<p class='parameter'><strong>property</strong> The value for key.
+</p>
+			<p class='parameter'><strong>key</strong> The key for one of the receiver's properties. See “Constants” for a description of the available property-key constants and expected values.
+</p>
+			<p class='returns'><strong>Returns</strong> <a href='http://ingr-link/YES' class='semistealth'><span>YES</span></a> if the value is accepted by the receiver, otherwise <a href='http://ingr-link/NO' class='semistealth'><span>NO</span></a>.
+</p>
+		</div>
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C173' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C173)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C173' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C173);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C173'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C173'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>setProperty:forKey:</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+				<th>See also</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='1'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='1'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+				<td><code><a href='#propertyForKey:.instance-method' class='stealth'>- propertyForKey:</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='streamError.instance-method'></a>
+	<div class='method'>
+		<h2>streamError</h2>
+		<div class='description'><p>Returns an <a href='http://ingr-link/NSError' class='semistealth'><span>NSError</span></a> object representing the stream error.
+</p></div>
+		<p class='prototype'><code>- (<a href='http://ingr-link/NSError' class='semistealth'><span>NSError</span></a> *)streamError
+</code></p>
+		<div class='in-out-vals'>
+			<p class='returns'><strong>Returns</strong> An <a href='http://ingr-link/NSError' class='semistealth'><span>NSError</span></a> object representing the stream error, or nil if no error has been encountered.
+</p>
+		</div>
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C125' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C125)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C125' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C125);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C125'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C125'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>streamError</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='1'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='1'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+<a name='streamStatus.instance-method'></a>
+	<div class='method'>
+		<h2>streamStatus</h2>
+		<div class='description'><p>Returns the receiver’s status.
+</p></div>
+		<p class='prototype'><code>- (<a href='http://ingr-link/NSStreamStatus' class='semistealth'><span>NSStreamStatus</span></a>)streamStatus
+</code></p>
+		<div class='in-out-vals'>
+			<p class='returns'><strong>Returns</strong> The receiver’s status.
+</p>
+		</div>
+		<hr>
+
+		<div class='discussion'><p>See “Constants” for a description of the available <a href='http://ingr-link/NSStreamStatus' class='semistealth'><span>NSStreamStatus</span></a> constants.
+</p></div>
+
+		<hr>
+
+<div class='annotations'>
+<h3><span>Annotations</span>
+<button class='inlinebutton hide-show-annotations-button' id='hide-show-annotations-button-t1EBCA378_723A_475D_A666_575F51D0D11C178' style='display:none' onclick='show_annotations(t1EBCA378_723A_475D_A666_575F51D0D11C178)'>Show</button>
+<button class='inlinebutton add-annotation-button' id='add-annotation-button-t1EBCA378_723A_475D_A666_575F51D0D11C178' onclick='add_annotation(t1EBCA378_723A_475D_A666_575F51D0D11C178);'>Add</button>
+</h3>
+<div class='annotations-inner' id='annotations-inner-t1EBCA378_723A_475D_A666_575F51D0D11C178'>
+<div class='add-annotation-box' id='add-annotation-box-t1EBCA378_723A_475D_A666_575F51D0D11C178'>
+<p class='annotation-field'><span class='key'>On</span> <span class='value'>streamStatus</span></p>
+<p class='annotation-field'><span class='key'>Name</span> <input class='value' type='text' value='Alex Gordon'></p><br>
+<p><textarea rows='10' cols='10'></textarea></p>
+<p><button class='inlinebutton create-public-button'>Cancel</button> <button class='inlinebutton right create-public-button'>Create <strong>Public</strong> Annotation</button> <button class='inlinebutton right create-private-button'>Create <strong>Private</strong> Annotation</button></p>
+</div>
+</div>
+</div>
+<hr>
+		<table class='info'>
+			<tr>
+				<th>Available in</th>
+				<th>Declared in</th>
+			</tr>
+			<tr class='first'>
+				<td rowspan='1'>Mac OS X <strong>10.3</strong>+</td>
+				<td rowspan='1'><code><a href='http://ingr-doc/mac/10.6/all/NSStream.h.headerfile' class='stealth'>NSStream.h</a></code></td>
+			</tr>
+		</table>
+	</div>
+
+</div>
+<a name='notifications'></a>
+<div class='methods' class='notifications'>
+</div>
+</body>
+</html>

@@ -3,6 +3,11 @@ function set_show_button_title(n, title)
     var button = document.getElementById("hide-show-annotations-button-" + String(n));
     button.innerHTML = title;
 }
+function set_add_button_title(n, title)
+{
+    var button = document.getElementById("add-annotation-button-" + String(n));
+    button.innerHTML = title;
+}
 
 function show_annotations(n)
 {
@@ -19,7 +24,6 @@ function show_annotations(n)
     }
 }
 
-
 function add_annotation(n)
 {
     var box = document.getElementById("annotations-inner-" + String(n));
@@ -32,13 +36,16 @@ function add_annotation(n)
     {
         //Hide addBox
         addBox.style.display = 'none';
+        
+        set_add_button_title(n, 'Add');
     }
     else
     {
         //Show addBox
         box.style.display = 'block';
         addBox.style.display = 'block';
-
+        
+        set_add_button_title(n, 'Cancel');
         set_show_button_title(n, 'Hide');
     }
 }

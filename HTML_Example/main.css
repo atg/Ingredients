@@ -312,6 +312,9 @@ td code
 .annotations h3
 {
 	margin-bottom: 14px;
+	font-size: inherit;
+	margin-bottom: 11px;
+	font-weight: bold;
 }
 .annotations h3 span
 {
@@ -374,6 +377,13 @@ td code
 	margin-bottom: -12px;
 }
 
+.inlinebutton.small
+{
+	font-size: 11px;
+	background-color: rgba(0,0,0,0.35);
+	-webkit-border-radius: 3px;
+	padding: 1px 5px 3px;
+}
 .inlinebutton
 {
 	background-color: #7f7f7f;
@@ -420,8 +430,14 @@ td code
 	display: none;
 }
 
+.add-annotation-box .clearing
+{
+	clear: both;
+	height: 38px;
+}
 .add-annotation-box .right
 {
+	margin-top: 0px;
 	float: right;
 }
 .add-annotation-box
