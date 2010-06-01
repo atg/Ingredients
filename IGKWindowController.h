@@ -167,6 +167,8 @@ typedef enum {
 
 @property (assign) NSArray *selectedFilterDocset;
 
+@property (readonly) WebView *browserWebView;
+
 - (IBAction)noselectionSearchField:(id)sender;
 
 - (IBAction)changeSelectedFilterDocset:(id)sender;
@@ -195,6 +197,8 @@ typedef enum {
 - (BOOL)filterBarTableRowIsGroup:(NSInteger)row;
 
 - (IBAction)predicateEditor:(id)sender;
+
+- (void)loadURLRequest:(NSURL *)urlRequest recordHistory:(BOOL)recordHistory;
 
 //Find Panel
 - (IBAction)closeFindPanel:(id)sender;

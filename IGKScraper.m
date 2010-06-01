@@ -1039,6 +1039,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 						
 						if ([dd length])
 						{
+							if (![object isKindOfEntityNamed:@"Callable"])
+								break;
+							
 							if (!ParameterEntity)
 								ParameterEntity = [NSEntityDescription entityForName:@"Parameter" inManagedObjectContext:transientContext];
 							

@@ -62,6 +62,7 @@
 @synthesize selectedFilterDocset;
 @synthesize shouldIndex;
 @synthesize isInFullscreen;
+@synthesize browserWebView;
 
 - (id)init
 {
@@ -570,6 +571,12 @@
 }
 - (void)loadURL:(NSURL *)url recordHistory:(BOOL)recordHistory
 {
+	[self loadURLRequest:[NSURLRequest requestWithURL:url] recordHistory:recordHistory];
+}
+- (void)loadURLRequest:(NSURLRequest *)urlRequest recordHistory:(BOOL)recordHistory
+{
+	NSURL *url = [urlRequest URL];
+	
 	isNonFilterBarType = YES;
 	
 	// set default title
@@ -591,13 +598,10 @@
 				
 		if (result)
 		{
-			
 			[self setBrowserActive:YES];
 			[self loadManagedObject:result tableOfContentsMask:tableOfContentsMask];
 			if (recordHistory)
 				[self recordHistoryForURL:url title:[result valueForKey:@"name"]];
-			
-			
 		}
 		
 		[self reloadTableOfContents];
@@ -607,7 +611,7 @@
 		[self loadNoSelectionRecordHistory:NO];
 		[self setBrowserActive:YES];
 		[browserWebView stopLoading:nil];
-		[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:url]];
+		[[browserWebView mainFrame] loadRequest:urlRequest];
 	}
 }
 - (void)loadManagedObject:(IGKDocRecordManagedObject *)mo tableOfContentsMask:(IGKHTMLDisplayTypeMask)tm
@@ -1750,6 +1754,14 @@
 	else
 		[self setRightFilterBarShown:rightFilterBarIsShown];
 }
+- (WebView *)webView:(WebView *)sender createWebViewWithRequest:(NSURLRequest *)request
+{
+	IGKWindowController *newController = [[[NSApp delegate] kitController] newWindowIsIndexing:NO];
+	[newController loadURLRequest:request recordHistory:YES];
+	
+	return [newController browserWebView];
+}
+
 - (IBAction)toggleRightFilterBar:(id)sender
 {
 	BOOL shown = ![self rightFilterBarShown];

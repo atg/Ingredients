@@ -200,26 +200,26 @@ code
 	font-size: 12px;
 }
 
-.methods a.semistealth
+a.semistealth
 {
 	text-decoration: underline;
 	color: rgb(83, 83, 83);
 }
-.methods a.semistealth span
+a.semistealth span
 {
 	color: #323232;
 }
-.methods a.semistealth:visited
+a.semistealth:visited
 {
 	color: inherit;
 	text-decoration: underline;
 }
-.methods a.semistealth:hover
+a.semistealth:hover
 {
 	color: white;
 	text-decoration: underline;
 }
-.methods a.semistealth span:hover
+a.semistealth span:hover
 {
 	background-color: rgba(125, 157, 202, 1.0);
 	-webkit-border-radius: 4px;
@@ -230,32 +230,32 @@ code
 	
 	color: white;
 }
-.methods a.semistealth:active
+a.semistealth:active
 {
 	text-decoration: underline;
 	color: white;
 }
-.methods a.semistealth:active span
+a.semistealth:active span
 {
 	background-color: #7d9dca;	
 }
 
-.methods a.stealth
+a.stealth
 {
 	color: inherit;
 	text-decoration: none;
 }
-.methods a.stealth:visited
+a.stealth:visited
 {
 	color: inherit;
 	text-decoration: none;
 }
-.methods a.stealth:hover
+a.stealth:hover
 {
 	color: inherit;
 	text-decoration: underline;
 }
-.methods a.stealth:active
+a.stealth:active
 {
 	text-decoration: none;
 

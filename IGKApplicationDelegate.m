@@ -117,7 +117,7 @@ const NSInteger IGKStoreVersion = 2;
 {
 	[self newWindowIsIndexing:NO];
 }
-- (void)newWindowIsIndexing:(BOOL)isIndexing
+- (id)newWindowIsIndexing:(BOOL)isIndexing
 {
 	if (docsetCount == 0)
 		return;
@@ -135,6 +135,8 @@ const NSInteger IGKStoreVersion = 2;
 	if (isIndexing)
 		windowController.shouldIndex = YES;
 	[windowController showWindow:nil];
+	
+	return windowController;
 }
 
 - (void)finalize

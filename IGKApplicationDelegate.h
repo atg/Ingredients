@@ -42,7 +42,7 @@
 - (IBAction)showPreferences:(id)sender;
 - (IBAction)showWindow:(id)sender;
 - (IBAction)newWindow:(id)sender;
-- (void)newWindowIsIndexing:(BOOL)isIndexing;
+- (id)newWindowIsIndexing:(BOOL)isIndexing;
 
 - (NSString *)developerDirectory;
 
