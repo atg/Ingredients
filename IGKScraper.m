@@ -567,9 +567,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 					{
 						[newSubobject setValue:[itemName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
 						[newSubobject setValue:docset forKey:@"docset"];
+						[newSubobject setValue:obj forKey:@"miscContainer"];
 						[newSubobject setValue:relativeExtractPath forKey:@"documentPath"];
 					}
-
 					
 					continue;
 				}
@@ -668,10 +668,23 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	if (!doc)
 		return;
 	
+	[self scrapeTransientObject];
+}
+- (void)scrapeTransientObject
+{
 	//Depending on the type of obj, we will need to parse it differently	
 	if ([transientObject isKindOfEntityNamed:@"ObjCAbstractMethodContainer"])
 	{
 		[self scrapeAbstractMethodContainer];
+		
+		//Hacky way to also read new data for misc items
+		id oldTransientObject = transientObject;
+		for (IGKDocRecordManagedObject *miscItem in [oldTransientObject valueForKey:@"miscitems"])
+		{
+			transientObject = miscItem;
+			[self scrapeTransientObject];
+		}
+		transientObject = oldTransientObject;
 	}
 	else if ([transientObject isKindOfEntityNamed:@"ObjCMethod"])
 	{

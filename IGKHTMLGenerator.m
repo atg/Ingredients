@@ -35,6 +35,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 - (void)html_methods;
 - (void)html_notifications;
 - (void)html_delegate;
+- (void)html_misc;
 
 - (void)html_methodLikeDeclarationsWithEntity:(NSString *)entityName hasParameters:(BOOL)hasParameters;
 - (void)html_method:(IGKDocRecordManagedObject *)obj hasParameters:(BOOL)hasParameters;
@@ -42,6 +43,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 - (void)html_parametersForCallable:(IGKDocRecordManagedObject *)object;
 
 - (void)html_generic;
+- (void)html_genericItem:(IGKDocRecordManagedObject *)object;
 
 - (NSString *)hrefToActualFragment:(IGKDocRecordManagedObject *)mo;
 
@@ -151,13 +153,12 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 			mask |= IGKHTMLDisplayType_Properties;
 		if ([[transientObject valueForKey:@"methods"] count])
 			mask |= IGKHTMLDisplayType_Methods;
-		//if ([[transientObject valueForKey:@"miscitems"] count])
-		//	mask |= IGKHTMLDisplayType_Misc;
-		
 		if ([[transientObject valueForKey:@"notifications"] count])
 			mask |= IGKHTMLDisplayType_Notifications;
 		if ([[transientObject valueForKey:@"delegatemethods"] count])
 			mask |= IGKHTMLDisplayType_Delegate;
+		if ([[transientObject valueForKey:@"miscitems"] count])
+			mask |= IGKHTMLDisplayType_Misc;
 		
 		if ([entity isKindOfEntity:[NSEntityDescription entityForName:@"ObjCClass" inManagedObjectContext:transientContext]])
 		{
@@ -201,6 +202,8 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 				[self html_notifications];
 			if (displayTypeMask & IGKHTMLDisplayType_Delegate)
 				[self html_delegate];
+			if (displayTypeMask & IGKHTMLDisplayType_Misc)
+				[self html_misc];
 		}
 	}
 	else if ([[transientObject entity] isKindOfEntity:ObjCMethod])
@@ -233,6 +236,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	[self html_methods];
 	[self html_notifications];
 	[self html_delegate];
+	[self html_misc];
 }
 - (void)html_overview
 {
@@ -298,6 +302,9 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	else if ([ingrcode isEqual:@"notification"])
 		containsInDocument = (_displayTypeMask & IGKHTMLDisplayType_Notifications);
+	
+	else if ([ingrcode isEqual:@"misc"])
+		containsInDocument = (_displayTypeMask & IGKHTMLDisplayType_Misc);
 	
 	else
 		containsInDocument = (_displayTypeMask & IGKHTMLDisplayType_Misc);
@@ -457,6 +464,37 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 - (void)html_delegate
 {
 	
+}
+- (void)html_misc
+{
+	[outputString appendString:@"<a name='misc'></a>\n"];
+	[outputString appendString:@"<div class='methods' class='misc'>\n"];
+	
+	NSFetchRequest *miscFetch = [[NSFetchRequest alloc] init];
+	[miscFetch setEntity:[NSEntityDescription entityForName:@"DocRecord" inManagedObjectContext:transientContext]];
+	[miscFetch setPredicate:[NSPredicate predicateWithFormat:@"miscContainer=%@", transientObject]];
+	[miscFetch setSortDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
+	
+	NSError *error = nil;
+	NSArray *miscs = [transientContext executeFetchRequest:miscFetch error:&error];
+	for (IGKDocRecordManagedObject *object in miscs)
+	{
+		[outputString appendFormat:@"<a name='%@.%@'></a>\n", [object valueForKey:@"name"], [object URLComponentExtension]];
+		[outputString appendFormat:@"\t<div class='method'>\n"];
+		
+		if ([object valueForKey:@"name"])
+		{
+			[outputString appendFormat:@"\t\t<h2>%@</h2>\n", [self escape:[object valueForKey:@"name"]]];
+			if (object == transientObject)
+				[self html_itemCategory:object];
+		}
+		
+		[self html_genericItem:object];
+		
+		[outputString appendString:@"</div>"];
+	}
+	
+	[outputString appendString:@"</div>\n"];
 }
 
 - (void)html_bindingsListing:(IGKDocRecordManagedObject *)object
@@ -866,24 +904,27 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	[outputString appendFormat:@"<h1>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];
 	
-	if ([transientObject valueForKey:@"discussion"])
-		[outputString appendString:[self addHyperlinks:[transientObject valueForKey:@"discussion"]]];
-	else if ([transientObject valueForKey:@"overview"])
-		[outputString appendString:[self addHyperlinks:[transientObject valueForKey:@"overview"]]];
+	[self html_genericItem:transientObject];
+	
+	[outputString appendString:@"</div>"];
+}
+- (void)html_genericItem:(IGKDocRecordManagedObject *)object
+{
+	if ([object valueForKey:@"discussion"])
+		[outputString appendString:[self addHyperlinks:[object valueForKey:@"discussion"]]];
+	else if ([object valueForKey:@"overview"])
+		[outputString appendString:[self addHyperlinks:[object valueForKey:@"overview"]]];
 	
 	
 	[outputString appendString:@"<div class='methods'>"];
 	
-	if ([transientObject valueForKey:@"signature"])
-		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [self addHyperlinks:[self reformatCode:[transientObject valueForKey:@"signature"]]]];
+	if ([object valueForKey:@"signature"])
+		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [self addHyperlinks:[self reformatCode:[object valueForKey:@"signature"]]]];
 	
-	if ([transientObject isKindOfEntityNamed:@"Callable"])
-		[self html_parametersForCallable:transientObject];
+	if ([object isKindOfEntityNamed:@"Callable"])
+		[self html_parametersForCallable:object];
 	
-	[self html_metadataTable:transientObject];
-	
-	[outputString appendString:@"</div>"];
-	
+	[self html_metadataTable:object];
 	
 	[outputString appendString:@"</div>"];
 }

@@ -961,22 +961,22 @@
 		
 		IGKHTMLDisplayTypeMask displayTypeMask = acceptableDisplayTypes;
 		if (displayTypeMask & IGKHTMLDisplayType_All)
-			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_All title:@"All"];//[tableOfContentsItems addObject:@"All"];
+			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_All title:@"All"];
 		
 		if (displayTypeMask & IGKHTMLDisplayType_Overview)
-			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_Overview title:@"Overview"];//[tableOfContentsItems addObject:@"Overview"];
-		//if (displayTypeMask & IGKHTMLDisplayType_Tasks)
-		//	[tableOfContentsItems addObject:@"Tasks"];
+			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_Overview title:@"Overview"];
 		if (displayTypeMask & IGKHTMLDisplayType_Properties)
-			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_Properties title:@"Properties"];//[tableOfContentsItems addObject:@"Properties"];
+			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_Properties title:@"Properties"];
 		if (displayTypeMask & IGKHTMLDisplayType_Methods)
-			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_Methods title:@"Methods"];//[tableOfContentsItems addObject:@"Methods"];
+			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_Methods title:@"Methods"];
 		if (displayTypeMask & IGKHTMLDisplayType_Notifications)
-			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_Notifications title:@"Notifications"];//[tableOfContentsItems addObject:@"Notifications"];
+			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_Notifications title:@"Notifications"];
 		if (displayTypeMask & IGKHTMLDisplayType_Delegate)
-			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_Delegate title:@"Delegate"];//[tableOfContentsItems addObject:@"Delegate"];
+			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_Delegate title:@"Delegate"];
+		if (displayTypeMask & IGKHTMLDisplayType_Misc)
+			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_Misc title:@"Misc"];
 		if (displayTypeMask & IGKHTMLDisplayType_BindingListings)
-			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_BindingListings title:@"Bindings"];//[tableOfContentsItems addObject:@"Bindings"];
+			[self registerDisplayTypeInTableView:IGKHTMLDisplayType_BindingListings title:@"Bindings"];
 	}
 	
 	
