@@ -69,6 +69,14 @@
 		7576540B1179243D0099D318 /* IGKFilterBarTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 757654091179243D0099D318 /* IGKFilterBarTableView.m */; };
 		7581084311B588D6007C564C /* ToC_Misc_S.png in Resources */ = {isa = PBXBuildFile; fileRef = 7581084111B588D6007C564C /* ToC_Misc_S.png */; };
 		7581084411B588D6007C564C /* ToC_Misc.png in Resources */ = {isa = PBXBuildFile; fileRef = 7581084211B588D6007C564C /* ToC_Misc.png */; };
+		758108B511B5C57E007C564C /* ToC_All_N.png in Resources */ = {isa = PBXBuildFile; fileRef = 758108AD11B5C57E007C564C /* ToC_All_N.png */; };
+		758108B611B5C57E007C564C /* ToC_Bindings_N.png in Resources */ = {isa = PBXBuildFile; fileRef = 758108AE11B5C57E007C564C /* ToC_Bindings_N.png */; };
+		758108B711B5C57E007C564C /* ToC_Delegate_N.png in Resources */ = {isa = PBXBuildFile; fileRef = 758108AF11B5C57E007C564C /* ToC_Delegate_N.png */; };
+		758108B811B5C57E007C564C /* ToC_Methods_N.png in Resources */ = {isa = PBXBuildFile; fileRef = 758108B011B5C57E007C564C /* ToC_Methods_N.png */; };
+		758108B911B5C57E007C564C /* ToC_Misc_N.png in Resources */ = {isa = PBXBuildFile; fileRef = 758108B111B5C57E007C564C /* ToC_Misc_N.png */; };
+		758108BA11B5C57E007C564C /* ToC_Notifications_N.png in Resources */ = {isa = PBXBuildFile; fileRef = 758108B211B5C57E007C564C /* ToC_Notifications_N.png */; };
+		758108BB11B5C57E007C564C /* ToC_Overview_N.png in Resources */ = {isa = PBXBuildFile; fileRef = 758108B311B5C57E007C564C /* ToC_Overview_N.png */; };
+		758108BC11B5C57E007C564C /* ToC_Properties_N.png in Resources */ = {isa = PBXBuildFile; fileRef = 758108B411B5C57E007C564C /* ToC_Properties_N.png */; };
 		75901BEE1129FC2100BA0316 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 75901BEC1129FC2100BA0316 /* Credits.rtf */; };
 		759030231139BFF500550A86 /* IGKMatteSegmentedControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 759030211139BFF500550A86 /* IGKMatteSegmentedControl.h */; };
 		759030241139BFF500550A86 /* IGKMatteSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 759030221139BFF500550A86 /* IGKMatteSegmentedControl.m */; };
@@ -265,6 +273,14 @@
 		758027A61147E9BF00FCE783 /* IngredientsRevisedDataModel.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = IngredientsRevisedDataModel.xcdatamodel; sourceTree = "<group>"; };
 		7581084111B588D6007C564C /* ToC_Misc_S.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ToC_Misc_S.png; path = TableOfContents/ToC_Misc_S.png; sourceTree = "<group>"; };
 		7581084211B588D6007C564C /* ToC_Misc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ToC_Misc.png; path = TableOfContents/ToC_Misc.png; sourceTree = "<group>"; };
+		758108AD11B5C57E007C564C /* ToC_All_N.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ToC_All_N.png; path = TableOfContents/ToC_All_N.png; sourceTree = "<group>"; };
+		758108AE11B5C57E007C564C /* ToC_Bindings_N.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ToC_Bindings_N.png; path = TableOfContents/ToC_Bindings_N.png; sourceTree = "<group>"; };
+		758108AF11B5C57E007C564C /* ToC_Delegate_N.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ToC_Delegate_N.png; path = TableOfContents/ToC_Delegate_N.png; sourceTree = "<group>"; };
+		758108B011B5C57E007C564C /* ToC_Methods_N.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ToC_Methods_N.png; path = TableOfContents/ToC_Methods_N.png; sourceTree = "<group>"; };
+		758108B111B5C57E007C564C /* ToC_Misc_N.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ToC_Misc_N.png; path = TableOfContents/ToC_Misc_N.png; sourceTree = "<group>"; };
+		758108B211B5C57E007C564C /* ToC_Notifications_N.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ToC_Notifications_N.png; path = TableOfContents/ToC_Notifications_N.png; sourceTree = "<group>"; };
+		758108B311B5C57E007C564C /* ToC_Overview_N.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ToC_Overview_N.png; path = TableOfContents/ToC_Overview_N.png; sourceTree = "<group>"; };
+		758108B411B5C57E007C564C /* ToC_Properties_N.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ToC_Properties_N.png; path = TableOfContents/ToC_Properties_N.png; sourceTree = "<group>"; };
 		75901BED1129FC2100BA0316 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Credits.rtf; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		759030211139BFF500550A86 /* IGKMatteSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKMatteSegmentedControl.h; sourceTree = "<group>"; };
 		759030221139BFF500550A86 /* IGKMatteSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKMatteSegmentedControl.m; sourceTree = "<group>"; };
@@ -666,6 +682,14 @@
 				75C74A091140415F00E3EAC6 /* ToC_Overview.png */,
 				7581084111B588D6007C564C /* ToC_Misc_S.png */,
 				7581084211B588D6007C564C /* ToC_Misc.png */,
+				758108AD11B5C57E007C564C /* ToC_All_N.png */,
+				758108AE11B5C57E007C564C /* ToC_Bindings_N.png */,
+				758108AF11B5C57E007C564C /* ToC_Delegate_N.png */,
+				758108B011B5C57E007C564C /* ToC_Methods_N.png */,
+				758108B111B5C57E007C564C /* ToC_Misc_N.png */,
+				758108B211B5C57E007C564C /* ToC_Notifications_N.png */,
+				758108B311B5C57E007C564C /* ToC_Overview_N.png */,
+				758108B411B5C57E007C564C /* ToC_Properties_N.png */,
 			);
 			name = "Table of Contents";
 			sourceTree = "<group>";
@@ -884,6 +908,14 @@
 				756D7A8D1145BB11001C05D7 /* Ingredients.sdef in Resources */,
 				7581084311B588D6007C564C /* ToC_Misc_S.png in Resources */,
 				7581084411B588D6007C564C /* ToC_Misc.png in Resources */,
+				758108B511B5C57E007C564C /* ToC_All_N.png in Resources */,
+				758108B611B5C57E007C564C /* ToC_Bindings_N.png in Resources */,
+				758108B711B5C57E007C564C /* ToC_Delegate_N.png in Resources */,
+				758108B811B5C57E007C564C /* ToC_Methods_N.png in Resources */,
+				758108B911B5C57E007C564C /* ToC_Misc_N.png in Resources */,
+				758108BA11B5C57E007C564C /* ToC_Notifications_N.png in Resources */,
+				758108BB11B5C57E007C564C /* ToC_Overview_N.png in Resources */,
+				758108BC11B5C57E007C564C /* ToC_Properties_N.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1270,7 +1270,7 @@
 	if (col == IGKTableOfContentsIconColumn)
 	{
 		BOOL isSelected = [[tableOfContentsPicker selectedRowIndexes] containsIndex:row];
-		NSString *imageName = [NSString stringWithFormat:@"ToC_%@%@", title, (isSelected ? @"_S" : @"")];
+		NSString *imageName = [NSString stringWithFormat:@"ToC_%@%@", title, (isSelected ? @"_S" : [[self window] isMainWindow] ? @"" : @"_N")];
 		return [NSImage imageNamed:imageName];
 	}
 	
