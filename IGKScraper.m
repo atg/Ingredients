@@ -670,6 +670,17 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	
 	[self scrapeTransientObject];
 }
+- (NSArray *)methodNodes
+{
+	if (methodNodes)
+		return methodNodes;
+	
+	methodNodes = [[doc rootElement] nodesMatchingPredicate:^BOOL(NSXMLNode *node) {
+		return [[node name] isEqual:@"a"];
+	}];
+	
+	return methodNodes;
+}
 - (void)scrapeTransientObject
 {
 	//Depending on the type of obj, we will need to parse it differently	
@@ -729,12 +740,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	[self scrapeApplecodes:[NSArray arrayWithObject:applecode]];
 }
 - (void)scrapeApplecodes:(NSArray *)applecodes
-{	
-	//NSArray *methodNodes1 = [[doc rootElement] nodesForXPath:@"//a" error:nil];
-	NSArray *methodNodes = [[doc rootElement] nodesMatchingPredicate:^BOOL(NSXMLNode *node) {
-		return [[node name] isEqual:@"a"];
-	}];
-	
+{
 	NSMutableArray *fullApplecodePatterns = [[NSMutableArray alloc] init];
 	for (NSString *applecode in applecodes)
 	{
@@ -743,7 +749,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	
 	//Search through all anchors in the document, and record their parent elements
 	NSMutableSet *containersSet = [[NSMutableSet alloc] init];
-	for (NSXMLElement *a in methodNodes)
+	for (NSXMLElement *a in [self methodNodes])
 	{
 		if ([containersSet containsObject:[a parent]])
 			continue;
@@ -784,14 +790,10 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	NSError *err = nil;
 	
 	//NSArray *methodNodes1 = [[doc rootElement] nodesForXPath:@"//a" error:&err];
-	NSArray *methodNodes = [[doc rootElement] nodesMatchingPredicate:^BOOL(NSXMLNode *node) {
-		return [[node name] isEqual:@"a"];
-	}];
-	
 	
 	//Search through all anchors in the document, and record their parent elements
 	NSMutableSet *containersSet = [[NSMutableSet alloc] init];
-	for (NSXMLElement *a in methodNodes)
+	for (NSXMLElement *a in [self methodNodes])
 	{
 		if ([containersSet containsObject:[a parent]])
 			continue;
@@ -1517,9 +1519,6 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	NSError *err = nil;
 		
 	// NSArray *methodNodes1 = [[doc rootElement] nodesForXPath:@"//a" error:&err];
-	NSArray *methodNodes = [[doc rootElement] nodesMatchingPredicate:^BOOL(NSXMLNode *node) {
-		return [[node name] isEqual:@"a"];
-	}];
 	
 	
 	//Find <div id="Overview_section" class="zClassDescription">	
@@ -1567,7 +1566,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	
 	//Search through all anchors in the document, and record their parent elements
 	NSMutableSet *containersSet = [[NSMutableSet alloc] init];
-	for (NSXMLElement *a in methodNodes)
+	for (NSXMLElement *a in [self methodNodes])
 	{
 		if (![a isKindOfClass:[NSXMLElement class]])
 			continue;

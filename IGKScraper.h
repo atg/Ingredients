@@ -53,6 +53,8 @@
 	NSManagedObject *docset;
 	NSXMLDocument *doc;
 	
+	NSArray *methodNodes;
+	
 	//Some caching of entities
 	NSEntityDescription *ObjCMethodEntity;
 	NSEntityDescription *ObjCNotificationEntity;
