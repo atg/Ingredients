@@ -27,6 +27,39 @@
         this[7] = bitboard[7];
         this[8] = bitboard[8];
     }
+    
+    //Apply a symmetry. Each symmetry is numbered from 0 to 7.
+    Board.prototype.applySymmetry = function(n) {
+        //e = e
+        if (n == 0) return;
+        
+        //r_π/2 = r
+        if (n == 1) { this.rotate(); return; }
+
+        //r_π = r.r
+        if (n == 2) { this.rotate(); this.rotate(); return; }
+
+        //r_3π/2 = r.r.r
+        if (n == 3) { this.rotate(); this.rotate(); this.rotate(); return; }
+        
+        //q_0 = q
+        if (n == 4) { this.reflect(); return; }
+        
+        //q_π/4 = r.q
+        if (n == 5) { this.reflect(); this.rotate(); return; }
+        
+        //q_π/2 = r.r.q
+        if (n == 6) { this.reflect(); this.rotate(); this.rotate(); return; }
+        
+        //q_3π/4 = r.r.r.q
+        if (n == 7) { this.reflect(); this.rotate();  this.rotate(); this.rotate(); return; }
+    }
+    //S(□) is a cyclic group of order 8, so it's isomorphic to (ℤ₈, +₈).
+    //The inverse of the symmetry at n is therefore given as the additive inverse of n in ℤ₈
+    Board.prototype.inverseSymmetry = function(n) {
+        return (-n) % 8;
+    }
+    
     Board.prototype.rotate = function() {
         var r = this.rotationMap;
         this.rotationMap = [r[6], r[3], r[0], r[7], r[4], r[1], r[8], r[5], r[2]];
@@ -45,6 +78,23 @@
         
         return true;
     }
+    Board.prototype.reflect = function() {
+        //Reflect in the horizontal centerline
+        var r = this.rotationMap;
+        this.rotationMap = [r[6], r[7], r[8], r[3], r[4], r[5], r[0], r[1], r[2]];
+        
+        var x = [this[0], this[1], this[2], this[3], this[4], this[5], this[6], this[7], this[8]];
+        
+        this[0] = x[6];
+        this[1] = x[7];
+        this[2] = x[8];
+        this[6] = x[0];
+        this[7] = x[1];
+        this[8] = x[2];
+        
+        return true;
+    }
+    
     Board.prototype.set = function(i)
     {
         bitboard[this.rotationMap[i]] = 2;
@@ -74,14 +124,12 @@
     
     function cc(e, n)
     {
-        
         if (inFinalState)
             return;
         
         if (bitboard[e.id] != 0)
         {
             alertWithInfobox("You can't play that move!", "blue");
-            //alert("You can't play that move!");
             return;
         }
         
@@ -93,11 +141,11 @@
         playComputerTurn();
     }
     
-    function playComputerTurn() {
-        
+    function playComputerTurn()
+    {
         var myBitBoard = new Board();
         
-        if (calculateComputerTurn(myBitBoard))
+        if (calculateComputerTurn2(myBitBoard))
             return true;
 		
         //Someone won
@@ -164,7 +212,178 @@
         return [b[6], b[3], b[0], b[7], b[4], b[1], b[8], b[5], b[2]];
     }
     
-    function calculateComputerTurn(b) {
+    function shuffle(collection) {
+        for (var i = collection.length - 1; i >= 1; i--)
+        {
+            var j = randomBetween(0, i);
+            
+            var temp = collection[j];
+            collection[j] = collection[i];
+            collection[i] = temp;
+        }
+    }
+    
+    function calculateComputerTurn2(b) {
+        detectWin();
+        
+        var indicies = [0, 1, 2, 3, 4, 5, 6, 7];
+        shuffle(indicies);
+        
+        //For each substrategy
+        substratergies = [ss1, ss2, ss3, ss4, ss5, ss6, ss7];
+        for (var i = 0; i < substratergies.length; i++)
+        {
+            //For each symmetry of the board in random order: {e, r_π/2, r_π, r_3π/2, q_0, q_π/4, q_π/2, q_3π/4}
+            for (var j = 0; j < 8; j++)
+            {
+                b.applySymmetry(indicies[j]);
+                
+                var result = substratergies[i](b);
+                
+                b.applySymmetry(b.inverseSymmetry(indicies[j]));
+                
+                //A result of -1 indicates that the substratergy has failed
+                if (result == -1)
+                {
+                    continue;
+                }
+                //A result in [0, 8] indicates that the substratergy wants to play the square with that index
+                else if (result >= 0 && result <= 8)
+                {
+                    b.set(result);
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    /* Test for a row to either block or complete
+        ø  _  _
+        ø  _  _
+        #  _  _
+    */
+    function ss1(b)
+    {
+        if (b[0] != 0 && b[3] != 0 && b[6] == 0)
+            return 6;
+        return -1;
+    }
+    
+    /* Test for a row to either block or complete
+        ø  _  _
+        #  _  _
+        ø  _  _
+    */
+    function ss2(b)
+    {
+        if (b[0] != 0 && b[3] == 0 && b[6] != 0)
+            return 3;
+        return -1;
+    }
+    
+    /* Test for a row to either block or complete
+        ø  _  _
+        _  ø  _
+        _  _  #
+    */
+    function ss3(b)
+    {
+        if (b[0] != 0 && b[4] != 0 && b[8] == 0)
+            return 8;
+        return -1;
+    }
+    
+    /* Test for a row to either block or complete
+       ø  _  _
+       _  #  _
+       _  _  ø
+   */
+   function ss4(b)
+   {
+       if (b[0] != 0 && b[4] == 0 && b[8] != 0)
+           return 4;
+       return -1;
+   }
+   
+   /* Test for a row to either block or complete
+      ø  _  _
+      _  #  _
+      _  _  ø
+   */
+   function ss4(b)
+   {
+       if (b[0] != 0 && b[4] == 0 && b[8] != 0)
+           return 4;
+       return -1;
+   }
+   
+   /* Test for a row to either block or complete
+      x  _  _
+      _  _  _
+      _  _  #
+   */
+   function ss5(b)
+   {
+       if (b[0] == 1 && b[8] == 0)
+           return 8;
+       return -1;
+   }
+   
+   function ss6(b)
+   {
+       return -1;
+   }
+   
+   //Randomly play either the center, corners or an edge
+   function ss7(b)
+   {
+       var shouldPlayCenter = Math.random() < 0.5;
+       if (shouldPlayCenter && b[4] == 0)
+       {
+           return 4;
+       }
+       
+       var shouldPlayCorner = Math.random() < 0.66;
+       if (shouldPlayCorner && (b[0] == 0 || b[2] == 0 || b[6] == 0 || b[8] == 0))
+       {
+           var corners = [];
+           if (b[0] == 0)
+               corners.push(0);
+           if (b[2] == 0)
+               corners.push(2);
+           if (b[6] == 0)
+               corners.push(6);
+           if (b[8] == 0)
+               corners.push(8);
+           
+           return corners[randomBetween(0, corners.length - 1)];
+       }
+       
+       var edges = [];
+       if (!(b[1] == 0 || b[3] == 0 || b[5] == 0 || b[7] == 0))
+          return -1;
+       
+       if (b[1] == 0)
+           edges.push(1);
+       if (b[3] == 0)
+           edges.push(3);
+       if (b[5] == 0)
+           edges.push(5);
+       if (b[7] == 0)
+           edges.push(7);
+       
+       return edges[randomBetween(0, edges.length - 1)];
+   }
+   
+   //Generate a random integer in the interval [a, b]
+   function randomBetween(a, b)
+   {
+       return a + Math.floor(Math.random()*(b+1));
+   }
+   
+   function calculateComputerTurn(b) {
         
         //We want to consider b[0], b[1] and b[4]
         var corner = b[0];

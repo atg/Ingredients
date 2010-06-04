@@ -207,6 +207,16 @@
 		NSString *a = [obja valueForKey:@"name"];
 		NSString *b = [objb valueForKey:@"name"];
 		
+		//If a or b contain a (...) portion, then remove it for the purposes of comparison
+		NSRange parenRange = [a rangeOfString:@"("];
+		if (parenRange.location != NSNotFound)
+			a = [a substringToIndex:parenRange.location];
+		
+		parenRange = [b rangeOfString:@"("];
+		if (parenRange.location != NSNotFound)
+			b = [b substringToIndex:parenRange.location];
+		
+		
 		NSUInteger qLength = [sideSearchQuery length];
 		NSString *qlower = [sideSearchQuery lowercaseString];
 		NSUInteger qlowerLength = [qlower length];
@@ -649,6 +659,8 @@
 	
 	
 	[self reloadRightFilterBarTable:mo transient:[generator transientObject]];
+	
+	[generator finish];
 }
 - (void)recordHistoryForURL:(NSURL *)url title:(NSString *)title
 {

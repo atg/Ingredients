@@ -245,7 +245,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	
 	
 	//Parse the item's name and kind
-	NSString *regex_className = @"<a name=\"//apple_ref/(occ/([a-z_]+)/([a-zA-Z_][a-zA-Z0-9_]*)|c/([a-zA-Z_][a-zA-Z0-9_]*))";
+	NSString *regex_className = @"<a name=\"//apple_ref/(occ/([a-z_]+)/([a-zA-Z_][a-zA-Z0-9_\\(\\)]*)|c/([a-zA-Z_][a-zA-Z0-9_]*))";
 	NSArray *className_captures = [contents captureComponentsMatchedByRegex:regex_className];
 	if ([className_captures count] < 3)
 	{

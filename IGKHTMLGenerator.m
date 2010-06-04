@@ -132,11 +132,13 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	return transientObject;
 }
 
-- (void)finalize
+- (void)finish
 {
 	[fullScraper cleanUp];
 	fullScraper = nil;
-	
+}
+- (void)finalize
+{	
 	[super finalize];
 }
 
