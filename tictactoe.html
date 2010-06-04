@@ -54,10 +54,8 @@
         //q_3π/4 = r.r.r.q
         if (n == 7) { this.reflect(); this.rotate();  this.rotate(); this.rotate(); return; }
     }
-    //S(□) is a cyclic group of order 8, so it's isomorphic to (ℤ₈, +₈).
-    //The inverse of the symmetry at n is therefore given as the additive inverse of n in ℤ₈
     Board.prototype.inverseSymmetry = function(n) {
-        return (-n) % 8;
+        return [0, 3, 2, 1, 4, 5, 6, 7][n];
     }
     
     Board.prototype.rotate = function() {
@@ -96,7 +94,7 @@
     }
     
     Board.prototype.set = function(i)
-    {
+    {        
         bitboard[this.rotationMap[i]] = 2;
         this[i] = 2;
         
@@ -229,6 +227,25 @@
         var indicies = [0, 1, 2, 3, 4, 5, 6, 7];
         shuffle(indicies);
         
+        /*var shouldMakeMistake = randomBetween(0, 1);
+        if (shouldMakeMistake == 1)
+        {
+            var openSpaces = [];
+            if (b[0] == 0) openSpaces.push(0);
+            if (b[1] == 0) openSpaces.push(1);
+            if (b[2] == 0) openSpaces.push(2);
+            if (b[3] == 0) openSpaces.push(3);
+            if (b[4] == 0) openSpaces.push(4);
+            if (b[5] == 0) openSpaces.push(5);
+            if (b[6] == 0) openSpaces.push(6);
+            if (b[7] == 0) openSpaces.push(7);
+            
+            var openSpaceIndex = randomBetween(0, openSpaces.length - 1);
+            b.set(openSpaceIndex);
+            
+            return true;
+        }*/
+        
         //For each substrategy
         substratergies = [ss1, ss2, ss3, ss4, ss5, ss6, ss7];
         for (var i = 0; i < substratergies.length; i++)
@@ -240,17 +257,17 @@
                 
                 var result = substratergies[i](b);
                 
-                b.applySymmetry(b.inverseSymmetry(indicies[j]));
-                
                 //A result of -1 indicates that the substratergy has failed
                 if (result == -1)
                 {
+                    b.applySymmetry(b.inverseSymmetry(indicies[j]));
                     continue;
                 }
                 //A result in [0, 8] indicates that the substratergy wants to play the square with that index
                 else if (result >= 0 && result <= 8)
                 {
                     b.set(result);
+                    b.applySymmetry(b.inverseSymmetry(indicies[j]));
                     return true;
                 }
             }
@@ -308,31 +325,32 @@
    }
    
    /* Test for a row to either block or complete
-      ø  _  _
-      _  #  _
-      _  _  ø
-   */
-   function ss4(b)
-   {
-       if (b[0] != 0 && b[4] == 0 && b[8] == b[0])
-           return 4;
-       return -1;
-   }
-   
-   /* Test for a row to either block or complete
-      x  _  _
-      _  _  _
-      _  _  #
+       _  _  _
+       ø  ø  _
+       _  _  _
    */
    function ss5(b)
    {
-       if (b[0] == 1 && b[8] == 0)
-           return 8;
-       return -1;
+      if (b[3] != 0 && b[4] == 0 && b[5] == b[3])
+          return 4;
+      
+      if (b[3] != 0 && b[4] == b[3] && b[5] == 0)
+          return 5;
+      
+      return -1;
    }
    
+   /* Test for a row to either block or complete
+      _  x  _
+      _  #  _
+      _  _  _
+   */
    function ss6(b)
    {
+       if (b[1] != 0 && b[4] == 0)
+           return 4;
+       if (b[1] == 0 && b[4] != 0)
+           return 1;
        return -1;
    }
    
@@ -580,7 +598,8 @@
                 </tr>
             </table>
         </div>
-    </div>
+        <div id="logger" style="clear:both;"></div>
+</div>
     
 </body>
 </html>
