@@ -266,7 +266,7 @@
     */
     function ss1(b)
     {
-        if (b[0] != 0 && b[3] != 0 && b[6] == 0)
+        if (b[0] != 0 && b[3] == b[0] && b[6] == 0)
             return 6;
         return -1;
     }
@@ -278,7 +278,7 @@
     */
     function ss2(b)
     {
-        if (b[0] != 0 && b[3] == 0 && b[6] != 0)
+        if (b[0] != 0 && b[3] == 0 && b[6] == b[0])
             return 3;
         return -1;
     }
@@ -290,7 +290,7 @@
     */
     function ss3(b)
     {
-        if (b[0] != 0 && b[4] != 0 && b[8] == 0)
+        if (b[0] != 0 && b[4] == b[0] && b[8] == 0)
             return 8;
         return -1;
     }
@@ -302,7 +302,7 @@
    */
    function ss4(b)
    {
-       if (b[0] != 0 && b[4] == 0 && b[8] != 0)
+       if (b[0] != 0 && b[4] == 0 && b[8] == b[0])
            return 4;
        return -1;
    }
@@ -314,7 +314,7 @@
    */
    function ss4(b)
    {
-       if (b[0] != 0 && b[4] == 0 && b[8] != 0)
+       if (b[0] != 0 && b[4] == 0 && b[8] == b[0])
            return 4;
        return -1;
    }
@@ -380,6 +380,9 @@
    //Generate a random integer in the interval [a, b]
    function randomBetween(a, b)
    {
+       if (a == b)
+        return a;
+       
        return a + Math.floor(Math.random()*(b+1));
    }
    
