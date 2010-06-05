@@ -32,7 +32,7 @@
 	NSString *developerDirectory;
 }
 
-- (id)initWithDocsetURL:(NSURL *)theDocsetURL managedObjectContext:(NSManagedObjectContext *)moc launchController:(IGKLaunchController*)lc dbQueue:(dispatch_queue_t)dbq;
+- (id)initWithDocsetURL:(NSURL *)theDocsetURL managedObjectContext:(NSManagedObjectContext *)moc launchController:(IGKLaunchController*)lc dbQueue:(dispatch_queue_t)dbq developerDirectory:(NSString *)devDir;
 
 - (void)findPathCount;
 - (BOOL)findPaths;

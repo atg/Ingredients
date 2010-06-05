@@ -41,7 +41,7 @@
 			[newString appendString:[passage substringWithRange:NSMakeRange(NSMaxRange(previousRange), inbetweenLength)]];
 		}
 		
-		if ([words containsObject:substring])
+		if ([substring length] > 1 && [words containsObject:substring])
 		{
 			[newString appendString:@"<a href='http://ingr-link/"];
 			[newString appendString:substring];

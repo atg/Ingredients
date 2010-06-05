@@ -10,13 +10,21 @@
 
 //This isn't hacky at all. Not... at... all...
 
-@interface IGKSometimesCenteredTextCell : NSTextFieldCell {
+@interface IGKStrikethroughTextCell : NSTextFieldCell {
+	BOOL hasStrikethrough;
+}
+
+@property (assign) BOOL hasStrikethrough;
+
+@end
+
+@interface IGKSometimesCenteredTextCell : IGKStrikethroughTextCell {
 
 }
 
 @end
 
-@interface IGKSometimesCenteredTextCell2 : NSTextFieldCell {
+@interface IGKSometimesCenteredTextCell2 : IGKStrikethroughTextCell {
 	
 }
 
