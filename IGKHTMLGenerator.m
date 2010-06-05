@@ -531,6 +531,9 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 }
 - (void)html_itemAnnotations:(IGKDocRecordManagedObject *)object
 {
+	//NOT FINISHED YET
+	return;
+	
 	if (![[NSUserDefaults standardUserDefaults] boolForKey:@"IGKShowAnnotations"])
 		return;
 	

@@ -1237,7 +1237,7 @@
 		}
 		
 		//Otherwise, add to the array if obj contains queryString
-		if ([[obj valueForKey:@"name"] caseInsensitiveCompare:queryString])
+		if ([[obj valueForKey:@"name"] caseInsensitiveContainsString:queryString])
 		{
 			[rightFilterBarItems addObject:obj];
 		}
