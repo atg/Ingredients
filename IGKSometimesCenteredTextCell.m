@@ -11,11 +11,13 @@
 
 @implementation IGKStrikethroughTextCell
 
+@synthesize hasStrikethrough;
+
 + (void)drawStrikethroughInRect:(NSRect)rect
 {
 	[[NSColor redColor] set];
 	
-	rect.origin.y = rect.size.height / 2.0;
+	rect.origin.y = rect.origin.y + floor(rect.size.height / 2.0) + 2;
 	rect.size.height = 1.0;
 	
 	NSRectFillUsingOperation(rect, NSCompositeSourceOver);
@@ -46,7 +48,7 @@
 	[super drawWithFrame:cellFrame inView:controlView];
 	
 	if (hasStrikethrough)
-		[self drawStrikethroughInRect:cellFrame];
+		[[self class] drawStrikethroughInRect:cellFrame];
 }
 
 
@@ -65,7 +67,7 @@
 	 NSRect titleRect = [self titleRectForBounds:cellFrame];
 	 [[self attributedStringValue] drawInRect:titleRect];
 	 if (hasStrikethrough)
-		 [self drawStrikethroughInRect:cellFrame];
+		 [[self class] drawStrikethroughInRect:cellFrame];
  }
 
 @end

@@ -15,6 +15,7 @@
 #import "IGKPredicateEditor.h"
 #import "IGKDocRecordManagedObject.h"
 #import "CHSymbolButtonImage.h"
+#import "IGKSometimesCenteredTextCell.h"
 
 @interface IGKWindowController ()
 
@@ -1391,6 +1392,24 @@
 			if ([cell respondsToSelector:@selector(setTextColor:)])
 				[cell setTextColor:[NSColor blackColor]];
 			
+			if ([cell respondsToSelector:@selector(setHasStrikethrough:)])
+				[(IGKStrikethroughTextCell *)cell setHasStrikethrough:[[currentRow valueForKey:@"isDeprecated"] boolValue]];
+		}
+	}
+	else if (tableView == sideSearchViewResults)
+	{
+		if ([cell respondsToSelector:@selector(setHasStrikethrough:)])
+		{
+			id currentRow = [sideSearchController objectAtRow:row];
+			[(IGKStrikethroughTextCell *)cell setHasStrikethrough:[[currentRow valueForKey:@"isDeprecated"] boolValue]];
+		}
+	}
+	else if (tableView == searchViewTable)
+	{
+		if ([cell respondsToSelector:@selector(setHasStrikethrough:)])
+		{
+			id currentRow = [advancedController objectAtRow:row];
+			[(IGKStrikethroughTextCell *)cell setHasStrikethrough:[[currentRow valueForKey:@"isDeprecated"] boolValue]];
 		}
 	}
 }

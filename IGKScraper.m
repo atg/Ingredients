@@ -650,6 +650,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			 methodEntity:(NSEntityDescription *)methodEntity parent:(NSManagedObject*)parent docset:(NSManagedObject*)theDocset;
 
 - (void)scrape;
+- (void)scrapeTransientObject;
 - (void)scrapeMethod;
 - (void)scrapeAbstractMethodContainer;
 - (void)scrapeMethodChildren:(NSArray *)children index:(NSUInteger)index managedObject:(NSManagedObject *)object;
@@ -696,13 +697,43 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 
 - (void)scrape
 {
+	NSManagedObjectContext *persistmoc = [persistobj managedObjectContext];
+	NSError *err = nil;
+	
+	NSString *docsetPath = [[persistobj valueForKey:@"docset"] valueForKey:@"path"];
+	NSString *docsetPathWithPrefix = [docsetPath stringByAppendingPathComponent:kIGKDocsetPrefixPath];
+	
+	//Fetch the deprecated methods
+	NSFetchRequest *deprecatedObjectsFetch = [[NSFetchRequest alloc] init];
+	[deprecatedObjectsFetch setEntity:[NSEntityDescription entityForName:@"DocRecord" inManagedObjectContext:persistmoc]];
+	[deprecatedObjectsFetch setPredicate:[NSPredicate predicateWithFormat:@"isDeprecated=TRUE && globalContainer=%@", persistobj]];
+	NSArray *deprecatedObjects = [persistmoc executeFetchRequest:deprecatedObjectsFetch error:&err];
+	NSMutableSet *deprecatedAppendices = [[NSMutableSet alloc] initWithCapacity:1];
+	for (NSManagedObject *deprecatedObject in deprecatedObjects)
+	{
+		NSString *deprecatedAppendixPath = [[deprecatedObject valueForKeyPath:@"heavyNonQueryables"] valueForKey:@"documentPath"];
+		if (deprecatedAppendixPath)
+			[deprecatedAppendices addObject:[docsetPathWithPrefix stringByAppendingPathComponent:deprecatedAppendixPath]];
+	}
+	
 	//Get persistobj's equivalent in transientContext
 	transientObject = (IGKDocRecordManagedObject *)[transientContext objectWithID:[persistobj objectID]];
-	
 	docset = [transientObject valueForKey:@"docset"];
-	NSString *relativeExtractPath = [transientObject valueForKey:@"documentPath"];
-	NSString *docsetPath = [[transientObject valueForKey:@"docset"] valueForKey:@"path"];
-	NSString *extractPath = [[docsetPath stringByAppendingPathComponent:kIGKDocsetPrefixPath] stringByAppendingPathComponent:relativeExtractPath];
+	
+	[self scrapeInPath:[docsetPathWithPrefix stringByAppendingPathComponent:[persistobj valueForKey:@"documentPath"]]];
+	
+	isParsingDeprecatedAppendix = YES;
+	for (NSString *deprecatedAppendix in deprecatedAppendices)
+	{
+		NSLog(@"deprecatedAppendix = %@", deprecatedAppendix);
+		[self scrapeInPath:deprecatedAppendix];
+	}
+	isParsingDeprecatedAppendix = NO;
+}
+- (void)scrapeInPath:(NSString *)extractPath
+{
+	//NSString *relativeExtractPath = [transientObject valueForKey:@"documentPath"];
+	//NSString *extractPath = [docsetPathWithPrefix stringByAppendingPathComponent:relativeExtractPath];
 	
 	NSURL *fileurl = [NSURL fileURLWithPath:extractPath];
 	
@@ -1551,27 +1582,24 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		
 	}
 }
-- (void)scrapeAbstractMethodContainer
+- (void)scrapeAbstractMethodContainerNonDeprecatedBits
 {
+	NSError *err = nil;
+	
 	[transientObject setValue:[NSSet set] forKey:@"methods"];
 	[transientObject setValue:[NSSet set] forKey:@"properties"];
 	[transientObject setValue:[NSSet set] forKey:@"notifications"];
 	[transientObject setValue:[NSSet set] forKey:@"delegatemethods"];
 	[transientObject setValue:[NSSet set] forKey:@"taskgroups"];
 	
-	NSError *err = nil;
-		
-	// NSArray *methodNodes1 = [[doc rootElement] nodesForXPath:@"//a" error:&err];
-	
-	
 	//Find <div id="Overview_section" class="zClassDescription">	
 	NSArray *overviewSectionNodes = [[doc rootElement] nodesForXPath:@"//div[@id='Overview_section']" error:&err];
 	//FIXME: This (faster) version isn't working for some reason. It should be equivalent
 	/*
-	NSArray *overviewSectionNodes1 = [[doc rootElement] nodesMatchingPredicate:^BOOL(NSXMLNode *node) {
-		return [[node name] isEqual:@"div"] && [[node attributeForName:@"id"] isEqual:@"Overview_section"];
-	}];
-	*/
+	 NSArray *overviewSectionNodes1 = [[doc rootElement] nodesMatchingPredicate:^BOOL(NSXMLNode *node) {
+	 return [[node name] isEqual:@"div"] && [[node attributeForName:@"id"] isEqual:@"Overview_section"];
+	 }];
+	 */
 	for (NSXMLElement *el in overviewSectionNodes)
 	{
 		if (![el isKindOfClass:[NSXMLElement class]])
@@ -1579,7 +1607,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		
 		if (![el childCount])
 			continue;
-				
+		
 		[self scrapeAbstractMethodContainerTopDOMChildren:[el children] index:0 type:0];
 		break;
 	}
@@ -1590,10 +1618,10 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	
 	//FIXME: Same deal as above. This (faster) version isn't working for some reason. It should be equivalent
 	/*
-	NSArray *tasksSectionNodes1 = [[doc rootElement] nodesMatchingPredicate:^BOOL(NSXMLNode *node) {
-		return [[node name] isEqual:@"div"] && [[node attributeForName:@"id"] isEqual:@"Tasks_section"];
-	}];
-	*/
+	 NSArray *tasksSectionNodes1 = [[doc rootElement] nodesMatchingPredicate:^BOOL(NSXMLNode *node) {
+	 return [[node name] isEqual:@"div"] && [[node attributeForName:@"id"] isEqual:@"Tasks_section"];
+	 }];
+	 */
 	for (NSXMLElement *el in tasksSectionNodes)
 	{
 		if (![el isKindOfClass:[NSXMLElement class]])
@@ -1606,6 +1634,15 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		break;
 	}
 	
+}
+- (void)scrapeAbstractMethodContainer
+{	
+	if (!isParsingDeprecatedAppendix)
+	{
+		[self scrapeAbstractMethodContainerNonDeprecatedBits];
+	}
+	
+	// NSArray *methodNodes1 = [[doc rootElement] nodesForXPath:@"//a" error:&err];
 	
 	//Search through all anchors in the document, and record their parent elements
 	NSMutableSet *containersSet = [[NSMutableSet alloc] init];

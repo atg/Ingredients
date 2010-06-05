@@ -55,6 +55,8 @@
 	
 	NSArray *methodNodes;
 	
+	BOOL isParsingDeprecatedAppendix;
+	
 	//Some caching of entities
 	NSEntityDescription *ObjCMethodEntity;
 	NSEntityDescription *ObjCNotificationEntity;
