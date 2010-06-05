@@ -221,6 +221,10 @@
         }
     }
     
+    function isFinished() {
+        return b[0] != 0 && b[1] != 0 && b[2] != 0 && b[3] != 0 && b[4] != 0 && b[5] != 0 && b[6] != 0 && b[7] != 0 && b[8] != 0;
+    }
+    
     function calculateComputerTurn2(b) {
         detectWin();
         
@@ -239,6 +243,9 @@
             if (b[5] == 0) openSpaces.push(5);
             if (b[6] == 0) openSpaces.push(6);
             if (b[7] == 0) openSpaces.push(7);
+            
+            if (!openSpaces.length)
+                return false;
             
             var openSpaceIndex = randomBetween(0, openSpaces.length - 1);
             b.set(openSpaces[openSpaceIndex]);
