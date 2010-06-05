@@ -18,7 +18,9 @@
 
 - (NSUInteger)backgroundSearch:(NSManagedObject *)docset;
 
-- (BOOL)extractPath:(NSString *)extractPath relativeExtractPath:(NSString *)relativeExtractPath docset:(NSManagedObject *)docset;
++ (NSArray *)pathOfDeprecationAppendiciesForPath:(NSString *)indexPath;
+
+- (BOOL)extractPath:(NSString *)extractPath relativeExtractPath:(NSString *)relativeExtractPath docset:(NSManagedObject *)docset isDeprecationAppendix:(BOOL)isDeprecationAppendix mainObjectIn:(NSManagedObject *)mainObjectIn mainObjectOut:(NSManagedObject **)mainObjectOut;
 - (NSManagedObject *)addRecordNamed:(NSString *)recordName entityName:(NSString *)entityName desc:(NSString *)recordDesc sourcePath:(NSString *)recordPath;
 
 @end
@@ -221,8 +223,22 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		
 		for (NSString *relativeExtractPath in paths)
 		{
-			[self extractPath:[docsetPathWithPrefix stringByAppendingPathComponent:relativeExtractPath]
-		  relativeExtractPath:relativeExtractPath docset:scraperDocset];
+			NSString *indexPath = [docsetPathWithPrefix stringByAppendingPathComponent:relativeExtractPath];
+			NSManagedObject *mainObject = nil;
+			[self extractPath:indexPath relativeExtractPath:relativeExtractPath docset:scraperDocset isDeprecationAppendix:NO mainObjectIn:nil mainObjectOut:&mainObject];
+			
+			//Try to find matching deprecated appendicies
+			NSArray *deprecationAppendicies = [[self class] pathOfDeprecationAppendiciesForPath:indexPath];
+			for (NSString *deprecationAppendixPath in deprecationAppendicies)
+			{
+				NSLog(@"mainObject = %@", mainObject);
+				[self extractPath:[[indexPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:deprecationAppendixPath]
+			  relativeExtractPath:[[relativeExtractPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:deprecationAppendixPath]
+						   docset:scraperDocset
+			isDeprecationAppendix:YES
+					 mainObjectIn:mainObject
+					mainObjectOut:NULL];
+			}
 			
 			pathsCounter += 1;
 			
@@ -232,9 +248,33 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		}
 	});
 }
-
-- (BOOL)extractPath:(NSString *)extractPath relativeExtractPath:(NSString *)relativeExtractPath docset:(NSManagedObject *)docset
++ (NSArray *)pathOfDeprecationAppendiciesForPath:(NSString *)indexPath
 {	
+	NSString *deprecationAppendiciesFolder = [[indexPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"DeprecationAppendix"];
+	
+	NSError *err = nil;
+	NSArray *appendixPaths = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:deprecationAppendiciesFolder error:&err];
+	
+	if (![appendixPaths count])
+		return nil;
+	
+	NSMutableArray *deprecationAppendicies = [[NSMutableArray alloc] initWithCapacity:[appendixPaths count]];
+	
+	for (NSString *deprecationAppendixPath in appendixPaths)
+	{
+		[deprecationAppendicies addObject:[@"DeprecationAppendix" stringByAppendingPathComponent:deprecationAppendixPath]];
+	}
+	
+	return deprecationAppendicies;
+}
+
+- (BOOL)extractPath:(NSString *)extractPath relativeExtractPath:(NSString *)relativeExtractPath docset:(NSManagedObject *)docset isDeprecationAppendix:(BOOL)isDeprecationAppendix mainObjectIn:(NSManagedObject *)mainObjectIn mainObjectOut:(NSManagedObject **)mainObjectOut
+{
+	if (isDeprecationAppendix)
+	{
+		NSLog(@"Deprecation appendix '%@'", extractPath);
+	}
+	
 	//Let's try to extract the class's name (assuming it is a class of course)	
 	NSError *error = nil;
 	NSString *contents = [NSString stringWithContentsOfFile:extractPath encoding:NSUTF8StringEncoding error:&error];
@@ -306,7 +346,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	}
 	
 	//Nothing of note matched
-	else
+	else if (!isDeprecationAppendix)
 	{
 		// bail
 		return NO;
@@ -370,7 +410,6 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	/* The interesting captures are 3 & 4, and 5 & 6 */
 	NSArray *items = [contents arrayOfCaptureComponentsMatchedByRegex:linkRegex];
 	
-	
 	dispatch_sync(dbQueue, ^{
 		
 		NSEntityDescription *propertyEntity = [NSEntityDescription entityForName:@"ObjCProperty" inManagedObjectContext:ctx];
@@ -385,9 +424,10 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		NSEntityDescription *enumEntity = nil;
 		NSEntityDescription *structEntity = nil;
 		NSEntityDescription *unionEntity = nil;
-		
-		NSManagedObject *obj = nil;
-		if (entityName)
+				
+		//If this isn't a deprecation appendix, create a parent object
+		NSManagedObject *obj = mainObjectIn;
+		if (entityName && isDeprecationAppendix == NO)
 		{
 			obj = [self addRecordNamed:name entityName:entityName desc:@"" sourcePath:relativeExtractPath];
 			[obj setValue:docset forKey:@"docset"];
@@ -405,8 +445,13 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			}
 		}
 		
-		int lastWasProperty = 0;
+		if (mainObjectOut)
+			*mainObjectOut = obj;
 		
+		if (mainObjectOut)
+			NSLog(@"mainObjectOut = %d, *mainObjectOut = %d, obj = %d", mainObjectOut, *mainObjectOut, obj);
+		
+		int lastWasProperty = 0;
 		for (NSArray *captures in items)
 		{
 			if ([captures count] > 4)
@@ -442,6 +487,11 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 					[newMethod setValue:obj forKey:@"globalContainer"];
 					[newMethod setValue:docset forKey:@"docset"];
 					[newMethod setValue:relativeExtractPath forKey:@"documentPath"];
+					if (isDeprecationAppendix)
+						[newMethod setValue:[NSNumber numberWithBool:YES] forKey:@"isDeprecated"];
+					
+					if (isDeprecationAppendix)
+						NSLog(@"newMethod = %@", newMethod);
 					
 					if (!isProperty)
 						[newMethod setValue:[NSNumber numberWithBool:isInstanceMethod] forKey:@"isInstanceMethod"];
@@ -569,6 +619,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 						[newSubobject setValue:docset forKey:@"docset"];
 						[newSubobject setValue:obj forKey:@"miscContainer"];
 						[newSubobject setValue:relativeExtractPath forKey:@"documentPath"];
+						
+						if (isDeprecationAppendix)
+							[newSubobject setValue:[NSNumber numberWithBool:YES] forKey:@"isDeprecated"];
 					}
 					
 					continue;
