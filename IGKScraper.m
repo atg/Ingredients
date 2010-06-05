@@ -725,7 +725,6 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	isParsingDeprecatedAppendix = YES;
 	for (NSString *deprecatedAppendix in deprecatedAppendices)
 	{
-		NSLog(@"deprecatedAppendix = %@", deprecatedAppendix);
 		[self scrapeInPath:deprecatedAppendix];
 	}
 	isParsingDeprecatedAppendix = NO;
@@ -741,6 +740,8 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	doc = [[NSXMLDocument alloc] initWithContentsOfURL:fileurl options:NSXMLDocumentTidyHTML error:&err];
 	if (!doc)
 		return;
+	
+	methodNodes = nil;
 	
 	[self scrapeTransientObject];
 }
@@ -763,15 +764,19 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		[self scrapeAbstractMethodContainer];
 		
 		//Hacky way to also read new data for misc items
-		id oldTransientObject = transientObject;
-		for (IGKDocRecordManagedObject *miscItem in [oldTransientObject valueForKey:@"miscitems"])
+		if (!isParsingDeprecatedAppendix)
 		{
-			transientObject = miscItem;
-			[self scrapeTransientObject];
+			id oldTransientObject = transientObject;
+			for (IGKDocRecordManagedObject *miscItem in [oldTransientObject valueForKey:@"miscitems"])
+			{
+				transientObject = miscItem;
+				[self scrapeTransientObject];
+			}
+			transientObject = oldTransientObject;
 		}
-		transientObject = oldTransientObject;
+		return;
 	}
-	else if ([transientObject isKindOfEntityNamed:@"ObjCMethod"])
+	if ([transientObject isKindOfEntityNamed:@"ObjCMethod"])
 	{
 		[self scrapeMethod];
 	}
@@ -1657,7 +1662,6 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			[containersSet addObject:[a parent]];
 		}
 	}
-	
 	
 	//For each container
 	NSMutableArray *methods = [[NSMutableArray alloc] init];
