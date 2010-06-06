@@ -544,7 +544,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	itemid = [itemid stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
 	//NSLog(@"itemid = %@", itemid);
 	
-	NSArray *annotations = [[IGKAnnotationManager sharedAnnotationManager] annotationsForURL:[object docURL:IGKHTMLDisplayType_All]];
+	NSArray *annotations = [[IGKAnnotationManager sharedAnnotationManager] annotationsForURL:[[object docURL:IGKHTMLDisplayType_All] absoluteString]];
 	
 	// -[<strong>NSString</strong> <strong>stringWithFormat:</strong>]
 	NSString *itemNameValue = [object valueForKey:@"name"];
