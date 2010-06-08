@@ -654,6 +654,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 - (void)scrapeMethod;
 - (void)scrapeAbstractMethodContainer;
 - (void)scrapeMethodChildren:(NSArray *)children index:(NSUInteger)index managedObject:(NSManagedObject *)object;
+- (void)scrapeBindings:(NSArray *)children index:(NSUInteger)index managedObject:(NSManagedObject *)object;
 
 - (void)scrapeApplecode:(NSString *)applecode;
 - (void)scrapeApplecodes:(NSArray *)applecodes;;
@@ -1754,6 +1755,136 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		[newItem setValue:docset forKey:@"docset"];
 	}
 }
+
+- (void)scrapeBindingsListing
+{
+	//Search through all anchors in the document, and record their parent elements
+	NSMutableSet *containersSet = [[NSMutableSet alloc] init];
+	for (NSXMLElement *a in [self methodNodes])
+	{
+		if (![a isKindOfClass:[NSXMLElement class]])
+			continue;
+		
+		NSString *name = [[a attributeForName:@"name"] commentlessStringValue];
+		if (name)
+		{
+			[containersSet addObject:[a parent]];
+		}
+	}
+	
+	//Partition into bindings descriptions
+	NSMutableArray *methods = [[NSMutableArray alloc] init];
+	for (NSXMLNode *container in containersSet)
+	{		
+		//Split the container's children array by "interesting" <a> elements
+		NSArray *arr = [[self class] splitArray:[container children] byBlock:^ NSString* (id a) {
+			if (![a isKindOfClass:[NSXMLElement class]])
+				return nil;
+			
+			NSXMLNode *el = [a attributeForName:@"name"];
+			NSString *strval = [el commentlessStringValue];
+			
+			if ([strval hasPrefix:@"//apple_ref/occ/binding"])
+			{
+				return @"ObjCBinding";
+			}
+			
+			return nil;
+		}];
+		
+		[methods addObjectsFromArray:arr];
+	}
+	
+	//Scrape each partition
+	for (NSArray *arr in methods)
+	{
+		if ([arr count] < 2)
+			continue;
+				
+		NSEntityDescription *entity = [NSEntityDescription entityForName:@"ObjCBinding" inManagedObjectContext:transientContext];
+		IGKDocRecordManagedObject *newItem = [[IGKDocRecordManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:transientContext];
+		
+		[self scrapeBinding:arr index:0 managedObject:newItem];
+		
+		[newItem setValue:transientObject forKey:@"container"];
+		[newItem setValue:transientObject forKey:@"globalContainer"];
+		[newItem setValue:docset forKey:@"docset"];
+	}	
+}
+- (void)scrapeBindings:(NSArray *)children index:(NSUInteger)index managedObject:(NSManagedObject *)object
+{
+	BOOL hasRecordedBindingsListing = NO;
+	
+	NSUInteger i = 0;
+	NSUInteger count = [children count];
+	
+	BOOL isOnlyAElements = YES;
+	if (count == 0)
+		isOnlyAElements = NO;
+		
+	for (i = index; i < count; i++)
+	{
+		NSXMLElement *n = [children objectAtIndex:i];
+		if (![n isKindOfClass:[NSXMLElement class]])
+			continue;
+		
+		NSString *nName = [[n name] lowercaseString];
+		NSArray *nClass = [[[[n attributeForName:@"class"] commentlessStringValue] lowercaseString] componentsSeparatedByString:@" "];
+		
+		if (![nName isEqual:@"a"])
+			isOnlyAElements = NO;
+		
+		//name
+		// <h3 class="*jump*"> ... </h3>
+		if ([nName isEqual:@"h3"] && [nClass containsObject:@"jump"])
+		{
+			//If we've already recorded a method, then we're done
+			if (hasRecordedBindingsListing)
+				break;
+			hasRecordedBindingsListing = YES;
+			[object setValue:[[n commentlessStringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
+			
+			continue;
+		}
+		
+		//availability
+		/* <div class="availabilityList">
+		     <strong>Availability:</strong>
+		     <div class="availabilityItem">Available in Mac OS X v10.3 and later.</div>
+		   </div>
+		 */
+		
+		
+		//isReadOnly
+		// <strong>Binding is Read-Only.</strong>
+		
+		
+		//placeholders
+		/* <div class="placeholder_options_block">
+		     <span class="bindings_tablehead">Binding Options</span>
+		     <table class="graybox" border="0" cellspacing="0" cellpadding="5">
+		       <tr valign="top">
+		         <td scope="row">
+				   <span class="content_text">Raises for Not Applicable Keys</span>
+				 </td>
+				 <td>
+				   <tt>...</tt>
+				 </td>
+				 <td>
+				   <span class="content_text">NSNumber (Boolean)</span>
+			     </td>
+			   </tr>
+			 </table>
+		   </div>
+		*/
+		
+		
+		//options
+		
+		
+	}		
+}
+
 
 + (NSArray *)splitArray:(NSArray *)array byBlock:(NSString* (^)(id a))block
 {

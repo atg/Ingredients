@@ -531,7 +531,6 @@
 				0C402C151191C691001564B5 /* NSString+Utilities.m */,
 				75BD17C71143F38800E67594 /* SQPreferencesBackgroundComponent.h */,
 				75BD17C51143F37E00E67594 /* SQPreferencesBackgroundComponent.m */,
-				75C9FF03110F868300C9B51C /* main.css */,
 				75F6702F110CCD31005F299C /* RegexKitLite.h */,
 				75F67030110CCD31005F299C /* RegexKitLite.m */,
 				754AA3F81140267300321EAF /* AnthillBugReporter.h */,
@@ -553,6 +552,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				75C9FF03110F868300C9B51C /* main.css */,
 				754AA3FB1140267D00321EAF /* AnthillReporter.nib */,
 				75901BEC1129FC2100BA0316 /* Credits.rtf */,
 				75B534F6111076C000560848 /* Images */,

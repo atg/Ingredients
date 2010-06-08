@@ -1,0 +1,82 @@
+l<a name="//apple_ref/occ/binding/NSSlider/enabled" title="enabled"></a>
+<a name="//apple_ref/doc/uid/NSSlider-DontLinkElementID_532" title="enabled"></a>
+
+<h3 class="tight jump">enabled</h3>
+
+<p>A multiple-value binding that determines if the NSSlider is enabled in the user interface.</p>
+<p>When <code>enabled</code> is bound, a new binding, <code>enabled2</code>, is exposed and can be bound. Binding to <code>enabled2</code> causes <code>enabled3</code> to be exposed, and so on.</p>
+<p>The NSSlider is enabled if a logical AND operation on all the <code>enabled</code> bindings results in a Boolean value of <code>YES</code>.</p>
+
+<div class="availabilityList">
+    <strong>Availability:</strong>
+	<div class="availabilityItem">Available in Mac OS X v10.3 and later.</div>
+</div> 
+
+<strong>Binding is Read-Only.</strong><br/>
+
+<div class="placeholder_options_block">
+    <br/>
+    <br/>
+    <span class="bindings_tablehead">Binding Options</span>
+    <br/>
+    <table class="graybox" border="0" cellspacing="0" cellpadding="5">
+        <tr>
+            <th scope="col" align="left">Option</th>
+            <th scope="col" align="left">Binding option constant</th>
+            <th scope="col" align="left">Value class</th>
+        </tr>
+    	<tr valign="top">
+    	    <td scope="row">
+    	        <span class="content_text">Raises for Not Applicable Keys</span>
+	        </td>
+	        
+	        <td>
+	            <tt>
+	                <span class="content_text">
+	                    <a href="../Concepts/BindingsOptions.html#//apple_ref/doc/uid/20002304-187525" target="_self">NSRaisesForNotApplicableKeysBindingOption</a>
+	                </span>
+	            </tt>
+	        </td>
+	        
+	        <td>
+	            <span class="content_text">NSNumber (Boolean)</span>
+	        </td>
+	    </tr>
+    </table>
+</div>
+
+<br/>
+
+<div class="placeholder_options_block">
+    <br/>
+    <span class="bindings_tablehead">Placeholders</span>
+    <br/>   
+    <table class="graybox" border="0" cellspacing="0" cellpadding="5">
+        <tr>
+            <th scope="col" align="left">Description</th>
+            <th scope="col" align="left">Placeholder constant</th>
+            <th scope="col" align="left">Value class</th>
+        </tr>
+    	<tr valign="top">
+    	    <td scope="row">
+    	        <span class="content_text">Multiple Values Placeholder</span>
+    	    </td>
+    	    <td>
+    	        <tt>
+    	            <span class="content_text">
+    	                <a href="../Concepts/BindingsOptions.html#//apple_ref/doc/uid/20002304-DontLinkElementID_768" target="_self">NSMultipleValuesPlaceholderBindingOption</a>
+    	            </span>
+    	        </tt>
+    	    </td>
+    	    
+    	    <td>
+    	        <span class="content_text">NSNumber (Boolean) or NSNull</span>
+	        </td>
+	    </tr>
+    	<tr valign="top">
+    	    <td>
+    	        <span class="content_text">No Selection Placeholder</span>
+    	    </td><td><tt><span class="content_text"><a href="../Concepts/BindingsOptions.html#//apple_ref/doc/uid/20002304-DontLinkElementID_769" target="_self">NSNoSelectionPlaceholderBindingOption</a></span></tt></td><td><span class="content_text">NSNumber (Boolean) or NSNull</span></td></tr>
+	<tr valign="top"><td><span class="content_text">Not Applicable Placeholder</span></td><td><tt><span class="content_text"><a href="../Concepts/BindingsOptions.html#//apple_ref/doc/uid/20002304-DontLinkElementID_770" target="_self">NSNotApplicablePlaceholderBindingOption</a></span></tt></td><td><span class="content_text">NSNumber (Boolean) or NSNull</span></td></tr>
+	<tr valign="top"><td><span class="content_text">Null Placeholder</span></td><td><tt><span class="content_text"><a href="../Concepts/BindingsOptions.html#//apple_ref/doc/uid/20002304-203776" target="_self">NSNullPlaceholderBindingOption</a></span></tt></td><td><span class="content_text">NSNumber (Boolean) or NSNull</span></td></tr>
+</table></div>
