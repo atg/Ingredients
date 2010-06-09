@@ -11,7 +11,7 @@
 #import "IGKDocRecordManagedObject.h"
 #import "IGKLaunchController.h"
 #import "NSXMLNode+IGKAdditions.h"
-
+#import "NSString+Utilities.h"
 #import "IGKDocSetManagedObject.h"
 
 @interface IGKScraper ()
@@ -812,6 +812,10 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	else if ([transientObject isKindOfEntityNamed:@"ObjCNotification"])
 	{
 		[self scrapeApplecode:@"c/data"];
+	}
+	else if ([transientObject isKindOfEntityNamed:@"ObjCBindingsListing"])
+	{
+		[self scrapeBindingsListing];
 	}
 }
 
@@ -1801,17 +1805,17 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		if ([arr count] < 2)
 			continue;
 				
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"ObjCBinding" inManagedObjectContext:transientContext];
-		IGKDocRecordManagedObject *newItem = [[IGKDocRecordManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:transientContext];
+		if (!ObjCBindingEntity)
+			ObjCBindingEntity = [NSEntityDescription entityForName:@"ObjCBinding" inManagedObjectContext:transientContext];
+		
+		IGKDocRecordManagedObject *newItem = [[IGKDocRecordManagedObject alloc] initWithEntity:ObjCBindingEntity insertIntoManagedObjectContext:transientContext];
 		
 		[self scrapeBinding:arr index:0 managedObject:newItem];
 		
 		[newItem setValue:transientObject forKey:@"container"];
-		[newItem setValue:transientObject forKey:@"globalContainer"];
-		[newItem setValue:docset forKey:@"docset"];
 	}	
 }
-- (void)scrapeBindings:(NSArray *)children index:(NSUInteger)index managedObject:(NSManagedObject *)object
+- (void)scrapeBinding:(NSArray *)children index:(NSUInteger)index managedObject:(NSManagedObject *)object
 {
 	BOOL hasRecordedBindingsListing = NO;
 	
@@ -1821,7 +1825,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	BOOL isOnlyAElements = YES;
 	if (count == 0)
 		isOnlyAElements = NO;
-		
+	
 	for (i = index; i < count; i++)
 	{
 		NSXMLElement *n = [children objectAtIndex:i];
@@ -1847,16 +1851,60 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			continue;
 		}
 		
+		//overview
+		/* <p> ... </p> <p> ... </p> <p> ... </p> ... */
+		if ([nName isEqual:@"p"])
+		{
+			NSMutableString *description = [[NSMutableString alloc] init];
+			
+			NSUInteger j;
+			for (; i < count; i++)
+			{
+				NSXMLElement *m = [children objectAtIndex:i];
+				if (![m isKindOfClass:[NSXMLElement class]])
+					continue;
+				if (![[[m name] lowercaseString] isEqual:@"p"])
+				{
+					i--;
+					break;
+				}
+				
+				[description appendFormat:@"<p>%@</p>", [m commentlessStringValue]];
+			}
+			
+			[object setValue:description forKey:@"overview"];
+		}
+		
 		//availability
 		/* <div class="availabilityList">
 		     <strong>Availability:</strong>
 		     <div class="availabilityItem">Available in Mac OS X v10.3 and later.</div>
 		   </div>
 		 */
-		
+		if ([nName isEqual:@"div"] && [nClass containsObject:@"availabilityList"])
+		{
+			NSArray *nChildren = [n children];
+			for (NSXMLNode *m in nChildren)
+			{
+				if (![m isKindOfClass:[NSXMLElement class]])
+					continue;
+				
+				if (![[[m name] lowercaseString] isEqual:@"div"])
+					continue;
+				
+				[object setValue:[m commentlessStringValue] forKey:@"availability"];
+			}
+		}
 		
 		//isReadOnly
 		// <strong>Binding is Read-Only.</strong>
+		if ([nName isEqual:@"strong"])
+		{
+			if ([[n commentlessStringValue] hasPrefix:@"Binding is Read-Only"])
+			{
+				[object setValue:[NSNumber numberWithBool:YES] forKey:@"isReadOnly"];
+			}
+		}
 		
 		
 		//placeholders
@@ -1877,14 +1925,107 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			 </table>
 		   </div>
 		*/
+		void (^parseOptionsTable)(NSManagedObject *, NSArray *) = ^(NSManagedObject *bindingsObject, NSArray *parentChildren) {
+		
+			if ([parentChildren count])
+			{				
+				for (NSXMLNode *m in parentChildren)
+				{
+					if (![m isKindOfClass:[NSXMLElement class]])
+						continue;
+					
+					BOOL isPlaceholders = NO;
+					
+					//Find out what kind of objects we will be creating
+					if ([[[m name] lowercaseString] isEqual:@"span"])
+					{
+						NSString *mStringValue = [m commentlessStringValue];
+						if ([mStringValue isEqual:@"Binding Options"])
+							isPlaceholders = NO;
+						else if ([mStringValue isEqual:@"Placeholders"])
+							isPlaceholders = YES;
+						
+						continue;
+					}
+					
+					if ([[[m name] lowercaseString] isEqual:@"table"])
+					{
+						NSArray *rows = [m children];
+						for (NSXMLNode *row in rows)
+						{
+							if (![row isKindOfClass:[NSXMLElement class]])
+								continue;
+							
+							NSManagedObject *subobject = nil;
+							for (NSXMLNode *cell in [row children])
+							{
+								if (![cell isKindOfClass:[NSXMLElement class]])
+									continue;
+								
+								//If this is a row full of header cells, continue on to the next row
+								if (![[[n name] lowercaseString] isEqual:@"th"])
+									break;
+								if (![[[n name] lowercaseString] isEqual:@"td"])
+									break;
+								
+								//This is a data row so create a new managed object
+								if (!subobject && isPlaceholders)
+								{
+									if (!ObjCBindingPlaceholderEntity)
+										ObjCBindingPlaceholderEntity = [NSEntityDescription entityForName:@"ObjCBindingPlaceholder" inManagedObjectContext:transientContext];
+									subobject = [[NSManagedObject alloc] initWithEntity:ObjCBindingPlaceholderEntity insertIntoManagedObjectContext:transientContext];
+								}
+								else if (!subobject)
+								{
+									if (!ObjCBindingOptionEntity)
+										ObjCBindingOptionEntity = [NSEntityDescription entityForName:@"ObjCBindingOption" inManagedObjectContext:transientContext];
+									subobject = [[NSManagedObject alloc] initWithEntity:ObjCBindingOptionEntity insertIntoManagedObjectContext:transientContext];
+								}
+								
+								//Try to set the option's type
+								if ([[[[(NSXMLElement *)cell attributeForName:@"scope"] commentlessStringValue] lowercaseString] isEqual:@"row"])
+								{
+									NSString *placeholderConstant = [cell commentlessStringValue];
+									if (placeholderConstant)
+										[subobject setValue:placeholderConstant forKey:@"placeholderConstant"];
+									continue;
+								}
+								
+								//Try to set the option's name
+								NSArray *cellChildren = [cell children];
+								if ([cellChildren count])
+								{
+									NSXMLNode *possibleTTNode = [cellChildren objectAtIndex:0];
+									if ([[[possibleTTNode name] lowercaseString] isEqual:@"tt"])
+									{
+										[subobject setValue:possibleTTNode forKey:@"option"];
+										continue;
+									}
+								}
+								
+								//Otherwise set the option's class
+								NSString *cellStringValue = [cell commentlessStringValue];
+								if (cellStringValue)
+								{
+									[subobject setValue:cellStringValue forKey:@"valueClass"];
+								}
+							}
+							
+							[subobject setValue:object forKey:@"binding"];
+						}
+					}
+				}
+			}
+		};
+		
+		if ([nName isEqual:@"placeholder_options_block"])
+        {
+			parseOptionsTable(object, [n children]);
+		}
 		
 		
-		//options
-		
-		
-	}		
+	}
 }
-
 
 + (NSArray *)splitArray:(NSArray *)array byBlock:(NSString* (^)(id a))block
 {

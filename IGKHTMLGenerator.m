@@ -510,12 +510,35 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	
 	[outputString appendString:@"<div class='methods'>"];
-	NSArray *bindings = [[object valueForKey:@"bindings"] allObjects];
-	//NSLog(@"bindings = %@", bindings);
+	
+	//Get the bindings and sort them by name
+	NSSortDescriptor *nameSorter = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+	NSArray *bindings = [[[object valueForKey:@"bindings"] allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:nameSorter]];
+	
+	NSLog(@"bindings = %@", bindings);
+	
+	for (NSManagedObject *binding in bindings)
+	{
+		[self html_binding:binding];
+	}
+	
 	[outputString appendString:@"</div>"];
 	
-	
 	[outputString appendString:@"</div>"];
+}
+- (void)html_binding:(NSManagedObject *)binding
+{
+	[outputString appendString:@"\t<div>"];
+	
+	[outputString appendFormat:@"\t\t<h2>%@</h2>\n", [self escape:[binding valueForKey:@"name"]]];
+	
+	if ([[binding valueForKey:@"isReadOnly"] boolValue])
+		[outputString appendFormat:@"<p><strong><em>Read only binding.</em></strong></p>"];
+	
+	if ([binding valueForKey:@"overview"])
+		[outputString appendFormat:@"\t\t<div class='description'>%@</div>\n", [self addHyperlinks:[binding valueForKey:@"overview"]]];
+	
+	[outputString appendString:@"\t</div>"];
 }
 
 - (void)html_itemCategory:(IGKDocRecordManagedObject *)object

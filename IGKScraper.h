@@ -65,6 +65,9 @@
 	NSEntityDescription *SampleCodeProjectEntity;
 	NSEntityDescription *MetaTaskGroupEntity;
 	NSEntityDescription *MetaTaskGroupItemEntity;
+	NSEntityDescription *ObjCBindingEntity;
+	NSEntityDescription *ObjCBindingOptionEntity;
+	NSEntityDescription *ObjCBindingPlaceholderEntity;
 }
 
 @property (readonly) NSManagedObject *transientObject;
