@@ -537,8 +537,39 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	if ([binding valueForKey:@"overview"])
 		[outputString appendFormat:@"\t\t<div class='description'>%@</div>\n", [self addHyperlinks:[binding valueForKey:@"overview"]]];
+		
+	//Get the placeholder options
+	[self html_bindingOptions:[binding valueForKey:@"options"]];
+	[self html_bindingOptions:[binding valueForKey:@"placeholders"]];
 	
 	[outputString appendString:@"\t</div>"];
+}
+- (void)html_bindingOptions:(NSSet *)options
+{
+	if (![options count])
+		return;
+		
+	NSSortDescriptor *nameSorter = [NSSortDescriptor sortDescriptorWithKey:@"option" ascending:YES];
+	NSArray *sortedOptions = [[options allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:nameSorter]];
+	
+	[outputString appendString:@"\t\t<table class='info'>\n"];
+	
+	[outputString appendString:@"\t\t\t<tr class='first'>\n"];
+	[outputString appendString:@"\t\t\t\t<th>Option</th>\n"];
+	[outputString appendString:@"\t\t\t\t<th>Constant</th>\n"];
+	[outputString appendString:@"\t\t\t\t<th>Value Class</th>\n"];
+	[outputString appendString:@"\t\t\t</tr>\n"];
+
+	for (NSManagedObject *placeholder in sortedOptions)
+	{
+		[outputString appendString:@"\t\t\t<tr>\n"];
+		[outputString appendFormat:@"\t\t\t\t<td>%@</td>\n", [self escape:[placeholder valueForKey:@"option"] ?: @""]];
+		[outputString appendFormat:@"\t\t\t\t<td>%@</td>\n", [self escape:[placeholder valueForKey:@"placeholderConstant"] ?: @""]];
+		[outputString appendFormat:@"\t\t\t\t<td>%@</td>\n", [self escape:[placeholder valueForKey:@"valueClass"] ?: @""]];
+		[outputString appendString:@"\t\t\t<tr>\n"];
+	}
+	
+	[outputString appendString:@"\t\t</table>\n"];
 }
 
 - (void)html_itemCategory:(IGKDocRecordManagedObject *)object

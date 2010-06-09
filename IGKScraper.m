@@ -1963,10 +1963,8 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 									continue;
 								
 								//If this is a row full of header cells, continue on to the next row
-								if (![[[n name] lowercaseString] isEqual:@"th"])
-									break;
-								if (![[[n name] lowercaseString] isEqual:@"td"])
-									break;
+								if (![[[cell name] lowercaseString] isEqual:@"td"])
+									continue;
 								
 								//This is a data row so create a new managed object
 								if (!subobject && isPlaceholders)
@@ -1998,7 +1996,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 									NSXMLNode *possibleTTNode = [cellChildren objectAtIndex:0];
 									if ([[[possibleTTNode name] lowercaseString] isEqual:@"tt"])
 									{
-										[subobject setValue:possibleTTNode forKey:@"option"];
+										[subobject setValue:[possibleTTNode commentlessStringValue] forKey:@"option"];
 										continue;
 									}
 								}
@@ -2018,12 +2016,10 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			}
 		};
 		
-		if ([nName isEqual:@"placeholder_options_block"])
+		if ([nClass containsObject:@"placeholder_options_block"])
         {
 			parseOptionsTable(object, [n children]);
 		}
-		
-		
 	}
 }
 
