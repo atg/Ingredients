@@ -56,7 +56,7 @@ const NSTimeInterval timeoutInterval = 0.15;
 		NSFetchRequest *request = [[NSFetchRequest alloc] init];
 		[request setEntity:[NSEntityDescription entityForName:entityToFetch inManagedObjectContext:ctx]];
 		[request setPredicate:copiedPredicate];
-		
+				
 		[request setFetchLimit:500];
 		if (maxRows != 0 && maxRows < 500)
 		{

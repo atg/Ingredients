@@ -80,6 +80,8 @@
 		75901BEE1129FC2100BA0316 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 75901BEC1129FC2100BA0316 /* Credits.rtf */; };
 		759030231139BFF500550A86 /* IGKMatteSegmentedControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 759030211139BFF500550A86 /* IGKMatteSegmentedControl.h */; };
 		759030241139BFF500550A86 /* IGKMatteSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 759030221139BFF500550A86 /* IGKMatteSegmentedControl.m */; };
+		7593070311C01B96008A0AC5 /* IGKOutputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 7593070111C01B96008A0AC5 /* IGKOutputStream.h */; };
+		7593070411C01B96008A0AC5 /* IGKOutputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 7593070211C01B96008A0AC5 /* IGKOutputStream.m */; };
 		75943BA5114407C2004126E7 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75943BA4114407C2004126E7 /* Sparkle.framework */; };
 		75943BCE114407C9004126E7 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 75943BA4114407C2004126E7 /* Sparkle.framework */; };
 		75943BD1114407D1004126E7 /* IGKPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BD177D1143E94000E67594 /* IGKPreferencesController.m */; };
@@ -284,6 +286,8 @@
 		75901BED1129FC2100BA0316 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Credits.rtf; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		759030211139BFF500550A86 /* IGKMatteSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKMatteSegmentedControl.h; sourceTree = "<group>"; };
 		759030221139BFF500550A86 /* IGKMatteSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKMatteSegmentedControl.m; sourceTree = "<group>"; };
+		7593070111C01B96008A0AC5 /* IGKOutputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKOutputStream.h; sourceTree = "<group>"; };
+		7593070211C01B96008A0AC5 /* IGKOutputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKOutputStream.m; sourceTree = "<group>"; };
 		75943BA4114407C2004126E7 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		75943C0911441AE0004126E7 /* IGKBackForwardManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKBackForwardManager.h; sourceTree = "<group>"; };
 		75943C0A11441AE0004126E7 /* IGKBackForwardManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKBackForwardManager.m; sourceTree = "<group>"; };
@@ -529,6 +533,8 @@
 			children = (
 				0C402C141191C691001564B5 /* NSString+Utilities.h */,
 				0C402C151191C691001564B5 /* NSString+Utilities.m */,
+				7593070111C01B96008A0AC5 /* IGKOutputStream.h */,
+				7593070211C01B96008A0AC5 /* IGKOutputStream.m */,
 				75BD17C71143F38800E67594 /* SQPreferencesBackgroundComponent.h */,
 				75BD17C51143F37E00E67594 /* SQPreferencesBackgroundComponent.m */,
 				75F6702F110CCD31005F299C /* RegexKitLite.h */,
@@ -777,6 +783,7 @@
 				0C35D868118B657F0013DDFD /* IGKAnnotationManager.h in Headers */,
 				0C35D86E118B65920013DDFD /* IGKAnnotation.h in Headers */,
 				75ADECEA118E0B9500C57C77 /* IGKWordMembership.h in Headers */,
+				7593070311C01B96008A0AC5 /* IGKOutputStream.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -962,6 +969,7 @@
 				0C35D869118B657F0013DDFD /* IGKAnnotationManager.m in Sources */,
 				0C35D86F118B65920013DDFD /* IGKAnnotation.m in Sources */,
 				75ADECEB118E0B9500C57C77 /* IGKWordMembership.m in Sources */,
+				7593070411C01B96008A0AC5 /* IGKOutputStream.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

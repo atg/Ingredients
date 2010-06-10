@@ -13,6 +13,7 @@
 #import "IGKWordMembership.h"
 #import "IGKAnnotationManager.h"
 #import "IGKAnnotation.h"
+#import "IGKDocSetManagedObject.h"
 
 BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 {
@@ -44,6 +45,10 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 
 - (void)html_generic;
 - (void)html_genericItem:(IGKDocRecordManagedObject *)object;
+
+- (void)html_bindingsListing:(IGKDocRecordManagedObject *)object;
+- (void)html_binding:(NSManagedObject *)binding;
+- (void)html_bindingOptions:(NSSet *)options;
 
 - (NSString *)hrefToActualFragment:(IGKDocRecordManagedObject *)mo;
 
@@ -539,7 +544,9 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		[outputString appendFormat:@"\t\t<div class='description'>%@</div>\n", [self addHyperlinks:[binding valueForKey:@"overview"]]];
 		
 	//Get the placeholder options
+	[outputString appendString:@"\t\t<h3>Options</h3>\n"];
 	[self html_bindingOptions:[binding valueForKey:@"options"]];
+	[outputString appendString:@"\t\t<h3>Placeholders</h3>\n"];
 	[self html_bindingOptions:[binding valueForKey:@"placeholders"]];
 	
 	[outputString appendString:@"\t</div>"];
