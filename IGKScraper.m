@@ -1221,10 +1221,25 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 					continue;
 				}
 				
-				if (![[[m name] lowercaseString] isEqual:@"p"])
+				NSString *mLowerName = [[m name] lowercaseString];
+				if ([mLowerName isEqual:@"p"])
+				{
+					[discussion appendFormat:@"<p>%@</p>", [m commentlessStringValue]];
+				}
+				else if ([mLowerName isEqual:@"ul"])
+				{
+					for (NSXMLNode *li in [m children])
+					{
+						if (![li isKindOfClass:[NSXMLElement class]])
+							continue;
+						
+						[discussion appendFormat:@"<p>- %@</p>", [li commentlessStringValue]];
+					}
+				}
+				else
+				{
 					break;
-				
-				[discussion appendFormat:@"<p>%@</p>", [m commentlessStringValue]];
+				}
 			}
 			
 			[object setValue:discussion forKey:@"discussion"];
@@ -1863,7 +1878,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 				NSXMLElement *m = [children objectAtIndex:i];
 				if (![m isKindOfClass:[NSXMLElement class]])
 					continue;
-				if (![[[m name] lowercaseString] isEqual:@"p"])
+				
+				NSString *mLowerName = [[m name] lowercaseString];
+				if (![mLowerName isEqual:@"p"])
 				{
 					i--;
 					break;
@@ -1943,9 +1960,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 						if ([mStringValue isEqual:@"Binding Options"])
 							isPlaceholders = NO;
 						else if ([mStringValue isEqual:@"Placeholders"])
-						{
 							isPlaceholders = YES;
-						}
 						
 						continue;
 					}

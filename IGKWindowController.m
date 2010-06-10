@@ -53,6 +53,10 @@
 
 - (void)loadURL:(NSURL *)url recordHistory:(BOOL)recordHistory;
 
+- (void)jumpToObject:(id)kvobject;
+
+- (NSDictionary *)makeDictionaryFromManagedObject:(IGKDocRecordManagedObject *)mo transientObject:(IGKDocRecordManagedObject *)transientObject;
+
 @end
 
 @implementation IGKWindowController
@@ -277,7 +281,7 @@
 				return NSOrderedDescending;
 			
 			//Just a normal compare
-			return [a localizedCompare:b];
+			return [a compare:b];
 			
 		}
 		else if(l1 < l2)
@@ -1156,7 +1160,7 @@
 		if (![obj2 respondsToSelector:@selector(characterAtIndex:)])
 			str2 = [obj2 valueForKey:@"name"];
 		
-		return [str1 localizedCompare:str2];
+		return [str1 compare:str2];
 	}];
 	
 	rightFilterBarItems = [[self currentFilterBarAllItems] mutableCopy];
@@ -1460,7 +1464,7 @@
 	else
 	{
 		NSString *href = [kvobject valueForKey:@"href"];
-		
+				
 		if ([href hasPrefix:@"#"])
 		{
 			[browserWebView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"window.location.hash = '%@';", href]];
