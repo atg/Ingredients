@@ -519,9 +519,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	//Get the bindings and sort them by name
 	NSSortDescriptor *nameSorter = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
 	NSArray *bindings = [[[object valueForKey:@"bindings"] allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:nameSorter]];
-	
-	NSLog(@"bindings = %@", bindings);
-	
+		
 	for (NSManagedObject *binding in bindings)
 	{
 		[self html_binding:binding];
@@ -571,8 +569,8 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	{
 		[outputString appendString:@"\t\t\t<tr>\n"];
 		[outputString appendFormat:@"\t\t\t\t<td>%@</td>\n", [self escape:[placeholder valueForKey:@"option"] ?: @""]];
-		[outputString appendFormat:@"\t\t\t\t<td>%@</td>\n", [self escape:[placeholder valueForKey:@"placeholderConstant"] ?: @""]];
-		[outputString appendFormat:@"\t\t\t\t<td>%@</td>\n", [self escape:[placeholder valueForKey:@"valueClass"] ?: @""]];
+		[outputString appendFormat:@"\t\t\t\t<td>%@</td>\n", [self addHyperlinks:[self escape:[placeholder valueForKey:@"placeholderConstant"] ?: @""]]];
+		[outputString appendFormat:@"\t\t\t\t<td>%@</td>\n", [self addHyperlinks:[self escape:[placeholder valueForKey:@"valueClass"] ?: @""]]];
 		[outputString appendString:@"\t\t\t<tr>\n"];
 	}
 	

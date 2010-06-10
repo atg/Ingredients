@@ -2003,23 +2003,23 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 									}
 								}
 								
-								//Try to set the option's type
+								//Try to set the option's name
 								if ([[[[(NSXMLElement *)cell attributeForName:@"scope"] commentlessStringValue] lowercaseString] isEqual:@"row"])
 								{
 									NSString *placeholderConstant = [cell commentlessStringValue];
 									if (placeholderConstant)
-										[subobject setValue:placeholderConstant forKey:@"placeholderConstant"];
+										[subobject setValue:placeholderConstant forKey:@"option"];
 									continue;
 								}
 								
-								//Try to set the option's name
+								//Try to set the option's type
 								NSArray *cellChildren = [cell children];
 								if ([cellChildren count])
 								{
 									NSXMLNode *possibleTTNode = [cellChildren objectAtIndex:0];
 									if ([[[possibleTTNode name] lowercaseString] isEqual:@"tt"])
 									{
-										[subobject setValue:[possibleTTNode commentlessStringValue] forKey:@"option"];
+										[subobject setValue:[possibleTTNode commentlessStringValue] forKey:@"placeholderConstant"];
 										continue;
 									}
 								}
