@@ -23,12 +23,14 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="20"/>
-			<integer value="83"/>
-			<integer value="392"/>
-			<integer value="1"/>
+			<integer value="189"/>
+			<integer value="849"/>
 			<integer value="820"/>
 			<integer value="63"/>
+			<integer value="370"/>
+			<integer value="19"/>
+			<integer value="1"/>
+			<integer value="83"/>
 			<integer value="714"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -79,7 +81,7 @@
 				<string key="NSFrameAutosaveName">IGKDocMainWindow</string>
 			</object>
 			<object class="NSView" id="4605457">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -180,6 +182,7 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{756, 602}</string>
+				<reference key="NSSuperview"/>
 			</object>
 			<object class="NSCustomView" id="309459769">
 				<reference key="NSNextResponder"/>
@@ -2558,7 +2561,7 @@
 									</object>
 									<object class="NSMutableArray" key="dict.values">
 										<bool key="EncodedWithXMLCoder">YES</bool>
-										<integer value="354"/>
+										<integer value="254"/>
 										<integer value="120"/>
 									</object>
 								</object>
@@ -2851,7 +2854,7 @@
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomView" id="367457761">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2994,6 +2997,7 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{830, 530}</string>
+				<reference key="NSSuperview"/>
 				<string key="NSClassName">IGKNoSelectionOuterView</string>
 			</object>
 			<object class="NSUserDefaultsController" id="299561765">
@@ -6103,9 +6107,9 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>{{684, 232}, {756, 602}}</string>
+					<string>{{323, 232}, {756, 602}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{684, 232}, {756, 602}}</string>
+					<string>{{323, 232}, {756, 602}}</string>
 					<boolean value="NO"/>
 					<string>{196, 240}</string>
 					<string>{{202, 428}, {480, 270}}</string>
@@ -6123,7 +6127,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>IGKEaseInOutAnimatedView</string>
-					<string>{{227, 394}, {756, 602}}</string>
+					<string>{{227, 254}, {756, 602}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{626, 73}, {247, 404}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -6177,7 +6181,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.brandonwalkin.BWToolkit</string>
-					<string>{{626, 11}, {635, 466}}</string>
+					<string>{{444, 11}, {635, 466}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.brandonwalkin.BWToolkit</string>
@@ -6294,7 +6298,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="0"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{626, 11}, {635, 466}}</string>
+					<string>{{444, 11}, {635, 466}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -6338,6 +6342,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">FirstResponder</string>
+					<string key="superclassName">NSObject</string>
 					<object class="NSMutableDictionary" key="actions">
 						<string key="NS.key.0">printAction:</string>
 						<string key="NS.object.0">id</string>
@@ -6556,7 +6561,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">IGKSometimesCenteredTextCell</string>
-					<string key="superclassName">NSTextFieldCell</string>
+					<string key="superclassName">IGKStrikethroughTextCell</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier" id="519005926">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">IGKSometimesCenteredTextCell.h</string>
@@ -6564,6 +6569,11 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">IGKSometimesCenteredTextCell2</string>
+					<string key="superclassName">IGKStrikethroughTextCell</string>
+					<reference key="sourceIdentifier" ref="519005926"/>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">IGKStrikethroughTextCell</string>
 					<string key="superclassName">NSTextFieldCell</string>
 					<reference key="sourceIdentifier" ref="519005926"/>
 				</object>

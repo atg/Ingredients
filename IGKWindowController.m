@@ -1114,6 +1114,7 @@
 			CHSymbolButtonImageMask iconmask = [IGKDocRecordManagedObject iconMaskForEntity:entityName isInstanceMethod:[ingrcode isEqual:@"instance-method"]];
 			
 			[taskitemDict setValue:[NSNumber numberWithUnsignedLongLong:iconmask] forKey:@"iconMask"];
+			[taskitemDict setValue:entityName forKey:@"entityName"];				
 			[taskitemDict setValue:taskitemName forKey:@"name"];				
 			
 			[rightFilterBarTaskGroupedItems addObject:taskitemDict];
@@ -1146,7 +1147,7 @@
 		
 		for (NSManagedObject *method in [methods sortedArrayUsingDescriptors:[NSArray arrayWithObjects:instanceMethodSort, nameSort, nil]])
 		{
-			[rightFilterBarKindGroupedItems addObject:[self makeDictionaryFromManagedObject:method transientObject:transientObject]];
+			[rightFilterBarKindGroupedItems addObject:[self makeDictionaryFromManagedObject:(IGKDocRecordManagedObject *)method transientObject:transientObject]];
 		}
 	}
 	
@@ -1171,6 +1172,7 @@
 {
 	NSMutableDictionary *taskitemDict = [[NSMutableDictionary alloc] init];
 	[taskitemDict setValue:[mo valueForKey:@"name"] forKey:@"name"];				
+	[taskitemDict setValue:[[mo entity] name] forKey:@"entityName"];				
 	
 	NSString *ingrcode = [mo URLComponentExtension];
 	BOOL containsInDocument = [IGKHTMLGenerator containsInDocument:mo transientObject:transientObject displayTypeMask:acceptableDisplayTypes containerName:[transientObject valueForKey:@"name"] itemName:[mo valueForKey:@"name"] ingrcode:ingrcode];
@@ -1449,7 +1451,55 @@
 
 	id kvobject = [rightFilterBarItems objectAtIndex:selind];
 	
+	if ([kvobject respondsToSelector:@selector(objectForKey:)])
+	{
+		NSString *entityName = [kvobject valueForKey:@"entityName"];
+		BOOL canJump = NO;
+		if (tableOfContentsMask & IGKHTMLDisplayType_All)
+			canJump = YES;
+		else if (tableOfContentsMask & IGKHTMLDisplayType_None)
+			canJump = NO;
+		else if (tableOfContentsMask & IGKHTMLDisplayType_Overview)
+			canJump = NO;
+		else if (tableOfContentsMask & IGKHTMLDisplayType_Tasks)
+			canJump = NO;
+		else if (tableOfContentsMask & IGKHTMLDisplayType_Delegate)
+			canJump = NO;
+		else if ([entityName isEqual:@"ObjCMethod"] && (tableOfContentsMask & IGKHTMLDisplayType_Methods))
+			canJump = YES;
+		else if ([entityName isEqual:@"ObjCProperty"] && (tableOfContentsMask & IGKHTMLDisplayType_Properties))
+			canJump = YES;
+		else if ([entityName isEqual:@"ObjCNotification"] && (tableOfContentsMask & IGKHTMLDisplayType_Notifications))
+			canJump = YES;
+		else if ([entityName isEqual:@"ObjCBinding"] && (tableOfContentsMask & IGKHTMLDisplayType_BindingListings))
+			canJump = YES;
+		else if (tableOfContentsMask & IGKHTMLDisplayType_Misc)
+			canJump = YES;
+		
+		if (!canJump)
+		{
+			if ([[kvobject valueForKey:@"href"] length] > 1)
+			{
+				NSURL *itemURL = [[self currentURL] URLByAppendingPathComponent:[[kvobject valueForKey:@"href"] substringFromIndex:1]];
+				NSLog(@"itemURL = %@", itemURL);
+				
+				[self loadURL:itemURL recordHistory:YES];
+				return;
+			}
+		}
+	}
+	
 	[self jumpToObject:kvobject];
+}
+- (NSString *)currentURL
+{
+	//FIXME: Implement -currentURL
+	return @"Hello World";
+}
+- (NSString *)currentDocsetIdentifier
+{
+	//FIXME: Implement -currentDocsetIdentifier
+	return [NSString stringWithFormat:@"unknown/unknown"];
 }
 - (void)jumpToObject:(id)kvobject
 {

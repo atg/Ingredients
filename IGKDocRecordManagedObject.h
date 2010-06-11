@@ -43,6 +43,7 @@ typedef enum {
 - (NSString *)xcontainername;
 - (IGKDocRecordManagedObject *)xcontainer;
 
+- (CHSymbolButtonImageMask)iconMask;
 + (CHSymbolButtonImageMask)iconMaskForEntity:(NSString *)entityName isInstanceMethod:(BOOL)instanceMethod;
 
 @end

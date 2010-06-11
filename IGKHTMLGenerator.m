@@ -22,6 +22,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 
 @interface IGKHTMLGenerator ()
 
++ (NSString *)hrefToActualFragment:(IGKDocRecordManagedObject *)mo transientObject:(NSManagedObject *)_transientObject displayTypeMask:(IGKHTMLDisplayTypeMask)_displayTypeMask;
 - (NSString *)addHyperlinks:(NSString *)unhappyText;
 - (NSString *)escape:(NSString *)unescapedText;
 - (NSString *)processAvailability:(NSString *)availability;
