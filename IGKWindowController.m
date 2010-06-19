@@ -599,12 +599,24 @@
 	
 	if ([[url scheme] isEqual:@"special"] && [[url resourceSpecifier] isEqual:@"no-selection"])
 	{
-		//[self setBrowserActive:NO];
 		[browserWebView stopLoading:nil];
 		[self loadNoSelectionRecordHistory:YES];
 	}
 	else if ([[url scheme] isEqual:@"ingr-doc"])
 	{
+		if ([[url path] containsString:@"headerfile"])
+		{
+			NSString *var = [[[[url pathComponents] igk_filter:^BOOL(id obj) {
+				if ([obj containsString:@"headerfile"])
+					return YES;
+				return NO;
+			}] igk_firstObject] stringByDeletingPathExtension];
+			NSString *htmlFormat = @"<!doctype html><html><head><meta name='charset' content='utf-8'><title>Opening %@...</title><link rel='stylesheet' href='openingpage.css' type='text/css' media='screen' charset='utf-8'></head><body><div><h1>Opening <strong>%@...</strong></h1><p class='message'>Please wait while we load your file</p><p class='smallprint'>Orders are non-refundable. Do not ingest <code>%@</code>. We are not responsible for any damage incurred while reading <code>%@</code>. Contains brackets, semicolons and high fructose corn syrup. Designed in California. Made in China.</p></div></body></html>";
+			NSString *html = [NSString stringWithFormat:htmlFormat, var, var, var, var];
+			[[browserWebView mainFrame] loadHTMLString:html
+											   baseURL:[[NSBundle mainBundle] resourceURL]];
+		}
+		
 		NSLog(@"Load URL = %@, record history = %d", url, recordHistory);
 		NSManagedObjectContext *ctx = [[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext];
 		
@@ -1478,6 +1490,7 @@
 		
 		if (!canJump)
 		{
+			/*
 			if ([[kvobject valueForKey:@"href"] length] > 1)
 			{
 				NSURL *itemURL = [[self currentURL] URLByAppendingPathComponent:[[kvobject valueForKey:@"href"] substringFromIndex:1]];
@@ -1486,6 +1499,7 @@
 				[self loadURL:itemURL recordHistory:YES];
 				return;
 			}
+			*/
 		}
 	}
 	
@@ -1720,11 +1734,19 @@
 	
 	if ([[[[request URL] host] lowercaseString] isEqual:@"ingr-doc"])
 	{
+		NSLog(@"ingr-doc: %@", url);
+		if ([[url path] containsString:@"headerfile"])
+		{
+			NSLog(@"FOUND HEADER");
+		}
+		
 		NSArray *comps = [[url path] pathComponents];
 		if ([comps count] > 3)
 		{
 			NSArray *newcomps = [[NSArray arrayWithObject:@"/"] arrayByAddingObjectsFromArray:[comps subarrayWithRange:NSMakeRange(2, [comps count] - 2)]];
 			NSURL *newURL = [[NSURL alloc] initWithScheme:@"ingr-doc" host:[comps objectAtIndex:1] path:[NSString pathWithComponents:newcomps]];
+			
+			NSLog(@"\t Now loading: %@", newURL);
 			
 			[self performSelector:@selector(loadURLRecordHistory:) withObject:newURL afterDelay:0.0];
 			return nil;

@@ -1,0 +1,58 @@
+html, body, h1, p
+{
+	margin: 0;
+	padding: 0;
+}
+
+html
+{
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	font-size: 13px;
+	color: #323232;
+}
+
+h1
+{
+	text-align: center;
+		
+	margin-bottom: 9px;
+}
+h1 strong
+{
+	color: black;
+}
+
+body div
+{
+	margin: 0 auto;
+	width: 400px;
+	background-color: #f2f2f2;
+	
+	position: relative;
+	top: 37%;
+	
+	padding: 20px;
+	
+	-webkit-border-radius: 7px;
+}
+
+.message
+{
+	margin-bottom: 8px;
+	font-size: 14px;
+	text-align: left;
+	direction: ltr;
+	text-transform: none;
+}
+.smallprint
+{
+	font-size: 8px;
+	color: #929292;
+	text-align: left;
+}
+
+code
+{
+	font-family: "Menlo", "Monaco", "Courier New", Courier, mono;
+	font-size: 90%;
+}
