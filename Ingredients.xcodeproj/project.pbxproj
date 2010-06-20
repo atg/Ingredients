@@ -140,6 +140,8 @@
 		75B534FA111076C000560848 /* View_AdvSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F7111076C000560848 /* View_AdvSearchTemplate.png */; };
 		75B534FB111076C000560848 /* View_NoSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F8111076C000560848 /* View_NoSearchTemplate.png */; };
 		75B534FC111076C000560848 /* View_SideSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F9111076C000560848 /* View_SideSearchTemplate.png */; };
+		75BC565611CDD5900012800F /* IGKMatteButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 75BC565411CDD5900012800F /* IGKMatteButton.h */; };
+		75BC565711CDD5900012800F /* IGKMatteButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BC565511CDD5900012800F /* IGKMatteButton.m */; };
 		75BD17761143E7F000E67594 /* TBReSparkle.png in Resources */ = {isa = PBXBuildFile; fileRef = 75BD17751143E7F000E67594 /* TBReSparkle.png */; };
 		75BD177E1143E94000E67594 /* IGKPreferencesController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75BD177C1143E94000E67594 /* IGKPreferencesController.h */; };
 		75BD17C61143F37E00E67594 /* SQPreferencesBackgroundComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BD17C51143F37E00E67594 /* SQPreferencesBackgroundComponent.m */; };
@@ -345,6 +347,8 @@
 		75B534F7111076C000560848 /* View_AdvSearchTemplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = View_AdvSearchTemplate.png; path = Images/View_AdvSearchTemplate.png; sourceTree = "<group>"; };
 		75B534F8111076C000560848 /* View_NoSearchTemplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = View_NoSearchTemplate.png; path = Images/View_NoSearchTemplate.png; sourceTree = "<group>"; };
 		75B534F9111076C000560848 /* View_SideSearchTemplate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = View_SideSearchTemplate.png; path = Images/View_SideSearchTemplate.png; sourceTree = "<group>"; };
+		75BC565411CDD5900012800F /* IGKMatteButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKMatteButton.h; sourceTree = "<group>"; };
+		75BC565511CDD5900012800F /* IGKMatteButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKMatteButton.m; sourceTree = "<group>"; };
 		75BD176A1143E6C300E67594 /* IGKPreferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IGKPreferences.xib; sourceTree = "<group>"; };
 		75BD17751143E7F000E67594 /* TBReSparkle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBReSparkle.png; sourceTree = "<group>"; };
 		75BD177C1143E94000E67594 /* IGKPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKPreferencesController.h; sourceTree = "<group>"; };
@@ -652,6 +656,8 @@
 				75DF96DD117E32E100403233 /* IGKMattePopUpButtonView.m */,
 				75DF96E8117E350600403233 /* IGKMatteFocusedGradientBox.h */,
 				75DF96E9117E350600403233 /* IGKMatteFocusedGradientBox.m */,
+				75BC565411CDD5900012800F /* IGKMatteButton.h */,
+				75BC565511CDD5900012800F /* IGKMatteButton.m */,
 			);
 			name = "Matte White UI";
 			sourceTree = "<group>";
@@ -794,6 +800,7 @@
 				75ADECEA118E0B9500C57C77 /* IGKWordMembership.h in Headers */,
 				7593070311C01B96008A0AC5 /* IGKOutputStream.h in Headers */,
 				7515378611CC6D82004529B2 /* NSArray+IGKAdditions.h in Headers */,
+				75BC565611CDD5900012800F /* IGKMatteButton.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -982,6 +989,7 @@
 				75ADECEB118E0B9500C57C77 /* IGKWordMembership.m in Sources */,
 				7593070411C01B96008A0AC5 /* IGKOutputStream.m in Sources */,
 				7515378711CC6D82004529B2 /* NSArray+IGKAdditions.m in Sources */,
+				75BC565711CDD5900012800F /* IGKMatteButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
