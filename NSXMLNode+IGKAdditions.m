@@ -66,4 +66,9 @@ void IGKPutChildrenMatchingPredicateIntoArray(NSXMLElement *element, BOOL (^pred
 	return nodes;
 }
 
+- (NSString *)attributeForLocalName:(NSString *)str
+{
+	return [self attributeForLocalName:str URI:nil];
+}
+
 @end

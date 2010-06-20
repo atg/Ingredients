@@ -379,7 +379,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			NSArray *arrayOfMatchesCaptures = [conformsToSubstring arrayOfCaptureComponentsMatchedByRegex:conformsToSubregex];
 			if ([arrayOfMatchesCaptures count])
 			{
-				conformsTo = [[NSMutableSet alloc] init];
+				conformsTo = [[NSMutableSet alloc] initWithCapacity:[arrayOfMatchesCaptures count]];
 				for (NSArray *conformsToCaptures in arrayOfMatchesCaptures)
 				{
 					if ([conformsToCaptures count] < 2)
@@ -832,8 +832,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	}
 	
 	//Search through all anchors in the document, and record their parent elements
-	NSMutableSet *containersSet = [[NSMutableSet alloc] init];
-	for (NSXMLElement *a in [self methodNodes])
+	NSArray *mnodes = [self methodNodes];
+	NSMutableSet *containersSet = [[NSMutableSet alloc] initWithCapacity:[mnodes count]];
+	for (NSXMLElement *a in mnodes)
 	{
 		if ([containersSet containsObject:[a parent]])
 			continue;
@@ -841,7 +842,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		if (![a isKindOfClass:[NSXMLElement class]])
 			continue;
 		
-		NSXMLNode *el = [a attributeForName:@"name"];
+		NSXMLNode *el = [a attributeForLocalName:@"name"];
 		NSString *strval = [el commentlessStringValue];
 		
 		//(instm|clm|intfm|intfcm|intfp|instp)
@@ -876,8 +877,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	//NSArray *methodNodes1 = [[doc rootElement] nodesForXPath:@"//a" error:&err];
 	
 	//Search through all anchors in the document, and record their parent elements
-	NSMutableSet *containersSet = [[NSMutableSet alloc] init];
-	for (NSXMLElement *a in [self methodNodes])
+	NSArray *mnodes = [self methodNodes];
+	NSMutableSet *containersSet = [[NSMutableSet alloc] initWithCapacity:[mnodes count]];
+	for (NSXMLElement *a in mnodes)
 	{
 		if ([containersSet containsObject:[a parent]])
 			continue;
@@ -885,7 +887,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		if (![a isKindOfClass:[NSXMLElement class]])
 			continue;
 						
-		NSXMLNode *el = [a attributeForName:@"name"];
+		NSXMLNode *el = [a attributeForLocalName:@"name"];
 		NSString *strval = [el commentlessStringValue];
 		
 		//(instm|clm|intfm|intfcm|intfp|instp)
@@ -942,7 +944,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			continue;
 		
 		NSString *nName = [[n name] lowercaseString];
-		NSArray *nClass = [[[[n attributeForName:@"class"] commentlessStringValue] lowercaseString] componentsSeparatedByString:@" "];
+		NSArray *nClass = [[[[n attributeForLocalName:@"class"] commentlessStringValue] lowercaseString] componentsSeparatedByString:@" "];
 		
 		if (![nName isEqual:@"a"])
 			isOnlyAElements = NO;
@@ -1004,7 +1006,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 				if (![[[m name] lowercaseString] isEqual:@"code"])
 					continue;
 				
-				NSArray *mclasses = [[[[m attributeForName:@"class"] commentlessStringValue] lowercaseString] componentsSeparatedByString:@" "];
+				NSArray *mclasses = [[[[m attributeForLocalName:@"class"] commentlessStringValue] lowercaseString] componentsSeparatedByString:@" "];
 				if (![mclasses containsObject:@"jump"])
 					continue;
 				
@@ -1069,7 +1071,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 				if (![m isKindOfClass:[NSXMLElement class]])
 					continue;
 				
-				NSString *mclass = [[m attributeForName:@"class"] commentlessStringValue];
+				NSString *mclass = [[m attributeForLocalName:@"class"] commentlessStringValue];
 				if (![mclass isEqual:@"spaceabove"] && ![mclass isEqual:@"abstract"])
 					break;
 				
@@ -1213,7 +1215,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 				if ([[[m name] lowercaseString] isEqual:@"div"])
 				{
 					//This could be a codesample
-					NSArray *divClass = [[[[m attributeForName:@"class"] commentlessStringValue] lowercaseString] componentsSeparatedByString:@" "];
+					NSArray *divClass = [[[[m attributeForLocalName:@"class"] commentlessStringValue] lowercaseString] componentsSeparatedByString:@" "];
 					if (![divClass containsObject:@"codesample"])
 						break;
 					
@@ -1312,7 +1314,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 						
 						if (![a isKindOfClass:[NSXMLElement class]])
 							continue;
-						NSString *href = [[a attributeForName:@"href"] commentlessStringValue];
+						NSString *href = [[a attributeForLocalName:@"href"] commentlessStringValue];
 						NSString *strval = [a commentlessStringValue];
 						
 						if (!href || !strval)
@@ -1364,7 +1366,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 						NSXMLElement *spanElement = [[li children] lastObject];
 						NSXMLElement *a = [[spanElement children] lastObject];
 						
-						NSString *href = [[a attributeForName:@"href"] commentlessStringValue];
+						NSString *href = [[a attributeForLocalName:@"href"] commentlessStringValue];
 						NSString *strval = [a commentlessStringValue];
 						
 						if (!href || !strval)
@@ -1503,7 +1505,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			continue;
 		
 		NSString *nName = [[n name] lowercaseString];
-		NSArray *nClass = [[[[n attributeForName:@"class"] commentlessStringValue] lowercaseString] componentsSeparatedByString:@" "];
+		NSArray *nClass = [[[[n attributeForLocalName:@"class"] commentlessStringValue] lowercaseString] componentsSeparatedByString:@" "];
 		
 		/*
 			t = 0: Overview
@@ -1580,7 +1582,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 						NSXMLElement *codeElement = [[spanElement children] objectAtIndex:0];
 						NSXMLElement *a = [[codeElement children] lastObject];
 						
-						NSString *href = [[a attributeForName:@"href"] commentlessStringValue];
+						NSString *href = [[a attributeForLocalName:@"href"] commentlessStringValue];
 						NSString *strval = [a commentlessStringValue];
 						
 						if (!href || !strval)
@@ -1622,7 +1624,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	//FIXME: This (faster) version isn't working for some reason. It should be equivalent
 	/*
 	 NSArray *overviewSectionNodes1 = [[doc rootElement] nodesMatchingPredicate:^BOOL(NSXMLNode *node) {
-	 return [[node name] isEqual:@"div"] && [[node attributeForName:@"id"] isEqual:@"Overview_section"];
+	 return [[node name] isEqual:@"div"] && [[node attributeForLocalName:@"id"] isEqual:@"Overview_section"];
 	 }];
 	 */
 	for (NSXMLElement *el in overviewSectionNodes)
@@ -1644,7 +1646,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	//FIXME: Same deal as above. This (faster) version isn't working for some reason. It should be equivalent
 	/*
 	 NSArray *tasksSectionNodes1 = [[doc rootElement] nodesMatchingPredicate:^BOOL(NSXMLNode *node) {
-	 return [[node name] isEqual:@"div"] && [[node attributeForName:@"id"] isEqual:@"Tasks_section"];
+	 return [[node name] isEqual:@"div"] && [[node attributeForLocalName:@"id"] isEqual:@"Tasks_section"];
 	 }];
 	 */
 	for (NSXMLElement *el in tasksSectionNodes)
@@ -1670,13 +1672,14 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	// NSArray *methodNodes1 = [[doc rootElement] nodesForXPath:@"//a" error:&err];
 	
 	//Search through all anchors in the document, and record their parent elements
-	NSMutableSet *containersSet = [[NSMutableSet alloc] init];
-	for (NSXMLElement *a in [self methodNodes])
+	NSArray *mnodes = [self methodNodes];
+	NSMutableSet *containersSet = [[NSMutableSet alloc] initWithCapacity:[mnodes count]];
+	for (NSXMLElement *a in mnodes)
 	{
 		if (![a isKindOfClass:[NSXMLElement class]])
 			continue;
 		
-		NSString *name = [[a attributeForName:@"name"] commentlessStringValue];
+		NSString *name = [[a attributeForLocalName:@"name"] commentlessStringValue];
 		if (name)
 		{
 			[containersSet addObject:[a parent]];
@@ -1694,7 +1697,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			if (![a isKindOfClass:[NSXMLElement class]])
 				return nil;
 			
-			NSXMLNode *el = [a attributeForName:@"name"];
+			NSXMLNode *el = [a attributeForLocalName:@"name"];
 			NSString *strval = [el commentlessStringValue];
 			//(instm|clm|intfm|intfcm|intfp|instp)
 			
@@ -1778,13 +1781,14 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 - (void)scrapeBindingsListing
 {
 	//Search through all anchors in the document, and record their parent elements
-	NSMutableSet *containersSet = [[NSMutableSet alloc] init];
-	for (NSXMLElement *a in [self methodNodes])
+	NSArray *mnodes = [self methodNodes];
+	NSMutableSet *containersSet = [[NSMutableSet alloc] initWithCapacity:[mnodes count]];
+	for (NSXMLElement *a in mnodes)
 	{
 		if (![a isKindOfClass:[NSXMLElement class]])
 			continue;
 		
-		NSString *name = [[a attributeForName:@"name"] commentlessStringValue];
+		NSString *name = [[a attributeForLocalName:@"name"] commentlessStringValue];
 		if (name)
 		{
 			[containersSet addObject:[a parent]];
@@ -1800,7 +1804,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			if (![a isKindOfClass:[NSXMLElement class]])
 				return nil;
 			
-			NSXMLNode *el = [a attributeForName:@"name"];
+			NSXMLNode *el = [a attributeForLocalName:@"name"];
 			NSString *strval = [el commentlessStringValue];
 			
 			if ([strval hasPrefix:@"//apple_ref/occ/binding"])
@@ -1848,7 +1852,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			continue;
 		
 		NSString *nName = [[n name] lowercaseString];
-		NSArray *nClass = [[[[n attributeForName:@"class"] commentlessStringValue] lowercaseString] componentsSeparatedByString:@" "];
+		NSArray *nClass = [[[[n attributeForLocalName:@"class"] commentlessStringValue] lowercaseString] componentsSeparatedByString:@" "];
 		
 		if (![nName isEqual:@"a"])
 			isOnlyAElements = NO;
@@ -2004,7 +2008,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 								}
 								
 								//Try to set the option's name
-								if ([[[[(NSXMLElement *)cell attributeForName:@"scope"] commentlessStringValue] lowercaseString] isEqual:@"row"])
+								if ([[[[(NSXMLElement *)cell attributeForLocalName:@"scope"] commentlessStringValue] lowercaseString] isEqual:@"row"])
 								{
 									NSString *placeholderConstant = [cell commentlessStringValue];
 									if (placeholderConstant)
