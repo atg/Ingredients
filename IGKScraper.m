@@ -738,9 +738,17 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	NSURL *fileurl = [NSURL fileURLWithPath:extractPath];
 	
 	NSError *err = nil;
-	doc = [[NSXMLDocument alloc] initWithContentsOfURL:fileurl options:NSXMLDocumentTidyHTML error:&err];
+	
+	NSCache *xmlDocCache = [[[NSApp delegate] kitController] xmlDocumentCache];
+	doc = [xmlDocCache objectForKey:fileurl];
+	
 	if (!doc)
-		return;
+	{
+		doc = [[NSXMLDocument alloc] initWithContentsOfURL:fileurl options:NSXMLDocumentTidyHTML error:&err];
+		[xmlDocCache setObject:doc forKey:fileurl cost:0];
+		if (!doc)
+			return;
+	}
 	
 	methodNodes = nil;
 	
@@ -833,7 +841,8 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	
 	//Search through all anchors in the document, and record their parent elements
 	NSArray *mnodes = [self methodNodes];
-	NSMutableSet *containersSet = [[NSMutableSet alloc] initWithCapacity:[mnodes count]];
+	//NSMutableSet *containersSet = [[NSMutableSet alloc] initWithCapacity:[mnodes count]];
+	NSHashTable *containersSet = [[NSHashTable alloc] initWithOptions:NSPointerFunctionsStrongMemory | NSPointerFunctionsOpaquePersonality capacity:[mnodes count]];
 	for (NSXMLElement *a in mnodes)
 	{
 		if ([containersSet containsObject:[a parent]])
@@ -878,7 +887,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	
 	//Search through all anchors in the document, and record their parent elements
 	NSArray *mnodes = [self methodNodes];
-	NSMutableSet *containersSet = [[NSMutableSet alloc] initWithCapacity:[mnodes count]];
+	NSHashTable *containersSet = [[NSHashTable alloc] initWithOptions:NSPointerFunctionsStrongMemory | NSPointerFunctionsOpaquePersonality capacity:[mnodes count]];
 	for (NSXMLElement *a in mnodes)
 	{
 		if ([containersSet containsObject:[a parent]])
@@ -1673,7 +1682,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	
 	//Search through all anchors in the document, and record their parent elements
 	NSArray *mnodes = [self methodNodes];
-	NSMutableSet *containersSet = [[NSMutableSet alloc] initWithCapacity:[mnodes count]];
+	NSHashTable *containersSet = [[NSHashTable alloc] initWithOptions:NSPointerFunctionsStrongMemory | NSPointerFunctionsOpaquePersonality capacity:[mnodes count]];
 	for (NSXMLElement *a in mnodes)
 	{
 		if (![a isKindOfClass:[NSXMLElement class]])
@@ -1782,7 +1791,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 {
 	//Search through all anchors in the document, and record their parent elements
 	NSArray *mnodes = [self methodNodes];
-	NSMutableSet *containersSet = [[NSMutableSet alloc] initWithCapacity:[mnodes count]];
+	NSHashTable *containersSet = [[NSHashTable alloc] initWithOptions:NSPointerFunctionsStrongMemory | NSPointerFunctionsOpaquePersonality capacity:[mnodes count]];
 	for (NSXMLElement *a in mnodes)
 	{
 		if (![a isKindOfClass:[NSXMLElement class]])

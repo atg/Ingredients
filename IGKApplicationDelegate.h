@@ -24,17 +24,26 @@
 	NSManagedObjectContext *backgroundManagedObjectContext;
 	WebHistory *history;
 	
-	
 	id preferencesController;
 	
 	dispatch_queue_t backgroundQueue;
 	
 	NSUInteger docsetCount;
+	
+	//The NSXMLDocument cache caches parsed NSXMLDocument trees and references them by their location on disk
+	NSCache *xmlDocumentCache;
+	
+	//The HTML cache caches various pieces of parsed html to save the computer from parsing the same thing twice
+	NSCache *htmlCache;
 }
 
 @property (readonly) NSMutableArray *windowControllers;
 @property (readonly) id preferencesController;
 @property (assign) IGKWindowController *fullscreenWindowController;
+
+@property (assign) NSCache *xmlDocumentCache;
+@property (assign) NSCache *htmlCache;
+
 - (BOOL)hasMultipleWindowControllers;
 
 - (dispatch_queue_t)backgroundQueue;

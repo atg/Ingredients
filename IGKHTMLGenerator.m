@@ -74,7 +74,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	//If this type is not structurous, don't do any reformatting
 	if (!isStructurous)
 		return code;
-		
+	
 	//Trim any whitespace
 	code = [code stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	
@@ -89,7 +89,15 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 //Take a passage of text sans hyperlinks, cross-reference each word against the database, and build a new string
 - (NSString *)addHyperlinks:(NSString *)unhappyText
 {
+	NSCache *htmlCache = [[[NSApp delegate] kitController] htmlCache];
+	NSString *cachedHappyText = [htmlCache objectForKey:unhappyText];
+	if (cachedHappyText)
+		return cachedHappyText;
+	
 	NSString *happyText = [[IGKWordMembership sharedManager] addHyperlinksToPassage:unhappyText];
+	
+	[htmlCache setObject:happyText forKey:unhappyText cost:[happyText length] + [unhappyText length]];
+	
 	return happyText;
 }
 
@@ -986,7 +994,14 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	[outputString appendString:@"<div class='methods'>"];
 	
 	if ([object valueForKey:@"signature"])
+	{
 		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [self addHyperlinks:[self reformatCode:[object valueForKey:@"signature"]]]];
+	}
+	else
+	{
+		//Add some between the description and the metadata table
+		[outputString appendString:@"&nbsp;"];
+	}
 	
 	if ([object isKindOfEntityNamed:@"Callable"])
 		[self html_parametersForCallable:object];

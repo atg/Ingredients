@@ -19,6 +19,8 @@ const NSInteger IGKStoreVersion = 2;
 @synthesize windowControllers;
 @synthesize preferencesController;
 @synthesize fullscreenWindowController;
+@synthesize xmlDocumentCache;
+@synthesize htmlCache;
 
 - (id)init
 {
@@ -83,6 +85,15 @@ const NSInteger IGKStoreVersion = 2;
 		
 		// init the annotations...
 		[[IGKAnnotationManager sharedAnnotationManager] loadAnnotations];
+		
+		
+		xmlDocumentCache = [[NSCache alloc] init];
+		[xmlDocumentCache setCountLimit:12];
+		[xmlDocumentCache setEvictsObjectsWithDiscardedContent:YES];
+		
+		htmlCache = [[NSCache alloc] init];
+		[htmlCache setTotalCostLimit:30 * 1024];
+		[htmlCache setEvictsObjectsWithDiscardedContent:YES];
 	}
 	
 	return self;
