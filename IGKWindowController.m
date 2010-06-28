@@ -535,11 +535,21 @@
 	}
 	else if (selectedSegment == 1)
 	{
+		BOOL isSame = currentModeIndex == CHDocumentationBrowserUIMode_TwoUp;
+		
 		self.ui_currentModeIndex = [NSNumber numberWithInt:CHDocumentationBrowserUIMode_TwoUp];
+		
+		if (isSame)
+			[[self window] makeFirstResponder:sideSearchViewField];
 	}
 	else if (selectedSegment == 2)
 	{
+		BOOL isSame = currentModeIndex == CHDocumentationBrowserUIMode_AdvancedSearch;
+		
 		self.ui_currentModeIndex = [NSNumber numberWithInt:CHDocumentationBrowserUIMode_AdvancedSearch];
+		
+		if (isSame)
+			[[self window] makeFirstResponder:searchViewField];
 	}
 }
 
@@ -1945,16 +1955,12 @@
 
 - (IBAction)toggleFullscreen:(id)sender
 {
-	
-	
-	
 	NSMutableDictionary *fsOptions = [[NSMutableDictionary alloc] init];
 	NSInteger presentationOptions = (NSApplicationPresentationAutoHideDock|NSApplicationPresentationAutoHideMenuBar);
 	[fsOptions setObject:[NSNumber numberWithInt:presentationOptions] forKey:NSFullScreenModeApplicationPresentationOptions];
 	[fsOptions setObject:[NSNumber numberWithBool:NO] forKey:NSFullScreenModeAllScreens];
 	
-	
-	if(isInFullscreen)
+	if (isInFullscreen)
 	{
 		[[[NSApp delegate] kitController] setFullscreenWindowController:nil];
 		[[[self window] contentView] exitFullScreenModeWithOptions:fsOptions];
@@ -1963,7 +1969,7 @@
 	}
 	else 
 	{
-		if(![[[NSApp delegate] kitController] fullscreenWindowController])
+		if (![[[NSApp delegate] kitController] fullscreenWindowController])
 		{
 			[[[NSApp delegate] kitController] setFullscreenWindowController:self];
 			[[[self window] contentView] enterFullScreenMode:[[self window] screen] 
@@ -1972,13 +1978,12 @@
 		
 			isInFullscreen = YES;
 		}
-		else {
+		else
+		{
 			// noooooooooo!
 			return;
 		}
-
 	}
-
 }
 
 
@@ -2088,6 +2093,13 @@
 	if (action == @selector(doFindPanelAction:) || action == @selector(findPanelNext:) || action == @selector(findPanelPrevious:))
 		return [self isInValidStateForFindPanel];
 	
+	if (action == @selector(changeViewModeTagged:))
+	{
+		if ([anItem tag] == 0 && currentModeIndex == CHDocumentationBrowserUIMode_BrowserOnly)
+			return NO;
+		return YES;
+	}
+	
 	if (action == @selector(toggleRightFilterBar:) || action == @selector(findSymbol:))
 	{
 	    if (action == @selector(toggleRightFilterBar:))
@@ -2103,6 +2115,12 @@
 		return [[self currentArrayController] canSelectPrevious];
     if (action == @selector(goToNextResult:))
 		return [[self currentArrayController] canSelectNext];
+	
+	if (action == @selector(toggleFullscreen:))
+	{
+		if (!isInFullscreen && [[[NSApp delegate] kitController] fullscreenWindowController])
+			return NO;
+	}
 	
 	return YES;
 }

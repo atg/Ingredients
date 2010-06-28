@@ -1,7 +1,5 @@
-Needs a key combo for switching between the different "Group By" menu items
+"Group By" menu should maintain its state in preferences
 Needs key combos for selecting the next and previous method in the webview
-View -> Document Only should be grayed out if you're already on that view
-View -> Toggle Fullscreen should be grayed out if you're fullscreen and focused on a non-fullscreen window
 If you're in Side Search, then selecting View -> Side Search should focus the side search field
 If you're in Advanced Search, then selecting View -> Advanced Search should focus the advanced search field
 Switch to smartcmp algorithm
