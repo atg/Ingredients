@@ -205,6 +205,10 @@
 	[searchViewTable setTarget:self];
 	[searchViewTable setDoubleAction:@selector(advancedSearchDoubleAction:)];
 	
+	NSString *selectedFilterGroup = [[NSUserDefaults standardUserDefaults] valueForKey:@"IGKFilterGroup"];
+	if ([selectedFilterGroup length])
+		[rightFilterBarGroupByMenu selectItemWithTitle:selectedFilterGroup];
+	
 	sideSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:nil
 													   ascending:YES
 													  comparator:^NSComparisonResult (id obja, id objb)
@@ -1238,6 +1242,9 @@
 }
 - (IBAction)rightFilterGroupByMenu:(id)sender
 {
+	[[NSUserDefaults standardUserDefaults] setValue:[sender titleOfSelectedItem] forKey:@"IGKFilterGroup"];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+	
 	[self rightFilterSearchField:rightFilterBarSearchField];
 }
 - (NSArray *)currentFilterBarAllItems
