@@ -2089,7 +2089,15 @@
 		return [self isInValidStateForFindPanel];
 	
 	if (action == @selector(toggleRightFilterBar:) || action == @selector(findSymbol:))
-		return [self isInValidStateForRightFilterBar];
+	{
+	    if (action == @selector(toggleRightFilterBar:))
+	    {
+            NSString *verb = [self rightFilterBarShown] ? @"Hide" : @"Show";
+            [anItem setTitle:[NSString stringWithFormat:@"%@ Filter Bar", verb]];
+	    }
+	    
+	    return [self isInValidStateForRightFilterBar];
+	}
 	
 	if (action == @selector(goToPreviousResult:))
 		return [[self currentArrayController] canSelectPrevious];
