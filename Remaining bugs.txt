@@ -1,0 +1,17 @@
+Needs a key combo for highlighting the "filter methods & properties" search field
+"View -> Toggle Filter Bar" needs to become "View -> [Hide|Show] Filter Bar"
+Needs a key combo for switching between the different "Group By" menu items
+Needs key combos for selecting the next and previous method in the webview
+View -> Document Only should be grayed out if you're already on that view
+View -> Toggle Fullscreen should be grayed out if you're fullscreen and focused on a non-fullscreen window
+If you're in Side Search, then selecting View -> Side Search should focus the side search field
+If you're in Advanced Search, then selecting View -> Advanced Search should focus the advanced search field
+Switch to smartcmp algorithm
+    Implement frecency
+    Implement docset prioritization
+Back/forward button menus should include icons
+Loads of articles don't parse properly, but thankfully the main ones do
+
+---
+
+We need to write democracy so that the remaining features can be decided

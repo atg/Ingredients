@@ -51,6 +51,9 @@
 - (id)objectAtRow:(NSInteger)row;
 - (id)selection;
 
+- (BOOL)canSelectPrevious;
+- (BOOL)canSelectNext;
+
 - (IBAction)selectPrevious:(id)sender;
 - (IBAction)selectNext:(id)sender;
 

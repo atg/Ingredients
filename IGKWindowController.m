@@ -939,6 +939,34 @@
 	[self executeSearch:searchViewField];
 }
 
+- (IBAction)findSymbol:(id)sender
+{
+    //If the filter bar is hidden, show it
+    [self setRightFilterBarShown:YES];
+    
+    //Focus the search field
+    [[self window] makeFirstResponder:rightFilterBarSearchField];
+}
+- (IBAction)goToNextResult:(id)sender
+{
+	[[self currentArrayController] selectNext:nil];
+}
+- (IBAction)goToPreviousResult:(id)sender
+{
+	[[self currentArrayController] selectPrevious:nil];
+}
+- (IBAction)goToNextSymbol:(id)sender
+{
+	
+}
+- (IBAction)goToPreviousSymbol:(id)sender
+{
+	
+}
+- (IBAction)goToTableOfContents:(NSMenuItem *)sender
+{
+	NSInteger tag = [sender tag];
+}
 
 #pragma mark -
 #pragma mark Table View Delegate 
@@ -2055,15 +2083,18 @@
 
 - (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)anItem
 {
-	if ([anItem action] == @selector(doFindPanelAction:) || [anItem action] == @selector(findPanelNext:) || [anItem action] == @selector(findPanelPrevious:))
-	{
+    SEL action = [anItem action];
+    
+	if (action == @selector(doFindPanelAction:) || action == @selector(findPanelNext:) || action == @selector(findPanelPrevious:))
 		return [self isInValidStateForFindPanel];
-	}
 	
-	if ([anItem action] == @selector(toggleRightFilterBar:))
-	{
+	if (action == @selector(toggleRightFilterBar:) || action == @selector(findSymbol:))
 		return [self isInValidStateForRightFilterBar];
-	}
+	
+	if (action == @selector(goToPreviousResult:))
+		return [[self currentArrayController] canSelectPrevious];
+    if (action == @selector(goToNextResult:))
+		return [[self currentArrayController] canSelectNext];
 	
 	return YES;
 }

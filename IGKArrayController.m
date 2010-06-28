@@ -173,24 +173,35 @@ const NSTimeInterval timeoutInterval = 0.15;
 	}];
 }
 
-- (IBAction)selectPrevious:(id)sender
+- (BOOL)canSelectPrevious
 {
 	NSInteger row = [tableView selectedRow] - 1;
-	
-	if (row < 0 || row >= [fetchedObjects count])
+	return !(row < 0 || row >= [fetchedObjects count]);
+}
+- (IBAction)selectPrevious:(id)sender
+{	
+	if (![self canSelectPrevious])
 		return;
+	
+	NSInteger row = [tableView selectedRow] - 1;
 	
 	[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
 	[tableView scrollRowToVisible:row];
 	
 	[[tableView delegate] tableViewSelectionDidChange:nil];
 }
-- (IBAction)selectNext:(id)sender
+
+- (BOOL)canSelectNext
 {
 	NSInteger row = [tableView selectedRow] + 1;
-	
-	if (row < 0 || row >= [self numberOfRowsInTableView:tableView])
+	return !(row < 0 || row >= [self numberOfRowsInTableView:tableView]);
+}
+- (IBAction)selectNext:(id)sender
+{
+	if (![self canSelectNext])
 		return;
+	
+	NSInteger row = [tableView selectedRow] + 1;
 	
 	[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
 	[tableView scrollRowToVisible:row];

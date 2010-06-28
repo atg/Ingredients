@@ -188,9 +188,13 @@ typedef enum {
 
 - (void)tableViewSelectionDidChange:(NSNotification *)aNotification;
 
+//Right filter bar
+- (IBAction)findSymbol:(id)sender;
+
 - (IBAction)toggleRightFilterBar:(id)sender;
 - (BOOL)rightFilterBarShown;
 - (void)setRightFilterBarShown:(BOOL)shown;
+
 
 - (IBAction)toggleFullscreen:(id)sender;
 
@@ -206,5 +210,12 @@ typedef enum {
 - (IBAction)findPanelSegmentedControl:(id)sender;
 - (IBAction)findPanelPrevious:(id)sender;
 - (IBAction)findPanelNext:(id)sender;
+
+//Go to...
+- (IBAction)goToNextResult:(id)sender;
+- (IBAction)goToPreviousResult:(id)sender;
+- (IBAction)goToNextSymbol:(id)sender;
+- (IBAction)goToPreviousSymbol:(id)sender;
+- (IBAction)goToTableOfContents:(NSMenuItem *)sender;
 
 @end
