@@ -216,6 +216,6 @@ typedef enum {
 - (IBAction)goToPreviousResult:(id)sender;
 - (IBAction)goToNextSymbol:(id)sender;
 - (IBAction)goToPreviousSymbol:(id)sender;
-- (IBAction)goToTableOfContents:(NSMenuItem *)sender;
+- (IBAction)goToTableOfContentsSection:(NSMenuItem *)sender;
 
 @end

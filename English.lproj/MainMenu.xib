@@ -248,8 +248,8 @@
 								<object class="NSMenuItem" id="620705007">
 									<reference key="NSMenu" ref="960517776"/>
 									<string key="NSTitle">Page Setup…</string>
-									<string key="NSKeyEquiv">P</string>
-									<int key="NSKeyEquivModMask">1048576</int>
+									<string key="NSKeyEquiv">p</string>
+									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="893455832"/>
 									<reference key="NSMixedImage" ref="424226900"/>
@@ -852,8 +852,8 @@
 								<object class="NSMenuItem" id="275597043">
 									<reference key="NSMenu" ref="531461334"/>
 									<string key="NSTitle">All</string>
-									<string key="NSKeyEquiv">a</string>
-									<int key="NSKeyEquivModMask">524288</int>
+									<string key="NSKeyEquiv">A</string>
+									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="893455832"/>
 									<reference key="NSMixedImage" ref="424226900"/>
@@ -862,18 +862,19 @@
 								<object class="NSMenuItem" id="647540138">
 									<reference key="NSMenu" ref="531461334"/>
 									<string key="NSTitle">Overview</string>
-									<string key="NSKeyEquiv">o</string>
-									<int key="NSKeyEquivModMask">524288</int>
+									<string key="NSKeyEquiv">O</string>
+									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="893455832"/>
 									<reference key="NSMixedImage" ref="424226900"/>
 									<int key="NSTag">2</int>
 								</object>
-								<object class="NSMenuItem" id="855188564">
+								<object class="NSMenuItem" id="654502584">
 									<reference key="NSMenu" ref="531461334"/>
+									<bool key="NSIsHidden">YES</bool>
 									<string key="NSTitle">Tasks</string>
 									<string key="NSKeyEquiv">t</string>
-									<int key="NSKeyEquivModMask">524288</int>
+									<int key="NSKeyEquivModMask">1310720</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="893455832"/>
 									<reference key="NSMixedImage" ref="424226900"/>
@@ -882,8 +883,8 @@
 								<object class="NSMenuItem" id="571966999">
 									<reference key="NSMenu" ref="531461334"/>
 									<string key="NSTitle">Properties</string>
-									<string key="NSKeyEquiv">p</string>
-									<int key="NSKeyEquivModMask">524288</int>
+									<string key="NSKeyEquiv">P</string>
+									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="893455832"/>
 									<reference key="NSMixedImage" ref="424226900"/>
@@ -892,8 +893,8 @@
 								<object class="NSMenuItem" id="705322590">
 									<reference key="NSMenu" ref="531461334"/>
 									<string key="NSTitle">Methods</string>
-									<string key="NSKeyEquiv">m</string>
-									<int key="NSKeyEquivModMask">524288</int>
+									<string key="NSKeyEquiv">M</string>
+									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="893455832"/>
 									<reference key="NSMixedImage" ref="424226900"/>
@@ -902,8 +903,8 @@
 								<object class="NSMenuItem" id="75990353">
 									<reference key="NSMenu" ref="531461334"/>
 									<string key="NSTitle">Notifications</string>
-									<string key="NSKeyEquiv">n</string>
-									<int key="NSKeyEquivModMask">524288</int>
+									<string key="NSKeyEquiv">N</string>
+									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="893455832"/>
 									<reference key="NSMixedImage" ref="424226900"/>
@@ -911,9 +912,10 @@
 								</object>
 								<object class="NSMenuItem" id="1061962363">
 									<reference key="NSMenu" ref="531461334"/>
+									<bool key="NSIsHidden">YES</bool>
 									<string key="NSTitle">Delegate</string>
 									<string key="NSKeyEquiv">d</string>
-									<int key="NSKeyEquivModMask">524288</int>
+									<int key="NSKeyEquivModMask">1310720</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="893455832"/>
 									<reference key="NSMixedImage" ref="424226900"/>
@@ -921,9 +923,10 @@
 								</object>
 								<object class="NSMenuItem" id="177635166">
 									<reference key="NSMenu" ref="531461334"/>
+									<bool key="NSIsHidden">YES</bool>
 									<string key="NSTitle">Bindings</string>
 									<string key="NSKeyEquiv">b</string>
-									<int key="NSKeyEquivModMask">524288</int>
+									<int key="NSKeyEquivModMask">1310720</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="893455832"/>
 									<reference key="NSMixedImage" ref="424226900"/>
@@ -932,8 +935,8 @@
 								<object class="NSMenuItem" id="680133754">
 									<reference key="NSMenu" ref="531461334"/>
 									<string key="NSTitle">Misc</string>
-									<string key="NSKeyEquiv">c</string>
-									<int key="NSKeyEquivModMask">524288</int>
+									<string key="NSKeyEquiv">C</string>
+									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="893455832"/>
 									<reference key="NSMixedImage" ref="424226900"/>
@@ -1524,14 +1527,6 @@
 					<object class="IBActionConnection" key="connection">
 						<string key="label">goToTableOfContentsSection:</string>
 						<reference key="source" ref="909243075"/>
-						<reference key="destination" ref="855188564"/>
-					</object>
-					<int key="connectionID">705</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">goToTableOfContentsSection:</string>
-						<reference key="source" ref="909243075"/>
 						<reference key="destination" ref="571966999"/>
 					</object>
 					<int key="connectionID">706</int>
@@ -1575,6 +1570,14 @@
 						<reference key="destination" ref="680133754"/>
 					</object>
 					<int key="connectionID">711</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">goToTableOfContentsSection:</string>
+						<reference key="source" ref="909243075"/>
+						<reference key="destination" ref="654502584"/>
+					</object>
+					<int key="connectionID">713</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2287,7 +2290,6 @@
 							<reference ref="969439924"/>
 							<reference ref="275597043"/>
 							<reference ref="647540138"/>
-							<reference ref="855188564"/>
 							<reference ref="571966999"/>
 							<reference ref="705322590"/>
 							<reference ref="75990353"/>
@@ -2298,6 +2300,7 @@
 							<reference ref="225550900"/>
 							<reference ref="300563559"/>
 							<reference ref="313489441"/>
+							<reference ref="654502584"/>
 						</object>
 						<reference key="parent" ref="959092516"/>
 					</object>
@@ -2352,11 +2355,6 @@
 						<reference key="parent" ref="531461334"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">690</int>
-						<reference key="object" ref="855188564"/>
-						<reference key="parent" ref="531461334"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">691</int>
 						<reference key="object" ref="571966999"/>
 						<reference key="parent" ref="531461334"/>
@@ -2384,6 +2382,11 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">696</int>
 						<reference key="object" ref="680133754"/>
+						<reference key="parent" ref="531461334"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">712</int>
+						<reference key="object" ref="654502584"/>
 						<reference key="parent" ref="531461334"/>
 					</object>
 				</object>
@@ -2457,6 +2460,7 @@
 					<string>458.IBPluginDependency</string>
 					<string>459.IBPluginDependency</string>
 					<string>460.IBPluginDependency</string>
+					<string>461.IBEditorWindowLastContentRect</string>
 					<string>461.IBPluginDependency</string>
 					<string>462.IBPluginDependency</string>
 					<string>463.IBPluginDependency</string>
@@ -2465,6 +2469,7 @@
 					<string>465.IBPluginDependency</string>
 					<string>466.IBPluginDependency</string>
 					<string>467.IBPluginDependency</string>
+					<string>468.IBEditorWindowLastContentRect</string>
 					<string>468.IBPluginDependency</string>
 					<string>469.IBPluginDependency</string>
 					<string>470.IBPluginDependency</string>
@@ -2473,6 +2478,7 @@
 					<string>473.IBPluginDependency</string>
 					<string>474.IBPluginDependency</string>
 					<string>475.IBPluginDependency</string>
+					<string>476.IBEditorWindowLastContentRect</string>
 					<string>476.IBPluginDependency</string>
 					<string>477.IBPluginDependency</string>
 					<string>478.IBPluginDependency</string>
@@ -2532,13 +2538,13 @@
 					<string>676.IBPluginDependency</string>
 					<string>688.IBPluginDependency</string>
 					<string>689.IBPluginDependency</string>
-					<string>690.IBPluginDependency</string>
 					<string>691.IBPluginDependency</string>
 					<string>692.IBPluginDependency</string>
 					<string>693.IBPluginDependency</string>
 					<string>694.IBPluginDependency</string>
 					<string>695.IBPluginDependency</string>
 					<string>696.IBPluginDependency</string>
+					<string>712.IBPluginDependency</string>
 					<string>74.IBPluginDependency</string>
 					<string>74.ImportedFromIB2</string>
 					<string>77.IBPluginDependency</string>
@@ -2581,7 +2587,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{359, 586}, {194, 73}}</string>
+					<string>{{386, 693}, {194, 73}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2601,7 +2607,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{198, 376}, {254, 283}}</string>
+					<string>{{188, 483}, {254, 283}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2618,20 +2624,16 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>{{442, 463}, {150, 43}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{783, 793}, {170, 63}}</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>{{442, 463}, {170, 63}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>{{442, 413}, {182, 133}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2640,8 +2642,15 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>{{442, 453}, {275, 113}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{448, 112}, {181, 63}}</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>{{442, 523}, {181, 63}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2666,7 +2675,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{242, 586}, {155, 73}}</string>
+					<string>{{232, 693}, {155, 73}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2712,7 +2721,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{156, 556}, {180, 103}}</string>
+					<string>{{146, 663}, {180, 103}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2735,7 +2744,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">711</int>
+			<int key="maxID">713</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3022,6 +3031,12 @@
 							<string>findPanelPrevious:</string>
 							<string>findPanelSearchField:</string>
 							<string>findPanelSegmentedControl:</string>
+							<string>findSymbol:</string>
+							<string>goToNextResult:</string>
+							<string>goToNextSymbol:</string>
+							<string>goToPreviousResult:</string>
+							<string>goToPreviousSymbol:</string>
+							<string>goToTableOfContentsSection:</string>
 							<string>noselectionSearchField:</string>
 							<string>openInSafari:</string>
 							<string>predicateEditor:</string>
@@ -3042,6 +3057,12 @@
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>NSMenuItem</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>

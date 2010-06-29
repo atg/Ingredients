@@ -105,7 +105,6 @@
 		return;
 	}
 	
-	NSTimeInterval t = [NSDate timeIntervalSinceReferenceDate];
 	NSMenu *newBackMenu = [[NSMenu alloc] initWithTitle:@"Back"];
 	for (WebHistoryItem *item in backList)
 	{
@@ -349,9 +348,7 @@
 						[docsetsFilterPopupButton selectItem:m];
 					}
 				}
-				
-				BOOL successful = [docsetsController setSelectedObjects:[NSArray arrayWithObject:docset]];
-				
+								
 				break;
 			}
 		}
@@ -977,9 +974,71 @@
 {
 	
 }
-- (IBAction)goToTableOfContents:(NSMenuItem *)sender
+- (IBAction)goToTableOfContentsSection:(NSMenuItem *)sender
 {
 	NSInteger tag = [sender tag];
+	
+	IGKHTMLDisplayType displayType = [[self class] tableOfContentsMenuItemToMask:tag];
+	NSNumber *displayTypeNumber = [NSNumber numberWithInteger:displayType];
+	
+	if (![tableOfContentsTypes containsObject:displayTypeNumber])
+		return;
+	
+	NSInteger index = [tableOfContentsTypes indexOfObject:displayTypeNumber];
+	if (index < 0 || index == NSNotFound)
+		return;
+	
+	if ([tableOfContentsPicker.selectedRowIndexes count] == 1 && [tableOfContentsPicker.selectedRowIndexes containsIndex:index])
+		return;
+	
+	[tableOfContentsPicker.selectedRowIndexes removeAllIndexes];
+	[tableOfContentsPicker.selectedRowIndexes addIndex:[tableOfContentsTypes indexOfObject:displayTypeNumber]];
+}
++ (IGKHTMLDisplayTypeMask)tableOfContentsMenuItemToMask:(NSInteger)tag
+{	
+	if (tag == 1)
+		return IGKHTMLDisplayType_All;
+	else if (tag == 2)
+		return IGKHTMLDisplayType_Overview;
+	else if (tag == 3)
+		return IGKHTMLDisplayType_Tasks;
+	else if (tag == 4)
+		return IGKHTMLDisplayType_Properties;
+	else if (tag == 5)
+		return IGKHTMLDisplayType_Methods;
+	else if (tag == 6)
+		return IGKHTMLDisplayType_Notifications;
+	else if (tag == 7)
+		return IGKHTMLDisplayType_Delegate;
+	else if (tag == 8)
+		return IGKHTMLDisplayType_BindingListings;
+	else if (tag == 9)
+		return IGKHTMLDisplayType_Misc;
+	
+	return IGKHTMLDisplayType_All;
+}
++ (NSInteger)tableOfContentsMaskToMenuItem:(NSInteger)mask
+{	
+	if (mask == IGKHTMLDisplayType_All)
+		return 1;
+	else if (mask == IGKHTMLDisplayType_Overview)
+		return 2;
+	else if (mask == IGKHTMLDisplayType_Tasks)
+		return 3;
+	else if (mask == IGKHTMLDisplayType_Properties)
+		return 4;
+	else if (mask == IGKHTMLDisplayType_Methods)
+		return 5;
+	else if (mask == IGKHTMLDisplayType_Notifications)
+		return 6;
+	else if (mask == IGKHTMLDisplayType_Delegate)
+		return 7;
+	else if (mask == IGKHTMLDisplayType_BindingListings)
+		return 8;
+	else if (mask == IGKHTMLDisplayType_Misc)
+		return 9;
+	
+	return 1;
 }
 
 #pragma mark -
@@ -2126,6 +2185,21 @@
 	if (action == @selector(toggleFullscreen:))
 	{
 		if (!isInFullscreen && [[[NSApp delegate] kitController] fullscreenWindowController])
+			return NO;
+	}
+	
+	if (action == @selector(goToTableOfContentsSection:))
+	{
+		NSInteger tag = [anItem tag];
+		
+		IGKHTMLDisplayType displayType = [[self class] tableOfContentsMenuItemToMask:tag];
+		NSNumber *displayTypeNumber = [NSNumber numberWithInteger:displayType];
+		
+		NSInteger index = [tableOfContentsTypes indexOfObject:displayTypeNumber];
+		if (index < 0 || index == NSNotFound)
+			return NO;
+		
+		if ([tableOfContentsPicker.selectedRowIndexes count] == 1 && [tableOfContentsPicker.selectedRowIndexes containsIndex:index])
 			return NO;
 	}
 	
