@@ -1,6 +1,5 @@
 Needs key combos for selecting the next and previous method in the webview
 The table of contents doesn't correctly show as non-key when in a non-key fullscreen window
-Go > [Table of Contents Section] menu items aren't implemented
 Switch to smartcmp algorithm
     Implement frecency
     Implement docset prioritization

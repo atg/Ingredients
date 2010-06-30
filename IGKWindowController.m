@@ -993,6 +993,8 @@
 	
 	[tableOfContentsPicker.selectedRowIndexes removeAllIndexes];
 	[tableOfContentsPicker.selectedRowIndexes addIndex:[tableOfContentsTypes indexOfObject:displayTypeNumber]];
+	
+	[self tableOfContentsChangedSelection];
 }
 + (IGKHTMLDisplayTypeMask)tableOfContentsMenuItemToMask:(NSInteger)tag
 {	
