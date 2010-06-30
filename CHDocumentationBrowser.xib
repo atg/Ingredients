@@ -23,15 +23,15 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1"/>
-			<integer value="83"/>
-			<integer value="820"/>
-			<integer value="714"/>
-			<integer value="40"/>
 			<integer value="189"/>
-			<integer value="63"/>
+			<integer value="820"/>
 			<integer value="19"/>
+			<integer value="1"/>
 			<integer value="373"/>
+			<integer value="63"/>
+			<integer value="42"/>
+			<integer value="759"/>
+			<integer value="83"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2611,70 +2611,6 @@
 						<int key="NSvFlags">266</int>
 						<object class="NSMutableArray" key="NSSubviews">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="BWStyledTextField" id="786580050">
-								<reference key="NSNextResponder" ref="311665377"/>
-								<int key="NSvFlags">290</int>
-								<string key="NSFrame">{{79, 9}, {337, 18}}</string>
-								<reference key="NSSuperview" ref="311665377"/>
-								<bool key="NSEnabled">YES</bool>
-								<object class="BWStyledTextFieldCell" key="NSCell" id="433833077">
-									<int key="NSCellFlags">69336641</int>
-									<int key="NSCellFlags2">138418176</int>
-									<string key="NSContents"/>
-									<object class="NSFont" key="NSSupport" id="652540626">
-										<string key="NSName">Menlo-Bold</string>
-										<double key="NSSize">12</double>
-										<int key="NSfFlags">16</int>
-									</object>
-									<reference key="NSControlView" ref="786580050"/>
-									<reference key="NSBackgroundColor" ref="606539273"/>
-									<object class="NSColor" key="NSTextColor" id="41248831">
-										<int key="NSColorSpace">2</int>
-										<bytes key="NSRGB">MC4zNDkwMTk2MTY4IDAuMzQ5MDE5NjE2OCAwLjM0OTAxOTYxNjgAA</bytes>
-									</object>
-									<bool key="BWSTFCShadowIsBelow">YES</bool>
-									<bool key="BWSTFCHasShadow">YES</bool>
-									<bool key="BWSTFCHasGradient">NO</bool>
-									<object class="NSColor" key="BWSTFCShadowColor" id="7980790">
-										<int key="NSColorSpace">2</int>
-										<bytes key="NSRGB">MSAxIDEAA</bytes>
-									</object>
-									<object class="NSMutableDictionary" key="BWSTFCPreviousAttributes">
-										<bool key="EncodedWithXMLCoder">YES</bool>
-										<object class="NSArray" key="dict.sortedKeys">
-											<bool key="EncodedWithXMLCoder">YES</bool>
-											<string>NSColor</string>
-											<string>NSFont</string>
-											<string>NSOriginalFont</string>
-											<string>NSParagraphStyle</string>
-											<string>NSShadow</string>
-										</object>
-										<object class="NSMutableArray" key="dict.values">
-											<bool key="EncodedWithXMLCoder">YES</bool>
-											<reference ref="41248831"/>
-											<reference ref="652540626"/>
-											<reference ref="652540626"/>
-											<object class="NSMutableParagraphStyle">
-												<int key="NSLineBreakMode">2</int>
-												<nil key="NSTabStops"/>
-											</object>
-											<object class="NSShadow">
-												<double key="NSShadowVert">-1</double>
-												<reference key="NSShadowColor" ref="7980790"/>
-											</object>
-										</object>
-									</object>
-									<object class="NSColor" key="BWSTFCStartingColor">
-										<int key="NSColorSpace">1</int>
-										<bytes key="NSRGB">MC4zMjk3MTQ5MjQxIDAuMzc5MjE3MjY3IDAuNDMzNjczNDcxMgA</bytes>
-									</object>
-									<object class="NSColor" key="BWSTFCEndingColor">
-										<int key="NSColorSpace">1</int>
-										<bytes key="NSRGB">MC41NjA2NDczNjg0IDAuNjA1Mzg4OTk5IDAuNjU4MTYzMjQ5NQA</bytes>
-									</object>
-									<reference key="BWSTFCSolidColor" ref="41248831"/>
-								</object>
-							</object>
 							<object class="NSPopUpButton" id="109674972">
 								<reference key="NSNextResponder" ref="311665377"/>
 								<int key="NSvFlags">289</int>
@@ -3361,7 +3297,15 @@
 										</object>
 										<double key="NSIntercellSpacingWidth">3</double>
 										<double key="NSIntercellSpacingHeight">2</double>
-										<reference key="NSBackgroundColor" ref="525648164"/>
+										<object class="NSColor" key="NSBackgroundColor">
+											<int key="NSColorSpace">6</int>
+											<string key="NSCatalogName">System</string>
+											<string key="NSColorName">_sourceListBackgroundColor</string>
+											<object class="NSColor" key="NSColor">
+												<int key="NSColorSpace">1</int>
+												<bytes key="NSRGB">MC44MzkyMTU2OTU5IDAuODY2NjY2Njc0NiAwLjg5ODAzOTIyMTgAA</bytes>
+											</object>
+										</object>
 										<reference key="NSGridColor" ref="365060459"/>
 										<double key="NSRowHeight">17</double>
 										<int key="NSTvFlags">314572800</int>
@@ -3371,7 +3315,8 @@
 										<int key="NSDraggingSourceMaskForLocal">15</int>
 										<int key="NSDraggingSourceMaskForNonLocal">0</int>
 										<bool key="NSAllowsTypeSelect">NO</bool>
-										<int key="NSTableViewDraggingDestinationStyle">0</int>
+										<int key="NSTableViewSelectionHighlightStyle">1</int>
+										<int key="NSTableViewDraggingDestinationStyle">1</int>
 									</object>
 								</object>
 								<string key="NSFrameSize">{247, 350}</string>
@@ -3870,14 +3815,6 @@
 						<reference key="destination" ref="495249127"/>
 					</object>
 					<int key="connectionID">196</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">browserViewTitle</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="786580050"/>
-					</object>
-					<int key="connectionID">198</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -4706,26 +4643,11 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 						<reference key="object" ref="311665377"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="786580050"/>
 							<reference ref="916318684"/>
 							<reference ref="7977298"/>
 							<reference ref="109674972"/>
 						</object>
 						<reference key="parent" ref="495249127"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">50</int>
-						<reference key="object" ref="786580050"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="433833077"/>
-						</object>
-						<reference key="parent" ref="311665377"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">54</int>
-						<reference key="object" ref="433833077"/>
-						<reference key="parent" ref="786580050"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">63</int>
@@ -6021,8 +5943,6 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>456.IBPluginDependency</string>
 					<string>464.IBPluginDependency</string>
 					<string>495.IBPluginDependency</string>
-					<string>50.IBPluginDependency</string>
-					<string>54.IBPluginDependency</string>
 					<string>565.IBPluginDependency</string>
 					<string>571.IBEditorWindowLastContentRect</string>
 					<string>571.IBPluginDependency</string>
@@ -6206,8 +6126,6 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.brandonwalkin.BWToolkit</string>
-					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{418, 725}, {453, 131}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -6635,6 +6553,12 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 							<string>findPanelPrevious:</string>
 							<string>findPanelSearchField:</string>
 							<string>findPanelSegmentedControl:</string>
+							<string>findSymbol:</string>
+							<string>goToNextResult:</string>
+							<string>goToNextSymbol:</string>
+							<string>goToPreviousResult:</string>
+							<string>goToPreviousSymbol:</string>
+							<string>goToTableOfContentsSection:</string>
 							<string>noselectionSearchField:</string>
 							<string>openInSafari:</string>
 							<string>predicateEditor:</string>
@@ -6655,6 +6579,12 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>NSMenuItem</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>

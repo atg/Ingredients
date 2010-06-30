@@ -1,3 +1,4 @@
+When typing in the right filter search field, the best match (selected by smartcmp) should be selected and the webview should scroll to its anchor
 Needs key combos for selecting the next and previous method in the webview
 The table of contents doesn't correctly show as non-key when in a non-key fullscreen window
 Switch to smartcmp algorithm
