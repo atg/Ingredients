@@ -171,7 +171,7 @@ SmartCmpScore smartcmpScore(NSString *query,  NSString *lowercaseQuery,  unichar
 					+ 0.75 * case_s
 					+ anchor_s
 					+ frecency_s
-					+ 1.75 * category_s
+					+ 2.0 * category_s
 					;
 					
 	//NSLog(@"d %lf, c %lf, a %lf, f %lfm k %lf; t %lf; '%@'", distance_s, case_s, anchor_s, frecency_s, category_s, s, result);
