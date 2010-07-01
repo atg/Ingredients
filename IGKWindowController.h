@@ -169,6 +169,8 @@ typedef enum {
 
 @property (readonly) WebView *browserWebView;
 
+@property (readonly) NSString *sideSearchQuery;
+
 - (IBAction)noselectionSearchField:(id)sender;
 
 - (IBAction)changeSelectedFilterDocset:(id)sender;

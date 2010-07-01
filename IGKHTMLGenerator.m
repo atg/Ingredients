@@ -202,6 +202,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	//Find out if managedObject is an ObjCAbstractMethodContainer
 	NSEntityDescription *ObjCAbstractMethodContainer = [NSEntityDescription entityForName:@"ObjCAbstractMethodContainer" inManagedObjectContext:transientContext];
 	NSEntityDescription *ObjCMethod = [NSEntityDescription entityForName:@"ObjCMethod" inManagedObjectContext:transientContext];
+	NSEntityDescription *ObjCProperty = [NSEntityDescription entityForName:@"ObjCProperty" inManagedObjectContext:transientContext];
 	NSEntityDescription *ObjCBindingsListing = [NSEntityDescription entityForName:@"ObjCBindingsListing" inManagedObjectContext:transientContext];
 	if ([[transientObject entity] isKindOfEntity:ObjCAbstractMethodContainer])
 	{
@@ -230,6 +231,15 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		[outputString appendString:@"<div class='methods single'>\n"];
 		
 		[self html_method:transientObject hasParameters:YES];
+		
+		[outputString appendString:@"</div>\n"];
+	}
+	else if ([[transientObject entity] isKindOfEntity:ObjCProperty])
+	{
+		[outputString appendString:@"<a name='overview'>"];
+		[outputString appendString:@"<div class='methods single'>\n"];
+		
+		[self html_method:transientObject hasParameters:NO];
 		
 		[outputString appendString:@"</div>\n"];
 	}

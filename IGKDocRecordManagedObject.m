@@ -460,6 +460,11 @@
 	return @"";
 }
 
+- (NSString *)xdocset
+{
+	return [[self valueForKey:@"docset"] localizedUserInterfaceName];
+}
+
 - (NSImage *)normalIcon
 {
 	return [self iconForSelectedState:NO];

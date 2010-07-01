@@ -68,6 +68,7 @@
 @synthesize shouldIndex;
 @synthesize isInFullscreen;
 @synthesize browserWebView;
+@synthesize sideSearchQuery;
 
 - (id)init
 {
@@ -995,6 +996,8 @@
 	[tableOfContentsPicker.selectedRowIndexes addIndex:[tableOfContentsTypes indexOfObject:displayTypeNumber]];
 	
 	[self tableOfContentsChangedSelection];
+	
+	[tableOfContentsPicker setNeedsDisplay:YES];
 }
 + (IGKHTMLDisplayTypeMask)tableOfContentsMenuItemToMask:(NSInteger)tag
 {	
@@ -2030,21 +2033,22 @@
 	
 	if (isInFullscreen)
 	{
+		isInFullscreen = NO;
+		
 		[[[NSApp delegate] kitController] setFullscreenWindowController:nil];
 		[[[self window] contentView] exitFullScreenModeWithOptions:fsOptions];
 		[[self window] makeKeyAndOrderFront:sender];
-		isInFullscreen = NO;
 	}
 	else 
 	{
 		if (![[[NSApp delegate] kitController] fullscreenWindowController])
 		{
+			isInFullscreen = YES;
+
 			[[[NSApp delegate] kitController] setFullscreenWindowController:self];
 			[[[self window] contentView] enterFullScreenMode:[[self window] screen] 
 											 withOptions:fsOptions];
 			[[self window] orderOut:sender];
-		
-			isInFullscreen = YES;
 		}
 		else
 		{

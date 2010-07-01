@@ -785,7 +785,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		}
 		return;
 	}
-	if ([transientObject isKindOfEntityNamed:@"ObjCMethod"])
+	if ([transientObject isKindOfEntityNamed:@"ObjCMethod"] || [transientObject isKindOfEntityNamed:@"ObjCProperty"])
 	{
 		[self scrapeMethod];
 	}

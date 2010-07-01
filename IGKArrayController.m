@@ -72,7 +72,8 @@ const NSTimeInterval timeoutInterval = 0.15;
 		
 		//NSFetchRequests and NSComparator-based sort descriptors apparently don't go together, so we can't tell the fetch request to sort using this descriptor
 		//Besides, it's far better to be sorting 100 objects with our expensive comparator than 10000
-		objects = [objects sortedArrayUsingDescriptors:copiedCurrentSortDescriptors];
+		objects = [objects smartSort:[delegate sideSearchQuery]];
+		//objects = [objects sortedArrayUsingDescriptors:copiedCurrentSortDescriptors];
 		
 		BOOL containsVIP = NO;
 		
@@ -378,6 +379,13 @@ const NSTimeInterval timeoutInterval = 0.15;
 	{
 		return [fo valueForKey:@"xcontainername"];
 	}
+	
+	//*** Docset Names ***
+	if ([identifier isEqual:@"xdocset"])
+	{
+		return [fo valueForKey:@"xdocset"];
+	}
+	
 	
 	return nil;
 }

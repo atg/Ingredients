@@ -170,6 +170,8 @@
 		75DF96DE117E32E100403233 /* IGKMattePopUpButtonView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DF96DC117E32E100403233 /* IGKMattePopUpButtonView.h */; };
 		75DF96DF117E32E100403233 /* IGKMattePopUpButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DF96DD117E32E100403233 /* IGKMattePopUpButtonView.m */; };
 		75DF96EA117E350600403233 /* IGKMatteFocusedGradientBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DF96E9117E350600403233 /* IGKMatteFocusedGradientBox.m */; };
+		75E747D211DC2CF3009B89CB /* smartcmp.h in Headers */ = {isa = PBXBuildFile; fileRef = 75E747D111DC2CF3009B89CB /* smartcmp.h */; };
+		75E747D511DC2DEB009B89CB /* smartcmp.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E747D411DC2DEB009B89CB /* smartcmp.m */; };
 		75F67031110CCD31005F299C /* RegexKitLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F6702F110CCD31005F299C /* RegexKitLite.h */; };
 		75F67032110CCD31005F299C /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F67030110CCD31005F299C /* RegexKitLite.m */; };
 		75F67044110CD033005F299C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 75F67043110CD033005F299C /* libicucore.dylib */; };
@@ -383,6 +385,8 @@
 		75DF96DD117E32E100403233 /* IGKMattePopUpButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKMattePopUpButtonView.m; sourceTree = "<group>"; };
 		75DF96E8117E350600403233 /* IGKMatteFocusedGradientBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKMatteFocusedGradientBox.h; sourceTree = "<group>"; };
 		75DF96E9117E350600403233 /* IGKMatteFocusedGradientBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKMatteFocusedGradientBox.m; sourceTree = "<group>"; };
+		75E747D111DC2CF3009B89CB /* smartcmp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smartcmp.h; sourceTree = "<group>"; };
+		75E747D411DC2DEB009B89CB /* smartcmp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = smartcmp.m; sourceTree = "<group>"; };
 		75F6702F110CCD31005F299C /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
 		75F67030110CCD31005F299C /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		75F67043110CD033005F299C /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
@@ -545,6 +549,8 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				75E747D111DC2CF3009B89CB /* smartcmp.h */,
+				75E747D411DC2DEB009B89CB /* smartcmp.m */,
 				0C402C141191C691001564B5 /* NSString+Utilities.h */,
 				0C402C151191C691001564B5 /* NSString+Utilities.m */,
 				756EFCFC11DA5CB800BC978A /* IGKCircularBuffer.h */,
@@ -808,6 +814,7 @@
 				7515378611CC6D82004529B2 /* NSArray+IGKAdditions.h in Headers */,
 				75BC565611CDD5900012800F /* IGKMatteButton.h in Headers */,
 				756EFCFE11DA5CB800BC978A /* IGKCircularBuffer.h in Headers */,
+				75E747D211DC2CF3009B89CB /* smartcmp.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -998,6 +1005,7 @@
 				7515378711CC6D82004529B2 /* NSArray+IGKAdditions.m in Sources */,
 				75BC565711CDD5900012800F /* IGKMatteButton.m in Sources */,
 				756EFCFF11DA5CB800BC978A /* IGKCircularBuffer.m in Sources */,
+				75E747D511DC2DEB009B89CB /* smartcmp.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

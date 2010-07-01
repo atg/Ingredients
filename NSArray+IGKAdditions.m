@@ -7,7 +7,7 @@
 //
 
 #import "NSArray+IGKAdditions.h"
-
+#import "smartcmp.h"
 
 @implementation NSArray (IGKAdditions)
 
@@ -50,6 +50,74 @@
 		return nil;
 	
 	return [self objectAtIndex:index];
+}
+
+- (NSArray *)smartSort:(NSString *)query
+{
+	//Note some commonly used information about the query
+	NSString *lowercaseQuery = [query lowercaseString];
+	NSUInteger queryLength = [query length];
+	
+	unichar *queryCharacters = malloc(queryLength * sizeof(unichar));
+	[query getCharacters:queryCharacters range:NSMakeRange(0, queryLength)];
+	
+	
+	//Find the length of the longest name
+	NSUInteger maximumLength = 1.0;
+	for (id obj in self)
+	{
+		NSString *result = [obj valueForKey:@"name"];
+		
+		if ([result length] > maximumLength)
+			maximumLength = [result length];
+	}
+	
+	
+	//Iterate the array and score each item
+	NSMutableArray *scores = [[NSMutableArray alloc] initWithCapacity:[self count]];
+	for (id obj in self)
+	{
+		NSString *result = [obj valueForKey:@"name"];
+		NSString *lowercaseResult = [result lowercaseString];
+		NSUInteger resultLength = [result length];
+		
+		unichar *resultCharacters = malloc(resultLength * sizeof(unichar));
+		[result getCharacters:resultCharacters range:NSMakeRange(0, resultLength)];
+		
+		SmartCmpScore score = smartcmpScore(query, lowercaseQuery, queryCharacters, queryLength,
+											result, lowercaseResult, resultCharacters, resultLength, obj,
+											maximumLength);
+		
+		[scores addObject:[NSArray arrayWithObjects:[NSNumber numberWithDouble:score], obj, nil]];
+		
+		free(resultCharacters);
+	}
+	
+	
+	//Sort the scores
+	NSArray *sortedScores = [scores sortedArrayUsingComparator:^ NSComparisonResult (id a, id b) {
+		NSComparisonResult comparisonResult =  [[a objectAtIndex:0] compare:[b objectAtIndex:0]];
+		if (comparisonResult == NSOrderedAscending)
+			return NSOrderedDescending;
+		else if (comparisonResult == NSOrderedDescending)
+			return NSOrderedAscending;
+		return NSOrderedSame;
+	}];
+	
+	
+	//Clean up
+	free(queryCharacters);
+	
+	
+	//Return the sorted objects
+	NSMutableArray *sortedObjects = [[NSMutableArray alloc] initWithCapacity:[self count]];
+	for (id obj in sortedScores)
+	{
+		[sortedObjects addObject:[obj objectAtIndex:1]];
+	}
+	
+	
+	return sortedObjects;
 }
 
 @end

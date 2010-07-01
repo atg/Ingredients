@@ -130,8 +130,7 @@ const float ToCRowHeight = 31.0;
 	//*** Constants ***
 	const NSRect rect = [self bounds];
 	BOOL isActive = [self isActive];
-	
-	
+		
 	//*** Drawing ***
 	
 	//Draw the background
@@ -262,32 +261,44 @@ const float ToCRowHeight = 31.0;
 {
 	if (window)
 	{
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeMain:) name:NSWindowDidBecomeKeyNotification object:window];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidResignMain:) name:NSWindowDidResignKeyNotification object:window];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeMain:) name:NSWindowDidBecomeMainNotification object:window];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidResignMain:) name:NSWindowDidResignMainNotification object:window];
 	}
 	else
 	{
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeKeyNotification object:[self window]];
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidResignKeyNotification object:[self window]];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidBecomeMainNotification object:[self window]];
 		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidResignMainNotification object:[self window]];
 	}
+	
+	[self setNeedsDisplay:YES];
+}
+- (void)viewDidMoveToWindow
+{
+	//NSLog(@"viewDidMoveToWindow %d", [self isActive]);
+	[self setNeedsDisplay:YES];
 }
 - (void)windowDidBecomeMain:(NSNotification *)notif
 {
+	//NSLog(@"windowDidBecomeMain: %d", [self isActive]);
 	[splitView setColor:[NSColor colorWithCalibratedRed:0.591 green:0.626 blue:0.684 alpha:1.000]];
 	
 	[self setNeedsDisplay:YES];
 }
 - (void)windowDidResignMain:(NSNotification *)notif
 {
+	//NSLog(@"windowDidResignMain: %d", [self isActive]);
 	[splitView setColor:[NSColor colorWithCalibratedRed:0.647 green:0.647 blue:0.647 alpha:1.000]];
 	
 	[self setNeedsDisplay:YES];
 }
 - (BOOL)isActive
-{
-	return [[self window] isMainWindow] || [[[self window] contentView] isInFullScreenMode];
+{	
+	return [[self window] isMainWindow] || ([[self delegate] isInFullscreen] && [[self window] isKeyWindow]);
 }
-
 
 
 #pragma mark Events
