@@ -109,13 +109,13 @@
 	NSMenu *newBackMenu = [[NSMenu alloc] initWithTitle:@"Back"];
 	for (WebHistoryItem *item in backList)
 	{
-		//NSURL *url = [NSURL URLWithString:[item URLString]];
+		NSURL *url = [NSURL URLWithString:[item URLString]];
 		//IGKDocRecordManagedObject *mo = [IGKDocRecordManagedObject resolveURL:url inContext:[self managedObjectContext] tableOfContentsMask:NULL];
 		
 		NSMenuItem *menuItem = [newBackMenu addItemWithTitle:[item title] action:@selector(backMenuItem:) keyEquivalent:@""];
 		[menuItem setRepresentedObject:item];
 		[menuItem setTarget:self];
-		//[menuItem setImage:[mo normalIcon]];
+		[menuItem setImage:[[self class] iconImageForURL:url]];
 	}
 	
 	[backForwardButton setMenu:newBackMenu forSegment:0];
@@ -135,19 +135,34 @@
 	NSMenu *newForwardMenu = [[NSMenu alloc] initWithTitle:@"Forward"];
 	for (WebHistoryItem *item in forwardList)
 	{
-		//NSURL *url = [NSURL URLWithString:[item URLString]];
+		NSURL *url = [NSURL URLWithString:[item URLString]];
 		//IGKDocRecordManagedObject *mo = [IGKDocRecordManagedObject resolveURL:url inContext:[self managedObjectContext] tableOfContentsMask:NULL];
 		
 		NSMenuItem *menuItem = [newForwardMenu addItemWithTitle:[item title] action:@selector(forwardMenuItem:) keyEquivalent:@""];
 		[menuItem setRepresentedObject:item];
 		[menuItem setTarget:self];
-		//[menuItem setImage:[mo normalIcon]];
+		[menuItem setImage:[[self class] iconImageForURL:url]];
 	}
 	
 	[backForwardButton setMenu:newForwardMenu forSegment:1];
 	
 	[backForwardButton setEnabled:YES forSegment:1];
 }
++ (NSImage *)iconImageForURL:(NSURL *)url
+{
+	//Get an image for the item. We take this roundabout route to avoid resolving the URL (which is slow)
+	NSString *extension = [[url lastPathComponent] pathExtension];
+	BOOL isInstanceMethod = NO;
+	if ([extension isEqual:@"instance-method"])
+		isInstanceMethod = YES;
+	
+	NSString *entityName = [IGKDocRecordManagedObject entityNameFromURLComponentExtension:extension];
+	CHSymbolButtonImageMask iconMask = [IGKDocRecordManagedObject iconMaskForEntity:entityName isInstanceMethod:isInstanceMethod];
+	NSImage *image = [[CHSymbolButtonImage symbolImageWithMask:iconMask] objectAtIndex:0];
+	
+	return image;
+}
+
 - (void)backMenuItem:(NSMenuItem *)sender
 {	
 	NSInteger index = [[backForwardButton menuForSegment:0] indexOfItem:sender];

@@ -5,7 +5,6 @@ Needs key combos for selecting the next and previous method in the webview
 Switch to smartcmp algorithm
     Implement frecency
     Implement docset prioritization
-Back/forward button menus should include icons
 Loads of articles don't parse properly, but thankfully the main ones do
 
 ---

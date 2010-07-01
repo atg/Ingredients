@@ -171,6 +171,8 @@ typedef enum {
 
 @property (readonly) NSString *sideSearchQuery;
 
++ (NSImage *)iconImageForURL:(NSURL *)url;
+
 - (IBAction)noselectionSearchField:(id)sender;
 
 - (IBAction)changeSelectedFilterDocset:(id)sender;
