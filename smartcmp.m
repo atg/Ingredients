@@ -144,9 +144,12 @@ SmartCmpScore categoryScore(id resultObject)
     int categoryCount = 1;
     
     //Priority
-    SmartCmpScore maximumPriorityValue = (SmartCmpScore)(CHPriorityMaximum - 1);
-    score += ((SmartCmpScore)[resultObject priorityval]) / maximumPriorityValue;
-    
+    if ([resultObject respondsToSelector:@selector(priorityval)])
+	{
+		SmartCmpScore maximumPriorityValue = (SmartCmpScore)(CHPriorityMaximum - 1);
+		score += ((SmartCmpScore)[resultObject priorityval]) / maximumPriorityValue;
+    }
+	
     //Docsets
     //TODO: Record most used docsets and score appropriately
     

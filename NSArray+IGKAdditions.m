@@ -46,7 +46,7 @@
 	if (index < 0)
 		return [self igk_objectAtSoftIndex:[self count] + index];
 	
-	if (index > [self count])
+	if (index >= [self count])
 		return nil;
 	
 	return [self objectAtIndex:index];

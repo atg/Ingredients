@@ -23,15 +23,15 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="114"/>
 			<integer value="759"/>
-			<integer value="189"/>
-			<integer value="1"/>
-			<integer value="19"/>
-			<integer value="42"/>
-			<integer value="820"/>
-			<integer value="373"/>
 			<integer value="63"/>
+			<integer value="20"/>
+			<integer value="1"/>
+			<integer value="114"/>
+			<integer value="42"/>
+			<integer value="189"/>
+			<integer value="373"/>
+			<integer value="820"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -438,7 +438,6 @@
 										<int key="NSvFlags">-2147483392</int>
 										<string key="NSFrame">{{0, 337}, {620, 15}}</string>
 										<reference key="NSSuperview" ref="61344541"/>
-										<bool key="NSEnabled">YES</bool>
 										<int key="NSsFlags">1</int>
 										<reference key="NSTarget" ref="61344541"/>
 										<string key="NSAction">_doScroller:</string>
@@ -463,7 +462,7 @@
 								<string key="NSFrameSize">{635, 340}</string>
 								<reference key="NSSuperview" ref="3414012"/>
 								<reference key="NSNextKeyView" ref="770639792"/>
-								<int key="NSsFlags">688</int>
+								<int key="NSsFlags">560</int>
 								<reference key="NSVScroller" ref="837312541"/>
 								<reference key="NSHScroller" ref="1055726284"/>
 								<reference key="NSContentView" ref="770639792"/>
@@ -3329,15 +3328,7 @@
 										</object>
 										<double key="NSIntercellSpacingWidth">3</double>
 										<double key="NSIntercellSpacingHeight">2</double>
-										<object class="NSColor" key="NSBackgroundColor">
-											<int key="NSColorSpace">6</int>
-											<string key="NSCatalogName">System</string>
-											<string key="NSColorName">_sourceListBackgroundColor</string>
-											<object class="NSColor" key="NSColor">
-												<int key="NSColorSpace">1</int>
-												<bytes key="NSRGB">MC44MzkyMTU2OTU5IDAuODY2NjY2Njc0NiAwLjg5ODAzOTIyMTgAA</bytes>
-											</object>
-										</object>
+										<reference key="NSBackgroundColor" ref="936577122"/>
 										<reference key="NSGridColor" ref="365060459"/>
 										<double key="NSRowHeight">17</double>
 										<int key="NSTvFlags">314572800</int>
@@ -3347,8 +3338,7 @@
 										<int key="NSDraggingSourceMaskForLocal">15</int>
 										<int key="NSDraggingSourceMaskForNonLocal">0</int>
 										<bool key="NSAllowsTypeSelect">NO</bool>
-										<int key="NSTableViewSelectionHighlightStyle">1</int>
-										<int key="NSTableViewDraggingDestinationStyle">1</int>
+										<int key="NSTableViewDraggingDestinationStyle">0</int>
 									</object>
 								</object>
 								<string key="NSFrameSize">{247, 350}</string>

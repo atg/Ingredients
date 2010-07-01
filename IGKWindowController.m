@@ -926,8 +926,51 @@
 			
 		}
 	}
+	else if (control == rightFilterBarSearchField)
+	{
+		if ([NSStringFromSelector(command) isEqual:@"moveUp:"] || [NSStringFromSelector(command) isEqual:@"moveDown:"])
+		{
+			[self performSelector:@selector(handleRightFilterBarEvent:) withObject:NSStringFromSelector(command) afterDelay:0.3];
+			return YES;
+		}
+	}
 	
 	return NO;
+}
+- (void)handleRightFilterBarEvent:(NSString *)command
+{
+	if ([command isEqual:@"moveUp:"])
+	{
+		NSInteger i = [rightFilterBarTable selectedRow] - 1;
+		while (i >= 0 && i < [rightFilterBarTable numberOfRows])
+		{
+			BOOL canSelect = [[rightFilterBarTable delegate] tableView:rightFilterBarTable shouldSelectRow:i];
+			if (canSelect)
+			{
+				[rightFilterBarTable selectRowIndexes:[NSIndexSet indexSetWithIndex:i] byExtendingSelection:NO];
+				[rightFilterBarTable scrollRowToVisible:i];
+				break;
+			}
+			
+			i--;
+		}
+	}
+	else if ([command isEqual:@"moveDown:"])
+	{
+		NSInteger i = [rightFilterBarTable selectedRow] + 1;
+		while (i < [rightFilterBarTable numberOfRows] && i < [rightFilterBarTable numberOfRows])
+		{
+			BOOL canSelect = [[rightFilterBarTable delegate] tableView:rightFilterBarTable shouldSelectRow:i];
+			if (canSelect)
+			{
+				[rightFilterBarTable selectRowIndexes:[NSIndexSet indexSetWithIndex:i] byExtendingSelection:NO];
+				[rightFilterBarTable scrollRowToVisible:i];
+				break;
+			}
+			
+			i++;
+		}
+	}
 }
 
 - (IBAction)changeSelectedFilterDocset:(id)sender
@@ -1393,6 +1436,19 @@
 	}
 	
 	[rightFilterBarTable reloadData];
+	
+	//Select the best matching item, as selected by smartSort:
+	NSArray *smartSorted = [[rightFilterBarItems igk_filter:^(id obj) { return [obj respondsToSelector:@selector(keyEnumerator)]; }] smartSort:queryString];
+	if ([smartSorted count])
+	{
+		NSUInteger smartIndex = [rightFilterBarItems indexOfObject:[smartSorted igk_firstObject]];
+		if (smartIndex < NSNotFound && smartIndex > 0 && smartIndex < [rightFilterBarTable numberOfRows] && [[rightFilterBarTable delegate] tableView:rightFilterBarTable shouldSelectRow:smartIndex])
+		{
+			[rightFilterBarTable selectRowIndexes:[NSIndexSet indexSetWithIndex:smartIndex] byExtendingSelection:NO];
+			[rightFilterBarTable scrollRowToVisible:smartIndex];
+			[[rightFilterBarTable delegate] tableViewSelectionDidChange:[NSNotification notificationWithName:NSTableViewSelectionDidChangeNotification object:rightFilterBarTable]];
+		}
+	}
 }
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
