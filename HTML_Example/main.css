@@ -17,6 +17,8 @@ code
 .category
 {
 	margin-top: -4px;
+	margin-bottom: 0;
+	padding-bottom: 8px;
 	text-indent: 20px;
 	font-style: italic;
 	font-size: 13px;
@@ -133,6 +135,10 @@ code
 	padding-top: 0;
 		
 	border-top-style: none;
+}
+.methods div.description
+{
+	margin-top: -12px;
 }
 
 .methods .info h3

@@ -3,7 +3,7 @@
 //  Ingredients
 //
 //  Created by Alex Gordon on 23/01/2010.
-//  Copyright 2010 Fileability. All rights reserved.
+//  Written in 2010 by Fileability.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -150,7 +150,9 @@ typedef enum {
 	BOOL shouldIndex;
 	BOOL isIndexing;
 	BOOL isInFullscreen;
-		
+	
+	long frecencyToken;
+	
 	NSManagedObjectID *currentObjectIDInBrowser;
 	
 	NSArray *selectedFilterDocset;

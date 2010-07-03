@@ -3,7 +3,7 @@
 //  Ingredients
 //
 //  Created by Alex Gordon on 23/01/2010.
-//  Copyright 2010 Fileability. All rights reserved.
+//  Written in 2010 by Fileability.
 //
 
 #import "IGKWindowController.h"
@@ -16,6 +16,7 @@
 #import "IGKDocRecordManagedObject.h"
 #import "CHSymbolButtonImage.h"
 #import "IGKSometimesCenteredTextCell.h"
+#import "IGKFrecencyStore.h"
 
 @interface IGKWindowController ()
 
@@ -32,7 +33,7 @@
 - (void)tableOfContentsChangedSelection;
 - (void)registerDisplayTypeInTableView:(IGKHTMLDisplayType)type title:(NSString *)title;
 
-- (void)loadManagedObject:(IGKDocRecordManagedObject *)mo tableOfContentsMask:(IGKHTMLDisplayTypeMask)tm;
+- (void)loadManagedObject:(IGKDocRecordManagedObject *)mo tableOfContentsMask:(IGKHTMLDisplayTypeMask)tm URL:(NSURL *)url;
 
 - (void)setMode:(int)modeIndex;
 - (IGKArrayController *)currentArrayController;
@@ -620,6 +621,7 @@
 	NSURL *url = [urlRequest URL];
 	
 	isNonFilterBarType = YES;
+	frecencyToken = 0;
 	
 	// set default title
 	[[self window] setTitle:@"Documentation"];
@@ -643,22 +645,24 @@
 			[[browserWebView mainFrame] loadHTMLString:html
 											   baseURL:[[NSBundle mainBundle] resourceURL]];
 		}
-		
-		NSLog(@"Load URL = %@, record history = %d", url, recordHistory);
-		NSManagedObjectContext *ctx = [[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext];
-		
-		tableOfContentsMask = IGKHTMLDisplayType_None;
-		IGKDocRecordManagedObject *result = [IGKDocRecordManagedObject resolveURL:url inContext:ctx tableOfContentsMask:&tableOfContentsMask];
-				
-		if (result)
-		{
-			[self setBrowserActive:YES];
-			[self loadManagedObject:result tableOfContentsMask:tableOfContentsMask];
-			if (recordHistory)
-				[self recordHistoryForURL:url title:[result valueForKey:@"name"]];
+		else
+		{		
+			NSLog(@"Load URL = %@, record history = %d", url, recordHistory);
+			NSManagedObjectContext *ctx = [[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext];
+			
+			tableOfContentsMask = IGKHTMLDisplayType_None;
+			IGKDocRecordManagedObject *result = [IGKDocRecordManagedObject resolveURL:url inContext:ctx tableOfContentsMask:&tableOfContentsMask];
+					
+			if (result)
+			{
+				[self setBrowserActive:YES];
+				[self loadManagedObject:result tableOfContentsMask:tableOfContentsMask URL:url];
+				if (recordHistory)
+					[self recordHistoryForURL:url title:[result valueForKey:@"name"]];
+			}
+			
+			[self reloadTableOfContents];
 		}
-		
-		[self reloadTableOfContents];
 	}
 	else
 	{
@@ -668,8 +672,9 @@
 		[[browserWebView mainFrame] loadRequest:urlRequest];
 	}
 }
-- (void)loadManagedObject:(IGKDocRecordManagedObject *)mo tableOfContentsMask:(IGKHTMLDisplayTypeMask)tm
+- (void)loadManagedObject:(IGKDocRecordManagedObject *)mo tableOfContentsMask:(IGKHTMLDisplayTypeMask)tm URL:(NSURL *)url
 {
+	frecencyToken = 0;
 	currentObjectIDInBrowser = [mo objectID];
 	
 	IGKHTMLGenerator *generator = [[IGKHTMLGenerator alloc] init];
@@ -705,7 +710,30 @@
 	[self reloadRightFilterBarTable:mo transient:[generator transientObject]];
 	
 	[generator finish];
+	
+	
+	//Find out if we're still here in 5 seconds
+	
+	if (url)
+	{
+		frecencyToken = random();
+	
+		NSArray *frecencyData = [NSArray arrayWithObjects:[NSNumber numberWithLong:frecencyToken], url, nil];
+		[self performSelector:@selector(checkIfStillAlive:) withObject:frecencyData afterDelay:5.0];
+	}
 }
+- (void)checkIfStillAlive:(NSArray *)frecencyData
+{
+	if ([[frecencyData objectAtIndex:0] longValue] == frecencyToken)
+	{		
+		//This was a triumph
+		IGKFrecencyStore *frecencyStore = [IGKFrecencyStore storeWithIdentifier:@"net.fileability.ingredients.DocumentationArticleURLFrecency"];
+		
+		//I'm making a note here
+		[frecencyStore recordItem:[[frecencyData objectAtIndex:1] absoluteString]];
+	}
+}
+
 - (void)recordHistoryForURL:(NSURL *)url title:(NSString *)title
 {
 	WebHistoryItem *item = [[WebHistoryItem alloc] initWithURLString:[url absoluteString] title:title lastVisitedTimeInterval:[NSDate timeIntervalSinceReferenceDate]];
@@ -835,6 +863,7 @@
 	[twoPaneSplitView setColorIsEnabled:YES];
 	[twoPaneSplitView setColor:[NSColor colorWithCalibratedRed:0.166 green:0.166 blue:0.166 alpha:1.000]];
 	
+	frecencyToken = 0;
 	[[browserWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:
 											 [NSURL fileURLWithPath:
 											  [[NSBundle mainBundle] pathForResource:@"tictactoe" ofType:@"html"]
@@ -1736,7 +1765,7 @@
 		[self restoreAdvancedSearchStateIntoTwoUp:YES];
 		
 		//Open in two up
-		//TODO: Make which view this switched to a preference. It could switch to either Two Up or Browser Only
+		//TODO: Record a preference for whichever view this switched to. It could switch to either Two Up or Browser Only
 		[self setMode:CHDocumentationBrowserUIMode_TwoUp];
 	}
 	
@@ -1816,6 +1845,8 @@
 }
 - (void)loadDocIntoBrowser
 {	
+	frecencyToken = 0;
+	
 	//Generate the HTML
 	if (![[self currentArrayController] selection])
 		return;
@@ -1834,9 +1865,10 @@
 	
 	tableOfContentsMask = dtmask;
 	
-	[self loadManagedObject:(IGKDocRecordManagedObject *)currentSelectionObject tableOfContentsMask:[self tableOfContentsSelectedDisplayTypeMask]];
+	NSURL *url = [(IGKDocRecordManagedObject *)currentSelectionObject docURL:[self tableOfContentsSelectedDisplayTypeMask]];
+	[self loadManagedObject:(IGKDocRecordManagedObject *)currentSelectionObject tableOfContentsMask:[self tableOfContentsSelectedDisplayTypeMask] URL:url];
 	
-	[self recordHistoryForURL:[(IGKDocRecordManagedObject *)currentSelectionObject docURL:[self tableOfContentsSelectedDisplayTypeMask]] title:[currentSelectionObject pageTitle:[self tableOfContentsSelectedDisplayTypeMask]]];
+	[self recordHistoryForURL:url title:[currentSelectionObject pageTitle:[self tableOfContentsSelectedDisplayTypeMask]]];
 }
 
 - (IBAction)openInSafari:(id)sender
@@ -1914,7 +1946,6 @@
 	
 	if ([[[[request URL] host] lowercaseString] isEqual:@"ingr-doc"])
 	{
-		NSLog(@"ingr-doc: %@", url);
 		if ([[url path] containsString:@"headerfile"])
 		{
 			NSLog(@"FOUND HEADER");
@@ -1925,9 +1956,7 @@
 		{
 			NSArray *newcomps = [[NSArray arrayWithObject:@"/"] arrayByAddingObjectsFromArray:[comps subarrayWithRange:NSMakeRange(2, [comps count] - 2)]];
 			NSURL *newURL = [[NSURL alloc] initWithScheme:@"ingr-doc" host:[comps objectAtIndex:1] path:[NSString pathWithComponents:newcomps]];
-			
-			NSLog(@"\t Now loading: %@", newURL);
-			
+						
 			[self performSelector:@selector(loadURLRecordHistory:) withObject:newURL afterDelay:0.0];
 			return nil;
 		}

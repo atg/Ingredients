@@ -3,7 +3,7 @@
 //  Ingredients
 //
 //  Created by Alex Gordon on 22/02/2010.
-//  Copyright 2010 Fileability. All rights reserved.
+//  Written in 2010 by Fileability.
 //
 
 #import "IGKShyTableView.h"

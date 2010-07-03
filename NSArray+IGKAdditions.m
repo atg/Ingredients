@@ -3,11 +3,20 @@
 //  Ingredients
 //
 //  Created by Alex Gordon on 18/06/2010.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Written in 2010 by Fileability.
 //
 
 #import "NSArray+IGKAdditions.h"
 #import "smartcmp.h"
+
+NSComparisonResult IGKInverseComparisonResult(NSComparisonResult result)
+{
+	if (result == NSOrderedAscending)
+		return NSOrderedDescending;
+	if (result == NSOrderedDescending)
+		return NSOrderedAscending;
+	return NSOrderedSame;
+}
 
 @implementation NSArray (IGKAdditions)
 
@@ -96,12 +105,19 @@
 	
 	//Sort the scores
 	NSArray *sortedScores = [scores sortedArrayUsingComparator:^ NSComparisonResult (id a, id b) {
-		NSComparisonResult comparisonResult =  [[a objectAtIndex:0] compare:[b objectAtIndex:0]];
-		if (comparisonResult == NSOrderedAscending)
-			return NSOrderedDescending;
-		else if (comparisonResult == NSOrderedDescending)
-			return NSOrderedAscending;
-		return NSOrderedSame;
+		NSComparisonResult comparisonResult = IGKInverseComparisonResult([[a objectAtIndex:0] compare:[b objectAtIndex:0]]);
+		if (comparisonResult == NSOrderedSame)
+		{
+			//If we're really desperate we can compare the lengths of the contents
+			if ([[a objectAtIndex:1] respondsToSelector:@selector(lengthOfContent)])
+			{
+				return IGKInverseComparisonResult([[[a objectAtIndex:1] lengthOfContent] compare:[[b objectAtIndex:1] lengthOfContent]]);
+			}
+			
+			return [[[a objectAtIndex:1] valueForKey:@"name"] compare:[[b objectAtIndex:1] valueForKey:@"name"]];
+		}
+		
+		return comparisonResult;
 	}];
 	
 	

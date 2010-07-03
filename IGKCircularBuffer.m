@@ -1,28 +1,22 @@
-typedef struct {
-	// 0 <= elementCount <= actualSize <= targetSize
+#import "IGKCircularBuffer.h"
+
+IGKCircularBuffer IGKCircularBufferCreateFromData(const void *data, CFIndex dataLength, CFIndex maximumCount, CFIndex elementSize)
+{
+	IGKCircularBuffer buffer;
 	
-	//The number of elements in the buffer
-	CFIndex elementCount;
+	buffer.elementCount = 0;
+	buffer.allocatedCount = dataLength / elementSize;
+	buffer.maximumCount = maximumCount;
+	buffer.elementSize = elementSize;
 	
-	//The amount of elements that we have allocated enough memory to hold. Must not be 0
-	CFIndex allocatedCount;
+	buffer.items = malloc(dataLength * elementSize);
+	memcpy(buffer.items, data, dataLength);
 	
-	//The maximum number of elements that the buffer will grow to hold before it starts discarding things
-	CFIndex maximumCount;
+	buffer.oldestElement = -1;
+	buffer.youngestElement = -1;
 	
-	//The size in bytes of each element in the buffer
-	CFIndex elementSize;
-	
-	//A pointer to all the elements
-	void* items;
-	
-	//The offset of the element that was added the longest time ago
-	int64_t oldestElement;
-	
-	//The offset of the element that was added most recently
-	CFIndex youngestElement;
-	
-} IGKCircularBuffer;
+	return buffer;
+}
 
 //Create an empty buffer with a specified size
 IGKCircularBuffer IGKCircularBufferCreate(CFIndex maximumCount, CFIndex elementSize, CFIndex initialSize)
@@ -47,7 +41,7 @@ void* IGKCircularBufferElementAt(IGKCircularBuffer buffer, CFIndex index)
 }
 
 //Add elementSize bytes of *pointerToData to the buffer.
-void* IGKCircularBufferAdd(IGKCircularBuffer buffer, void* pointerToData)
+void IGKCircularBufferAdd(IGKCircularBuffer buffer, void* pointerToData)
 {
 	//If the buffer needs to grow
 	if (buffer.elementCount + 1 > buffer.allocatedCount && buffer.allocatedCount < buffer.maximumCount)
@@ -65,7 +59,7 @@ void* IGKCircularBufferAdd(IGKCircularBuffer buffer, void* pointerToData)
 		if (!newItems)
 		{
 			//Do something if reallocf fails
-			return NULL;
+			return;
 		}
 		
 		//Set our variables
@@ -114,11 +108,39 @@ void* IGKCircularBufferAdd(IGKCircularBuffer buffer, void* pointerToData)
 }
 
 //Get a pointer to the raw data and the length of the data, eg to pass to NSData
-IGKCircularBuffer* IGKCircularBufferRawData(IGKCircularBuffer buffer)
+void* IGKCircularBufferRawData(IGKCircularBuffer buffer)
 {
 	return buffer.items;
 }
 CFIndex IGKCircularBufferRawDataLength(IGKCircularBuffer buffer)
+{
+	if (buffer.items)
+		return buffer.elementCount * buffer.elementSize;
+	return 0;
+}
+
+//Get data in a format suitable for writing out to disk
+NSData* IGKCircularBufferOrderedData(IGKCircularBuffer buffer)
+{
+	NSMutableData *data = [[NSMutableData alloc] initWithCapacity:IGKCircularBufferOrderedDataLength(buffer)];
+	
+	if (buffer.elementCount == 0)
+		return data;
+	
+	for (CFIndex i = buffer.oldestElement; ; i = (i + 1) % buffer.elementCount)
+	{
+		if (buffer.items + i == NULL)
+			continue;
+		
+		[data appendBytes:buffer.items + i * buffer.elementSize length:buffer.elementSize];
+		
+		if (i == buffer.youngestElement)
+			break;
+	}
+	
+	return data;
+}
+CFIndex IGKCircularBufferOrderedDataLength(IGKCircularBuffer buffer)
 {
 	if (buffer.items)
 		return buffer.elementCount * buffer.elementSize;

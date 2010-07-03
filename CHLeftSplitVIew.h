@@ -3,7 +3,7 @@
 //  Chocolat
 //
 //  Created by Alex Gordon on 29/10/2009.
-//  Copyright 2009 __MyCompanyName__. All rights reserved.
+//  Copyright 2009 Fileability. Written in 2010 by Fileability..
 //
 
 #import <Cocoa/Cocoa.h>

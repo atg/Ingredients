@@ -2,7 +2,7 @@
 //  NSBezierPath+MCAdditions.m
 //
 //  Created by Sean Patrick O'Brien on 4/1/08.
-//  Copyright 2008 MolokoCacao. All rights reserved.
+//  Copyright 2008 MolokoCacao. Written in 2010 by Fileability..
 //
 
 #import "NSBezierPath+MCAdditions.h"
@@ -97,7 +97,7 @@ static void CGPathCallback(void *info, const CGPathElement *element)
 				break;
 		};
 	}
-	return thePath;
+	return NSMakeCollectable(thePath);
 }
 
 - (NSBezierPath *)pathWithStrokeWidth:(CGFloat)strokeWidth

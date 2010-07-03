@@ -3,7 +3,7 @@
  *  Ingredients
  *
  *  Created by Alex Gordon on 30/06/2010.
- *  Copyright 2010 __MyCompanyName__. All rights reserved.
+ *  Written in 2010 by Fileability.
  *
  */
 

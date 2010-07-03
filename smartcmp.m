@@ -147,8 +147,22 @@ SmartCmpScore categoryScore(id resultObject)
     if ([resultObject respondsToSelector:@selector(priorityval)])
 	{
 		SmartCmpScore maximumPriorityValue = (SmartCmpScore)(CHPriorityMaximum - 1);
-		score += ((SmartCmpScore)[resultObject priorityval]) / maximumPriorityValue;
-    }
+		score += (((SmartCmpScore)[resultObject priorityval]) / maximumPriorityValue);
+	}
+	
+	//Content length
+	//The hypothesis is that longer documentation articles are more important than shorter ones. More commonly used classes get expanded more and end up being longer
+	
+	//I'm commenting this out because, while it works in theory, we really need to get the maximum and minimum-nonzero content length and do a proper quotient to get good weighting
+	//This would solve the problem of constants, methods, etc having zero content lengths, which screws up their weighting
+	/*
+	if ([resultObject respondsToSelector:@selector(lengthOfContent)])
+	{
+		SmartCmpScore x = (SmartCmpScore)[[resultObject lengthOfContent] doubleValue];
+		score += 1.0 - 1.0 / log(x + M_E);
+		NSLog(@"content length score = %lf : '%@'", 1.0 - 1.0 / log(x + M_E), [resultObject valueForKey:@"name"]);
+	}
+	*/
 	
     //Docsets
     //TODO: Record most used docsets and score appropriately
@@ -174,7 +188,7 @@ SmartCmpScore smartcmpScore(NSString *query,  NSString *lowercaseQuery,  unichar
 					+ 0.75 * case_s
 					+ anchor_s
 					+ frecency_s
-					+ 2.0 * category_s
+					+ 1.5 * category_s
 					;
 					
 	//NSLog(@"d %lf, c %lf, a %lf, f %lfm k %lf; t %lf; '%@'", distance_s, case_s, anchor_s, frecency_s, category_s, s, result);

@@ -3,7 +3,7 @@
 //  Ingredients
 //
 //  Created by Jean-Nicolas Jolivet on 10-04-30.
-//  Copyright 2010 SilverCocoa. All rights reserved.
+//  Written in 2010 by SilverCocoa.
 //
 
 #import "IGKAnnotation.h"

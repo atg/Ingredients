@@ -3,7 +3,7 @@
 //  SourceList3
 //
 //  Created by Alex Gordon on 16/01/2009.
-//  Copyright 2009 Fileability. All rights reserved.
+//  Copyright 2009 Fileability. Written in 2010 by Fileability..
 //
 
 #import "XBNewSourceListCell.h"

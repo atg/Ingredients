@@ -3,7 +3,7 @@
 //  AnthillReporter
 //
 //  Created by Alex Gordon on 14/02/2009.
-//  Copyright 2009 Fileability. All rights reserved.
+//  Copyright 2009 Fileability. Written in 2010 by Fileability..
 //
 
 #import "AnthillBugReporter.h"

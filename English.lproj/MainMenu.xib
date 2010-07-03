@@ -796,6 +796,7 @@
 									<reference key="NSMenu" ref="531461334"/>
 									<bool key="NSIsDisabled">YES</bool>
 									<bool key="NSIsSeparator">YES</bool>
+									<bool key="NSIsHidden">YES</bool>
 									<string key="NSTitle"/>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -804,6 +805,7 @@
 								</object>
 								<object class="NSMenuItem" id="739539978">
 									<reference key="NSMenu" ref="531461334"/>
+									<bool key="NSIsHidden">YES</bool>
 									<string key="NSTitle">Previous Symbol</string>
 									<string key="NSKeyEquiv"></string>
 									<int key="NSKeyEquivModMask">1572864</int>
@@ -813,6 +815,7 @@
 								</object>
 								<object class="NSMenuItem" id="1070219007">
 									<reference key="NSMenu" ref="531461334"/>
+									<bool key="NSIsHidden">YES</bool>
 									<string key="NSTitle">Next Symbol</string>
 									<string key="NSKeyEquiv"></string>
 									<int key="NSKeyEquivModMask">1572864</int>

@@ -3,7 +3,7 @@
 //  Ingredients
 //
 //  Created by Alex Gordon on 24/01/2010.
-//  Copyright 2010 Fileability. All rights reserved.
+//  Written in 2010 by Fileability.
 //
 
 #import "IGKScraper.h"
@@ -277,6 +277,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	//Let's try to extract the class's name (assuming it is a class of course)	
 	NSError *error = nil;
 	NSString *contents = [NSString stringWithContentsOfFile:extractPath encoding:NSUTF8StringEncoding error:&error];
+	NSUInteger contentsLength = [contents length];
 	if (error || !contents)
 	{
 		return nil;
@@ -430,6 +431,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		{
 			obj = [self addRecordNamed:name entityName:entityName desc:@"" sourcePath:relativeExtractPath];
 			[obj setValue:docset forKey:@"docset"];
+			[obj setValue:[NSNumber numberWithUnsignedInteger:contentsLength] forKey:@"contentsLength"];			
 			
 			if ([superclass length])
 				[obj setValue:superclass forKey:@"superclassName"];
