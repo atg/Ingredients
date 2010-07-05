@@ -107,8 +107,11 @@ SmartCmpScore caseScore(NSString *query, unichar *queryCharacters, NSUInteger qu
         if (qc == rc)
             count++;
     }
-    	
-    return ((SmartCmpScore)count) / ((SmartCmpScore)(range.length));
+	
+	SmartCmpScore wrongCharacters = ((SmartCmpScore)(range.length)) - ((SmartCmpScore)count);
+	//NSLog(@"\t %lf => %lf: '%@'", wrongCharacters, pow(2.0, -wrongCharacters), result);
+	
+    return pow(2.0, -wrongCharacters);
 }
 
 //Compute the number of case-mismatches between the result and the query, using a local alignment algorithm. Slower but more accurate than caseScore().
