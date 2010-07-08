@@ -87,7 +87,7 @@ SmartCmpScore distanceScore(unichar *queryCharacters, NSUInteger queryLength, un
 	if (ldistance == 0)
 		return 1.0;
 	
-	return ((double)queryLength) / ((double)ldistance);
+	return 1.0 - ((double)ldistance) / ((double)(maximumLength - queryLength));
 }
 
 //Compute the number of case-mismatches between the result and the query, given that result is a substring of query

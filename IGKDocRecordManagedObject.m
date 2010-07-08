@@ -400,6 +400,9 @@
 	if([entityName isEqual:@"ObjCMethod"] || [entityName isEqual:@"ObjCProperty"])
 		return CHPriorityMethod;
 	
+	if([entityName isEqual:@"ObjCBindingsListing"])
+		return CHPriorityBindings;
+	
 	else if([entityName isEqual:@"ObjCClass"])
 		return CHPriorityClass;
 	

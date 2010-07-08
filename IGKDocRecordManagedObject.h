@@ -14,14 +14,13 @@
 //Priorities of different objects when sorting the list in case of a tiebreak. From lowest priority to highest
 typedef enum {
 	CHPriorityOther = 0, //Any object not convered by another priority class
-	CHPriorityFunction = 1,
-	CHPriorityMethod,
-	CHPriorityType, //Struct, Union, Enum, Typedef, etc
-	CHPriorityCategory,
-	CHPriorityProtocol,
-	CHPriorityClass,
-	
-	
+	CHPriorityMethod = 1,
+	CHPriorityFunction = 2,
+	CHPriorityType = 2, //Struct, Union, Enum, Typedef, etc
+	CHPriorityBindings = 3,
+	CHPriorityCategory = 4,
+	CHPriorityProtocol = 5,
+	CHPriorityClass = 6,
 	
 	CHPriorityMaximum, //DON'T USE THIS! DON'T PUT ANY ENUM CONSTANTS AFTER IT. This is a placeholder element so that I can work out the maximum priority by doing CHPriorityMaximum - 1.
 } CHRecordPriority;
