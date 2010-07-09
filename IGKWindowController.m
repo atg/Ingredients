@@ -2201,7 +2201,9 @@
 	[findWindow setParentWindow:[self actualWindow]];
 	[[[[findWindow contentView] subviews] lastObject] viewDidMoveToParentWindow:[self actualWindow]];
 	[findWindow makeKeyAndOrderFront:nil];
-	[[self actualWindow] makeMainWindow];
+	
+	if (!isInFullscreen)
+		[[self actualWindow] makeMainWindow];
 }
 - (IBAction)closeFindPanel:(id)sender
 {

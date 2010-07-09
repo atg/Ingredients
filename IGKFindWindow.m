@@ -67,14 +67,16 @@
 	[super becomeKeyWindow];
 	
 	//If this window becomes key, we should make the parent window main
-	[[self parentWindow] makeMainWindow];
+	if ([[self parentWindow] canBecomeMainWindow])
+		[[self parentWindow] makeMainWindow];
 }
 - (void)becomeMainWindow
 {
 	[super becomeMainWindow];
 	
 	//Ditto here. For some reason Apple sends -becomeKeyWindow first then -becomeMainWindow
-	[[self parentWindow] makeMainWindow];
+	if ([[self parentWindow] canBecomeMainWindow])
+		[[self parentWindow] makeMainWindow];
 }
 
 - (BOOL)canBecomeKeyWindow
