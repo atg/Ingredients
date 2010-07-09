@@ -1133,6 +1133,14 @@
 	return 1;
 }
 
+- (NSWindow *)window
+{
+	if (isInFullscreen)
+		return [contentView window];
+	
+	return [super window];
+}
+
 #pragma mark -
 #pragma mark Table View Delegate 
 
@@ -2136,8 +2144,8 @@
 		isInFullscreen = NO;
 		
 		[[[NSApp delegate] kitController] setFullscreenWindowController:nil];
-		[[[self window] contentView] exitFullScreenModeWithOptions:fsOptions];
-		[[self window] makeKeyAndOrderFront:sender];
+		[[[super window] contentView] exitFullScreenModeWithOptions:fsOptions];
+		[[super window] makeKeyAndOrderFront:sender];
 	}
 	else 
 	{
@@ -2146,9 +2154,9 @@
 			isInFullscreen = YES;
 
 			[[[NSApp delegate] kitController] setFullscreenWindowController:self];
-			[[[self window] contentView] enterFullScreenMode:[[self window] screen] 
+			[[[super window] contentView] enterFullScreenMode:[[self window] screen] 
 											 withOptions:fsOptions];
-			[[self window] orderOut:sender];
+			[[super window] orderOut:sender];
 		}
 		else
 		{
