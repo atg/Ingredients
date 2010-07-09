@@ -528,7 +528,7 @@
 		else if ([noselectionView window])
 			[[noselectionView window] makeFirstResponder:noselectionView];
 		else
-			[[self window] makeFirstResponder:[self window]];
+			[[self actualWindow] makeFirstResponder:[self actualWindow]];
 	}
 	else if (modeIndex == CHDocumentationBrowserUIMode_AdvancedSearch)
 	{
@@ -558,7 +558,7 @@
 		self.ui_currentModeIndex = [NSNumber numberWithInt:CHDocumentationBrowserUIMode_TwoUp];
 		
 		if (isSame)
-			[[self window] makeFirstResponder:sideSearchViewField];
+			[[self actualWindow] makeFirstResponder:sideSearchViewField];
 	}
 	else if (selectedSegment == 2)
 	{
@@ -567,7 +567,7 @@
 		self.ui_currentModeIndex = [NSNumber numberWithInt:CHDocumentationBrowserUIMode_AdvancedSearch];
 		
 		if (isSame)
-			[[self window] makeFirstResponder:searchViewField];
+			[[self actualWindow] makeFirstResponder:searchViewField];
 	}
 }
 
@@ -624,7 +624,7 @@
 	frecencyToken = 0;
 	
 	// set default title
-	[[self window] setTitle:@"Documentation"];
+	[[self actualWindow] setTitle:@"Documentation"];
 	
 	if ([[url scheme] isEqual:@"special"] && [[url resourceSpecifier] isEqual:@"no-selection"])
 	{
@@ -704,7 +704,7 @@
 		newTitle = [NSString stringWithFormat:@"%@ %C %@", docsetName, 0x203A, objectName];
 	}
 	
-	[[self window] setTitle:newTitle];
+	[[self actualWindow] setTitle:newTitle];
 	
 	
 	[self reloadRightFilterBarTable:mo transient:[generator transientObject]];
@@ -876,7 +876,7 @@
 {
 	[savingProgressIndicator setUsesThreadedAnimation:YES];
 	[savingProgressIndicator startAnimation:nil];
-	[NSApp beginSheet:savingProgressWindow modalForWindow:[self window] modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
+	[NSApp beginSheet:savingProgressWindow modalForWindow:[self actualWindow] modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
 }
 - (void)indexedAllPaths:(NSNotification *)notif
 {
@@ -923,7 +923,7 @@
 	[browserWebView stringByEvaluatingJavaScriptFromString:@"completed();"];
 
 	
-	[[self window] makeFirstResponder:sideSearchViewField];
+	[[self actualWindow] makeFirstResponder:sideSearchViewField];
 }
 
 - (void)setAdvancedFilterPredicate:(NSPredicate *)pred
@@ -1044,7 +1044,7 @@
     [self setRightFilterBarShown:YES];
     
     //Focus the search field
-    [[self window] makeFirstResponder:rightFilterBarSearchField];
+    [[self actualWindow] makeFirstResponder:rightFilterBarSearchField];
 }
 - (IBAction)goToNextResult:(id)sender
 {
@@ -1132,13 +1132,12 @@
 	
 	return 1;
 }
-
-- (NSWindow *)window
+- (NSWindow *)actualWindow
 {
 	if (isInFullscreen)
 		return [contentView window];
 	
-	return [super window];
+	return [self window];
 }
 
 #pragma mark -
@@ -1161,7 +1160,7 @@
 	else
 	{
 		// set default title
-		[[self window] setTitle:@"Documentation"];
+		[[self actualWindow] setTitle:@"Documentation"];
 		id superview = [browserSplitViewContainer superview];
 		if (superview)
 		{
@@ -1518,7 +1517,7 @@
 	if (col == IGKTableOfContentsIconColumn)
 	{
 		BOOL isSelected = [[tableOfContentsPicker selectedRowIndexes] containsIndex:row];
-		NSString *imageName = [NSString stringWithFormat:@"ToC_%@%@", title, (isSelected ? @"_S" : [[self window] isMainWindow] ? @"" : @"_N")];
+		NSString *imageName = [NSString stringWithFormat:@"ToC_%@%@", title, (isSelected ? @"_S" : [[self actualWindow] isMainWindow] ? @"" : @"_N")];
 		return [NSImage imageNamed:imageName];
 	}
 	
@@ -1929,7 +1928,7 @@
 - (void)webView:(WebView *)sender runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WebFrame *)frame
 {
 	NSAlert *alert = [NSAlert alertWithMessageText:message defaultButton:@"OK" alternateButton:@"" otherButton:@"" informativeTextWithFormat:@""];
-	[alert beginSheetModalForWindow:[self window] modalDelegate:nil didEndSelector:nil contextInfo:nil];
+	[alert beginSheetModalForWindow:[self actualWindow] modalDelegate:nil didEndSelector:nil contextInfo:nil];
 }
 - (BOOL)webView:(WebView *)sender runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WebFrame *)frame
 {
@@ -2023,7 +2022,7 @@
 	
 	[self setUpForWebView:sender frame:frame];
 	
-	if ([title length]) [[self window] setTitle:title];
+	if ([title length]) [[self actualWindow] setTitle:title];
 }
 - (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame
 {
@@ -2198,15 +2197,15 @@
 	
 	[self relayoutFindPanel];
 	
-	[[self window] addChildWindow:findWindow ordered:NSWindowAbove];
-	[findWindow setParentWindow:[self window]];
-	[[[[findWindow contentView] subviews] lastObject] viewDidMoveToParentWindow:[self window]];
+	[[self actualWindow] addChildWindow:findWindow ordered:NSWindowAbove];
+	[findWindow setParentWindow:[self actualWindow]];
+	[[[[findWindow contentView] subviews] lastObject] viewDidMoveToParentWindow:[self actualWindow]];
 	[findWindow makeKeyAndOrderFront:nil];
-	[[self window] makeMainWindow];
+	[[self actualWindow] makeMainWindow];
 }
 - (IBAction)closeFindPanel:(id)sender
 {
-	[[self window] removeChildWindow:findWindow];
+	[[self actualWindow] removeChildWindow:findWindow];
 	[findWindow close];
 }
 
@@ -2329,12 +2328,12 @@
 	newFindViewFrame.origin.y = [browserWebViewContainer frame].size.height - newFindViewFrame.size.height + 1;
 	newFindViewFrame.origin.x = [browserWebViewContainer frame].size.width - newFindViewFrame.size.width - 20.0 - 15.0;
 	
-	NSRect webViewConvertedFrame = [browserWebView convertRect:[browserWebView bounds] toView:[[self window] contentView]];
+	NSRect webViewConvertedFrame = [browserWebView convertRect:[browserWebView bounds] toView:[[self actualWindow] contentView]];
 	
 	NSRect newFrame = [findWindow frame];
-	newFrame.origin = [[self window] frame].origin;
+	newFrame.origin = [[self actualWindow] frame].origin;
 	newFrame.origin.y += [browserWebViewContainer frame].size.height - newFrame.size.height + 1;
-	newFrame.origin.x += NSMaxX(webViewConvertedFrame) - 20.0 - 15.0 - newFindViewFrame.size.width; //[browserWebViewContainer frame].size.width - newFindViewFrame.size.width - 20.0 - 15.0 + [[self window] frame].size.width - [browserSplitView frame].size.width;
+	newFrame.origin.x += NSMaxX(webViewConvertedFrame) - 20.0 - 15.0 - newFindViewFrame.size.width; //[browserWebViewContainer frame].size.width - newFindViewFrame.size.width - 20.0 - 15.0 + [[self actualWindow] frame].size.width - [browserSplitView frame].size.width;
 	
 	NSRect stepperFrame = [findBackForwardStepper frame];
 	stepperFrame.size.height = 20.0;
