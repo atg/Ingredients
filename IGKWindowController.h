@@ -174,6 +174,7 @@ typedef enum {
 @property (readonly) NSString *sideSearchQuery;
 
 + (NSImage *)iconImageForURL:(NSURL *)url;
++ (IGKHTMLDisplayTypeMask)tableOfContentsMenuItemToMask:(NSInteger)tag;
 
 - (IBAction)noselectionSearchField:(id)sender;
 
