@@ -1106,7 +1106,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		
 		//signature (other items)
 		// <pre class="declaration">
-		else if ([nName isEqual:@"pre"] && [nClass containsObject:@"declaration"])
+		else if (([nName isEqual:@"pre"] || [nName isEqual:@"p"]) && [nClass containsObject:@"declaration"])
 		{
 			NSMutableString *prototype = [[NSMutableString alloc] init];
 			[prototype appendString:[n commentlessStringValue]];
