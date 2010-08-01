@@ -183,6 +183,7 @@ typedef enum {
 - (IBAction)rightFilterSearchField:(id)sender;
 - (IBAction)rightFilterGroupByMenu:(id)sender;
 
+- (void)executeUISideSearch:(NSString *)query;
 - (IBAction)executeSearch:(id)sender;
 - (IBAction)executeAdvancedSearch:(id)sender;
 - (IBAction)changeViewModeTagged:(id)sender;

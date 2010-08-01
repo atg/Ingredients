@@ -43,5 +43,16 @@
 	<string>Ingredients.sdef</string>
 	<key>NSAppleScriptEnabled</key>
 	<true/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>Ingredients Lookup URL</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>x-ingredients</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

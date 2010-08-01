@@ -11,8 +11,21 @@
 
 @implementation Ingredients_AppDelegate
 
-- (void)applicationDidFinishLaunching:(NSNotification *)notification
+- (id)init
 {
+	if (self = [super init])
+	{
+		NSLog(@"INIT");
+	}
+	return self;
+}
+
+- (void)getURL:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent
+{
+	NSRunAlertPanel(@"GET URL", @"", @"", @"", @"");
+}
+- (void)applicationDidFinishLaunching:(NSNotification *)notification
+{	
 	srandom((unsigned long)[NSDate timeIntervalSinceReferenceDate]);
 	PFMoveToApplicationsFolderIfNecessary();
 	

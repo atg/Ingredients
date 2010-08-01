@@ -70,7 +70,7 @@ const NSInteger IGKStoreVersion = 2;
 		history = [[WebHistory alloc] init];
 		[history loadFromURL:[NSURL fileURLWithPath:[[self applicationSupportDirectory] stringByAppendingPathComponent:@"history"]] error:nil];
 		[WebHistory setOptionalSharedHistory:history];
-		
+				
 		if (docsetCount > 0)
 		{
 			[self newWindowIsIndexing:isIndexing];
@@ -97,6 +97,44 @@ const NSInteger IGKStoreVersion = 2;
 	}
 	
 	return self;
+}
+
+- (void)awakeFromNib
+{
+	[[NSAppleEventManager sharedAppleEventManager] setEventHandler:self andSelector:@selector(getURL:withReplyEvent:) forEventClass:kInternetEventClass andEventID:kAEGetURL];
+}
+
+- (void)getURL:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent
+{
+	//return;
+	//NSRunAlertPanel(@"GET URL", nil, nil, nil, nil);
+	NSString *urlString = [[event paramDescriptorForKeyword:keyDirectObject] stringValue];
+	
+	NSURL *url = [NSURL URLWithString:urlString];
+	NSString *resourceSpecifier = [url resourceSpecifier];
+	NSArray *resourceSpecifierComponents = [resourceSpecifier pathComponents];
+	
+	if ([[resourceSpecifierComponents igk_firstObject] isEqual:@"/"])
+		resourceSpecifierComponents = [resourceSpecifierComponents cdr];
+		
+	NSString *action = [resourceSpecifierComponents igk_firstObject];
+	NSString *query = [[resourceSpecifierComponents cdr] igk_firstObject];
+	
+	if ([action isCaseInsensitiveEqual:@"search"])
+	{
+		//Get the frontmost window
+		NSWindowController *windowController = nil;
+		if ([[[NSApp mainWindow] windowController] isKindOfClass:[IGKWindowController class]])
+			windowController = [[NSApp mainWindow] windowController];
+		
+		if (!windowController)
+			windowController = [windowControllers lastObject];
+		
+		if (!windowController)
+			windowController = [self newWindowIsIndexing:NO];
+		
+		[windowController executeUISideSearch:query];
+	}
 }
 
 - (BOOL)hasMultipleWindowControllers
@@ -131,12 +169,12 @@ const NSInteger IGKStoreVersion = 2;
 - (id)newWindowIsIndexing:(BOOL)isIndexing
 {
 	if (docsetCount == 0)
-		return;
+		return nil;
 	
 	if (![self hasMultipleWindowControllers] && [windowControllers count])
 	{
 		[self showWindow:nil];
-		return;
+		return nil;
 	}
 	
 	IGKWindowController *windowController = [[IGKWindowController alloc] init];

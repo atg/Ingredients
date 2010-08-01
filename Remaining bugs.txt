@@ -4,7 +4,7 @@ Needs key combos for selecting the next and previous method in the webview
 Switch to smartcmp algorithm
     Implement frecency
     Implement docset prioritization
-Implement some kind of average of particular scores. A high length suggests a class, so we need to do an average of {length,priority}. Not quite sure which average one to use. Arithmetic mean looks like the best suited.
+Implement some kind of average of particular scores. A high length suggests a class, so we need to do an average of {length,priority}. Not quite sure which average one to use. Arithmetic or RMS looks like the best suited.
 
 Loads of articles don't parse properly, but thankfully the main ones do
 

@@ -61,6 +61,14 @@ NSComparisonResult IGKInverseComparisonResult(NSComparisonResult result)
 	return [self objectAtIndex:index];
 }
 
+- (NSArray *)cdr
+{
+	if ([self count] < 2)
+		return nil;
+	
+	return [self subarrayWithRange:NSMakeRange(1, [self count] - 1)];
+}
+
 - (NSArray *)smartSort:(NSString *)query
 {
 	//Note some commonly used information about the query

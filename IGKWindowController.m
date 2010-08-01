@@ -778,6 +778,16 @@
 		[self executeSideSearch:query];	
 }
 
+- (void)executeUISideSearch:(NSString *)query
+{
+	[[self actualWindow] makeFirstResponder:sideSearchViewField];
+	[sideSearchViewField setStringValue:query];
+	
+	[[self actualWindow] makeKeyAndOrderFront:nil];
+	[[self actualWindow] deminiaturize:nil]; 
+	
+	[self executeSideSearch:query];
+}
 - (void)executeSideSearch:(NSString *)query
 {
 	sideSearchQuery = query;
