@@ -780,6 +780,9 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	//Find the total number of rows
 	NSUInteger maxrowcount = 0;
 	
+	NSMutableArray *superclasses = [object getSuperclasses];
+	//NSMutableArray *subclasses = [object getSubclasses];
+	
 	//If we have availability or declared_in_header, then we have at least one row
 	if ([object valueForKey:@"availability"] || [object valueForKey:@"declared_in_header"])
 		maxrowcount = 1;
@@ -788,9 +791,10 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		maxrowcount = 1;
 	
 	maxrowcount = MAX(maxrowcount, [[object valueForKey:@"seealsos"] count]);
-	
 	maxrowcount = MAX(maxrowcount, [[object valueForKey:@"samplecodeprojects"] count]);
-	
+	maxrowcount = MAX(maxrowcount, [superclasses count]);
+	//maxrowcount = MAX(maxrowcount, [subclasses count]);
+		
 	//If there's rows to be rendered, then add a table element
 	if (maxrowcount > 0)
 		[outputString appendString:@"\t\t<table class='info'>\n"];
@@ -799,8 +803,9 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	NSArray *seealsos = [[[object valueForKey:@"seealsos"] allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
 	//NSArray *seealsos = [[ valueForKey:@"name"] sortedArrayUsingSelector:@selector(localizedCompare:)];
-	NSArray *samplecodeprojects = [[[object valueForKey:@"samplecodeprojects"] allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];// [[[[object valueForKey:@"samplecodeprojects"] allObjects] valueForKey:@"name"] sortedArrayUsingSelector:@selector(localizedCompare:)];
+	NSArray *samplecodeprojects = [[[object valueForKey:@"samplecodeprojects"] allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];	
 	
+		
 	for (i = 0; i < maxrowcount + 1; i++)
 	{
 		// <tr>
@@ -808,6 +813,36 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 			[outputString appendString:@"\t\t\t<tr class='first'>\n"];
 		else
 			[outputString appendString:@"\t\t\t<tr>\n"];
+		
+		if ([superclasses count])
+		{
+			if (i == 0)
+				[outputString appendString:@"\t\t\t\t<th>Superclasses</th>\n"];
+			else
+			{
+				NSString *superclass = [superclasses igk_objectAtSoftIndex:i - 1];
+				if (superclass)
+				{
+					NSString *superclassURL = [NSString stringWithFormat:@"http://ingr-doc/%@/all/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], superclass, @"class"];
+					[outputString appendFormat:@"\t\t\t\t<td><code><a href='%@' class='stealth'>%@</a></code></td>\n", superclassURL, superclass];
+				}
+			}
+		}
+		
+		/*if ([subclasses count])
+		{
+			if (i == 0)
+				[outputString appendString:@"\t\t\t\t<th>Subclasses</th>\n"];
+			else
+			{
+				NSString *subclass = [subclasses igk_objectAtSoftIndex:i - 1];
+				if (subclass)
+				{
+					NSString *subclassURL = [NSString stringWithFormat:@"http://ingr-doc/%@/all/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], subclass, @"class"];
+					[outputString appendFormat:@"\t\t\t\t<td><code><a href='%@' class='stealth'>%@</a></code></td>\n", subclassURL, subclass];
+				}
+			}
+		}*/
 		
 		if (i == 0 || i == 1)
 		{
@@ -829,18 +864,6 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 					NSString *declaredInURL = [NSString stringWithFormat:@"http://ingr-doc/%@/all/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], declaredIn, @"headerfile"];
 
 					[outputString appendFormat:@"\t\t\t\t<td rowspan='%d'><code><a href='%@' class='stealth'>%@</a></code></td>\n", maxrowcount, declaredInURL, declaredIn];
-				}
-			}
-			
-			if ([object valueForKey:@"superclassName"])
-			{
-				if (i == 0)
-					[outputString appendString:@"\t\t\t\t<th>Superclass</th>\n"];
-				else
-				{
-					NSString *superclass = [object valueForKey:@"superclassName"];
-					NSString *superclassURL = [NSString stringWithFormat:@"http://ingr-doc/%@/all/%@.%@", [[transientObject valueForKey:@"Docset"] docsetURLHost], superclass, @"class"];
-					[outputString appendFormat:@"\t\t\t\t<td rowspan='%d'><code><a href='%@' class='stealth'>%@</a></code></td>\n", maxrowcount, superclassURL, superclass];
 				}
 			}
 			

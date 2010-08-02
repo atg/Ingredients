@@ -210,6 +210,59 @@
 		return name;
 }
 
+- (NSMutableArray *)getSuperclasses
+{
+	NSString *superclassName = [self valueForKey:@"superclassName"];
+	if (![superclassName length])
+		return nil;
+	
+	NSMutableArray *superclasses = [[NSMutableArray alloc] init];
+	id superclass = self;
+	
+	NSUInteger i;
+	for (i = 0; i < 10; i++)
+	{
+		NSString *superclassName = [superclass valueForKey:@"superclassName"];
+
+		if (![superclassName length])
+			break;
+		if ([superclassName isEqual:[superclasses lastObject]])
+			break;
+		
+		[superclasses addObject:superclassName];
+		
+		superclass = [[superclass findNearestClassWithName:superclassName] igk_firstObject];
+		if (!superclass)
+			break;
+	}
+		
+	return superclasses;
+}
+- (NSMutableArray *)getSubclasses
+{
+	NSString *superclassName = [self valueForKey:@"superclassName"];
+	if (![superclassName length])
+		return nil;
+	
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	[fetchRequest setEntity:[NSEntityDescription entityForName:@"ObjCAbstractMethodContainer" inManagedObjectContext:[self managedObjectContext]]];
+	[fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"superclassName=%@ && docset=%@", [self valueForKey:@"name"], [self valueForKey:@"docset"]]];
+	
+	return [[[[self managedObjectContext] executeFetchRequest:fetchRequest error:NULL] valueForKey:@"name"] sortedArrayUsingSelector:@selector(compare:)];
+}
+
+- (id)findNearestClassWithName:(NSString *)className
+{
+	if (![className length])
+		return nil;
+	
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	[fetchRequest setEntity:[NSEntityDescription entityForName:@"ObjCAbstractMethodContainer" inManagedObjectContext:[self managedObjectContext]]];
+	[fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"name=%@ && docset=%@", className, [self valueForKey:@"docset"]]];
+	
+	return [[self managedObjectContext] executeFetchRequest:fetchRequest error:NULL];
+}
+
 + (NSString *)entityNameFromURLComponentExtension:(NSString *)ext
 {
 	if ([ext isEqual:@"class"])
