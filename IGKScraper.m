@@ -936,12 +936,12 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	     * seealsos
 	     * samplecode
 	*/
-	
+		
 	BOOL hasRecordedMethod = NO;
 	
 	NSUInteger i = 0;
 	NSUInteger count = [children count];
-	
+		
 	BOOL isOnlyAElements = YES;
 	if (count == 0)
 		isOnlyAElements = NO;
@@ -968,8 +968,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			if (hasRecordedMethod)
 				break;
 			hasRecordedMethod = YES;
+
 			[object setValue:[[n commentlessStringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
-						
+
 			continue;
 		}
 		
@@ -1484,7 +1485,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			parseSpecialConsiderations(1, [n children]);
 		}
 	}
-	
+		
 	if (isOnlyAElements)
 	{
 		NSXMLElement *firstChild = [children objectAtIndex:0];
