@@ -79,7 +79,7 @@
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSavingProgressSheet:) name:@"IGKWillSaveIndex" object:nil];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDefaultsDidChange:) name:NSUserDefaultsDidChangeNotification object:nil];
-		
+				
 		isInFullscreen = NO;
 	}
 	
@@ -196,7 +196,9 @@
 	}
 }
 - (void)windowDidLoad
-{	
+{
+	[[self window] setDelegate:self];
+	
 	currentModeIndex = CHDocumentationBrowserUIMode_NeedsSetup;
 	[self setMode:CHDocumentationBrowserUIMode_TwoUp];
 	sideSearchQuery = @"";
@@ -372,12 +374,18 @@
 	}
 }
 
-- (void)close
+- (BOOL)windowShouldClose:(id)sender
 {
-	if ([appDelegate hasMultipleWindowControllers])
-		[[appDelegate windowControllers] removeObject:self];
+	if (isIndexing)
+	{
+		NSBeep();
+		return NO;
+	}
 	
-	[super close];
+	if ([[[NSApp delegate] kitController] hasMultipleWindowControllers])
+		[[[[NSApp delegate] kitController] windowControllers] removeObject:self];
+	
+	return YES;
 }
 
 #pragma mark UI
@@ -857,7 +865,7 @@
 }
 
 - (void)startIndexing
-{
+{	
 	[self setRightFilterBarShown:NO];
 	
 	isIndexing = YES;

@@ -42,6 +42,8 @@ const NSInteger IGKStoreVersion = 2;
 		//Load core data
 		[self managedObjectContext];
 		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(indexedAllPaths:) name:@"IGKHasIndexedAllPaths" object:nil];
+		
 		if (![[NSUserDefaults standardUserDefaults] objectForKey:@"IGKShowAnnotations"])
 		{
 			[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"IGKShowAnnotations"];
@@ -52,11 +54,11 @@ const NSInteger IGKStoreVersion = 2;
 		
 		windowControllers = [[NSMutableArray alloc] init];
 		
-		BOOL isIndexing = [launchController launch];
+		applicationIsIndexing = [launchController launch];
 		
 		docsetCount = 1;
 		//If we're not indexing and there's no docsets in sight, show the preferences dialog
-		if (!isIndexing)
+		if (!applicationIsIndexing)
 		{
 			NSError *err = nil;
 			NSFetchRequest *docsetCountFetch = [[NSFetchRequest alloc] init];
@@ -70,10 +72,10 @@ const NSInteger IGKStoreVersion = 2;
 		history = [[WebHistory alloc] init];
 		[history loadFromURL:[NSURL fileURLWithPath:[[self applicationSupportDirectory] stringByAppendingPathComponent:@"history"]] error:nil];
 		[WebHistory setOptionalSharedHistory:history];
-				
+		
 		if (docsetCount > 0)
 		{
-			[self newWindowIsIndexing:isIndexing];
+			[self newWindowIsIndexing:applicationIsIndexing];
 		}
 		else
 		{
@@ -102,6 +104,11 @@ const NSInteger IGKStoreVersion = 2;
 - (void)awakeFromNib
 {
 	[[NSAppleEventManager sharedAppleEventManager] setEventHandler:self andSelector:@selector(getURL:withReplyEvent:) forEventClass:kInternetEventClass andEventID:kAEGetURL];
+}
+
+- (void)indexedAllPaths:(NSNotification *)notif
+{
+	applicationIsIndexing = NO;
 }
 
 - (void)getURL:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent
@@ -164,6 +171,12 @@ const NSInteger IGKStoreVersion = 2;
 
 - (IBAction)newWindow:(id)sender
 {
+	if (applicationIsIndexing)
+	{
+		NSBeep();
+		return;
+	}
+	
 	[self newWindowIsIndexing:NO];
 }
 - (id)newWindowIsIndexing:(BOOL)isIndexing

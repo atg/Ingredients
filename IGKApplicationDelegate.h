@@ -35,6 +35,8 @@
 	
 	//The HTML cache caches various pieces of parsed html to save the computer from parsing the same thing twice
 	NSCache *htmlCache;
+	
+	BOOL applicationIsIndexing;
 }
 
 @property (readonly) NSMutableArray *windowControllers;
