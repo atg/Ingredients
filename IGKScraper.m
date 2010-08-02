@@ -396,6 +396,18 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		}
 	}
 	
+	//Availability to
+	NSString *availability = nil;
+	if (parentItemType == ParentItemType_ObjCClass || parentItemType == ParentItemType_ObjCProtocol)
+	{
+		NSString *availabilityRegex = @"<strong>Availability</strong>.+?<div>(.+?)</div>";
+		NSArray *availabilityCaptureSet = [contents captureComponentsMatchedByRegex:availabilityRegex];
+		if ([availabilityCaptureSet count] >= 2)
+		{
+			availability = [availabilityCaptureSet objectAtIndex:1];
+		}
+	}
+	
 	//Declared in
 	NSString *declaredIn = nil;
 	NSString *declaredInRegex = @"Declared in.+?<span class=\"content_text\">([^<]+)<";
@@ -435,6 +447,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			
 			if ([superclass length])
 				[obj setValue:superclass forKey:@"superclassName"];
+			
+			if ([availability length])
+				[obj setValue:availability forKey:@"availability"];
 			
 			if ([declaredIn length])
 				[obj setValue:declaredIn forKey:@"declared_in_header"];
