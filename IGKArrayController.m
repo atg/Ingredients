@@ -371,7 +371,12 @@ const NSTimeInterval timeoutInterval = 0.15;
 	//*** Titles ***
 	if ([identifier isEqual:@"name"])
 	{
-		return [fo valueForKey:@"name"];
+		NSString *foName = [fo valueForKey:@"name"];
+		
+		if ([fo hasKey:@"container"])
+			return [NSString stringWithFormat:@"%@\t(%@)", foName, /* 0x2013, */ [fo valueForKeyPath:@"container.name"]];
+		
+		return foName;
 	}
 	
 	//*** Container Names ***
