@@ -311,7 +311,7 @@
 		
 	}];
 	
-	[sideSearchController setMaxRows:100];
+	[sideSearchController setMaxRows:500];
 	[sideSearchController setSmartSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];
 	
 	[advancedController setSmartSortDescriptors:[NSArray arrayWithObject:sideSortDescriptor]];	
