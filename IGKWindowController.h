@@ -186,6 +186,8 @@ typedef enum {
 - (void)executeUISideSearch:(NSString *)query;
 - (IBAction)executeSearch:(id)sender;
 - (IBAction)executeAdvancedSearch:(id)sender;
+
+- (IBAction)focusSearchField:(id)sender;
 - (IBAction)changeViewModeTagged:(id)sender;
 - (IBAction)backForward:(id)sender;
 

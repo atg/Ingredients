@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1060</int>
-		<string key="IBDocument.SystemVersion">10D573</string>
+		<string key="IBDocument.SystemVersion">10F569</string>
 		<string key="IBDocument.InterfaceBuilderVersion">762</string>
 		<string key="IBDocument.AppKitVersion">1038.29</string>
-		<string key="IBDocument.HIToolboxVersion">460.00</string>
+		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			<string key="NS.object.0">762</string>
@@ -833,6 +833,16 @@
 									<reference key="NSOnImage" ref="893455832"/>
 									<reference key="NSMixedImage" ref="424226900"/>
 								</object>
+								<object class="NSMenuItem" id="67028238">
+									<reference key="NSMenu" ref="531461334"/>
+									<string key="NSTitle">Search</string>
+									<string key="NSKeyEquiv">f</string>
+									<int key="NSKeyEquivModMask">1572864</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="893455832"/>
+									<reference key="NSMixedImage" ref="424226900"/>
+									<int key="NSTag">1</int>
+								</object>
 								<object class="NSMenuItem" id="300563559">
 									<reference key="NSMenu" ref="531461334"/>
 									<string key="NSTitle">Find Symbol</string>
@@ -1582,6 +1592,14 @@
 					</object>
 					<int key="connectionID">713</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">focusSearchField:</string>
+						<reference key="source" ref="909243075"/>
+						<reference key="destination" ref="67028238"/>
+					</object>
+					<int key="connectionID">719</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -2304,6 +2322,7 @@
 							<reference ref="300563559"/>
 							<reference ref="313489441"/>
 							<reference ref="654502584"/>
+							<reference ref="67028238"/>
 						</object>
 						<reference key="parent" ref="959092516"/>
 					</object>
@@ -2390,6 +2409,11 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">712</int>
 						<reference key="object" ref="654502584"/>
+						<reference key="parent" ref="531461334"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">717</int>
+						<reference key="object" ref="67028238"/>
 						<reference key="parent" ref="531461334"/>
 					</object>
 				</object>
@@ -2548,6 +2572,7 @@
 					<string>695.IBPluginDependency</string>
 					<string>696.IBPluginDependency</string>
 					<string>712.IBPluginDependency</string>
+					<string>717.IBPluginDependency</string>
 					<string>74.IBPluginDependency</string>
 					<string>74.ImportedFromIB2</string>
 					<string>77.IBPluginDependency</string>
@@ -2698,9 +2723,10 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{349, 453}, {203, 313}}</string>
+					<string>{{349, 433}, {203, 333}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2747,7 +2773,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">713</int>
+			<int key="maxID">719</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2850,6 +2876,7 @@
 							<string>findPanelNext:</string>
 							<string>findPanelPrevious:</string>
 							<string>findSymbol:</string>
+							<string>focusSearchField:</string>
 							<string>goToNextResult:</string>
 							<string>goToNextSymbol:</string>
 							<string>goToPreviousResult:</string>
@@ -2860,6 +2887,7 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -3035,6 +3063,7 @@
 							<string>findPanelSearchField:</string>
 							<string>findPanelSegmentedControl:</string>
 							<string>findSymbol:</string>
+							<string>focusSearchField:</string>
 							<string>goToNextResult:</string>
 							<string>goToNextSymbol:</string>
 							<string>goToPreviousResult:</string>
@@ -3050,6 +3079,7 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>

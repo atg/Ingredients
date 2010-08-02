@@ -543,15 +543,25 @@
 	[self executeSearchWithString:[sender stringValue]];
 }
 
+- (IBAction)focusSearchField:(id)sender
+{
+	if (currentModeIndex == CHDocumentationBrowserUIMode_BrowserOnly)
+		self.ui_currentModeIndex = [NSNumber numberWithInt:CHDocumentationBrowserUIMode_TwoUp];
+	
+	if (currentModeIndex == CHDocumentationBrowserUIMode_TwoUp)
+		[[self actualWindow] makeFirstResponder:sideSearchViewField];
+	else if (currentModeIndex == CHDocumentationBrowserUIMode_AdvancedSearch)
+		[[self actualWindow] makeFirstResponder:searchViewField];
+}
 - (IBAction)changeViewModeTagged:(id)sender
 {	
-	NSInteger selectedSegment = [sender tag];
-	if (selectedSegment == 0)
+	NSInteger tag = [sender tag];
+	if (tag == 0)
 	{
 		//We use self.ui_currentModeIndex instead of [self setMode:] because we want to refetch the side search view if we're already in advanced search
 		self.ui_currentModeIndex = [NSNumber numberWithInt:CHDocumentationBrowserUIMode_BrowserOnly];
 	}
-	else if (selectedSegment == 1)
+	else if (tag == 1)
 	{
 		BOOL isSame = currentModeIndex == CHDocumentationBrowserUIMode_TwoUp;
 		
@@ -560,7 +570,7 @@
 		if (isSame)
 			[[self actualWindow] makeFirstResponder:sideSearchViewField];
 	}
-	else if (selectedSegment == 2)
+	else if (tag == 2)
 	{
 		BOOL isSame = currentModeIndex == CHDocumentationBrowserUIMode_AdvancedSearch;
 		
