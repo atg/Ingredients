@@ -1,0 +1,26 @@
+Fixed a bug where full method prototype would fail to show up
+Added support for x-ingredients://search/searchquery URLs
+Now opens a new window when clicking the dock icon, if the main window has been closed
+Now shows the whole superclass chain of a class
+Added the [cmd][alt]4 shortcut to focus on the search field
+Fixed a bug where Ingredients would crash on certain UIKit classes
+Now shows class names associated with methods and properties in search results
+Now shows 5x more search results
+Fixed a bug where Ingredients could crash if a new window was opened while indexing
+Now shows availability for classes
+Methods are now visibly marked as deprecated in documentation
+
+
+<ul>
+    <li>Fixed a bug where full method prototype would fail to show up</li>
+    <li>Added support for x-ingredients://search/searchquery URLs</li>
+    <li>Now opens a new window when clicking the dock icon, if the main window has been closed</li>
+    <li>Now shows the whole superclass chain of a class</li>
+    <li>Added the [cmd][alt]4 shortcut to focus on the search field</li>
+    <li>Fixed a bug where Ingredients would crash on certain UIKit classes</li>
+    <li>Now shows class names associated with methods and properties in search results</li>
+    <li>Now shows 5x more search results</li>
+    <li>Fixed a bug where Ingredients could crash if a new window was opened while indexing</li>
+    <li>Now shows availability for classes</li>
+    <li>Methods are now visibly marked as deprecated in documentation</li>
+</ul>
