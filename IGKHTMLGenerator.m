@@ -666,7 +666,8 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	if ([object valueForKey:@"name"])
 	{
-		[outputString appendFormat:@"\t\t<h2>%@</h2>\n", [self escape:[object valueForKey:@"name"]]];
+		//NSLog(@"[[object valueForKey:@\"isDeprecated\"] boolValue] = %@", [[object valueForKey:@"isDeprecated"] boolValue]);
+		[outputString appendFormat:@"\t\t<h2><span class='%@'><span>%@</span></span></h2>\n", ([[object valueForKey:@"isDeprecated"] boolValue] ? @"deprecated" : @""), [self escape:[object valueForKey:@"name"]]];
 		if (object == transientObject)
 			[self html_itemCategory:object];
 	}

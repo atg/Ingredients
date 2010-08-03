@@ -985,7 +985,10 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			hasRecordedMethod = YES;
 
 			[object setValue:[[n commentlessStringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKey:@"name"];
-
+			
+			if (isParsingDeprecatedAppendix)
+				[object setValue:[NSNumber numberWithBool:YES] forKey:@"isDeprecated"];
+			
 			continue;
 		}
 		

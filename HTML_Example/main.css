@@ -14,6 +14,16 @@ code
 
 /* @group Tasks */
 
+.deprecated
+{
+	color: rgba(255,0,0,1.0) !important;
+	text-decoration: line-through !important;
+}
+.deprecated span
+{
+	color: #323232;
+}
+
 .category
 {
 	margin-top: -4px;
