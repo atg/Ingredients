@@ -1,0 +1,12 @@
+- Fixes for chromium tabs
+  - Remove animation when dragging tab out of window tab bar
+  - Distance to drag *down* when detacting tab is slightly too far
+  - Close buttons should be on the left
+  - Typeface that tab titles are rendered in is ugly
+  - Restyle tab appearance
+  - When dragging a tab outside a tab bar, the window titlebar is shown at around 50% opacity. This is ugly and unnecessary because the user already has enough visual cues if they drag into a tab bar (the tab bar's window will become key and the tabs will move around)
+  - There should be some limit to the number of tabs that can be created (to avoid http://fileability.net/snaps/chromium_too_many_tabs.png). If there's no space, a new window should be created instead
+  - Tabs currently don't resize if the mouse is over the entire area of the window title/toolbar, excluding the rightmost tab. This should be changed to the area starting from the right edge of the leftmost tab extending all the way to the right edge of the window (assuming a left hand close button).
+  - The add tab button should probably have a fixed position on the right hand side of the window (where the toolbar tic-tac normally is).
+    Downside: You have to move the mouse to move the tab you've just created
+    Upside: Better consistency. The thing doesn't move around so much.
