@@ -26,6 +26,9 @@ static NSMutableDictionary *sharedSymbolButtonImageCache = nil;
 	else if ([typeString isEqual:@"@"])
 		m |= CHSymbolButtonObjcClass | CHSymbolButtonObjcInterface;
 	
+	else if ([typeString isEqual:@"FF"])
+		m |= CHSymbolButtonFunctionContainer;
+	
 	else if ([typeString isEqual:@"@p"])
 		m |= CHSymbolButtonObjcProtocol | CHSymbolButtonObjcInterface;
 	
@@ -99,6 +102,11 @@ static NSMutableDictionary *sharedSymbolButtonImageCache = nil;
 		{
 			offset = 209.0;
 			str = [NSString stringWithFormat:@"%C", 0x0192];
+		}
+		else if (mask & CHSymbolButtonFunctionContainer)
+		{
+			offset = 209.0;
+			str = @"F";
 		}
 		else if (mask & CHSymbolButtonObjcMethod)
 		{

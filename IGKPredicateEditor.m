@@ -72,6 +72,10 @@
 		{
 			requestedEntityName = @"ObjCClass";
 		}
+		else if([requestedEntityName isEqual:@"Function Group"])
+		{
+			requestedEntityName = @"FunctionContainer";
+		}
 		else if([requestedEntityName isEqual:@"Category"])
 		{
 			requestedEntityName = @"ObjCCategory";

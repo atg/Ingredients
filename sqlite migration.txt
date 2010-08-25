@@ -1,0 +1,65 @@
+/* We use core data for three things:
+     Persistence
+     Querying
+     A persistent object graph of the light-index
+     A throwaway object graph between full-index and html-generation
+
+   We can switch to basic sqlite for persistence. All that is required is modifying IGKScraper to execute SQL rather than create NSManagedObjects.
+
+   Likewise we can switch over querying to sqlite by rewriting all NSPredicates as SQL.
+
+   To replace the object graph, we can write a generalised NSObject graph library based on KVC. This would be a KVC-based and entirely in-memory multi-key object graph.
+*/
+
+@interface GGNode : NSObject
+{
+	NSDictionary *keyvalues;
+}
+
+- (id)valueForKey:(id)key;
+- (id)setValue:(id)value forKey:(id)key;
+
+@end
+
+@implementation GGNode
+
+- (id)valueForKey:(id)key
+{
+	id value = [keyvalues objectForKey:key];
+	
+	if (value)
+		return value;
+	else
+		return [self valueForUndefinedKey:key];
+}
+- (id)setValue:(id)value forKey:(id)key
+{
+	if (value && key)
+		[keyvalues setValue:value forKey:key];
+}
+
+@end
+
+
+@interface IGKRecord : GGNode
+{
+	NSString *tableName;
+	uint64_t ident;
+}
+
++ (id)reverseKeyForToMany:(id)key;
+
+@end
+
+@implementation IGKRecord
+
+- (id)valueForUndefinedKey:(id)undef
+{
+	NSString *reverseKey = [IGKRecord reverseKeyForToMany:key];
+	if (!reverseKey)
+		return nil;
+	
+	NSString *query = [NSString stringWithFormat:@"SELECT id FROM %@ WHERE %@=%llu", tableName, reverseKey, ident];
+}
+
+@end

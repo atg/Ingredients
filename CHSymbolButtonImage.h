@@ -24,6 +24,7 @@ typedef enum _CHSymbolButtonImageType
 	CHSymbolButtonObjcClass = 1<<16,
 	CHSymbolButtonObjcProtocol = 1<<17,
 	CHSymbolButtonObjcCategory = 1<<18, //For example: ObjcCategory | ObjcInterface
+	CHSymbolButtonFunctionContainer = 1<<19,
 	
 	CHSymbolButtonVariable = 1<<20,
 	CHSymbolButtonObjcMethod = 1<<21,

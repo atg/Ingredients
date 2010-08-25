@@ -267,6 +267,8 @@
 {
 	if ([ext isEqual:@"class"])
 		return @"ObjCClass";
+	else if ([ext isEqual:@"functions"])
+		return @"FunctionContainer";
 	else if ([ext isEqual:@"category"])
 		return @"ObjCCategory";
 	else if ([ext isEqual:@"protocol"])
@@ -311,6 +313,8 @@
 	NSString *entityName = [[self entity] name];
 	if ([entityName isEqual:@"ObjCClass"])
 		return @"class";
+	if ([entityName isEqual:@"FunctionContainer"])
+		return @"functions";
 	else if ([entityName isEqual:@"ObjCCategory"])
 		return @"category";
 	else if([entityName isEqual:@"ObjCProtocol"])
@@ -459,6 +463,9 @@
 	else if([entityName isEqual:@"ObjCClass"])
 		return CHPriorityClass;
 	
+	else if([entityName isEqual:@"FunctionContainer"])
+		return CHPriorityFunctionContainer;
+	
 	else if([entityName isEqual:@"ObjCProtocol"])
 		return CHPriorityProtocol;
 	
@@ -541,6 +548,9 @@
 	
 	if([entityName isEqual:@"ObjCClass"])
 		return CHSymbolButtonObjcClass;
+	
+	if([entityName isEqual:@"FunctionContainer"])
+		return CHSymbolButtonFunctionContainer;
 	
 	else if([entityName isEqual:@"ObjCCategory"])
 		return CHSymbolButtonObjcCategory;
