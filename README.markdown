@@ -16,4 +16,4 @@ If you see lots of warnings, you know it's built correctly.
 
 ## Licence
 
-Ingredients is licensed under the GNU General Public License.
+In protest to [recent FUD](http://www.fsf.org/blogs/licensing/vlc-enforcement) from the Free Software Foundation, Ingredients is now licensed under the BSD licence.
