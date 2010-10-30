@@ -16,4 +16,4 @@ If you see lots of warnings, you know it's built correctly.
 
 ## Licence
 
-In protest to [recent FUD](http://www.fsf.org/blogs/licensing/vlc-enforcement) from the Free Software Foundation, Ingredients is now licensed under the BSD licence.
+Ingredients is licenced under the "Fuck copyright - I don't have the money to sue you anyway" licence :)
