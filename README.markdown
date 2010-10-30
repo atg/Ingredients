@@ -16,4 +16,4 @@ If you see lots of warnings, you know it's built correctly.
 
 ## Licence
 
-Ingredients is licenced under the "Fuck copyright - I don't have the money to sue you anyway" licence :)
+Ingredients is licensed under the GNU General Public License.
