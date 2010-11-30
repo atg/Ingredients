@@ -357,7 +357,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	if (parentItemType == ParentItemType_ObjCClass)
 	{
 		//Find the superclass
-		NSString *superclassRegex = @"Inherits from.+?>([A-Za-z0-9_$]+)<";
+		NSString *superclassRegex = @"Inherits from.+?>([^<]+)<";
 		
 		NSArray *superclassCaptureSet = [contents captureComponentsMatchedByRegex:superclassRegex];
 		if ([superclassCaptureSet count] >= 2)
@@ -446,7 +446,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			[obj setValue:[NSNumber numberWithUnsignedInteger:contentsLength] forKey:@"contentsLength"];			
 			
 			if ([superclass length])
+			{
 				[obj setValue:superclass forKey:@"superclassName"];
+			}
 			
 			if ([availability length])
 				[obj setValue:availability forKey:@"availability"];
@@ -1125,7 +1127,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		
 		//signature (other items)
 		// <pre class="declaration">
-		else if (([nName isEqual:@"pre"] || [nName isEqual:@"p"]) && [nClass containsObject:@"declaration"])
+		else if (([nName isEqual:@"pre"] || [nName isEqual:@"p"] || [nName isEqual:@"div"]) && [nClass containsObject:@"declaration"])
 		{
 			NSMutableString *prototype = [[NSMutableString alloc] init];
 			[prototype appendString:[n commentlessStringValue]];
