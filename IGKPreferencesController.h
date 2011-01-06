@@ -7,7 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import <Sparkle/SUUpdater.h>
+//#import <Sparkle/SUUpdater.h>
 
 @interface IGKPreferencesController : NSWindowController<NSTableViewDataSource, NSTableViewDelegate>
 {

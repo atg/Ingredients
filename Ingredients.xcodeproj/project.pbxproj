@@ -89,8 +89,6 @@
 		759030241139BFF500550A86 /* IGKMatteSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 759030221139BFF500550A86 /* IGKMatteSegmentedControl.m */; };
 		7593070311C01B96008A0AC5 /* IGKOutputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 7593070111C01B96008A0AC5 /* IGKOutputStream.h */; };
 		7593070411C01B96008A0AC5 /* IGKOutputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 7593070211C01B96008A0AC5 /* IGKOutputStream.m */; };
-		75943BA5114407C2004126E7 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75943BA4114407C2004126E7 /* Sparkle.framework */; };
-		75943BCE114407C9004126E7 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 75943BA4114407C2004126E7 /* Sparkle.framework */; };
 		75943BD1114407D1004126E7 /* IGKPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BD177D1143E94000E67594 /* IGKPreferencesController.m */; };
 		75943BDD1144085D004126E7 /* IGKPreferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 75BD176A1143E6C300E67594 /* IGKPreferences.xib */; };
 		75943C0B11441AE0004126E7 /* IGKBackForwardManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 75943C0911441AE0004126E7 /* IGKBackForwardManager.h */; };
@@ -202,7 +200,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				75943BCE114407C9004126E7 /* Sparkle.framework in CopyFiles */,
 				756F9E00110BB74600E6F291 /* IngredientsKit.framework in CopyFiles */,
 				756F9DE3110BB59100E6F291 /* BWToolkitFramework.framework in CopyFiles */,
 			);
@@ -306,7 +303,6 @@
 		759030221139BFF500550A86 /* IGKMatteSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKMatteSegmentedControl.m; sourceTree = "<group>"; };
 		7593070111C01B96008A0AC5 /* IGKOutputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKOutputStream.h; sourceTree = "<group>"; };
 		7593070211C01B96008A0AC5 /* IGKOutputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKOutputStream.m; sourceTree = "<group>"; };
-		75943BA4114407C2004126E7 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		75943C0911441AE0004126E7 /* IGKBackForwardManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKBackForwardManager.h; sourceTree = "<group>"; };
 		75943C0A11441AE0004126E7 /* IGKBackForwardManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKBackForwardManager.m; sourceTree = "<group>"; };
 		759ECF99113344CC00067BD1 /* IGKShyTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKShyTableView.h; sourceTree = "<group>"; };
@@ -424,7 +420,6 @@
 				756F9E54110BE74100E6F291 /* IngredientsKit.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				75B23F6A1140216200EC1D2B /* Security.framework in Frameworks */,
-				75943BA5114407C2004126E7 /* Sparkle.framework in Frameworks */,
 				75A9AAA911495F2300E539F2 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -509,7 +504,6 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				75943BA4114407C2004126E7 /* Sparkle.framework */,
 				75F67043110CD033005F299C /* libicucore.dylib */,
 				756F9E60110BE76600E6F291 /* WebKit.framework */,
 				756F9DAC110BB55100E6F291 /* BWToolkitFramework.framework */,
