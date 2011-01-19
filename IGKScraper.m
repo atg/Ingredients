@@ -63,9 +63,8 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	
 	//Register it with preferences
 	int result = [[NSClassFromString(@"IGKPreferencesController") sharedPreferencesController] addDocsetWithPath:[docsetURL path]
-																					  localizedUserInterfaceName:localizedUserInterfaceName
-																							  developerDirectory:developerDirectory];
-	
+																				      localizedUserInterfaceName:localizedUserInterfaceName
+																						      developerDirectory:developerDirectory];
 	/*
 	 if result == -1
 	 No docset already exists

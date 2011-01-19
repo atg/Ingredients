@@ -95,6 +95,19 @@
 		[self applyDeveloperDirectory:devdir];
 	}
 	
+	for (NSString *sharedPath in NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSAllDomainsMask, YES))
+	{
+		NSString *docsetSharedPath = [sharedPath stringByAppendingPathComponent:@"Developer/Shared/Documentation/DocSets"];
+		if ([[NSFileManager defaultManager] fileExistsAtPath:docsetSharedPath])
+		{
+			[self addDocsetsInPath:docsetSharedPath
+						   toArray:docsetPaths
+						       set:docsetPathsSet
+				developerDirectory:@"Shared"];
+		}
+	}
+	
+	
 	for (NSDictionary *description in [self developerDirectoryDescriptionsFromDefaults])
 	{ 
 		NSString *devdir = [description valueForKey:@"path"];
