@@ -111,6 +111,22 @@ const NSInteger IGKStoreVersion = 3;
 	applicationIsIndexing = NO;
 }
 
+- (void)queryString:(NSString *)query
+{
+	//Get the frontmost window
+	NSWindowController *windowController = nil;
+	if ([[[NSApp mainWindow] windowController] isKindOfClass:[IGKWindowController class]])
+		windowController = [[NSApp mainWindow] windowController];
+	
+	if (!windowController)
+		windowController = [windowControllers lastObject];
+	
+	if (!windowController)
+		windowController = [self newWindowIsIndexing:NO];
+	
+	[windowController executeUISideSearch:query];
+}
+
 - (void)getURL:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent
 {
 	//return;
@@ -129,18 +145,7 @@ const NSInteger IGKStoreVersion = 3;
 	
 	if ([action isCaseInsensitiveEqual:@"search"])
 	{
-		//Get the frontmost window
-		NSWindowController *windowController = nil;
-		if ([[[NSApp mainWindow] windowController] isKindOfClass:[IGKWindowController class]])
-			windowController = [[NSApp mainWindow] windowController];
-		
-		if (!windowController)
-			windowController = [windowControllers lastObject];
-		
-		if (!windowController)
-			windowController = [self newWindowIsIndexing:NO];
-		
-		[windowController executeUISideSearch:query];
+		[self queryString: query];
 	}
 }
 

@@ -57,6 +57,8 @@
 
 - (NSString *)developerDirectory;
 
+- (void)queryString:(NSString *)query;
+
 // Core Data Nonsense
 
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;

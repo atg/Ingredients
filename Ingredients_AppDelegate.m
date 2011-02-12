@@ -24,11 +24,22 @@
 {
 	NSRunAlertPanel(@"GET URL", @"", @"", @"", @"");
 }
+
+- (void)lookupService:(NSPasteboard *)pboard userData:(NSString *)data error:(NSString **)error
+{
+	NSArray *types = [pboard types];
+	if ([types containsObject:NSStringPboardType]){
+		NSString* query = [pboard stringForType:NSStringPboardType];
+		[kitController queryString: query];
+	}
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {	
 	srandom((unsigned long)[NSDate timeIntervalSinceReferenceDate]);
 	PFMoveToApplicationsFolderIfNecessary();
 	
+	[NSApp setServicesProvider:self];
 	[kitController showWindow:nil];
 }
 
