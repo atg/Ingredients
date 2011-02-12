@@ -49,7 +49,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>Lookup in Ingredients</string>
+				<string>Look up in Ingredients</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>lookupService</string>
@@ -58,7 +58,7 @@
 			<key>NSRequiredContext</key>
 			<dict>
 				<key>NSServiceCategory</key>
-				<string>public.item</string>
+				<string>public.text</string>
 			</dict>
 			<key>NSSendTypes</key>
 			<array>
