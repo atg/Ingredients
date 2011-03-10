@@ -199,6 +199,10 @@
 {
 	[[self window] setDelegate:self];
 	
+    //NOTE: (1 << 7) is a NSWindowCollectionBehaviorFullScreenPrimary that will build on 10.6
+	[[self window] setCollectionBehavior:[[self window] collectionBehavior] | (1 << 7)];
+    
+    
 	currentModeIndex = CHDocumentationBrowserUIMode_NeedsSetup;
 	[self setMode:CHDocumentationBrowserUIMode_TwoUp];
 	sideSearchQuery = @"";
@@ -663,7 +667,7 @@
 			[[browserWebView mainFrame] loadHTMLString:html
 											   baseURL:[[NSBundle mainBundle] resourceURL]];
 		}
-		else
+		
 		{		
 			NSLog(@"Load URL = %@, record history = %d", url, recordHistory);
 			NSManagedObjectContext *ctx = [[[NSApp delegate] valueForKey:@"kitController"] managedObjectContext];
@@ -2159,7 +2163,19 @@
 	}
 }
 
-- (IBAction)toggleFullscreen:(id)sender
+- (BOOL)respondsToSelector:(SEL)aSelector
+{
+    if (aSelector == @selector(toggleFullScreen:))
+    {
+        // We only want to use our own fullscreen if the user is running 10.6 or lower
+        if ([self isLionOrGreater])
+            return NO;
+        
+        return YES;
+    }
+    return [super respondsToSelector:aSelector];
+}
+- (IBAction)toggleFullScreen:(id)sender
 {
 	NSMutableDictionary *fsOptions = [[NSMutableDictionary alloc] init];
 	NSInteger presentationOptions = (NSApplicationPresentationAutoHideDock|NSApplicationPresentationAutoHideMenuBar);
@@ -2295,6 +2311,10 @@
 	return YES;
 }
 
+- (BOOL)isLionOrGreater
+{
+    return NSClassFromString(@"NSLinguisticTagger") != Nil;
+}
 - (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)anItem
 {
     SEL action = [anItem action];
@@ -2325,7 +2345,7 @@
     if (action == @selector(goToNextResult:))
 		return [[self currentArrayController] canSelectNext];
 	
-	if (action == @selector(toggleFullscreen:))
+	if (action == @selector(toggleFullScreen:) && ![self isLionOrGreater])
 	{
 		if (!isInFullscreen && [[[NSApp delegate] kitController] fullscreenWindowController])
 			return NO;

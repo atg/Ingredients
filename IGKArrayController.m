@@ -373,7 +373,7 @@ const NSTimeInterval timeoutInterval = 0.15;
 	{
 		NSString *foName = [fo valueForKey:@"name"];
 		
-		if ([fo hasKey:@"container"])
+		if ([fo hasKey:@"container"] && [[fo valueForKeyPath:@"container.name"] length])
 			return [NSString stringWithFormat:@"%@\t(%@)", foName, /* 0x2013, */ [fo valueForKeyPath:@"container.name"]];
 		
 		return foName;

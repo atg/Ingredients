@@ -144,7 +144,7 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 		pathsCount = [self backgroundSearch:scraperDocset];
 		
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[launchController reportPathCount:pathsCount];
+			[launchController reportPathCount:pathsCount];            
 		});
 	});
 }

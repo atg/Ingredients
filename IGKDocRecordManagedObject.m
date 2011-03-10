@@ -28,7 +28,7 @@
 	 ingr-doc:// <docset-family> / <docset-version> / <table-of-contents> / <item-name> . <item-type>
 	 ingr-doc:// <docset-family> / <docset-version> / <table-of-contents> / <container-name> . <container-type> / <item-name> . <item-type>
 	 */
-	
+	NSLog(@"resolve URL: %@ = %@", url, components);
 	//There should be at least 4 components
 	if ([components count] < 4)
 		return nil;
@@ -142,12 +142,11 @@
 		
 		//Get the path of the SDK
 		// .../Developer/SDKs/bar.sdk
-		NSString *developerDirectoryPath = [[[docsetPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
+		NSString *developerDirectoryPath = [[[docsetPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];		
 		NSString *sdkPath = [[developerDirectoryPath stringByAppendingPathComponent:@"SDKs"] stringByAppendingPathComponent:[docset sdkComponent]];
 		
 		//Search in the SDK for itemName
 		NSArray *subpaths = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:sdkPath error:&err];
-		
 		if (err || ![subpaths count])
 			return nil;
 		
@@ -160,7 +159,7 @@
 				NSString *fullpath = [sdkPath stringByAppendingPathComponent:subpath];
 				
 				//Open the header in some application
-				[[NSWorkspace sharedWorkspace] openFile:fullpath];
+				BOOL worked = [[NSWorkspace sharedWorkspace] openFile:fullpath];
 				
 				return nil;
 			}

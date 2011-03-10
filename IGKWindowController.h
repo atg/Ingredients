@@ -206,7 +206,7 @@ typedef enum {
 - (void)setRightFilterBarShown:(BOOL)shown;
 
 
-- (IBAction)toggleFullscreen:(id)sender;
+- (IBAction)toggleFullScreen:(id)sender;
 
 - (BOOL)filterBarTableRowIsGroup:(NSInteger)row;
 

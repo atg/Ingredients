@@ -105,6 +105,15 @@
 						       set:docsetPathsSet
 				developerDirectory:@"Shared"];
 		}
+        
+        docsetSharedPath = [sharedPath stringByAppendingPathComponent:@"Developer/Documentation/DocSets"];
+		if ([[NSFileManager defaultManager] fileExistsAtPath:docsetSharedPath])
+		{
+			[self addDocsetsInPath:docsetSharedPath
+						   toArray:docsetPaths
+						       set:docsetPathsSet
+				developerDirectory:@"Shared"];
+		}
 	}
 	
 	
@@ -272,6 +281,64 @@
 		
 		//All paths have been reported
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"IGKHasIndexedAllPaths" object:self];
+        
+        [self showFoundNoPathsError];
+    });
+}
+- (void)showFoundNoPathsError
+{
+    /*
+    NSEntityDescription *docRecordEntity = [NSEntityDescription entityForName:@"DocRecord" inManagedObjectContext:[appController managedObjectContext]];
+    
+    NSFetchRequest *fetchEverything = [[NSFetchRequest alloc] init];
+    [fetchEverything setEntity:docRecordEntity];
+    [fetchEverything setFetchLimit:20];
+    */
+    
+    NSManagedObjectContext *ctx = [appController managedObjectContext];
+	dispatch_queue_t queue = [appController backgroundQueue];
+	
+	if (!queue)
+		return;
+	
+	dispatch_sync(queue, ^{
+		
+		//Oh god, Core Data was *NOT* meant to be used like this
+		NSEntityDescription *docRecordEntity = [NSEntityDescription entityForName:@"DocRecord" inManagedObjectContext:ctx];
+		NSPropertyDescription *nameProperty = [[docRecordEntity propertiesByName] valueForKey:@"name"];
+		
+		NSFetchRequest *fetchEverything = [[NSFetchRequest alloc] init];
+		[fetchEverything setEntity:docRecordEntity];
+		[fetchEverything setResultType:NSDictionaryResultType];
+		[fetchEverything setReturnsDistinctResults:YES];
+		[fetchEverything setPropertiesToFetch:[NSArray arrayWithObject:nameProperty]];
+		
+		//NSArray *objects = [ctx executeFetchRequest:fetchEverything error:nil];
+		
+		//NSLog(@"All names: %d", [objects count]);
+		
+        NSUInteger c = [ctx countForFetchRequest:fetchEverything error:nil];
+        
+        if (c < 10)
+        {
+            NSAlert *alert = [[NSAlert alloc] init];
+            [alert setMessageText:@"Ingredients could not find any documentation to index."];
+            [alert setInformativeText:@"This is usually because Xcode has not downloaded documentation. Try going to Xcode's Documentation preferences and making sure the docsets you want have been downloaded.\n\nThis can also happen if you're using a newly released version of Xcode and Ingredients has not yet been updated to support it."];
+            [alert addButtonWithTitle:@"Quit"];
+            
+            NSInteger answer = [alert runModal];
+            
+            NSString *appSupportPath = [@"~/Library/Application Support/Ingredients/" stringByExpandingTildeInPath];
+            
+            [[NSFileManager defaultManager] removeItemAtPath:appSupportPath error:nil];
+            
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"docsets"];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ShutdownBad"];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"storeVersion"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            [NSApp terminate:nil];
+        }
 	});
 }
 
@@ -353,7 +420,7 @@
 		
 		if ([docsetsSet containsObject:path])
 			continue;
-		
+        
 		[docsetPathsArray addObject:path];
 		[docsetsSet addObject:path];
 	}
