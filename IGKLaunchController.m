@@ -300,7 +300,7 @@
 	
 	if (!queue)
 		return;
-	
+	/*
 	dispatch_sync(queue, ^{
 		
 		//Oh god, Core Data was *NOT* meant to be used like this
@@ -339,12 +339,12 @@
             
             [NSApp terminate:nil];
         }
-	});
+	});*/
 }
 
 - (void)finishedLoading
 {
-	NSManagedObjectContext *ctx = [appController managedObjectContext];
+	NSManagedObjectContext *ctx = [appController backgroundManagedObjectContext];
 	dispatch_queue_t queue = [appController backgroundQueue];
 	
 	if (!queue)
@@ -364,6 +364,33 @@
 		
 		NSArray *objects = [ctx executeFetchRequest:fetchEverything error:nil];
 		
+        if ([objects count] < 10)
+        {
+            dispatch_sync(dispatch_get_main_queue(), ^(void) {
+            
+                NSAlert *alert = [[NSAlert alloc] init];
+                [alert setMessageText:@"Ingredients could not find any documentation to index."];
+                [alert setInformativeText:@"This is usually because Xcode has not downloaded documentation. Try going to Xcode's Documentation preferences and making sure the docsets you want have been downloaded.\n\nThis can also happen if you're using a newly released version of Xcode and Ingredients has not yet been updated to support it."];
+                [alert addButtonWithTitle:@"Quit"];
+                
+                NSInteger answer = [alert runModal];
+                
+                NSString *appSupportPath = [@"~/Library/Application Support/Ingredients/" stringByExpandingTildeInPath];
+                
+                [[NSFileManager defaultManager] removeItemAtPath:appSupportPath error:nil];
+                
+                [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"docsets"];
+                [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ShutdownBad"];
+                [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"storeVersion"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
+                [NSApp terminate:nil];
+                    return;
+            });
+        }
+        
+        
+        
 		NSLog(@"All names: %d", [objects count]);
 		
 		IGKWordMembership *wordMembershipManager = [IGKWordMembership sharedManagerWithCapacity:[objects count]];

@@ -2169,7 +2169,7 @@
     {
         // We only want to use our own fullscreen if the user is running 10.6 or lower
         if ([self isLionOrGreater])
-            return NO;
+            return [super respondsToSelector:aSelector];
         
         return YES;
     }

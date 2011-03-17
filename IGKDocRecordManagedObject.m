@@ -252,6 +252,7 @@
 
 - (id)findNearestClassWithName:(NSString *)className
 {
+    NSLog(@"className = %@", className);
 	if (![className length])
 		return nil;
 	

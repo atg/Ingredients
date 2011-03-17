@@ -265,7 +265,7 @@
 		755F432311232B2F00AA16F5 /* NSShadow+MCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSShadow+MCAdditions.m"; sourceTree = "<group>"; };
 		755F437811232C9500AA16F5 /* IGKLaunchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKLaunchController.h; sourceTree = "<group>"; };
 		755F437911232C9500AA16F5 /* IGKLaunchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKLaunchController.m; sourceTree = "<group>"; };
-		756D7A8A1145BB11001C05D7 /* Ingredients.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.sdef; path = Ingredients.sdef; sourceTree = "<group>"; };
+		756D7A8A1145BB11001C05D7 /* Ingredients.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Ingredients.sdef; sourceTree = "<group>"; };
 		756D7A8B1145BB11001C05D7 /* IngredientsCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IngredientsCommand.h; sourceTree = "<group>"; };
 		756D7A8C1145BB11001C05D7 /* IngredientsCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IngredientsCommand.m; sourceTree = "<group>"; };
 		756EFCFC11DA5CB800BC978A /* IGKCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKCircularBuffer.h; sourceTree = "<group>"; };
