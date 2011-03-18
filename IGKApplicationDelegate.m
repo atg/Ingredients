@@ -12,7 +12,7 @@
 #import <WebKit/WebKit.h>
 #import "IGKAnnotationManager.h"
 
-const NSInteger IGKStoreVersion = 3;
+const NSInteger IGKStoreVersion = 4;
 
 @implementation IGKApplicationDelegate
 
