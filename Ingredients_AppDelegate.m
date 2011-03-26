@@ -15,7 +15,7 @@
 {
 	if (self = [super init])
 	{
-		NSLog(@"INIT");
+		NSLog(@"Welcome to Ingredients: Documentation at the speed of Core Data.");
 	}
 	return self;
 }
@@ -37,10 +37,11 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {	
 	srandom((unsigned long)[NSDate timeIntervalSinceReferenceDate]);
-	//PFMoveToApplicationsFolderIfNecessary();
-	
+		
 	[NSApp setServicesProvider:self];
 	[kitController showWindow:nil];
+	
+	NSUpdateDynamicServices();
 }
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag {

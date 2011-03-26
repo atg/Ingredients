@@ -60,6 +60,9 @@ NSString *UKCrashReporterFindTenFiveCrashReportPath(NSString* appName, NSString*
 {
 	if (self = [super init])
 	{
+		//I'm such an idiot
+		return nil;
+		
 		//Can an object be in two .nibs at once? Apparently it can (just don't use -awakeFromNib).
 		[NSBundle loadNibNamed:@"AnthillReporter" owner:self];		
 		

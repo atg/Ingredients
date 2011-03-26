@@ -39,6 +39,7 @@
 		7529260611DDA65C0003CE54 /* IGKFrecencyStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7529260411DDA65C0003CE54 /* IGKFrecencyStore.m */; };
 		75301F6D11B2F04A006DA0E3 /* annotations.js in Sources */ = {isa = PBXBuildFile; fileRef = 75301F6C11B2F04A006DA0E3 /* annotations.js */; };
 		75301FA911B2F55D006DA0E3 /* annotations.js in Resources */ = {isa = PBXBuildFile; fileRef = 75301F6C11B2F04A006DA0E3 /* annotations.js */; };
+		7542AF091336F395001A3AFA /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 7542ADA51336F28A001A3AFA /* sqlite3.c */; };
 		754AA3FA1140267300321EAF /* AnthillBugReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 754AA3F91140267300321EAF /* AnthillBugReporter.m */; };
 		754AA3FC1140267D00321EAF /* AnthillReporter.nib in Resources */ = {isa = PBXBuildFile; fileRef = 754AA3FB1140267D00321EAF /* AnthillReporter.nib */; };
 		755F427E112323C600AA16F5 /* tictactoe.html in Resources */ = {isa = PBXBuildFile; fileRef = 755F427D112323C600AA16F5 /* tictactoe.html */; };
@@ -252,6 +253,7 @@
 		7529260311DDA65C0003CE54 /* IGKFrecencyStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKFrecencyStore.h; sourceTree = "<group>"; };
 		7529260411DDA65C0003CE54 /* IGKFrecencyStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKFrecencyStore.m; sourceTree = "<group>"; };
 		75301F6C11B2F04A006DA0E3 /* annotations.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = annotations.js; path = HTML_Example/annotations.js; sourceTree = "<group>"; };
+		7542ADA51336F28A001A3AFA /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqlite3.c; sourceTree = "<group>"; };
 		754AA3F81140267300321EAF /* AnthillBugReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnthillBugReporter.h; path = "Anthill Cocoa/AnthillBugReporter.h"; sourceTree = "<group>"; };
 		754AA3F91140267300321EAF /* AnthillBugReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnthillBugReporter.m; path = "Anthill Cocoa/AnthillBugReporter.m"; sourceTree = "<group>"; };
 		754AA3FB1140267D00321EAF /* AnthillReporter.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = AnthillReporter.nib; path = "Anthill Cocoa/AnthillReporter.nib"; sourceTree = "<group>"; };
@@ -555,6 +557,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				7542ADA51336F28A001A3AFA /* sqlite3.c */,
 				75E747D111DC2CF3009B89CB /* smartcmp.h */,
 				75E747D411DC2DEB009B89CB /* smartcmp.m */,
 				0C402C141191C691001564B5 /* NSString+Utilities.h */,
@@ -1041,6 +1044,7 @@
 				0C402C161191C691001564B5 /* NSString+Utilities.m in Sources */,
 				0C402D09119321AB001564B5 /* IGKForwardView.m in Sources */,
 				75301F6D11B2F04A006DA0E3 /* annotations.js in Sources */,
+				7542AF091336F395001A3AFA /* sqlite3.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
