@@ -2,7 +2,7 @@
 #import "common.h"
 
 @implementation IGKTabContents
-
+/*
 -(id)initWithBaseTabContents:(CTTabContents*)baseContents {
   if (!(self = [super initWithBaseTabContents:baseContents])) return nil;
 
@@ -37,5 +37,6 @@
   frame.size = [(NSScrollView*)(view_) contentSize];
   [tv setFrame:frame];
 }
+*/
 
 @end

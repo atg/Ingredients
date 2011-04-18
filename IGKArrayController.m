@@ -9,8 +9,8 @@
 #import "IGKArrayController.h"
 #import "Ingredients_AppDelegate.h"
 #import "IGKDocRecordManagedObject.h"
-#import "IGKApplicationDelegate.h"
-
+//#import "IGKApplicationDelegate.h"
+@class IGKApplicationDelegate;
 const NSTimeInterval timeoutInterval = 0.15;
 
 @implementation IGKArrayController

@@ -10,14 +10,14 @@
 
 @class IGKLaunchController;
 @class WebHistory;
-@class IGKWindowController;
+@class IGKTabController;
 
 @interface IGKApplicationDelegate : NSObject
 {
 	NSMutableArray *windowControllers;
 	
 	IGKLaunchController *launchController;
-	IGKWindowController *fullscreenWindowController;
+	IGKTabController *fullscreenWindowController;
 	NSPersistentStoreCoordinator *persistentStoreCoordinator;
 	NSManagedObjectModel *managedObjectModel;
 	NSManagedObjectContext *managedObjectContext;
@@ -41,7 +41,7 @@
 
 @property (readonly) NSMutableArray *windowControllers;
 @property (readonly) id preferencesController;
-@property (assign) IGKWindowController *fullscreenWindowController;
+@property (assign) IGKTabController *fullscreenWindowController;
 
 @property (assign) NSCache *xmlDocumentCache;
 @property (assign) NSCache *htmlCache;

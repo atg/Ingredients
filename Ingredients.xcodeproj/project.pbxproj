@@ -7,80 +7,81 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0C35D868118B657F0013DDFD /* IGKAnnotationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C35D866118B657F0013DDFD /* IGKAnnotationManager.h */; };
-		0C35D869118B657F0013DDFD /* IGKAnnotationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C35D867118B657F0013DDFD /* IGKAnnotationManager.m */; };
-		0C35D86E118B65920013DDFD /* IGKAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C35D86C118B65920013DDFD /* IGKAnnotation.h */; };
-		0C35D86F118B65920013DDFD /* IGKAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C35D86D118B65920013DDFD /* IGKAnnotation.m */; };
-		0C402C161191C691001564B5 /* NSString+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C402C151191C691001564B5 /* NSString+Utilities.m */; };
-		0C402D09119321AB001564B5 /* IGKForwardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C402D08119321AB001564B5 /* IGKForwardView.m */; };
-		0C7C02E6110E000800412666 /* XBNewSourceListCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C7C02E4110E000800412666 /* XBNewSourceListCell.h */; };
-		0C7C02E7110E000800412666 /* XBNewSourceListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7C02E5110E000800412666 /* XBNewSourceListCell.m */; };
-		0C7C02ED110E006000412666 /* CHSymbolButtonImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C7C02EB110E006000412666 /* CHSymbolButtonImage.h */; };
-		0C7C02EE110E006000412666 /* CHSymbolButtonImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7C02EC110E006000412666 /* CHSymbolButtonImage.m */; };
-		7507CF4511598197008449DE /* IGKPredicateEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = 7507CF4311598197008449DE /* IGKPredicateEditor.h */; };
-		7507CF4611598197008449DE /* IGKPredicateEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7507CF4411598197008449DE /* IGKPredicateEditor.m */; };
-		750DFBCF114671CC004C5D08 /* IGKMattePopUpButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 750DFBCE114671CC004C5D08 /* IGKMattePopUpButton.m */; };
 		7515376D11CC64D5004529B2 /* openingpage.css in Resources */ = {isa = PBXBuildFile; fileRef = 7515376C11CC64D5004529B2 /* openingpage.css */; };
-		7515378611CC6D82004529B2 /* NSArray+IGKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7515378411CC6D82004529B2 /* NSArray+IGKAdditions.h */; };
-		7515378711CC6D82004529B2 /* NSArray+IGKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7515378511CC6D82004529B2 /* NSArray+IGKAdditions.m */; };
-		75195FBA116D49B00034590C /* IGKManagedObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 75195FB8116D49B00034590C /* IGKManagedObject.h */; };
-		75195FBB116D49B00034590C /* IGKManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 75195FB9116D49B00034590C /* IGKManagedObject.m */; };
-		751D2AD21126E4A100403E64 /* IGKArrayController.h in Headers */ = {isa = PBXBuildFile; fileRef = 751D2AD01126E4A100403E64 /* IGKArrayController.h */; };
-		751D2AD31126E4A100403E64 /* IGKArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 751D2AD11126E4A100403E64 /* IGKArrayController.m */; };
 		751D2D181126F1F400403E64 /* no_selection.html in Resources */ = {isa = PBXBuildFile; fileRef = 751D2D171126F1F400403E64 /* no_selection.html */; };
-		751D2DC01127340700403E64 /* IGKNoSelectionInnerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 751D2DBE1127340700403E64 /* IGKNoSelectionInnerView.h */; };
-		751D2DC11127340700403E64 /* IGKNoSelectionInnerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 751D2DBF1127340700403E64 /* IGKNoSelectionInnerView.m */; };
-		751D2DC91127354E00403E64 /* IGKNoSelectionOuterView.h in Headers */ = {isa = PBXBuildFile; fileRef = 751D2DC71127354E00403E64 /* IGKNoSelectionOuterView.h */; };
-		751D2DCA1127354E00403E64 /* IGKNoSelectionOuterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 751D2DC81127354E00403E64 /* IGKNoSelectionOuterView.m */; };
 		751E45D61125E6CE00CD544A /* tictactoe_style.css in Resources */ = {isa = PBXBuildFile; fileRef = 751E45D51125E6CE00CD544A /* tictactoe_style.css */; };
-		752321CA1179DE5400BAEA90 /* IGKBackgroundProgressBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 752321C81179DE5400BAEA90 /* IGKBackgroundProgressBar.h */; };
-		752321CB1179DE5400BAEA90 /* IGKBackgroundProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 752321C91179DE5400BAEA90 /* IGKBackgroundProgressBar.m */; };
-		7529260511DDA65C0003CE54 /* IGKFrecencyStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 7529260311DDA65C0003CE54 /* IGKFrecencyStore.h */; };
-		7529260611DDA65C0003CE54 /* IGKFrecencyStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7529260411DDA65C0003CE54 /* IGKFrecencyStore.m */; };
+		752371C1135C644A00438332 /* IGKPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BD177D1143E94000E67594 /* IGKPreferencesController.m */; };
+		752371C2135C644A00438332 /* IGKLaunchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 755F437911232C9500AA16F5 /* IGKLaunchController.m */; };
+		752371C3135C644A00438332 /* IGKScraper.m in Sources */ = {isa = PBXBuildFile; fileRef = 756F9FFA110C805C00E6F291 /* IGKScraper.m */; };
+		752371C4135C644A00438332 /* IGKMatteSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 759030221139BFF500550A86 /* IGKMatteSegmentedControl.m */; };
+		752371C5135C644A00438332 /* IGKMattePopUpButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 750DFBCE114671CC004C5D08 /* IGKMattePopUpButton.m */; };
+		752371C6135C644A00438332 /* IGKMattePopUpButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DF96DD117E32E100403233 /* IGKMattePopUpButtonView.m */; };
+		752371C7135C644A00438332 /* IGKMatteFocusedGradientBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DF96E9117E350600403233 /* IGKMatteFocusedGradientBox.m */; };
+		752371C8135C644A00438332 /* IGKMatteButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BC565511CDD5900012800F /* IGKMatteButton.m */; };
+		752371DB135C644F00438332 /* CHSymbolButtonImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7C02EC110E006000412666 /* CHSymbolButtonImage.m */; };
+		752371DC135C644F00438332 /* CHLeftSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 756F9FA0110BEA8D00E6F291 /* CHLeftSplitView.m */; };
+		752371DD135C644F00438332 /* IGKShyTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 759ECF9A113344CC00067BD1 /* IGKShyTableView.m */; };
+		752371DE135C644F00438332 /* IGKMultiSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 759ECFA2113349D700067BD1 /* IGKMultiSelector.m */; };
+		752371DF135C644F00438332 /* IGKWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 759ECFC311334D9800067BD1 /* IGKWindow.m */; };
+		752371E0135C644F00438332 /* XBNewSourceListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C7C02E5110E000800412666 /* XBNewSourceListCell.m */; };
+		752371E1135C644F00438332 /* IGKHTMLGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C9FE8F110F53E400C9B51C /* IGKHTMLGenerator.m */; };
+		752371E2135C644F00438332 /* IGKSourceListWallpaperView.m in Sources */ = {isa = PBXBuildFile; fileRef = 755F42B31123270700AA16F5 /* IGKSourceListWallpaperView.m */; };
+		752371E3135C644F00438332 /* IGKNoSelectionOuterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 751D2DC81127354E00403E64 /* IGKNoSelectionOuterView.m */; };
+		752371E4135C644F00438332 /* IGKNoSelectionInnerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 751D2DBF1127340700403E64 /* IGKNoSelectionInnerView.m */; };
+		752371E5135C644F00438332 /* IGKSometimesCenteredTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C74A5F1140539B00E3EAC6 /* IGKSometimesCenteredTextCell.m */; };
+		752371E6135C645000438332 /* IGKTableOfContentsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A4B48411429ECD008CA9E8 /* IGKTableOfContentsView.m */; };
+		752371E7135C645000438332 /* IGKEaseInOutAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A9AA9B11495DA300E539F2 /* IGKEaseInOutAnimatedView.m */; };
+		752371E8135C645000438332 /* IGKPredicateEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7507CF4411598197008449DE /* IGKPredicateEditor.m */; };
+		752371E9135C645000438332 /* IGKFilterBarTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 757654091179243D0099D318 /* IGKFilterBarTableView.m */; };
+		752371EA135C645000438332 /* IGKBackgroundProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 752321C91179DE5400BAEA90 /* IGKBackgroundProgressBar.m */; };
+		752371EB135C645000438332 /* IGKFindBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75ACEC58117A539600260366 /* IGKFindBackgroundView.m */; };
+		752371EC135C645000438332 /* IGKFindWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 75751B24117B599E0017B58B /* IGKFindWindow.m */; };
+		752371ED135C645000438332 /* IGKResizeDelegatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75751B8F117B641D0017B58B /* IGKResizeDelegatedView.m */; };
+		752371EE135C645000438332 /* IGKForwardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C402D08119321AB001564B5 /* IGKForwardView.m */; };
+		752371F7135C645700438332 /* smartcmp.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E747D411DC2DEB009B89CB /* smartcmp.m */; };
+		752371F8135C645700438332 /* NSString+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C402C151191C691001564B5 /* NSString+Utilities.m */; };
+		752371F9135C645700438332 /* IGKCircularBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 756EFCFD11DA5CB800BC978A /* IGKCircularBuffer.m */; };
+		752371FA135C645700438332 /* IGKOutputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 7593070211C01B96008A0AC5 /* IGKOutputStream.m */; };
+		752371FB135C645700438332 /* SQPreferencesBackgroundComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BD17C51143F37E00E67594 /* SQPreferencesBackgroundComponent.m */; };
+		752371FC135C645700438332 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F67030110CCD31005F299C /* RegexKitLite.m */; };
+		752371FD135C645700438332 /* AnthillBugReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 754AA3F91140267300321EAF /* AnthillBugReporter.m */; };
+		752371FE135C645700438332 /* PFMoveApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B23F4611401DD700EC1D2B /* PFMoveApplication.m */; };
+		752371FF135C645700438332 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		75237200135C645700438332 /* NSBezierPath+MCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 755F432111232B2F00AA16F5 /* NSBezierPath+MCAdditions.m */; };
+		75237201135C645700438332 /* NSShadow+MCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 755F432311232B2F00AA16F5 /* NSShadow+MCAdditions.m */; };
+		75237202135C645700438332 /* NSXMLNode+IGKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A9DA6611411C49003F8437 /* NSXMLNode+IGKAdditions.m */; };
+		75237203135C645700438332 /* NSArray+IGKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7515378511CC6D82004529B2 /* NSArray+IGKAdditions.m */; };
+		75237204135C645700438332 /* IngredientsCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 756D7A8C1145BB11001C05D7 /* IngredientsCommand.m */; };
+		75237205135C648200438332 /* IGKDocRecordManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F672AA110E254A005F299C /* IGKDocRecordManagedObject.m */; };
+		75237206135C648500438332 /* IGKManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 75195FB9116D49B00034590C /* IGKManagedObject.m */; };
+		75237207135C648900438332 /* IGKDocSetManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B23907113FB4D300EC1D2B /* IGKDocSetManagedObject.m */; };
+		75237208135C648E00438332 /* IGKTabBrowser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75461340135BE78C00A1BA0A /* IGKTabBrowser.mm */; };
+		75237209135C648E00438332 /* IGKTabContents.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75461342135BE78C00A1BA0A /* IGKTabContents.mm */; };
+		7523720A135C648E00438332 /* common.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7546134F135BE86A00A1BA0A /* common.mm */; };
+		7523720C135C648E00438332 /* IGKWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 756F9E0B110BB79100E6F291 /* IGKWindowController.mm */; };
+		7523720D135C648E00438332 /* IGKTabController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7523719F135C5D9100438332 /* IGKTabController.mm */; };
+		7523720E135C648E00438332 /* IGKArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 751D2AD11126E4A100403E64 /* IGKArrayController.m */; };
+		7523720F135C648E00438332 /* IGKBackForwardManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 75943C0A11441AE0004126E7 /* IGKBackForwardManager.m */; };
+		75237210135C648E00438332 /* IGKAnnotationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C35D867118B657F0013DDFD /* IGKAnnotationManager.m */; };
+		75237211135C648E00438332 /* IGKAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C35D86D118B65920013DDFD /* IGKAnnotation.m */; };
+		75237212135C648E00438332 /* IGKWordMembership.m in Sources */ = {isa = PBXBuildFile; fileRef = 75ADECE9118E0B9500C57C77 /* IGKWordMembership.m */; };
+		75237213135C648E00438332 /* IGKFrecencyStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7529260411DDA65C0003CE54 /* IGKFrecencyStore.m */; };
+		75237214135C65A600438332 /* IGKApplicationDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 756F9D80110BB44600E6F291 /* IGKApplicationDelegate.mm */; };
+		75237215135C66F600438332 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 75F67043110CD033005F299C /* libicucore.dylib */; };
+		75237216135C670200438332 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 756F9E60110BE76600E6F291 /* WebKit.framework */; };
 		75301F6D11B2F04A006DA0E3 /* annotations.js in Sources */ = {isa = PBXBuildFile; fileRef = 75301F6C11B2F04A006DA0E3 /* annotations.js */; };
 		75301FA911B2F55D006DA0E3 /* annotations.js in Resources */ = {isa = PBXBuildFile; fileRef = 75301F6C11B2F04A006DA0E3 /* annotations.js */; };
 		7542AF091336F395001A3AFA /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 7542ADA51336F28A001A3AFA /* sqlite3.c */; };
-		75461343135BE78C00A1BA0A /* IGKTabBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 7546133F135BE78C00A1BA0A /* IGKTabBrowser.h */; };
-		75461345135BE78C00A1BA0A /* IGKTabContents.h in Headers */ = {isa = PBXBuildFile; fileRef = 75461341135BE78C00A1BA0A /* IGKTabContents.h */; };
 		75461349135BE7AB00A1BA0A /* ChromiumTabs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75461348135BE7AB00A1BA0A /* ChromiumTabs.framework */; };
 		7546134A135BE7BB00A1BA0A /* ChromiumTabs.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 75461348135BE7AB00A1BA0A /* ChromiumTabs.framework */; };
-		7546134B135BE7E500A1BA0A /* IGKTabBrowser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75461340135BE78C00A1BA0A /* IGKTabBrowser.mm */; };
-		7546134C135BE7E500A1BA0A /* IGKTabContents.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75461342135BE78C00A1BA0A /* IGKTabContents.mm */; };
-		754AA3FA1140267300321EAF /* AnthillBugReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 754AA3F91140267300321EAF /* AnthillBugReporter.m */; };
 		754AA3FC1140267D00321EAF /* AnthillReporter.nib in Resources */ = {isa = PBXBuildFile; fileRef = 754AA3FB1140267D00321EAF /* AnthillReporter.nib */; };
 		755F427E112323C600AA16F5 /* tictactoe.html in Resources */ = {isa = PBXBuildFile; fileRef = 755F427D112323C600AA16F5 /* tictactoe.html */; };
 		755F42AF112326E700AA16F5 /* sourcelist_indexing_wallpaper.png in Resources */ = {isa = PBXBuildFile; fileRef = 755F42AE112326E700AA16F5 /* sourcelist_indexing_wallpaper.png */; };
-		755F42CA1123283A00AA16F5 /* IGKSourceListWallpaperView.m in Sources */ = {isa = PBXBuildFile; fileRef = 755F42B31123270700AA16F5 /* IGKSourceListWallpaperView.m */; };
-		755F435C11232C0E00AA16F5 /* NSShadow+MCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 755F432311232B2F00AA16F5 /* NSShadow+MCAdditions.m */; };
-		755F435D11232C1200AA16F5 /* NSBezierPath+MCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 755F432111232B2F00AA16F5 /* NSBezierPath+MCAdditions.m */; };
-		755F438111232DA800AA16F5 /* IGKLaunchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 755F437911232C9500AA16F5 /* IGKLaunchController.m */; };
 		756D7A8D1145BB11001C05D7 /* Ingredients.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 756D7A8A1145BB11001C05D7 /* Ingredients.sdef */; };
-		756D7A8E1145BB11001C05D7 /* IngredientsCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 756D7A8C1145BB11001C05D7 /* IngredientsCommand.m */; };
-		756EFCFE11DA5CB800BC978A /* IGKCircularBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 756EFCFC11DA5CB800BC978A /* IGKCircularBuffer.h */; };
-		756EFCFF11DA5CB800BC978A /* IGKCircularBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 756EFCFD11DA5CB800BC978A /* IGKCircularBuffer.m */; };
-		756F9D4E110BA94500E6F291 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		756F9D78110BB40C00E6F291 /* CHDocumentationBrowser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 756F9D77110BB40C00E6F291 /* CHDocumentationBrowser.xib */; };
 		756F9D7C110BB42300E6F291 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F7446970DB6B7EA00F9684A /* MainMenu.xib */; };
-		756F9D81110BB44600E6F291 /* IGKApplicationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 756F9D7F110BB44600E6F291 /* IGKApplicationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		756F9D82110BB44600E6F291 /* IGKApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 756F9D80110BB44600E6F291 /* IGKApplicationDelegate.m */; };
 		756F9DE3110BB59100E6F291 /* BWToolkitFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 756F9DAC110BB55100E6F291 /* BWToolkitFramework.framework */; };
-		756F9DFD110BB71700E6F291 /* IngredientsKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 756F9DFC110BB71700E6F291 /* IngredientsKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		756F9E00110BB74600E6F291 /* IngredientsKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 756F9D2F110BA72F00E6F291 /* IngredientsKit.framework */; };
-		756F9E0C110BB79100E6F291 /* IGKWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 756F9E0A110BB79100E6F291 /* IGKWindowController.h */; };
-		756F9E0D110BB79100E6F291 /* IGKWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 756F9E0B110BB79100E6F291 /* IGKWindowController.m */; };
-		756F9E54110BE74100E6F291 /* IngredientsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 756F9D2F110BA72F00E6F291 /* IngredientsKit.framework */; };
-		756F9F0A110BE77300E6F291 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 756F9E60110BE76600E6F291 /* WebKit.framework */; };
 		756F9F19110BE7A400E6F291 /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 756F9DAC110BB55100E6F291 /* BWToolkitFramework.framework */; };
-		756F9FA1110BEA8D00E6F291 /* CHLeftSplitVIew.h in Headers */ = {isa = PBXBuildFile; fileRef = 756F9F9F110BEA8D00E6F291 /* CHLeftSplitVIew.h */; };
-		756F9FB5110BEB5600E6F291 /* CHLeftSplitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 756F9FA0110BEA8D00E6F291 /* CHLeftSplitView.m */; };
-		756F9FFB110C805C00E6F291 /* IGKScraper.h in Headers */ = {isa = PBXBuildFile; fileRef = 756F9FF9110C805C00E6F291 /* IGKScraper.h */; };
-		756F9FFC110C805C00E6F291 /* IGKScraper.m in Sources */ = {isa = PBXBuildFile; fileRef = 756F9FFA110C805C00E6F291 /* IGKScraper.m */; };
-		75751B25117B599E0017B58B /* IGKFindWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 75751B23117B599E0017B58B /* IGKFindWindow.h */; };
-		75751B26117B599E0017B58B /* IGKFindWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 75751B24117B599E0017B58B /* IGKFindWindow.m */; };
-		75751B90117B641D0017B58B /* IGKResizeDelegatedView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75751B8E117B641D0017B58B /* IGKResizeDelegatedView.h */; };
-		75751B91117B641D0017B58B /* IGKResizeDelegatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75751B8F117B641D0017B58B /* IGKResizeDelegatedView.m */; };
-		7576540A1179243D0099D318 /* IGKFilterBarTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 757654081179243D0099D318 /* IGKFilterBarTableView.h */; };
-		7576540B1179243D0099D318 /* IGKFilterBarTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 757654091179243D0099D318 /* IGKFilterBarTableView.m */; };
+		757BCD28135C9ED300E4CE00 /* CHDocumentationBrowser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 756F9D77110BB40C00E6F291 /* CHDocumentationBrowser.xib */; };
 		7581084311B588D6007C564C /* ToC_Misc_S.png in Resources */ = {isa = PBXBuildFile; fileRef = 7581084111B588D6007C564C /* ToC_Misc_S.png */; };
 		7581084411B588D6007C564C /* ToC_Misc.png in Resources */ = {isa = PBXBuildFile; fileRef = 7581084211B588D6007C564C /* ToC_Misc.png */; };
 		758108B511B5C57E007C564C /* ToC_All_N.png in Resources */ = {isa = PBXBuildFile; fileRef = 758108AD11B5C57E007C564C /* ToC_All_N.png */; };
@@ -92,20 +93,9 @@
 		758108BB11B5C57E007C564C /* ToC_Overview_N.png in Resources */ = {isa = PBXBuildFile; fileRef = 758108B311B5C57E007C564C /* ToC_Overview_N.png */; };
 		758108BC11B5C57E007C564C /* ToC_Properties_N.png in Resources */ = {isa = PBXBuildFile; fileRef = 758108B411B5C57E007C564C /* ToC_Properties_N.png */; };
 		75901BEE1129FC2100BA0316 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 75901BEC1129FC2100BA0316 /* Credits.rtf */; };
-		759030231139BFF500550A86 /* IGKMatteSegmentedControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 759030211139BFF500550A86 /* IGKMatteSegmentedControl.h */; };
-		759030241139BFF500550A86 /* IGKMatteSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 759030221139BFF500550A86 /* IGKMatteSegmentedControl.m */; };
-		7593070311C01B96008A0AC5 /* IGKOutputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 7593070111C01B96008A0AC5 /* IGKOutputStream.h */; };
-		7593070411C01B96008A0AC5 /* IGKOutputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 7593070211C01B96008A0AC5 /* IGKOutputStream.m */; };
 		75943BA5114407C2004126E7 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75943BA4114407C2004126E7 /* Sparkle.framework */; };
 		75943BCE114407C9004126E7 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 75943BA4114407C2004126E7 /* Sparkle.framework */; };
-		75943BD1114407D1004126E7 /* IGKPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BD177D1143E94000E67594 /* IGKPreferencesController.m */; };
 		75943BDD1144085D004126E7 /* IGKPreferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 75BD176A1143E6C300E67594 /* IGKPreferences.xib */; };
-		75943C0B11441AE0004126E7 /* IGKBackForwardManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 75943C0911441AE0004126E7 /* IGKBackForwardManager.h */; };
-		75943C0C11441AE0004126E7 /* IGKBackForwardManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 75943C0A11441AE0004126E7 /* IGKBackForwardManager.m */; };
-		759ECF9B113344CC00067BD1 /* IGKShyTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 759ECF99113344CC00067BD1 /* IGKShyTableView.h */; };
-		759ECF9C113344CC00067BD1 /* IGKShyTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 759ECF9A113344CC00067BD1 /* IGKShyTableView.m */; };
-		759ECFA3113349D700067BD1 /* IGKMultiSelector.h in Headers */ = {isa = PBXBuildFile; fileRef = 759ECFA1113349D700067BD1 /* IGKMultiSelector.h */; };
-		759ECFA4113349D700067BD1 /* IGKMultiSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 759ECFA2113349D700067BD1 /* IGKMultiSelector.m */; };
 		759ECFB211334CE100067BD1 /* MultiSel_AdvSearch_Norm.png in Resources */ = {isa = PBXBuildFile; fileRef = 759ECFA511334CE100067BD1 /* MultiSel_AdvSearch_Norm.png */; };
 		759ECFB311334CE100067BD1 /* MultiSel_AdvSearch_NormHov.png in Resources */ = {isa = PBXBuildFile; fileRef = 759ECFA611334CE100067BD1 /* MultiSel_AdvSearch_NormHov.png */; };
 		759ECFB411334CE100067BD1 /* MultiSel_AdvSearch_Sel.png in Resources */ = {isa = PBXBuildFile; fileRef = 759ECFA711334CE100067BD1 /* MultiSel_AdvSearch_Sel.png */; };
@@ -119,8 +109,6 @@
 		759ECFBC11334CE100067BD1 /* MultiSel_window_frame_button_active_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 759ECFAF11334CE100067BD1 /* MultiSel_window_frame_button_active_left.png */; };
 		759ECFBD11334CE100067BD1 /* MultiSel_window_frame_button_active_middle.png in Resources */ = {isa = PBXBuildFile; fileRef = 759ECFB011334CE100067BD1 /* MultiSel_window_frame_button_active_middle.png */; };
 		759ECFBE11334CE100067BD1 /* MultiSel_window_frame_button_active_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 759ECFB111334CE100067BD1 /* MultiSel_window_frame_button_active_right.png */; };
-		759ECFC411334D9800067BD1 /* IGKWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 759ECFC211334D9800067BD1 /* IGKWindow.h */; };
-		759ECFC511334D9800067BD1 /* IGKWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 759ECFC311334D9800067BD1 /* IGKWindow.m */; };
 		75A1C05711431A48005489E4 /* MS_Browser_S.png in Resources */ = {isa = PBXBuildFile; fileRef = 75A1C05111431A48005489E4 /* MS_Browser_S.png */; };
 		75A1C05811431A48005489E4 /* MS_Browser.png in Resources */ = {isa = PBXBuildFile; fileRef = 75A1C05211431A48005489E4 /* MS_Browser.png */; };
 		75A1C05911431A48005489E4 /* MS_Search_S.png in Resources */ = {isa = PBXBuildFile; fileRef = 75A1C05311431A48005489E4 /* MS_Search_S.png */; };
@@ -131,31 +119,13 @@
 		75A1C0B911432C90005489E4 /* HistorySelRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 75A1C0B711432C90005489E4 /* HistorySelRight.png */; };
 		75A1C0C811432E85005489E4 /* HistorySelLeft_S.png in Resources */ = {isa = PBXBuildFile; fileRef = 75A1C0C611432E85005489E4 /* HistorySelLeft_S.png */; };
 		75A1C0C911432E85005489E4 /* HistorySelRight_S.png in Resources */ = {isa = PBXBuildFile; fileRef = 75A1C0C711432E85005489E4 /* HistorySelRight_S.png */; };
-		75A4B48511429ECD008CA9E8 /* IGKTableOfContentsView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A4B48311429ECD008CA9E8 /* IGKTableOfContentsView.h */; };
-		75A4B48611429ECD008CA9E8 /* IGKTableOfContentsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A4B48411429ECD008CA9E8 /* IGKTableOfContentsView.m */; };
-		75A9AA9C11495DA300E539F2 /* IGKEaseInOutAnimatedView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A9AA9A11495DA300E539F2 /* IGKEaseInOutAnimatedView.h */; };
-		75A9AA9D11495DA300E539F2 /* IGKEaseInOutAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A9AA9B11495DA300E539F2 /* IGKEaseInOutAnimatedView.m */; };
 		75A9AAA911495F2300E539F2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75A9AAA811495F2300E539F2 /* QuartzCore.framework */; };
-		75A9AAE111495F2900E539F2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75A9AAA811495F2300E539F2 /* QuartzCore.framework */; };
-		75A9DA6711411C49003F8437 /* NSXMLNode+IGKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A9DA6511411C49003F8437 /* NSXMLNode+IGKAdditions.h */; };
-		75A9DA6811411C49003F8437 /* NSXMLNode+IGKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A9DA6611411C49003F8437 /* NSXMLNode+IGKAdditions.m */; };
-		75ACEC59117A539600260366 /* IGKFindBackgroundView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75ACEC57117A539600260366 /* IGKFindBackgroundView.h */; };
-		75ACEC5A117A539600260366 /* IGKFindBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75ACEC58117A539600260366 /* IGKFindBackgroundView.m */; };
-		75ADECEA118E0B9500C57C77 /* IGKWordMembership.h in Headers */ = {isa = PBXBuildFile; fileRef = 75ADECE8118E0B9500C57C77 /* IGKWordMembership.h */; };
-		75ADECEB118E0B9500C57C77 /* IGKWordMembership.m in Sources */ = {isa = PBXBuildFile; fileRef = 75ADECE9118E0B9500C57C77 /* IGKWordMembership.m */; };
-		75B23908113FB4D300EC1D2B /* IGKDocSetManagedObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B23906113FB4D300EC1D2B /* IGKDocSetManagedObject.h */; };
-		75B23909113FB4D300EC1D2B /* IGKDocSetManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B23907113FB4D300EC1D2B /* IGKDocSetManagedObject.m */; };
-		75B23F4711401DD700EC1D2B /* PFMoveApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 75B23F4611401DD700EC1D2B /* PFMoveApplication.m */; };
 		75B23F6A1140216200EC1D2B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75B23F691140216200EC1D2B /* Security.framework */; };
 		75B23F6E1140218400EC1D2B /* Ingredients_AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 77C8280C06725ACE000B614F /* Ingredients_AppDelegate.m */; };
 		75B534FA111076C000560848 /* View_AdvSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F7111076C000560848 /* View_AdvSearchTemplate.png */; };
 		75B534FB111076C000560848 /* View_NoSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F8111076C000560848 /* View_NoSearchTemplate.png */; };
 		75B534FC111076C000560848 /* View_SideSearchTemplate.png in Resources */ = {isa = PBXBuildFile; fileRef = 75B534F9111076C000560848 /* View_SideSearchTemplate.png */; };
-		75BC565611CDD5900012800F /* IGKMatteButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 75BC565411CDD5900012800F /* IGKMatteButton.h */; };
-		75BC565711CDD5900012800F /* IGKMatteButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BC565511CDD5900012800F /* IGKMatteButton.m */; };
 		75BD17761143E7F000E67594 /* TBReSparkle.png in Resources */ = {isa = PBXBuildFile; fileRef = 75BD17751143E7F000E67594 /* TBReSparkle.png */; };
-		75BD177E1143E94000E67594 /* IGKPreferencesController.h in Headers */ = {isa = PBXBuildFile; fileRef = 75BD177C1143E94000E67594 /* IGKPreferencesController.h */; };
-		75BD17C61143F37E00E67594 /* SQPreferencesBackgroundComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 75BD17C51143F37E00E67594 /* SQPreferencesBackgroundComponent.m */; };
 		75C74A0A1140415F00E3EAC6 /* ToC_All_S.png in Resources */ = {isa = PBXBuildFile; fileRef = 75C749FE1140415F00E3EAC6 /* ToC_All_S.png */; };
 		75C74A0B1140415F00E3EAC6 /* ToC_All.png in Resources */ = {isa = PBXBuildFile; fileRef = 75C749FF1140415F00E3EAC6 /* ToC_All.png */; };
 		75C74A0C1140415F00E3EAC6 /* ToC_Delegate_S.png in Resources */ = {isa = PBXBuildFile; fileRef = 75C74A001140415F00E3EAC6 /* ToC_Delegate_S.png */; };
@@ -170,37 +140,12 @@
 		75C74A151140415F00E3EAC6 /* ToC_Overview.png in Resources */ = {isa = PBXBuildFile; fileRef = 75C74A091140415F00E3EAC6 /* ToC_Overview.png */; };
 		75C74A4D11404B0800E3EAC6 /* ToC_Bindings.png in Resources */ = {isa = PBXBuildFile; fileRef = 75C74A4C11404B0800E3EAC6 /* ToC_Bindings.png */; };
 		75C74A5611404FD800E3EAC6 /* ToC_Bindings_S.png in Resources */ = {isa = PBXBuildFile; fileRef = 75C74A5511404FD800E3EAC6 /* ToC_Bindings_S.png */; };
-		75C74A601140539B00E3EAC6 /* IGKSometimesCenteredTextCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C74A5E1140539B00E3EAC6 /* IGKSometimesCenteredTextCell.h */; };
-		75C74A611140539B00E3EAC6 /* IGKSometimesCenteredTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C74A5F1140539B00E3EAC6 /* IGKSometimesCenteredTextCell.m */; };
 		75C914E211374B8100F0D7EC /* ingredients.icns in Resources */ = {isa = PBXBuildFile; fileRef = 75C914E111374B8000F0D7EC /* ingredients.icns */; };
-		75C9FE90110F53E400C9B51C /* IGKHTMLGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 75C9FE8E110F53E400C9B51C /* IGKHTMLGenerator.h */; };
-		75C9FE91110F53E400C9B51C /* IGKHTMLGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C9FE8F110F53E400C9B51C /* IGKHTMLGenerator.m */; };
 		75C9FF05110F868300C9B51C /* main.css in Resources */ = {isa = PBXBuildFile; fileRef = 75C9FF03110F868300C9B51C /* main.css */; };
-		75DF96DE117E32E100403233 /* IGKMattePopUpButtonView.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DF96DC117E32E100403233 /* IGKMattePopUpButtonView.h */; };
-		75DF96DF117E32E100403233 /* IGKMattePopUpButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DF96DD117E32E100403233 /* IGKMattePopUpButtonView.m */; };
-		75DF96EA117E350600403233 /* IGKMatteFocusedGradientBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DF96E9117E350600403233 /* IGKMatteFocusedGradientBox.m */; };
-		75E747D211DC2CF3009B89CB /* smartcmp.h in Headers */ = {isa = PBXBuildFile; fileRef = 75E747D111DC2CF3009B89CB /* smartcmp.h */; };
-		75E747D511DC2DEB009B89CB /* smartcmp.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E747D411DC2DEB009B89CB /* smartcmp.m */; };
-		75F67031110CCD31005F299C /* RegexKitLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F6702F110CCD31005F299C /* RegexKitLite.h */; };
-		75F67032110CCD31005F299C /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F67030110CCD31005F299C /* RegexKitLite.m */; };
-		75F67044110CD033005F299C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 75F67043110CD033005F299C /* libicucore.dylib */; };
 		75F671D8110DE8E2005F299C /* Ingredients_DataModel.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 770B37EC0679A11B001EADE2 /* Ingredients_DataModel.xcdatamodel */; };
-		75F672AB110E254A005F299C /* IGKDocRecordManagedObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F672A9110E254A005F299C /* IGKDocRecordManagedObject.h */; };
-		75F672AC110E254A005F299C /* IGKDocRecordManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 75F672AA110E254A005F299C /* IGKDocRecordManagedObject.m */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
-		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		75B570621136A52A00EC5FE9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 756F9D2E110BA72F00E6F291;
-			remoteInfo = IngredientsKit;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		756F9DE7110BB59C00E6F291 /* CopyFiles */ = {
@@ -211,7 +156,6 @@
 			files = (
 				7546134A135BE7BB00A1BA0A /* ChromiumTabs.framework in CopyFiles */,
 				75943BCE114407C9004126E7 /* Sparkle.framework in CopyFiles */,
-				756F9E00110BB74600E6F291 /* IngredientsKit.framework in CopyFiles */,
 				756F9DE3110BB59100E6F291 /* BWToolkitFramework.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -257,6 +201,8 @@
 		751E45D51125E6CE00CD544A /* tictactoe_style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = tictactoe_style.css; sourceTree = "<group>"; };
 		752321C81179DE5400BAEA90 /* IGKBackgroundProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKBackgroundProgressBar.h; sourceTree = "<group>"; };
 		752321C91179DE5400BAEA90 /* IGKBackgroundProgressBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKBackgroundProgressBar.m; sourceTree = "<group>"; };
+		7523719E135C5D9100438332 /* IGKTabController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKTabController.h; sourceTree = "<group>"; };
+		7523719F135C5D9100438332 /* IGKTabController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IGKTabController.mm; sourceTree = "<group>"; };
 		7529260311DDA65C0003CE54 /* IGKFrecencyStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKFrecencyStore.h; sourceTree = "<group>"; };
 		7529260411DDA65C0003CE54 /* IGKFrecencyStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKFrecencyStore.m; sourceTree = "<group>"; };
 		75301F6C11B2F04A006DA0E3 /* annotations.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = annotations.js; path = HTML_Example/annotations.js; sourceTree = "<group>"; };
@@ -287,15 +233,14 @@
 		756D7A8C1145BB11001C05D7 /* IngredientsCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IngredientsCommand.m; sourceTree = "<group>"; };
 		756EFCFC11DA5CB800BC978A /* IGKCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKCircularBuffer.h; sourceTree = "<group>"; };
 		756EFCFD11DA5CB800BC978A /* IGKCircularBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKCircularBuffer.m; sourceTree = "<group>"; };
-		756F9D2F110BA72F00E6F291 /* IngredientsKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = IngredientsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		756F9D30110BA72F00E6F291 /* IngredientsKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "IngredientsKit-Info.plist"; sourceTree = "<group>"; };
 		756F9D77110BB40C00E6F291 /* CHDocumentationBrowser.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CHDocumentationBrowser.xib; sourceTree = "<group>"; };
 		756F9D7F110BB44600E6F291 /* IGKApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKApplicationDelegate.h; sourceTree = "<group>"; };
-		756F9D80110BB44600E6F291 /* IGKApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKApplicationDelegate.m; sourceTree = "<group>"; };
+		756F9D80110BB44600E6F291 /* IGKApplicationDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IGKApplicationDelegate.mm; sourceTree = "<group>"; };
 		756F9DAC110BB55100E6F291 /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BWToolkitFramework.framework; sourceTree = "<group>"; };
 		756F9DFC110BB71700E6F291 /* IngredientsKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IngredientsKit.h; sourceTree = "<group>"; };
 		756F9E0A110BB79100E6F291 /* IGKWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKWindowController.h; sourceTree = "<group>"; };
-		756F9E0B110BB79100E6F291 /* IGKWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKWindowController.m; sourceTree = "<group>"; };
+		756F9E0B110BB79100E6F291 /* IGKWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IGKWindowController.mm; sourceTree = "<group>"; };
 		756F9E60110BE76600E6F291 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		756F9F9F110BEA8D00E6F291 /* CHLeftSplitVIew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHLeftSplitVIew.h; sourceTree = "<group>"; };
 		756F9FA0110BEA8D00E6F291 /* CHLeftSplitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHLeftSplitView.m; sourceTree = "<group>"; };
@@ -422,23 +367,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		756F9D2D110BA72F00E6F291 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				756F9D4E110BA94500E6F291 /* Cocoa.framework in Frameworks */,
-				756F9F0A110BE77300E6F291 /* WebKit.framework in Frameworks */,
-				75F67044110CD033005F299C /* libicucore.dylib in Frameworks */,
-				75A9AAE111495F2900E539F2 /* QuartzCore.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8D11072E0486CEB800E47090 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75237216135C670200438332 /* WebKit.framework in Frameworks */,
+				75237215135C66F600438332 /* libicucore.dylib in Frameworks */,
 				756F9F19110BE7A400E6F291 /* BWToolkitFramework.framework in Frameworks */,
-				756F9E54110BE74100E6F291 /* IngredientsKit.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				75B23F6A1140216200EC1D2B /* Security.framework in Frameworks */,
 				75943BA5114407C2004126E7 /* Sparkle.framework in Frameworks */,
@@ -461,9 +396,11 @@
 				7546134E135BE86A00A1BA0A /* common.h */,
 				7546134F135BE86A00A1BA0A /* common.mm */,
 				756F9D7F110BB44600E6F291 /* IGKApplicationDelegate.h */,
-				756F9D80110BB44600E6F291 /* IGKApplicationDelegate.m */,
+				756F9D80110BB44600E6F291 /* IGKApplicationDelegate.mm */,
 				756F9E0A110BB79100E6F291 /* IGKWindowController.h */,
-				756F9E0B110BB79100E6F291 /* IGKWindowController.m */,
+				756F9E0B110BB79100E6F291 /* IGKWindowController.mm */,
+				7523719E135C5D9100438332 /* IGKTabController.h */,
+				7523719F135C5D9100438332 /* IGKTabController.mm */,
 				751D2AD01126E4A100403E64 /* IGKArrayController.h */,
 				751D2AD11126E4A100403E64 /* IGKArrayController.m */,
 				75943C0911441AE0004126E7 /* IGKBackForwardManager.h */,
@@ -560,7 +497,6 @@
 			isa = PBXGroup;
 			children = (
 				8D1107320486CEB800E47090 /* Ingredients.app */,
-				756F9D2F110BA72F00E6F291 /* IngredientsKit.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -803,78 +739,7 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		756F9D2A110BA72F00E6F291 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				756F9D81110BB44600E6F291 /* IGKApplicationDelegate.h in Headers */,
-				756F9DFD110BB71700E6F291 /* IngredientsKit.h in Headers */,
-				756F9E0C110BB79100E6F291 /* IGKWindowController.h in Headers */,
-				756F9FA1110BEA8D00E6F291 /* CHLeftSplitVIew.h in Headers */,
-				756F9FFB110C805C00E6F291 /* IGKScraper.h in Headers */,
-				75F67031110CCD31005F299C /* RegexKitLite.h in Headers */,
-				0C7C02E6110E000800412666 /* XBNewSourceListCell.h in Headers */,
-				0C7C02ED110E006000412666 /* CHSymbolButtonImage.h in Headers */,
-				75F672AB110E254A005F299C /* IGKDocRecordManagedObject.h in Headers */,
-				75C9FE90110F53E400C9B51C /* IGKHTMLGenerator.h in Headers */,
-				751D2AD21126E4A100403E64 /* IGKArrayController.h in Headers */,
-				751D2DC01127340700403E64 /* IGKNoSelectionInnerView.h in Headers */,
-				751D2DC91127354E00403E64 /* IGKNoSelectionOuterView.h in Headers */,
-				759ECF9B113344CC00067BD1 /* IGKShyTableView.h in Headers */,
-				759ECFA3113349D700067BD1 /* IGKMultiSelector.h in Headers */,
-				759ECFC411334D9800067BD1 /* IGKWindow.h in Headers */,
-				759030231139BFF500550A86 /* IGKMatteSegmentedControl.h in Headers */,
-				75B23908113FB4D300EC1D2B /* IGKDocSetManagedObject.h in Headers */,
-				75C74A601140539B00E3EAC6 /* IGKSometimesCenteredTextCell.h in Headers */,
-				75A9DA6711411C49003F8437 /* NSXMLNode+IGKAdditions.h in Headers */,
-				75A4B48511429ECD008CA9E8 /* IGKTableOfContentsView.h in Headers */,
-				75BD177E1143E94000E67594 /* IGKPreferencesController.h in Headers */,
-				75943C0B11441AE0004126E7 /* IGKBackForwardManager.h in Headers */,
-				75A9AA9C11495DA300E539F2 /* IGKEaseInOutAnimatedView.h in Headers */,
-				7507CF4511598197008449DE /* IGKPredicateEditor.h in Headers */,
-				75195FBA116D49B00034590C /* IGKManagedObject.h in Headers */,
-				7576540A1179243D0099D318 /* IGKFilterBarTableView.h in Headers */,
-				752321CA1179DE5400BAEA90 /* IGKBackgroundProgressBar.h in Headers */,
-				75ACEC59117A539600260366 /* IGKFindBackgroundView.h in Headers */,
-				75751B25117B599E0017B58B /* IGKFindWindow.h in Headers */,
-				75751B90117B641D0017B58B /* IGKResizeDelegatedView.h in Headers */,
-				75DF96DE117E32E100403233 /* IGKMattePopUpButtonView.h in Headers */,
-				0C35D868118B657F0013DDFD /* IGKAnnotationManager.h in Headers */,
-				0C35D86E118B65920013DDFD /* IGKAnnotation.h in Headers */,
-				75ADECEA118E0B9500C57C77 /* IGKWordMembership.h in Headers */,
-				7593070311C01B96008A0AC5 /* IGKOutputStream.h in Headers */,
-				7515378611CC6D82004529B2 /* NSArray+IGKAdditions.h in Headers */,
-				75BC565611CDD5900012800F /* IGKMatteButton.h in Headers */,
-				756EFCFE11DA5CB800BC978A /* IGKCircularBuffer.h in Headers */,
-				75E747D211DC2CF3009B89CB /* smartcmp.h in Headers */,
-				7529260511DDA65C0003CE54 /* IGKFrecencyStore.h in Headers */,
-				75461343135BE78C00A1BA0A /* IGKTabBrowser.h in Headers */,
-				75461345135BE78C00A1BA0A /* IGKTabContents.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
-		756F9D2E110BA72F00E6F291 /* IngredientsKit */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 756F9D34110BA73000E6F291 /* Build configuration list for PBXNativeTarget "IngredientsKit" */;
-			buildPhases = (
-				756F9D2A110BA72F00E6F291 /* Headers */,
-				756F9D2B110BA72F00E6F291 /* Resources */,
-				756F9D2C110BA72F00E6F291 /* Sources */,
-				756F9D2D110BA72F00E6F291 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = IngredientsKit;
-			productName = IngredientsKit;
-			productReference = 756F9D2F110BA72F00E6F291 /* IngredientsKit.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 		8D1107260486CEB800E47090 /* Ingredients */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 26FC0A840875C7B200E6366F /* Build configuration list for PBXNativeTarget "Ingredients" */;
@@ -887,7 +752,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				75B570631136A52A00EC5FE9 /* PBXTargetDependency */,
 			);
 			name = Ingredients;
 			productInstallPath = "$(HOME)/Applications";
@@ -902,7 +766,6 @@
 			isa = PBXProject;
 			buildConfigurationList = 26FC0A880875C7B200E6366F /* Build configuration list for PBXProject "Ingredients" */;
 			compatibilityVersion = "Xcode 3.1";
-			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -915,20 +778,11 @@
 			projectRoot = "";
 			targets = (
 				8D1107260486CEB800E47090 /* Ingredients */,
-				756F9D2E110BA72F00E6F291 /* IngredientsKit */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		756F9D2B110BA72F00E6F291 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				756F9D78110BB40C00E6F291 /* CHDocumentationBrowser.xib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8D1107290486CEB800E47090 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -998,94 +852,82 @@
 				758108BB11B5C57E007C564C /* ToC_Overview_N.png in Resources */,
 				758108BC11B5C57E007C564C /* ToC_Properties_N.png in Resources */,
 				7515376D11CC64D5004529B2 /* openingpage.css in Resources */,
+				757BCD28135C9ED300E4CE00 /* CHDocumentationBrowser.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		756F9D2C110BA72F00E6F291 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				756F9D82110BB44600E6F291 /* IGKApplicationDelegate.m in Sources */,
-				756F9E0D110BB79100E6F291 /* IGKWindowController.m in Sources */,
-				756F9FFC110C805C00E6F291 /* IGKScraper.m in Sources */,
-				75F67032110CCD31005F299C /* RegexKitLite.m in Sources */,
-				0C7C02E7110E000800412666 /* XBNewSourceListCell.m in Sources */,
-				0C7C02EE110E006000412666 /* CHSymbolButtonImage.m in Sources */,
-				75F672AC110E254A005F299C /* IGKDocRecordManagedObject.m in Sources */,
-				75C9FE91110F53E400C9B51C /* IGKHTMLGenerator.m in Sources */,
-				755F42CA1123283A00AA16F5 /* IGKSourceListWallpaperView.m in Sources */,
-				755F435C11232C0E00AA16F5 /* NSShadow+MCAdditions.m in Sources */,
-				755F435D11232C1200AA16F5 /* NSBezierPath+MCAdditions.m in Sources */,
-				755F438111232DA800AA16F5 /* IGKLaunchController.m in Sources */,
-				751D2AD31126E4A100403E64 /* IGKArrayController.m in Sources */,
-				751D2DC11127340700403E64 /* IGKNoSelectionInnerView.m in Sources */,
-				751D2DCA1127354E00403E64 /* IGKNoSelectionOuterView.m in Sources */,
-				759ECF9C113344CC00067BD1 /* IGKShyTableView.m in Sources */,
-				759ECFA4113349D700067BD1 /* IGKMultiSelector.m in Sources */,
-				759ECFC511334D9800067BD1 /* IGKWindow.m in Sources */,
-				759030241139BFF500550A86 /* IGKMatteSegmentedControl.m in Sources */,
-				75B23909113FB4D300EC1D2B /* IGKDocSetManagedObject.m in Sources */,
-				75C74A611140539B00E3EAC6 /* IGKSometimesCenteredTextCell.m in Sources */,
-				75A9DA6811411C49003F8437 /* NSXMLNode+IGKAdditions.m in Sources */,
-				75A4B48611429ECD008CA9E8 /* IGKTableOfContentsView.m in Sources */,
-				75943C0C11441AE0004126E7 /* IGKBackForwardManager.m in Sources */,
-				75A9AA9D11495DA300E539F2 /* IGKEaseInOutAnimatedView.m in Sources */,
-				7507CF4611598197008449DE /* IGKPredicateEditor.m in Sources */,
-				75195FBB116D49B00034590C /* IGKManagedObject.m in Sources */,
-				7576540B1179243D0099D318 /* IGKFilterBarTableView.m in Sources */,
-				752321CB1179DE5400BAEA90 /* IGKBackgroundProgressBar.m in Sources */,
-				75ACEC5A117A539600260366 /* IGKFindBackgroundView.m in Sources */,
-				75751B26117B599E0017B58B /* IGKFindWindow.m in Sources */,
-				75751B91117B641D0017B58B /* IGKResizeDelegatedView.m in Sources */,
-				75DF96DF117E32E100403233 /* IGKMattePopUpButtonView.m in Sources */,
-				0C35D869118B657F0013DDFD /* IGKAnnotationManager.m in Sources */,
-				0C35D86F118B65920013DDFD /* IGKAnnotation.m in Sources */,
-				75ADECEB118E0B9500C57C77 /* IGKWordMembership.m in Sources */,
-				7593070411C01B96008A0AC5 /* IGKOutputStream.m in Sources */,
-				7515378711CC6D82004529B2 /* NSArray+IGKAdditions.m in Sources */,
-				75BC565711CDD5900012800F /* IGKMatteButton.m in Sources */,
-				756EFCFF11DA5CB800BC978A /* IGKCircularBuffer.m in Sources */,
-				75E747D511DC2DEB009B89CB /* smartcmp.m in Sources */,
-				7529260611DDA65C0003CE54 /* IGKFrecencyStore.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8D11072C0486CEB800E47090 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D11072D0486CEB800E47090 /* main.m in Sources */,
-				756F9FB5110BEB5600E6F291 /* CHLeftSplitView.m in Sources */,
-				75F671D8110DE8E2005F299C /* Ingredients_DataModel.xcdatamodel in Sources */,
-				75B23F4711401DD700EC1D2B /* PFMoveApplication.m in Sources */,
 				75B23F6E1140218400EC1D2B /* Ingredients_AppDelegate.m in Sources */,
-				754AA3FA1140267300321EAF /* AnthillBugReporter.m in Sources */,
-				75BD17C61143F37E00E67594 /* SQPreferencesBackgroundComponent.m in Sources */,
-				75943BD1114407D1004126E7 /* IGKPreferencesController.m in Sources */,
-				756D7A8E1145BB11001C05D7 /* IngredientsCommand.m in Sources */,
-				750DFBCF114671CC004C5D08 /* IGKMattePopUpButton.m in Sources */,
-				75DF96EA117E350600403233 /* IGKMatteFocusedGradientBox.m in Sources */,
-				0C402C161191C691001564B5 /* NSString+Utilities.m in Sources */,
-				0C402D09119321AB001564B5 /* IGKForwardView.m in Sources */,
+				75F671D8110DE8E2005F299C /* Ingredients_DataModel.xcdatamodel in Sources */,
 				75301F6D11B2F04A006DA0E3 /* annotations.js in Sources */,
 				7542AF091336F395001A3AFA /* sqlite3.c in Sources */,
-				7546134B135BE7E500A1BA0A /* IGKTabBrowser.mm in Sources */,
-				7546134C135BE7E500A1BA0A /* IGKTabContents.mm in Sources */,
+				752371C1135C644A00438332 /* IGKPreferencesController.m in Sources */,
+				752371C2135C644A00438332 /* IGKLaunchController.m in Sources */,
+				752371C3135C644A00438332 /* IGKScraper.m in Sources */,
+				752371C4135C644A00438332 /* IGKMatteSegmentedControl.m in Sources */,
+				752371C5135C644A00438332 /* IGKMattePopUpButton.m in Sources */,
+				752371C6135C644A00438332 /* IGKMattePopUpButtonView.m in Sources */,
+				752371C7135C644A00438332 /* IGKMatteFocusedGradientBox.m in Sources */,
+				752371C8135C644A00438332 /* IGKMatteButton.m in Sources */,
+				752371DB135C644F00438332 /* CHSymbolButtonImage.m in Sources */,
+				752371DC135C644F00438332 /* CHLeftSplitView.m in Sources */,
+				752371DD135C644F00438332 /* IGKShyTableView.m in Sources */,
+				752371DE135C644F00438332 /* IGKMultiSelector.m in Sources */,
+				752371DF135C644F00438332 /* IGKWindow.m in Sources */,
+				752371E0135C644F00438332 /* XBNewSourceListCell.m in Sources */,
+				752371E1135C644F00438332 /* IGKHTMLGenerator.m in Sources */,
+				752371E2135C644F00438332 /* IGKSourceListWallpaperView.m in Sources */,
+				752371E3135C644F00438332 /* IGKNoSelectionOuterView.m in Sources */,
+				752371E4135C644F00438332 /* IGKNoSelectionInnerView.m in Sources */,
+				752371E5135C644F00438332 /* IGKSometimesCenteredTextCell.m in Sources */,
+				752371E6135C645000438332 /* IGKTableOfContentsView.m in Sources */,
+				752371E7135C645000438332 /* IGKEaseInOutAnimatedView.m in Sources */,
+				752371E8135C645000438332 /* IGKPredicateEditor.m in Sources */,
+				752371E9135C645000438332 /* IGKFilterBarTableView.m in Sources */,
+				752371EA135C645000438332 /* IGKBackgroundProgressBar.m in Sources */,
+				752371EB135C645000438332 /* IGKFindBackgroundView.m in Sources */,
+				752371EC135C645000438332 /* IGKFindWindow.m in Sources */,
+				752371ED135C645000438332 /* IGKResizeDelegatedView.m in Sources */,
+				752371EE135C645000438332 /* IGKForwardView.m in Sources */,
+				752371F7135C645700438332 /* smartcmp.m in Sources */,
+				752371F8135C645700438332 /* NSString+Utilities.m in Sources */,
+				752371F9135C645700438332 /* IGKCircularBuffer.m in Sources */,
+				752371FA135C645700438332 /* IGKOutputStream.m in Sources */,
+				752371FB135C645700438332 /* SQPreferencesBackgroundComponent.m in Sources */,
+				752371FC135C645700438332 /* RegexKitLite.m in Sources */,
+				752371FD135C645700438332 /* AnthillBugReporter.m in Sources */,
+				752371FE135C645700438332 /* PFMoveApplication.m in Sources */,
+				752371FF135C645700438332 /* main.m in Sources */,
+				75237200135C645700438332 /* NSBezierPath+MCAdditions.m in Sources */,
+				75237201135C645700438332 /* NSShadow+MCAdditions.m in Sources */,
+				75237202135C645700438332 /* NSXMLNode+IGKAdditions.m in Sources */,
+				75237203135C645700438332 /* NSArray+IGKAdditions.m in Sources */,
+				75237204135C645700438332 /* IngredientsCommand.m in Sources */,
+				75237205135C648200438332 /* IGKDocRecordManagedObject.m in Sources */,
+				75237206135C648500438332 /* IGKManagedObject.m in Sources */,
+				75237207135C648900438332 /* IGKDocSetManagedObject.m in Sources */,
+				75237208135C648E00438332 /* IGKTabBrowser.mm in Sources */,
+				75237209135C648E00438332 /* IGKTabContents.mm in Sources */,
+				7523720A135C648E00438332 /* common.mm in Sources */,
+				7523720C135C648E00438332 /* IGKWindowController.mm in Sources */,
+				7523720D135C648E00438332 /* IGKTabController.mm in Sources */,
+				7523720E135C648E00438332 /* IGKArrayController.m in Sources */,
+				7523720F135C648E00438332 /* IGKBackForwardManager.m in Sources */,
+				75237210135C648E00438332 /* IGKAnnotationManager.m in Sources */,
+				75237211135C648E00438332 /* IGKAnnotation.m in Sources */,
+				75237212135C648E00438332 /* IGKWordMembership.m in Sources */,
+				75237213135C648E00438332 /* IGKFrecencyStore.m in Sources */,
+				75237214135C65A600438332 /* IGKApplicationDelegate.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		75B570631136A52A00EC5FE9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 756F9D2E110BA72F00E6F291 /* IngredientsKit */;
-			targetProxy = 75B570621136A52A00EC5FE9 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
@@ -1194,62 +1036,6 @@
 			};
 			name = Release;
 		};
-		756F9D32110BA73000E6F291 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				INFOPLIST_FILE = "IngredientsKit-Info.plist";
-				INSTALL_PATH = "@loader_path/../Frameworks";
-				LD_DYLIB_INSTALL_NAME = "@loader_path/../Frameworks/$(EXECUTABLE_PATH)";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					AppKit,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = IngredientsKit;
-			};
-			name = Debug;
-		};
-		756F9D33110BA73000E6F291 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				INFOPLIST_FILE = "IngredientsKit-Info.plist";
-				INSTALL_PATH = "@loader_path/../Frameworks";
-				LD_DYLIB_INSTALL_NAME = "@loader_path/../Frameworks/$(EXECUTABLE_PATH)";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					AppKit,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = IngredientsKit;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1267,15 +1053,6 @@
 			buildConfigurations = (
 				26FC0A890875C7B200E6366F /* Debug */,
 				26FC0A8A0875C7B200E6366F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		756F9D34110BA73000E6F291 /* Build configuration list for PBXNativeTarget "IngredientsKit" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				756F9D32110BA73000E6F291 /* Debug */,
-				756F9D33110BA73000E6F291 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -23,16 +23,15 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="63"/>
-			<integer value="1"/>
-			<integer value="714"/>
-			<integer value="19"/>
-			<integer value="370"/>
-			<integer value="83"/>
-			<integer value="40"/>
+			<integer value="820"/>
 			<integer value="189"/>
-			<integer value="571"/>
-			<integer value="818"/>
+			<integer value="590"/>
+			<integer value="759"/>
+			<integer value="63"/>
+			<integer value="42"/>
+			<integer value="1"/>
+			<integer value="373"/>
+			<integer value="20"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -127,9 +126,9 @@
 						<reference key="NSSuperview" ref="4605457"/>
 						<bool key="NSIsVertical">YES</bool>
 						<int key="NSDividerStyle">2</int>
-						<object class="NSColor" key="BWSVColor">
-							<int key="NSColorSpace">2</int>
-							<bytes key="NSRGB">MC45NjAzMDYxNjYgMC4xMTkwNTk4NjE1IDAuODE5NDU0NzQ2AA</bytes>
+						<object class="NSColor" key="BWSVColor" id="239672116">
+							<int key="NSColorSpace">3</int>
+							<bytes key="NSWhite">MAA</bytes>
 						</object>
 						<bool key="BWSVColorIsEnabled">NO</bool>
 						<object class="NSMutableDictionary" key="BWSVMinValues">
@@ -263,10 +262,7 @@
 																<int key="NSColorSpace">6</int>
 																<string key="NSCatalogName">System</string>
 																<string key="NSColorName">headerTextColor</string>
-																<object class="NSColor" key="NSColor" id="239672116">
-																	<int key="NSColorSpace">3</int>
-																	<bytes key="NSWhite">MAA</bytes>
-																</object>
+																<reference key="NSColor" ref="239672116"/>
 															</object>
 														</object>
 														<object class="NSImageCell" key="NSDataCell" id="605973596">
@@ -3684,7 +3680,7 @@
 				<nil key="NSViewClass"/>
 				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<object class="NSView" key="NSWindowView" id="211579912">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3767,7 +3763,6 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{453, 131}</string>
-					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
 				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
@@ -6127,9 +6122,9 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>{{14, 232}, {756, 602}}</string>
+					<string>{{323, 232}, {756, 602}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{14, 232}, {756, 602}}</string>
+					<string>{{323, 232}, {756, 602}}</string>
 					<boolean value="NO"/>
 					<string>{196, 240}</string>
 					<string>{{202, 428}, {480, 270}}</string>
@@ -6147,9 +6142,9 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>IGKEaseInOutAnimatedView</string>
-					<string>{{14, 254}, {756, 602}}</string>
+					<string>{{227, 254}, {756, 602}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{448, 73}, {247, 404}}</string>
+					<string>{{626, 73}, {247, 404}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>CHLeftSplitView</string>
 					<string>com.brandonwalkin.BWToolkit</string>
@@ -6188,7 +6183,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<integer value="0"/>
 					<string>{{458, 388}, {166, 60}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{31, 156}, {830, 530}}</string>
+					<string>{{153, 156}, {830, 530}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -6201,7 +6196,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.brandonwalkin.BWToolkit</string>
-					<string>{{60, 390}, {635, 466}}</string>
+					<string>{{317, 390}, {635, 466}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.brandonwalkin.BWToolkit</string>
 					<string>com.brandonwalkin.BWToolkit</string>
@@ -6247,7 +6242,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>{{239, 416}, {187, 280}}</string>
 					<string>{{1334, 527}, {137, 117}}</string>
 					<string>{{458, 415}, {143, 22}}</string>
-					<string>{{448, 73}, {247, 404}}</string>
+					<string>{{626, 73}, {247, 404}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>IGKMatteFocusedGradientBox</string>
 					<string>com.brandonwalkin.BWToolkit</string>
@@ -6314,7 +6309,7 @@ ZQCUhAEqhIQLe0NHU2l6ZT1kZH2aAIOQAAAAAAAAAIaGA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="0"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{60, 335}, {635, 466}}</string>
+					<string>{{86, 335}, {635, 466}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

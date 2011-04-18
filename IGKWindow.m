@@ -8,7 +8,8 @@
 
 #import "IGKWindow.h"
 #import "IGKMultiSelector.h"
-#import "IGKWindowController.h"
+
+@class IGKTabController;
 
 @implementation IGKWindow
 
@@ -38,7 +39,7 @@
 	
 	searchString = [[scriptCommand arguments] objectForKey:@"searchString"];
 	NSAssert(searchString != nil, @"No search string found for search script command");
-	[(IGKWindowController*)[self windowController] executeSearchWithString:searchString];
+	[(IGKTabController*)[self windowController] executeSearchWithString:searchString];
 	return nil;
 }
 

@@ -6,14 +6,17 @@
 //  Written in 2010 by Fileability.
 //
 
+
+
 #import "IGKHTMLGenerator.h"
 #import "IGKScraper.h"
 #import "IGKDocRecordManagedObject.h"
-#import "RegexKitLite.h"
 #import "IGKWordMembership.h"
 #import "IGKAnnotationManager.h"
 #import "IGKAnnotation.h"
 #import "IGKDocSetManagedObject.h"
+ 
+#import "RegexKitLite.h"
 
 BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 {

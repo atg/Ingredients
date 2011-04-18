@@ -1,12 +1,12 @@
 //
-//  IGKWindowController.m
+//  IGKTabController.m
 //  Ingredients
 //
 //  Created by Alex Gordon on 23/01/2010.
 //  Written in 2010 by Fileability.
 //
 
-#import "IGKWindowController.h"
+#import "IGKTabController.h"
 #import "IGKApplicationDelegate.h"
 #import "IGKHTMLGenerator.h"
 #import "IGKSourceListWallpaperView.h"
@@ -18,7 +18,7 @@
 #import "IGKSometimesCenteredTextCell.h"
 #import "IGKFrecencyStore.h"
 
-@interface IGKWindowController ()
+@interface IGKTabController ()
 
 - (void)startIndexing;
 - (void)indexedAllPaths:(NSNotification *)notif;
@@ -60,27 +60,39 @@
 
 @end
 
-@implementation IGKWindowController
+@implementation IGKTabController
 
-@synthesize appDelegate;
 @synthesize sideFilterPredicate;
 @synthesize advancedFilterPredicate;
 @synthesize selectedFilterDocset;
 @synthesize shouldIndex;
-@synthesize isInFullscreen;
 @synthesize browserWebView;
 @synthesize sideSearchQuery;
+@synthesize isInFullscreen;
 
-- (id)init
+- (id)initWithBaseTabContents:(CTTabContents*)baseContents
+// - (id)init
 {
-	if (self = [super init])
+	if (self = [super initWithBaseTabContents:baseContents])
 	{
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(indexedAllPaths:) name:@"IGKHasIndexedAllPaths" object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSavingProgressSheet:) name:@"IGKWillSaveIndex" object:nil];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDefaultsDidChange:) name:NSUserDefaultsDidChangeNotification object:nil];
 				
-		isInFullscreen = NO;
+		//isInFullscreen = NO;
+		
+		[NSBundle loadNibNamed:[self windowNibName] owner:self];
+		self.view = contentView;
+		
+		[self windowDidLoad];
+		[twoPaneSplitView setColorIsEnabled:YES];
+		[twoPaneSplitView setColor:[NSColor colorWithCalibratedWhite:0.549 alpha:1.0]];
+		[browserSplitView setColorIsEnabled:YES];
+		[browserSplitView setColor:[NSColor colorWithCalibratedWhite:0.549 alpha:1.0]];
+		
+		
+		NSLog(@"contentView = %@", contentView);
 	}
 	
 	return self;
@@ -95,8 +107,10 @@
 {
 	[self setUpBackMenu];
 	[self setUpForwardMenu];
+	
+	self.icon = [[[self class] iconImageForURL:[NSURL URLWithString:[[backForwardManager currentItem] URLString]]] copy];
+	self.title = [[backForwardManager currentItem] title];
 }
-
 - (void)setUpBackMenu
 {
 	NSArray *backList = [backForwardManager backList];
@@ -184,17 +198,6 @@
 	return @"CHDocumentationBrowser";
 }
 
-- (void)userDefaultsDidChange:(NSNotification *)notif
-{
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"IGKKeepOnAllSpaces"])
-	{
-		[[self window] setCollectionBehavior:NSWindowCollectionBehaviorCanJoinAllSpaces];
-	}
-	else
-	{
-		[[self window] setCollectionBehavior:NSWindowCollectionBehaviorDefault];
-	}
-}
 - (void)windowDidLoad
 {
 	[[self window] setDelegate:self];
@@ -343,6 +346,22 @@
 	
 	[self setRightFilterBarShown:NO];
 }
+- (void)userDefaultsDidChange:(NSNotification *)notif
+{
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"IGKKeepOnAllSpaces"])
+	{
+		[[self window] setCollectionBehavior:NSWindowCollectionBehaviorCanJoinAllSpaces];
+	}
+	else
+	{
+		[[self window] setCollectionBehavior:NSWindowCollectionBehaviorDefault];
+	}
+}
+- (NSWindow *)window
+{
+    return [[self browser] window];
+}
+
 - (void)webView:(WebView *)sender didClearWindowObject:(WebScriptObject *)windowScriptObject forFrame:(WebFrame *)frame
 {
     [windowScriptObject setValue:self forKey:@"ingredients"];
@@ -789,8 +808,8 @@
 
 - (void)setUi_currentModeIndex:(NSNumber *)n
 {	
-	CHDocumentationBrowserUIMode oldMode = currentModeIndex;
-	CHDocumentationBrowserUIMode newMode = [n intValue];
+	CHDocumentationBrowserUIMode oldMode = (CHDocumentationBrowserUIMode)currentModeIndex;
+	CHDocumentationBrowserUIMode newMode = (CHDocumentationBrowserUIMode)[n intValue];
 	
 	if (newMode == CHDocumentationBrowserUIMode_BrowserOnly || 
 		newMode == CHDocumentationBrowserUIMode_TwoUp)
@@ -1120,7 +1139,7 @@
 {
 	NSInteger tag = [sender tag];
 	
-	IGKHTMLDisplayType displayType = [[self class] tableOfContentsMenuItemToMask:tag];
+	IGKHTMLDisplayType displayType = (IGKHTMLDisplayType)[[self class] tableOfContentsMenuItemToMask:tag];
 	NSNumber *displayTypeNumber = [NSNumber numberWithInteger:displayType];
 	
 	if (![tableOfContentsTypes containsObject:displayTypeNumber])
@@ -1188,10 +1207,7 @@
 }
 - (NSWindow *)actualWindow
 {
-	if (isInFullscreen)
-		return [contentView window];
-	
-	return [self window];
+	return [[[self browser] windowController] actualWindow];
 }
 
 #pragma mark -
@@ -1461,7 +1477,7 @@
 }
 - (NSArray *)currentFilterBarAllItems
 {
-	CHDocumentationBrowserFilterGroupByMode groupBy = [[rightFilterBarGroupByMenu selectedItem] tag];
+	CHDocumentationBrowserFilterGroupByMode groupBy = (CHDocumentationBrowserFilterGroupByMode)[[rightFilterBarGroupByMenu selectedItem] tag];
 	if (groupBy == CHDocumentationBrowserFilterGroupByTasks)
 	{
 		return rightFilterBarTaskGroupedItems;
@@ -1884,7 +1900,7 @@
 		if (index >= [tableOfContentsTypes count])
 			return;
 		
-		IGKHTMLDisplayType dt = [[tableOfContentsTypes objectAtIndex:index] longLongValue];
+		IGKHTMLDisplayType dt = (IGKHTMLDisplayType)[[tableOfContentsTypes objectAtIndex:index] longLongValue];
 		
 		//Append it to the bitmask 
 		dtmask |= dt;
@@ -2071,12 +2087,24 @@
 }
 - (void)webView:(WebView *)sender didReceiveTitle:(NSString *)title forFrame:(WebFrame *)frame
 {
+	if (frame != [sender mainFrame])
+		return;
+	
 	if (![[[[frame dataSource] request] URL] isEqual:[NSURL URLWithString:@"about:blank"]])
 		[self recordHistoryForURL:[[[frame dataSource] request] URL] title:title];
 	
 	[self setUpForWebView:sender frame:frame];
 	
 	if ([title length]) [[self actualWindow] setTitle:title];
+	
+	self.title = [title copy];
+}
+- (void)webView:(WebView *)sender didReceiveIcon:(NSImage *)image forFrame:(WebFrame *)frame
+{
+	if (frame != [sender mainFrame])
+		return;
+	
+	self.icon = [image copy];
 }
 - (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame
 {
@@ -2133,7 +2161,7 @@
 }
 - (WebView *)webView:(WebView *)sender createWebViewWithRequest:(NSURLRequest *)request
 {
-	IGKWindowController *newController = [[[NSApp delegate] kitController] newWindowIsIndexing:NO];
+	IGKTabController *newController = [[[NSApp delegate] kitController] newWindowIsIndexing:NO];
 	[newController loadURLRequest:request recordHistory:YES];
 	
 	return [newController browserWebView];
@@ -2185,6 +2213,7 @@
 	}
 }
 
+/*
 - (BOOL)respondsToSelector:(SEL)aSelector
 {
     if (aSelector == @selector(toggleFullScreen:))
@@ -2230,6 +2259,7 @@
 		}
 	}
 }
+*/
 
 
 #pragma mark Search Timeout
@@ -2268,7 +2298,7 @@
 	[[[[findWindow contentView] subviews] lastObject] viewDidMoveToParentWindow:[self actualWindow]];
 	[findWindow makeKeyAndOrderFront:nil];
 	
-	if (!isInFullscreen)
+	if (![self isInFullscreen])
 		[[self actualWindow] makeMainWindow];
 	
 	[findWindow makeFirstResponder:findSearchField];
@@ -2379,7 +2409,7 @@
 	{
 		NSInteger tag = [anItem tag];
 		
-		IGKHTMLDisplayType displayType = [[self class] tableOfContentsMenuItemToMask:tag];
+		IGKHTMLDisplayType displayType = (IGKHTMLDisplayType)[[self class] tableOfContentsMenuItemToMask:tag];
 		NSNumber *displayTypeNumber = [NSNumber numberWithInteger:displayType];
 		
 		NSInteger index = [tableOfContentsTypes indexOfObject:displayTypeNumber];
@@ -2391,6 +2421,50 @@
 	}
 	
 	return YES;
+}
+- (IBAction)toggleFullScreen:(id)sender
+{
+	NSMutableDictionary *fsOptions = [[NSMutableDictionary alloc] init];
+	NSInteger presentationOptions = (NSApplicationPresentationAutoHideDock|NSApplicationPresentationAutoHideMenuBar);
+	[fsOptions setObject:[NSNumber numberWithInt:presentationOptions] forKey:NSFullScreenModeApplicationPresentationOptions];
+	[fsOptions setObject:[NSNumber numberWithBool:NO] forKey:NSFullScreenModeAllScreens];
+	
+	if (isInFullscreen)
+	{
+		isInFullscreen = NO;
+		
+		[[[NSApp delegate] kitController] setFullscreenWindowController:nil];
+		[contentView exitFullScreenModeWithOptions:fsOptions];
+		[[[self browser] window] makeKeyAndOrderFront:sender];
+	}
+	else 
+	{
+		if (![[[NSApp delegate] kitController] fullscreenWindowController])
+		{
+			isInFullscreen = YES;
+
+			[[[NSApp delegate] kitController] setFullscreenWindowController:self];
+			[contentView enterFullScreenMode:[[self window] screen] withOptions:fsOptions];
+			[[[self browser] window] orderOut:sender];
+		}
+		else
+		{
+			// noooooooooo!
+			return;
+		}
+	}
+}
+- (BOOL)respondsToSelector:(SEL)aSelector
+{
+    if (aSelector == @selector(toggleFullScreen:))
+    {
+        // We only want to use our own fullscreen if the user is running 10.6 or lower
+        if ([self isLionOrGreater])
+            return [super respondsToSelector:aSelector];
+        
+        return YES;
+    }
+    return [super respondsToSelector:aSelector];
 }
 
 - (void)relayoutFindPanel

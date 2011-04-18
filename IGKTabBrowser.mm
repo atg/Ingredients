@@ -1,5 +1,6 @@
 #import "IGKTabBrowser.h"
 #import "IGKTabContents.h"
+#import "IGKTabController.h"
 
 @implementation IGKTabBrowser
 
@@ -7,8 +8,11 @@
 // new CTTabContents object which will represent the contents of the new tab.
 -(CTTabContents*)createBlankTabBasedOn:(CTTabContents*)baseContents {
   // Create a new instance of our tab type
-  return [[[IGKTabContents alloc]
+  return [[[IGKTabController alloc]
       initWithBaseTabContents:baseContents] autorelease];
 }
-
+-(CTToolbarController *)createToolbarController
+{
+	return nil;
+}
 @end

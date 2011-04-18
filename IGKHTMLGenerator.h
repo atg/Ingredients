@@ -7,6 +7,11 @@
 //
 
 #import <Cocoa/Cocoa.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 @class IGKDocRecordManagedObject;
 
 @class IGKFullScraper;
@@ -71,3 +76,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask);
 - (IGKHTMLDisplayTypeMask)acceptableDisplayTypes;
 
 @end
+
+#ifdef __cplusplus
+}
+#endif 

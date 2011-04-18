@@ -8,9 +8,11 @@
 
 #import "IGKApplicationDelegate.h"
 #import "IGKWindowController.h"
+#import "IGKTabController.h"
 #import "IGKLaunchController.h"
 #import <WebKit/WebKit.h>
 #import "IGKAnnotationManager.h"
+#import "IGKTabBrowser.h"
 
 const NSInteger IGKStoreVersion = 4;
 
@@ -115,7 +117,7 @@ const NSInteger IGKStoreVersion = 4;
 {
 	//Get the frontmost window
 	NSWindowController *windowController = nil;
-	if ([[[NSApp mainWindow] windowController] isKindOfClass:[IGKWindowController class]])
+	if ([[[NSApp mainWindow] windowController] isKindOfClass:[IGKTabController class]])
 		windowController = [[NSApp mainWindow] windowController];
 	
 	if (!windowController)
@@ -195,15 +197,25 @@ const NSInteger IGKStoreVersion = 4;
 		return nil;
 	}
 	
-	IGKWindowController *windowController = [[IGKWindowController alloc] init];
-	windowController.appDelegate = self;
-	[windowControllers addObject:windowController];
+//	IGKWindowController *windowController = [[IGKWindowController alloc] init];
+//	windowController.appDelegate = self;
+//	[windowControllers addObject:windowController];
 	
-	if (isIndexing)
-		windowController.shouldIndex = YES;
-	[windowController showWindow:nil];
+	//[windowController newTabShouldIndex:isIndexing];
+	//[windowController showWindow:nil];
+	
+	IGKWindowController* windowController = [[IGKWindowController alloc] initWithBrowser:[IGKTabBrowser browser]];
+	windowController.appDelegate = self;
+	[windowController.browser addBlankTabInForeground:YES];
+	[windowController showWindow:self];
+
 	
 	return windowController;
+}
+
+
+- (void)commandDispatch:(id)sender {
+	[IGKTabBrowser executeCommand:[sender tag]];
 }
 
 - (void)finalize

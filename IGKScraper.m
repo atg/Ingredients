@@ -7,7 +7,15 @@
 //
 
 #import "IGKScraper.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
 #import "RegexKitLite.h"
+    
+#ifdef __cplusplus
+}
+#endif
 #import "IGKDocRecordManagedObject.h"
 #import "IGKLaunchController.h"
 #import "NSXMLNode+IGKAdditions.h"

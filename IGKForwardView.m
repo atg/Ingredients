@@ -16,7 +16,7 @@
 {
 	BOOL isFullscreen = NO;
 	NSWindowController *controller = [[self window] windowController];
-	if (!controller || [controller isInFullscreen])
+	if (!controller || ([controller respondsToSelector:@selector(isInFullscreen)] && [controller isInFullscreen]))
 		isFullscreen = YES;
 	
 	if (isFullscreen)
