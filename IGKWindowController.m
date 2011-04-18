@@ -328,7 +328,9 @@
 	
 	[[browserWebView preferences] setDefaultFontSize:16];
 	[[browserWebView preferences] setDefaultFixedFontSize:16];
-	
+    
+    [[browserWebView windowScriptObject] setValue:self forKey:@"ingredients"];
+    
 	if (!didIndex)
 	{
 		[self didFinishIndexingOrLoading];
@@ -340,6 +342,26 @@
 	[self userDefaultsDidChange:nil];
 	
 	[self setRightFilterBarShown:NO];
+}
+- (void)webView:(WebView *)sender didClearWindowObject:(WebScriptObject *)windowScriptObject forFrame:(WebFrame *)frame
+{
+    [windowScriptObject setValue:self forKey:@"ingredients"];
+}
++ (BOOL)isSelectorExcludedFromWebScript:(SEL)selector
+{
+    if (selector == @selector(copyText:))
+    {
+        return NO;
+    }
+    
+    return YES;
+}
+- (void)copyText:(NSString *)text
+{
+    //Thanks, random guy on CocoaDev wiki for indulging my laziness
+    NSPasteboard *pasteBoard = [NSPasteboard generalPasteboard];
+    [pasteBoard declareTypes:[NSArray arrayWithObjects:NSStringPboardType, nil] owner:nil];
+    [pasteBoard setString:text forType:NSStringPboardType];
 }
 - (void)didFinishIndexingOrLoading
 {	
@@ -2248,6 +2270,8 @@
 	
 	if (!isInFullscreen)
 		[[self actualWindow] makeMainWindow];
+	
+	[findWindow makeFirstResponder:findSearchField];
 }
 - (IBAction)closeFindPanel:(id)sender
 {

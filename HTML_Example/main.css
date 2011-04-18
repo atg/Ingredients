@@ -501,3 +501,32 @@ td code
 }
 
 /* @end */
+
+h1.copyable:hover, h2.copyable:hover
+{
+    text-decoration: underline;
+}
+h1.copyable:active, h2.copyable:active
+{
+    text-decoration: double;
+    color: rgb(0, 61, 204);
+}
+
+.prototype.copyable:hover
+{
+    border-bottom-color: #d5d5d5;
+	border-top-color: #d5d5d5;
+	background-color: #efefef;
+}
+.prototype.copyable:active
+{
+    color:white;
+    border-bottom-color: #c5c5c5;
+	border-top-color: #c5c5c5;
+	background-color: #dfdfdf;
+    text-shadow: rgba(0,0,0,0.3) 0 1px 0;
+}
+.prototype.copyable:active *
+{
+    color:white !important;
+}

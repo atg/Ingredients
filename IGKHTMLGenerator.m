@@ -117,10 +117,14 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 
 - (void)header
 {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"WebKitDeveloperExtras"];
 	NSError *err = nil;
 	NSString *annotationsGlue = [[NSString alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"annotations" ofType:@"js"] encoding:NSUTF8StringEncoding error:&err];
 	
-	[outputString appendFormat:@"<!doctype html>\n<html>\n<head>\n<meta charset='utf-8'>\n<title></title>\n<link rel='stylesheet' href='main.css' type='text/css'>\n<script type='text/javascript' charset='utf-8'>%@</script>\n</head>\n<body>\n", annotationsGlue];
+	[outputString appendFormat:@"<!doctype html>\n<html>\n<head>\n<meta charset='utf-8'>\n<title></title>\n<link rel='stylesheet' href='main.css' type='text/css'>\n<script type='text/javascript' charset='utf-8'>%@</script>\n", annotationsGlue];
+    [outputString appendFormat:@"<script> function copy(e) {"
+                               @"window.ingredients.copyText_(window.event.target.innerHTML.replace(/<[^>]+>/g, ''));"
+                               @"}</script></head>\n<body>\n"];
 	//NSLog(@"outputstring = %@", outputString);
 }
 - (void)footer
@@ -271,7 +275,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	[outputString appendString:@"<a name='overview'></a>\n"];
 	[outputString appendString:@"<div class='methods overview'>\n"];
 	
-	[outputString appendFormat:@"<h1>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];
+	[outputString appendFormat:@"<h1 class='copyable' onclick='copy(this)'>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];
 	
 	if ([transientObject valueForKey:@"overview"])
 		[outputString appendString:[self addHyperlinks:[transientObject valueForKey:@"overview"]]];	
@@ -512,7 +516,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		
 		if ([object valueForKey:@"name"])
 		{
-			[outputString appendFormat:@"\t\t<h2>%@</h2>\n", [self escape:[object valueForKey:@"name"]]];
+			[outputString appendFormat:@"\t\t<h2 class='copyable' onclick='copy(this)'>%@</h2>\n", [self escape:[object valueForKey:@"name"]]];
 			if (object == transientObject)
 				[self html_itemCategory:object];
 		}
@@ -554,7 +558,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 {
 	[outputString appendString:@"\t<div>"];
 	
-	[outputString appendFormat:@"\t\t<h2>%@</h2>\n", [self escape:[binding valueForKey:@"name"]]];
+	[outputString appendFormat:@"\t\t<h2 class='copyable' onclick='copy(this)'>%@</h2>\n", [self escape:[binding valueForKey:@"name"]]];
 	
 	if ([[binding valueForKey:@"isReadOnly"] boolValue])
 		[outputString appendFormat:@"<p><strong><em>Read only binding.</em></strong></p>"];
@@ -667,7 +671,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	if ([object valueForKey:@"name"])
 	{
 		//NSLog(@"[[object valueForKey:@\"isDeprecated\"] boolValue] = %@", [[object valueForKey:@"isDeprecated"] boolValue]);
-		[outputString appendFormat:@"\t\t<h2><span class='%@'><span>%@</span></span></h2>\n", ([[object valueForKey:@"isDeprecated"] boolValue] ? @"deprecated" : @""), [self escape:[object valueForKey:@"name"]]];
+		[outputString appendFormat:@"\t\t<h2 class='copyable' onclick='copy(this)'><span class='%@'><span>%@</span></span></h2>\n", ([[object valueForKey:@"isDeprecated"] boolValue] ? @"deprecated" : @""), [self escape:[object valueForKey:@"name"]]];
 		if (object == transientObject)
 			[self html_itemCategory:object];
 	}
@@ -678,7 +682,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		[outputString appendFormat:@"\t\t<div class='description'>%@</div>\n", [self addHyperlinks:[object valueForKey:@"overview"]]];
 	
 	if ([object valueForKey:@"signature"])
-		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [self addHyperlinks:[object valueForKey:@"signature"]]];
+		[outputString appendFormat:@"\t\t<p class='prototype copyable' onclick='copy(this)'><code>%@</code></p>\n", [self addHyperlinks:[object valueForKey:@"signature"]]];
 	
 	if (hasParameters)
 		[self html_parametersForCallable:object];
@@ -693,7 +697,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	if ([object valueForKey:@"codesample"])
 	{
 		needsFinalHR = YES;
-		[outputString appendFormat:@"\t\t<p class='prototype codesample'><code>%@</code></p>\n",
+		[outputString appendFormat:@"\t\t<p class='prototype codesample copyable' onclick='copy(this)'><code>%@</code></p>\n",
 		 [self addHyperlinks:[self reformatCode:[object valueForKey:@"codesample"]]]];
 	}
 	
@@ -1011,7 +1015,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	[outputString appendString:@"<a name='overview'>"];
 	[outputString appendString:@"<div class='overview'>"];
 	
-	[outputString appendFormat:@"<h1>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];
+	[outputString appendFormat:@"<h1 class='copyable' onclick='copy(this)'>%@</h1>", [self escape:[transientObject valueForKey:@"name"]]];
 	
 	[self html_genericItem:transientObject];
 	
@@ -1029,7 +1033,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 	
 	if ([object valueForKey:@"signature"])
 	{
-		[outputString appendFormat:@"\t\t<p class='prototype'><code>%@</code></p>\n", [self addHyperlinks:[self reformatCode:[object valueForKey:@"signature"]]]];
+		[outputString appendFormat:@"\t\t<p class='prototype copyable' onclick='copy(this)'><code>%@</code></p>\n", [self addHyperlinks:[self reformatCode:[object valueForKey:@"signature"]]]];
 	}
 	else
 	{
