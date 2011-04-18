@@ -3,6 +3,7 @@ build
 *.pbxuser
 *.perspectivev3
 
+userinterfacestate.xcuserstate
 UserInterfaceState.xcuserstate
 build/*
 *.pbxuser
