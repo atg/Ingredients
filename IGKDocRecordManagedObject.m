@@ -242,7 +242,7 @@
 		{
 			if ([sc containsString:@"root class"])
 			{
-				[sc removeObject:sc];
+				[superclasses removeObject:sc];
 			}
 		}
 	}
