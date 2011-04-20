@@ -735,7 +735,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 		
 		if (hasReturnDescription)
 		{
-			[outputString appendFormat:@"\t\t\t<p class='returns'><strong>Returns</strong> %@</p>\n", [self addHyperlinks:[object valueForKey:@"returnDescription"]]];
+			[outputString appendFormat:@"\t\t\t<div class='returns'><strong>Returns</strong> %@</div>\n", [self addHyperlinks:[object valueForKey:@"returnDescription"]]];
 		}
 		
 		[outputString appendString:@"\t\t</div>\n"];

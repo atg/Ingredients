@@ -297,7 +297,7 @@ const float ToCRowHeight = 31.0;
 }
 - (BOOL)isActive
 {	
-	return [[self window] isMainWindow] || ([[[self window] windowController] isInFullscreen] && [[self window] isKeyWindow]);
+	return [[self window] isMainWindow] || ([delegate isInFullscreen] && [[self window] isKeyWindow]);
 }
 
 

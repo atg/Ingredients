@@ -234,6 +234,18 @@
 		if (!superclass)
 			break;
 	}
+	
+	//If there's more than one superclass, get rid of the root class thing
+	if ([superclasses count] > 1)
+	{
+		for (NSString *sc in [superclasses copy])
+		{
+			if ([sc containsString:@"root class"])
+			{
+				[sc removeObject:sc];
+			}
+		}
+	}
 		
 	return superclasses;
 }

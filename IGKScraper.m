@@ -771,9 +771,9 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 	if (!doc)
 	{
 		doc = [[NSXMLDocument alloc] initWithContentsOfURL:fileurl options:NSXMLDocumentTidyHTML error:&err];
-		[xmlDocCache setObject:doc forKey:fileurl cost:0];
 		if (!doc)
 			return;
+		[xmlDocCache setObject:doc forKey:fileurl cost:0];
 	}
 	
 	methodNodes = nil;
@@ -1230,10 +1230,11 @@ NSString *const kIGKDocsetPrefixPath = @"Contents/Resources/Documents/documentat
 			
 			for (NSXMLElement *m in nChildren)
 			{
-				if (![[[m name] lowercaseString] isEqual:@"p"])
+				NSString *ln = [[m name] lowercaseString];
+				if (![ln isEqual:@"p"] && ![ln isEqual:@"ul"] && ![ln isEqual:@"ol"])
 					continue;
 				
-				[returnValueDescription appendString:[m commentlessStringValue]];
+				[returnValueDescription appendString:[m XMLString]];
 			}
 			
 			[object setValue:returnValueDescription forKey:@"returnDescription"];

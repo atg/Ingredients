@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1060</int>
-		<string key="IBDocument.SystemVersion">10J567</string>
+		<string key="IBDocument.SystemVersion">10J869</string>
 		<string key="IBDocument.InterfaceBuilderVersion">762</string>
 		<string key="IBDocument.AppKitVersion">1038.35</string>
-		<string key="IBDocument.HIToolboxVersion">462.00</string>
+		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<object class="NSArray" key="dict.sortedKeys">
@@ -23,16 +23,16 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="63"/>
-			<integer value="1"/>
 			<integer value="714"/>
-			<integer value="19"/>
 			<integer value="370"/>
-			<integer value="83"/>
-			<integer value="40"/>
-			<integer value="189"/>
-			<integer value="571"/>
 			<integer value="818"/>
+			<integer value="63"/>
+			<integer value="42"/>
+			<integer value="20"/>
+			<integer value="189"/>
+			<integer value="83"/>
+			<integer value="1"/>
+			<integer value="571"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2372,7 +2372,7 @@
 						<bool key="BWGBHasLeftBorder">NO</bool>
 						<bool key="BWGBHasGradient">YES</bool>
 						<bool key="BWGBisVertical">NO</bool>
-						<float key="BWGBTopInsetAlpha">0.30000001192092896</float>
+						<float key="BWGBTopInsetAlpha">0.0</float>
 						<float key="BWGBRightInsetAlpha">0.0</float>
 						<float key="BWGBBottomInsetAlpha">0.0</float>
 						<float key="BWGBLeftInsetAlpha">0.0</float>
@@ -2853,7 +2853,7 @@
 						<bool key="BWGBHasLeftBorder">NO</bool>
 						<bool key="BWGBHasGradient">YES</bool>
 						<bool key="BWGBisVertical">NO</bool>
-						<float key="BWGBTopInsetAlpha">0.30000001192092896</float>
+						<float key="BWGBTopInsetAlpha">0.0</float>
 						<float key="BWGBRightInsetAlpha">0.0</float>
 						<float key="BWGBBottomInsetAlpha">0.0</float>
 						<float key="BWGBLeftInsetAlpha">0.0</float>
@@ -3283,7 +3283,7 @@
 						<bool key="BWGBHasLeftBorder">NO</bool>
 						<bool key="BWGBHasGradient">YES</bool>
 						<bool key="BWGBisVertical">NO</bool>
-						<float key="BWGBTopInsetAlpha">0.30000001192092896</float>
+						<float key="BWGBTopInsetAlpha">0.0</float>
 						<float key="BWGBRightInsetAlpha">0.0</float>
 						<float key="BWGBBottomInsetAlpha">0.0</float>
 						<float key="BWGBLeftInsetAlpha">0.0</float>
