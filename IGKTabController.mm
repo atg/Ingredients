@@ -1543,8 +1543,12 @@
 	
 	[rightFilterBarTable reloadData];
 	
-	//Select the best matching item, as selected by smartSort:
-	NSArray *smartSorted = [[rightFilterBarItems igk_filter:^(id obj) { return [obj respondsToSelector:@selector(keyEnumerator)]; }] smartSort:queryString];
+	//Select the best matching item, as selected by smartSort:	
+	NSArray *filtered = [rightFilterBarItems igk_filter:[^(id obj) {		
+		return [obj respondsToSelector:@selector(keyEnumerator)];
+	} copy]];
+
+	NSArray *smartSorted = [filtered smartSort:queryString];
 	if ([smartSorted count])
 	{
 		NSUInteger smartIndex = [rightFilterBarItems indexOfObject:[smartSorted igk_firstObject]];
@@ -1555,6 +1559,35 @@
 			[[rightFilterBarTable delegate] tableViewSelectionDidChange:[NSNotification notificationWithName:NSTableViewSelectionDidChangeNotification object:rightFilterBarTable]];
 		}
 	}
+}
+-(void)tabWillBecomeTeared {
+	browserWebViewSuperview = [browserWebView superview];
+	[browserWebView removeFromSuperview];
+	[super tabWillBecomeTeared];
+}
+- (void)tabDidInsertIntoBrowser:(CTBrowser*)browser
+                        atIndex:(NSInteger)index
+                   inForeground:(bool)foreground
+{
+	[browserWebViewSuperview addSubview:browserWebView];
+	[super tabDidInsertIntoBrowser:browser atIndex:index inForeground:foreground];
+}
+
+- (IBAction)newTab:(id)sender
+{
+	[[self browser] addBlankTabInForeground:YES];
+}
+- (IBAction)previousTab:(id)sender
+{
+	[[self browser] selectPreviousTab];
+}
+- (IBAction)nextTab:(id)sender
+{
+	[[self browser] selectNextTab];
+}
+- (IBAction)performClose:(id)sender
+{
+	[[self browser] closeTab];
 }
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
@@ -2398,6 +2431,11 @@
 		return [[self currentArrayController] canSelectPrevious];
     if (action == @selector(goToNextResult:))
 		return [[self currentArrayController] canSelectNext];
+
+	if (action == @selector(previousTab:))
+		return [[self browser] tabCount] > 1 && [[self browser] selectedTabIndex] > 0;
+    if (action == @selector(nextTab:))
+		return [[self browser] tabCount] > 1 && [[self browser] selectedTabIndex] + 1 < [[self browser] tabCount];
 	
 	if (action == @selector(toggleFullScreen:) && ![self isLionOrGreater])
 	{

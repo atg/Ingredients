@@ -156,6 +156,8 @@ typedef enum {
 	NSManagedObjectID *currentObjectIDInBrowser;
 	
 	NSArray *selectedFilterDocset;
+	
+	id browserWebViewSuperview;
 }
 
 @property (assign) NSPredicate *sideFilterPredicate;

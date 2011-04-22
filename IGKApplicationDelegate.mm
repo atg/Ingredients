@@ -208,7 +208,7 @@ const NSInteger IGKStoreVersion = 4;
 	windowController.appDelegate = self;
 	[windowController.browser addBlankTabInForeground:YES];
 	[windowController showWindow:self];
-
+	[windowControllers addObject:windowController];
 	
 	return windowController;
 }
@@ -223,6 +223,11 @@ const NSInteger IGKStoreVersion = 4;
 	dispatch_release(backgroundQueue);
 	
 	[super finalize];
+}
+
+- (IBAction)newTab:(id)sender
+{
+	[self newWindow:sender];
 }
 
 #pragma mark Core Data Nonsense

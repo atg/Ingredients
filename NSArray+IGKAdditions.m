@@ -22,7 +22,9 @@ NSComparisonResult IGKInverseComparisonResult(NSComparisonResult result)
 
 - (NSArray *)igk_map:(id (^)(id obj))rule
 {
-	NSMutableArray *filteredArray = [[NSMutableArray alloc] initWithCapacity:[self count]];
+	rule = [rule copy];
+	
+	NSMutableArray *filteredArray = [[NSMutableArray alloc] initWithCapacity:[self count] + 1];
 	
 	for (id obj in self)
 	{
@@ -34,12 +36,13 @@ NSComparisonResult IGKInverseComparisonResult(NSComparisonResult result)
 	return filteredArray;
 }
 - (NSArray *)igk_filter:(BOOL (^)(id obj))predicate
-{
-	NSMutableArray *mappedArray = [[NSMutableArray alloc] initWithCapacity:[self count]];
+{	
+	predicate = [predicate copy];
 	
+	NSMutableArray *mappedArray = [[NSMutableArray alloc] initWithCapacity:[self count] + 1];
 	for (id obj in self)
-	{
-		if (predicate(obj))
+	{	
+		if (obj && predicate(obj))
 			[mappedArray addObject:obj];
 	}
 	
@@ -91,7 +94,7 @@ NSComparisonResult IGKInverseComparisonResult(NSComparisonResult result)
 	
 	
 	//Iterate the array and score each item
-	NSMutableArray *scores = [[NSMutableArray alloc] initWithCapacity:[self count]];
+	NSMutableArray *scores = [[NSMutableArray alloc] initWithCapacity:[self count] + 1];
 	for (id obj in self)
 	{
 		NSString *result = [obj valueForKey:@"name"];
@@ -134,7 +137,7 @@ NSComparisonResult IGKInverseComparisonResult(NSComparisonResult result)
 	
 	
 	//Return the sorted objects
-	NSMutableArray *sortedObjects = [[NSMutableArray alloc] initWithCapacity:[self count]];
+	NSMutableArray *sortedObjects = [[NSMutableArray alloc] initWithCapacity:[self count] + 1];
 	for (id obj in sortedScores)
 	{
 		[sortedObjects addObject:[obj objectAtIndex:1]];
