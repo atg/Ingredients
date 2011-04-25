@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="81"/>
+			<integer value="242"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -243,7 +243,7 @@
 									<reference key="NSOnImage" ref="893455832"/>
 									<reference key="NSMixedImage" ref="424226900"/>
 								</object>
-								<object class="NSMenuItem" id="525320711">
+								<object class="NSMenuItem" id="993402536">
 									<reference key="NSMenu" ref="960517776"/>
 									<string key="NSTitle">Close Tab</string>
 									<string key="NSKeyEquiv">w</string>
@@ -1019,18 +1019,18 @@
 									<reference key="NSOnImage" ref="893455832"/>
 									<reference key="NSMixedImage" ref="424226900"/>
 								</object>
-								<object class="NSMenuItem" id="107534437">
+								<object class="NSMenuItem" id="743430002">
 									<reference key="NSMenu" ref="747245393"/>
-									<string key="NSTitle">Select Next Tab</string>
+									<string key="NSTitle">Select Previous Tab</string>
 									<string key="NSKeyEquiv"></string>
 									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="893455832"/>
 									<reference key="NSMixedImage" ref="424226900"/>
 								</object>
-								<object class="NSMenuItem" id="743430002">
+								<object class="NSMenuItem" id="107534437">
 									<reference key="NSMenu" ref="747245393"/>
-									<string key="NSTitle">Select Previous Tab</string>
+									<string key="NSTitle">Select Next Tab</string>
 									<string key="NSKeyEquiv"></string>
 									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -1648,7 +1648,7 @@
 					<object class="IBActionConnection" key="connection">
 						<string key="label">performTabClose:</string>
 						<reference key="source" ref="909243075"/>
-						<reference key="destination" ref="525320711"/>
+						<reference key="destination" ref="993402536"/>
 					</object>
 					<int key="connectionID">731</int>
 				</object>
@@ -1811,7 +1811,7 @@
 							<reference ref="176132179"/>
 							<reference ref="435240837"/>
 							<reference ref="299476542"/>
-							<reference ref="525320711"/>
+							<reference ref="993402536"/>
 						</object>
 						<reference key="parent" ref="842783111"/>
 					</object>
@@ -2483,7 +2483,7 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">729</int>
-						<reference key="object" ref="525320711"/>
+						<reference key="object" ref="993402536"/>
 						<reference key="parent" ref="960517776"/>
 					</object>
 				</object>
@@ -2688,7 +2688,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{386, 643}, {225, 123}}</string>
+					<string>{{338, 672}, {225, 123}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
