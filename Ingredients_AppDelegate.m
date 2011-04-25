@@ -42,7 +42,7 @@
 	srandom((unsigned long)[NSDate timeIntervalSinceReferenceDate]);
 		
 	[NSApp setServicesProvider:self];
-	[kitController showWindow:nil];
+	//[kitController showWindow:nil];
 	
 	NSUpdateDynamicServices();
 }

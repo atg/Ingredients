@@ -90,9 +90,10 @@
 		[browserSplitView setColorIsEnabled:YES];
 		[browserSplitView setColor:[NSColor colorWithCalibratedWhite:0.549 alpha:1.0]];
 		
-		[self performSelector:@selector(someTimeLater) withObject:nil afterDelay:0.0];
-		
-		NSLog(@"contentView = %@", contentView);
+		if (![[[NSApplication sharedApplication] delegate] kitController])
+			[self performSelector:@selector(someTimeLater) withObject:nil afterDelay:0.0];
+		else
+			[self windowDidLoad];
 	}
 	
 	return self;
@@ -220,9 +221,7 @@
 	
 	BOOL didIndex = YES;
 	
-	shouldIndex = [[[[NSApplication sharedApplication] delegate] kitController] applicationIsIndexing];
-	NSLog(@"%@ %@ | %@ %@ | shouldIndex = %d", NSApp, [NSApplication sharedApplication], [NSApp delegate], [[NSApp delegate] kitController], shouldIndex);
-	
+	shouldIndex = [[[[NSApplication sharedApplication] delegate] kitController] applicationIsIndexing];	
 	if (shouldIndex)
 		[self startIndexing];
 	else

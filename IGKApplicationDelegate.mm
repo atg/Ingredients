@@ -78,7 +78,9 @@ const NSInteger IGKStoreVersion = 4;
 		
 		if (docsetCount > 0)
 		{
-			[self newWindowIsIndexing:applicationIsIndexing];
+			[self performSelector:@selector(newWindowIsIndexingNumber:) withObject:[NSNumber numberWithBool:applicationIsIndexing] afterDelay:0.0];
+			
+			//[self newWindowIsIndexing:applicationIsIndexing];
 		}
 		else
 		{
@@ -104,6 +106,10 @@ const NSInteger IGKStoreVersion = 4;
 	return self;
 }
 
+- (void)newWindowIsIndexingNumber:(NSNumber *)isIndexing
+{
+	[self newWindowIsIndexing:[isIndexing boolValue]];
+}
 - (BOOL)applicationIsIndexing
 {
 	return applicationIsIndexing;
@@ -208,6 +214,7 @@ const NSInteger IGKStoreVersion = 4;
 	
 	//[windowController newTabShouldIndex:isIndexing];
 	//[windowController showWindow:nil];
+	
 	
 	IGKWindowController* windowController = [[IGKWindowController alloc] initWithBrowser:[IGKTabBrowser browser]];
 	windowController.appDelegate = self;

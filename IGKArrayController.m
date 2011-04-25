@@ -57,7 +57,6 @@ const NSTimeInterval timeoutInterval = 0.15;
 	
 	dispatch_async(queue, ^{
 		
-		NSLog(@"Predicate! %@ >>> %@", predicateString, predicateParameters);
 		if (predicateString && predicateParameters && !predicate)
 		{
 			 
@@ -66,10 +65,8 @@ const NSTimeInterval timeoutInterval = 0.15;
 			id fu = [ctx fffffffuuuuuuuuuuuu];
 			
 			// Replace predicateString with a WHERE clause and predicateParameters with the values of the ? placeholders in it
-			NSLog(@"sqlq = %@", sqlq);
 			FMResultSet *rset = [[fu database] executeQuery:sqlq withArgumentsInArray:predicateParameters];
 			id objects = [fu magicObjectsForResultSet:rset];
-			NSLog(@"objects = %d | %@", [objects count], objects);
 			[rset close];
 			
 			
