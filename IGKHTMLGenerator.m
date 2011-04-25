@@ -196,7 +196,7 @@ BOOL IGKHTMLDisplayTypeMaskIsSingle(IGKHTMLDisplayTypeMask mask)
 - (NSString *)html
 {
 	//return @"<html><body>Hello World!</body></html>";
-	
+	//return @"YO!";
 	if (!managedObject)
 		return @"";
 	

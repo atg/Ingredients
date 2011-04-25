@@ -407,7 +407,7 @@
 - (NSURL *)docURL:(IGKHTMLDisplayTypeMask)tocMask
 {
 	IGKDocSetManagedObject *docset = [self valueForKey:@"docset"];
-	NSString *host = [docset shortPlatformName];;
+	NSString *host = [docset shortPlatformName];
 	
 	NSString *containerComponent = nil;
 	if ([self hasKey:@"container"])

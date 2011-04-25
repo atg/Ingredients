@@ -17,6 +17,7 @@
 	if (self = [super init])
 	{
 		NSLog(@"Welcome to Ingredients: Documentation at the speed of Core Data.");
+		[NSApp setDelegate:self];
 	}
 	return self;
 }
@@ -37,6 +38,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {	
+	NSLog(@"kitController = %@", kitController);
 	srandom((unsigned long)[NSDate timeIntervalSinceReferenceDate]);
 		
 	[NSApp setServicesProvider:self];

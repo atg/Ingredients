@@ -85,17 +85,21 @@
 		[NSBundle loadNibNamed:[self windowNibName] owner:self];
 		self.view = contentView;
 		
-		[self windowDidLoad];
 		[twoPaneSplitView setColorIsEnabled:YES];
 		[twoPaneSplitView setColor:[NSColor colorWithCalibratedWhite:0.549 alpha:1.0]];
 		[browserSplitView setColorIsEnabled:YES];
 		[browserSplitView setColor:[NSColor colorWithCalibratedWhite:0.549 alpha:1.0]];
 		
+		[self performSelector:@selector(someTimeLater) withObject:nil afterDelay:0.0];
 		
 		NSLog(@"contentView = %@", contentView);
 	}
 	
 	return self;
+}
+- (void)someTimeLater
+{
+	[self windowDidLoad];
 }
 
 - (NSManagedObjectContext *)managedObjectContext
@@ -215,6 +219,9 @@
 	sideSearchResults = [[NSMutableArray alloc] init];
 	
 	BOOL didIndex = YES;
+	
+	shouldIndex = [[[[NSApplication sharedApplication] delegate] kitController] applicationIsIndexing];
+	NSLog(@"%@ %@ | %@ %@ | shouldIndex = %d", NSApp, [NSApplication sharedApplication], [NSApp delegate], [[NSApp delegate] kitController], shouldIndex);
 	
 	if (shouldIndex)
 		[self startIndexing];
@@ -862,11 +869,29 @@
 			fetchPredicate = [NSPredicate predicateWithFormat:@"name CONTAINS[c] %@ && docset == %@", query, selectedFilterDocset];
 		else
 			fetchPredicate = [NSPredicate predicateWithFormat:@"name CONTAINS[c] %@", query];
+		/*
+		if (selectedFilterDocset)
+		{
+			[sideSearchController setPredicateString:@"WHERE ZNAME LIKE '%' || ? || '%' && ZDOCSET = ?"];
+			[sideSearchController setPredicateParameters:[NSArray arrayWithObjects: query, [selectedFilterDocset valueForKey:@"_pk"], nil]];
+		}
+		else
+		{
+			[sideSearchController setPredicateString:@"WHERE ZNAME LIKE '%' || ? || '%'"];
+			[sideSearchController setPredicateParameters:[NSArray arrayWithObjects: query, nil]];
+		}
+		
+		*/
 		
 		[sideSearchController setPredicate:fetchPredicate];
 	}
 	else
 	{
+		/*
+		[sideSearchController setPredicateString:@"WHERE 1 = 0"];
+		[sideSearchController setPredicateParameters:[NSArray array]];
+		*/
+		
 		[sideSearchController setPredicate:[NSPredicate predicateWithValue:NO]];
 	}
 	
@@ -1585,7 +1610,7 @@
 {
 	[[self browser] selectNextTab];
 }
-- (IBAction)performClose:(id)sender
+- (IBAction)performTabClose:(id)sender
 {
 	[[self browser] closeTab];
 }

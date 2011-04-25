@@ -60,6 +60,7 @@ const NSInteger IGKStoreVersion = 4;
 		
 		docsetCount = 1;
 		//If we're not indexing and there's no docsets in sight, show the preferences dialog
+		NSLog(@"applicationIsIndexing = %d", applicationIsIndexing);
 		if (!applicationIsIndexing)
 		{
 			NSError *err = nil;
@@ -103,6 +104,10 @@ const NSInteger IGKStoreVersion = 4;
 	return self;
 }
 
+- (BOOL)applicationIsIndexing
+{
+	return applicationIsIndexing;
+}
 - (void)awakeFromNib
 {
 	[[NSAppleEventManager sharedAppleEventManager] setEventHandler:self andSelector:@selector(getURL:withReplyEvent:) forEventClass:kInternetEventClass andEventID:kAEGetURL];

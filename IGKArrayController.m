@@ -9,6 +9,8 @@
 #import "IGKArrayController.h"
 #import "Ingredients_AppDelegate.h"
 #import "IGKDocRecordManagedObject.h"
+#import "FUCoreDataStore.h"
+
 //#import "IGKApplicationDelegate.h"
 @class IGKApplicationDelegate;
 const NSTimeInterval timeoutInterval = 0.15;
@@ -16,6 +18,8 @@ const NSTimeInterval timeoutInterval = 0.15;
 @implementation IGKArrayController
 
 @synthesize predicate;
+@synthesize predicateString;
+@synthesize predicateParameters;
 @synthesize smartSortDescriptors;
 @synthesize currentSortDescriptors;
 @synthesize maxRows;
@@ -30,7 +34,7 @@ const NSTimeInterval timeoutInterval = 0.15;
 
 - (void)fetch:(void (^)(NSArray *managedObjectIDs, BOOL fetchContainsVip))completionBlock
 {
-	if (!predicate)
+	if (!predicate && (!predicateString || !predicateParameters))
 		return;
 	
 	if (!currentSortDescriptors)
@@ -45,7 +49,7 @@ const NSTimeInterval timeoutInterval = 0.15;
 	//Copy objects that may change while we're doing this
 	NSPredicate *copiedPredicate = [predicate copy];
 	NSArray *copiedCurrentSortDescriptors = [currentSortDescriptors copy];
-	NSManagedObjectID *vipObjectID = [vipObject objectID];
+	id vipObjectID = (predicateString && predicateParameters && !predicate) ? [vipObject objectID] : [vipObject valueForKey:@"_pk"];
 	
 	isSearching = YES;
 	startedSearchTimeInterval = [NSDate timeIntervalSinceReferenceDate];
@@ -53,51 +57,92 @@ const NSTimeInterval timeoutInterval = 0.15;
 	
 	dispatch_async(queue, ^{
 		
-		NSFetchRequest *request = [[NSFetchRequest alloc] init];
-		[request setEntity:[NSEntityDescription entityForName:entityToFetch inManagedObjectContext:ctx]];
-		[request setPredicate:copiedPredicate];
-				
-		[request setFetchLimit:500];
-		if (maxRows != 0 && maxRows < 500)
+		NSLog(@"Predicate! %@ >>> %@", predicateString, predicateParameters);
+		if (predicateString && predicateParameters && !predicate)
 		{
-			//Limit the list to 100 items. This could be changed to more, if requested, but my view is that if anybody needs more than 100, our sorting isn't smart enough
-			[request setFetchLimit:maxRows];
-		}
-		
-		//Sort results by priority, so that when we LIMIT our list, only the low priority items are cut
-		[request setSortDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:NO]]];
-		
-		//Fetch a list of objects
-		NSArray *objects = [ctx executeFetchRequest:request error:nil];
+			 
+			int limit = maxRows > 0 && maxRows < 500 ? maxRows : 500;
+			NSString *sqlq = [NSString stringWithFormat:@"SELECT * FROM ZDOCRECORD %@ ORDER BY ZPRIORITY LIMIT %d", predicateString, limit];
+			id fu = [ctx fffffffuuuuuuuuuuuu];
+			
+			// Replace predicateString with a WHERE clause and predicateParameters with the values of the ? placeholders in it
+			NSLog(@"sqlq = %@", sqlq);
+			FMResultSet *rset = [[fu database] executeQuery:sqlq withArgumentsInArray:predicateParameters];
+			id objects = [fu magicObjectsForResultSet:rset];
+			NSLog(@"objects = %d | %@", [objects count], objects);
+			[rset close];
+			
+			
+			BOOL containsVIP = NO;
+			for (NSManagedObject *obj in objects)
+			{
+				if (!containsVIP && [vipObjectID isEqual:[obj valueForKey:@"_pk"]])
+					containsVIP = YES;
+			}
+			
+			dispatch_async(dispatch_get_main_queue(), ^{
 				
-		//NSFetchRequests and NSComparator-based sort descriptors apparently don't go together, so we can't tell the fetch request to sort using this descriptor
-		//Besides, it's far better to be sorting 100 objects with our expensive comparator than 10000
-		objects = [objects smartSort:[delegate sideSearchQuery]];
-		//objects = [objects sortedArrayUsingDescriptors:copiedCurrentSortDescriptors];
-		
-		BOOL containsVIP = NO;
-		
-		//Put the object IDs into an array
-		NSMutableArray *objectIDs = [[NSMutableArray alloc] initWithCapacity:[objects count]];
-		for (NSManagedObject *obj in objects)
-		{
-			id objid = [obj objectID];
-			[objectIDs addObject:objid];
-			
-			if (!containsVIP && [vipObjectID isEqual:objid])
-				containsVIP = YES;
+				isSearching = NO;
+				
+				if ([delegate respondsToSelector:@selector(arrayControllerFinishedSearching:)])
+					[delegate arrayControllerFinishedSearching:self];
+				
+				completionBlock(objects, containsVIP);
+			});
 		}
-		
-		//Run the completion block on the main thread
-		dispatch_async(dispatch_get_main_queue(), ^{
+		else
+		{
 			
-			isSearching = NO;
 			
-			if ([delegate respondsToSelector:@selector(arrayControllerFinishedSearching:)])
-				[delegate arrayControllerFinishedSearching:self];
+			NSFetchRequest *request = [[NSFetchRequest alloc] init];
+			[request setEntity:[NSEntityDescription entityForName:entityToFetch inManagedObjectContext:ctx]];
+			[request setPredicate:copiedPredicate];
+					
+			[request setFetchLimit:500];
+			if (maxRows != 0 && maxRows < 500)
+			{
+				//Limit the list to 100 items. This could be changed to more, if requested, but my view is that if anybody needs more than 100, our sorting isn't smart enough
+				[request setFetchLimit:maxRows];
+			}
 			
-			completionBlock(objectIDs, containsVIP);
-		});
+			//Sort results by priority, so that when we LIMIT our list, only the low priority items are cut
+			[request setSortDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:NO]]];
+			
+			
+			
+			//Fetch a list of objects
+			NSArray *objects = [ctx executeFetchRequest:request error:nil];
+					
+			//NSFetchRequests and NSComparator-based sort descriptors apparently don't go together, so we can't tell the fetch request to sort using this descriptor
+			//Besides, it's far better to be sorting 100 objects with our expensive comparator than 10000
+			objects = [objects smartSort:[delegate sideSearchQuery]];
+			//objects = [objects sortedArrayUsingDescriptors:copiedCurrentSortDescriptors];
+			
+			BOOL containsVIP = NO;
+			
+			//Put the object IDs into an array
+			NSMutableArray *objectIDs = [[NSMutableArray alloc] initWithCapacity:[objects count]];
+			for (NSManagedObject *obj in objects)
+			{
+				id objid = [obj objectID];
+				[objectIDs addObject:objid];
+				
+				if (!containsVIP && [vipObjectID isEqual:objid])
+					containsVIP = YES;
+			}
+			
+			//Run the completion block on the main thread
+			dispatch_async(dispatch_get_main_queue(), ^{
+				
+				isSearching = NO;
+				
+				if ([delegate respondsToSelector:@selector(arrayControllerFinishedSearching:)])
+					[delegate arrayControllerFinishedSearching:self];
+				
+				completionBlock(objectIDs, containsVIP);
+			});
+			
+		}
 	});
 }
 - (void)refresh
@@ -123,9 +168,18 @@ const NSTimeInterval timeoutInterval = 0.15;
 	fetchContainsVipObject = fetchContainsVip;
 	
 	fetchedObjects = [[NSMutableArray alloc] initWithCapacity:[managedObjectIDs count]];
-	for (NSManagedObjectID *objID in managedObjectIDs)
+	
+	if (predicateString && predicateParameters && !predicate)
 	{
-		[fetchedObjects addObject:[ctx objectWithID:objID]];
+		//If we have a predicate string, then the managed object ids are actually FUCoreDataMagicObjects
+		[fetchedObjects addObjectsFromArray:managedObjectIDs];
+	}
+	else
+	{
+		for (NSManagedObjectID *objID in managedObjectIDs)
+		{
+			[fetchedObjects addObject:[ctx objectWithID:objID]];
+		}
 	}
 	
 	[tableView reloadData];

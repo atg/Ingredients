@@ -10,6 +10,7 @@
 #import "IGKScraper.h"
 #import "IGKApplicationDelegate.h"
 #import "IGKWordMembership.h"
+#import "FUCoreDataStore.h"
 
 @interface IGKLaunchController ()
 
@@ -346,7 +347,7 @@
 {
 	NSManagedObjectContext *ctx = [appController backgroundManagedObjectContext];
 	dispatch_queue_t queue = [appController backgroundQueue];
-	
+	NSLog(@"FINISHED LOADING: %d", queue);
 	if (!queue)
 		return;
 	
@@ -362,9 +363,30 @@
 		[fetchEverything setReturnsDistinctResults:YES];
 		[fetchEverything setPropertiesToFetch:[NSArray arrayWithObject:nameProperty]];
 		
-		NSArray *objects = [ctx executeFetchRequest:fetchEverything error:nil];
 		
-        if ([objects count] < 10)
+		id fu = [ctx fffffffuuuuuuuuuuuu];
+
+		[[fu database] executeUpdate:@"CREATE INDEX IF NOT EXISTS fileability_docrecord_name ON ZDOCRECORD (ZNAME COLLATE NOCASE)"];
+
+		FMResultSet *rset = [[fu database] executeQuery:@"SELECT DISTINCT ZNAME FROM ZDOCRECORD" withArgumentsInArray:[NSArray array]];
+		//id objects = [fu magicObjectsForResultSet:rset];
+		
+		NSMutableArray *names = [[NSMutableArray alloc] init];
+		while ([rset next])
+		{
+			id name = [rset stringForColumnIndex:0];
+			if (name)
+				[names addObject:name];
+		}
+		
+		
+		[rset close];
+	/*
+		
+		NSArray *objects = [ctx executeFetchRequest:fetchEverything error:nil];
+	*/	
+		NSLog(@"[names count] = %d", [names count]);
+        if ([names count] < 10)
         {
             dispatch_sync(dispatch_get_main_queue(), ^(void) {
             
@@ -376,28 +398,25 @@
                 NSInteger answer = [alert runModal];
                 
                 NSString *appSupportPath = [@"~/Library/Application Support/Ingredients/" stringByExpandingTildeInPath];
-                
+                /*
                 [[NSFileManager defaultManager] removeItemAtPath:appSupportPath error:nil];
                 
                 [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"docsets"];
                 [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"ShutdownBad"];
                 [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"storeVersion"];
                 [[NSUserDefaults standardUserDefaults] synchronize];
-                
+                */
                 [NSApp terminate:nil];
                     return;
             });
         }
-        
-        
-        
-		NSLog(@"All names: %d", [objects count]);
+                
+		NSLog(@"All names: %d", [names count]);
 		
-		IGKWordMembership *wordMembershipManager = [IGKWordMembership sharedManagerWithCapacity:[objects count]];
+		IGKWordMembership *wordMembershipManager = [IGKWordMembership sharedManagerWithCapacity:[names count]];
 		NSCharacterSet *uppercaseCharacters = [NSCharacterSet uppercaseLetterCharacterSet];
-		for (NSDictionary *dict in objects)
+		for (NSString *name in names)
 		{
-			NSString *name = [dict valueForKey:@"name"];
 			if (![name length])
 				continue;
 			

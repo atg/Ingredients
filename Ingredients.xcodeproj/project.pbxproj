@@ -142,6 +142,10 @@
 		75C74A5611404FD800E3EAC6 /* ToC_Bindings_S.png in Resources */ = {isa = PBXBuildFile; fileRef = 75C74A5511404FD800E3EAC6 /* ToC_Bindings_S.png */; };
 		75C914E211374B8100F0D7EC /* ingredients.icns in Resources */ = {isa = PBXBuildFile; fileRef = 75C914E111374B8000F0D7EC /* ingredients.icns */; };
 		75C9FF05110F868300C9B51C /* main.css in Resources */ = {isa = PBXBuildFile; fileRef = 75C9FF03110F868300C9B51C /* main.css */; };
+		75E2EDAB13623E6700590460 /* FUCoreDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E2EDAA13623E6700590460 /* FUCoreDataStore.m */; };
+		75E2EDB213623E9700590460 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E2EDAD13623E9700590460 /* FMDatabase.m */; };
+		75E2EDB313623E9700590460 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E2EDAF13623E9700590460 /* FMDatabaseAdditions.m */; };
+		75E2EDB413623E9700590460 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E2EDB113623E9700590460 /* FMResultSet.m */; };
 		75F671D8110DE8E2005F299C /* Ingredients_DataModel.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 770B37EC0679A11B001EADE2 /* Ingredients_DataModel.xcdatamodel */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -351,6 +355,14 @@
 		75DF96DD117E32E100403233 /* IGKMattePopUpButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKMattePopUpButtonView.m; sourceTree = "<group>"; };
 		75DF96E8117E350600403233 /* IGKMatteFocusedGradientBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGKMatteFocusedGradientBox.h; sourceTree = "<group>"; };
 		75DF96E9117E350600403233 /* IGKMatteFocusedGradientBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGKMatteFocusedGradientBox.m; sourceTree = "<group>"; };
+		75E2EDA913623E6700590460 /* FUCoreDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FUCoreDataStore.h; sourceTree = "<group>"; };
+		75E2EDAA13623E6700590460 /* FUCoreDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FUCoreDataStore.m; sourceTree = "<group>"; };
+		75E2EDAC13623E9700590460 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
+		75E2EDAD13623E9700590460 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
+		75E2EDAE13623E9700590460 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		75E2EDAF13623E9700590460 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		75E2EDB013623E9700590460 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
+		75E2EDB113623E9700590460 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		75E747D111DC2CF3009B89CB /* smartcmp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smartcmp.h; sourceTree = "<group>"; };
 		75E747D411DC2DEB009B89CB /* smartcmp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = smartcmp.m; sourceTree = "<group>"; };
 		75F6702F110CCD31005F299C /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
@@ -601,6 +613,7 @@
 			children = (
 				756F9DFC110BB71700E6F291 /* IngredientsKit.h */,
 				7756732906782D8800D1FEB8 /* Models */,
+				75E2ED9B13623E1500590460 /* FUCoreData */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 			);
 			name = "Ingredients Kit";
@@ -720,6 +733,21 @@
 				759ECFB111334CE100067BD1 /* MultiSel_window_frame_button_active_right.png */,
 			);
 			name = Multiselector;
+			sourceTree = "<group>";
+		};
+		75E2ED9B13623E1500590460 /* FUCoreData */ = {
+			isa = PBXGroup;
+			children = (
+				75E2EDA913623E6700590460 /* FUCoreDataStore.h */,
+				75E2EDAA13623E6700590460 /* FUCoreDataStore.m */,
+				75E2EDAC13623E9700590460 /* FMDatabase.h */,
+				75E2EDAD13623E9700590460 /* FMDatabase.m */,
+				75E2EDAE13623E9700590460 /* FMDatabaseAdditions.h */,
+				75E2EDAF13623E9700590460 /* FMDatabaseAdditions.m */,
+				75E2EDB013623E9700590460 /* FMResultSet.h */,
+				75E2EDB113623E9700590460 /* FMResultSet.m */,
+			);
+			name = FUCoreData;
 			sourceTree = "<group>";
 		};
 		7756732906782D8800D1FEB8 /* Models */ = {
@@ -924,6 +952,10 @@
 				75237212135C648E00438332 /* IGKWordMembership.m in Sources */,
 				75237213135C648E00438332 /* IGKFrecencyStore.m in Sources */,
 				75237214135C65A600438332 /* IGKApplicationDelegate.mm in Sources */,
+				75E2EDAB13623E6700590460 /* FUCoreDataStore.m in Sources */,
+				75E2EDB213623E9700590460 /* FMDatabase.m in Sources */,
+				75E2EDB313623E9700590460 /* FMDatabaseAdditions.m in Sources */,
+				75E2EDB413623E9700590460 /* FMResultSet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

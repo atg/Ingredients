@@ -18,6 +18,8 @@
 	NSUInteger maxRows;
 	
 	NSPredicate *predicate;
+	NSString *predicateString;
+	NSArray *predicateParameters;
 	NSArray *smartSortDescriptors;
 	NSArray *currentSortDescriptors;
 	
@@ -36,6 +38,8 @@
 }
 
 @property (assign) NSPredicate *predicate;
+@property (assign) NSString *predicateString;
+@property (assign) NSArray *predicateParameters;
 @property (assign) NSArray *smartSortDescriptors;
 @property (assign) NSArray *currentSortDescriptors;
 @property (assign) NSUInteger maxRows;

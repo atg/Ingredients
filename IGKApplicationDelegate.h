@@ -46,6 +46,7 @@
 @property (assign) NSCache *xmlDocumentCache;
 @property (assign) NSCache *htmlCache;
 
+- (BOOL)applicationIsIndexing;
 - (BOOL)hasMultipleWindowControllers;
 
 - (dispatch_queue_t)backgroundQueue;
