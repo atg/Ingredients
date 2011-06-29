@@ -49,11 +49,11 @@ NSComparisonResult IGKInverseComparisonResult(NSComparisonResult result)
 	return mappedArray;
 }
 
-- (NSArray *)igk_firstObject
+- (id)igk_firstObject
 {
 	return [self igk_objectAtSoftIndex:0];
 }
-- (NSArray *)igk_objectAtSoftIndex:(NSInteger)index
+- (id)igk_objectAtSoftIndex:(NSInteger)index
 {	
 	if (index < 0)
 		return [self igk_objectAtSoftIndex:[self count] + index];
