@@ -17,6 +17,8 @@
 #import "CHSymbolButtonImage.h"
 #import "IGKSometimesCenteredTextCell.h"
 #import "IGKFrecencyStore.h"
+#import "NSArray+IGKAdditions.h"
+#import "NSString+Utilities.h"
 
 @interface IGKTabController ()
 

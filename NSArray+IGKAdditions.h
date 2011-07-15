@@ -14,7 +14,7 @@
 - (NSArray *)igk_map:(id (^)(id obj))rule;
 - (NSArray *)igk_filter:(BOOL (^)(id obj))predicate;
 
-- (NSArray *)igk_firstObject;
-- (NSArray *)igk_objectAtSoftIndex:(NSInteger)index;
+- (id)igk_firstObject;
+- (id)igk_objectAtSoftIndex:(NSInteger)index;
 
 @end
