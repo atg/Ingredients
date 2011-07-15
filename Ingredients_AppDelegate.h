@@ -7,7 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import <IngredientsKit/IngredientsKit.h>
+//#import <IngredientsKit/IngredientsKit.h>
+#import "IGKApplicationDelegate.h"
 
 @interface Ingredients_AppDelegate : NSObject<NSApplicationDelegate>
 {
