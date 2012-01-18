@@ -1,0 +1,6 @@
+Search is slooooow
+Source list icons should be updated to use the new Chocolat ones
+Get rid of tabs
+Fullscreen mode
+Gestures should work in the webview
+Opening files does not work
