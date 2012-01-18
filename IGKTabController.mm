@@ -870,7 +870,8 @@
 			fetchPredicate = [NSPredicate predicateWithFormat:@"name CONTAINS[c] %@ && docset == %@", query, selectedFilterDocset];
 		else
 			fetchPredicate = [NSPredicate predicateWithFormat:@"name CONTAINS[c] %@", query];
-		/*
+#define USE_FAST_PATH
+#ifdef USE_FAST_PATH
 		if (selectedFilterDocset)
 		{
 			[sideSearchController setPredicateString:@"WHERE ZNAME LIKE '%' || ? || '%' && ZDOCSET = ?"];
@@ -882,18 +883,18 @@
 			[sideSearchController setPredicateParameters:[NSArray arrayWithObjects: query, nil]];
 		}
 		
-		*/
-		
+#else
 		[sideSearchController setPredicate:fetchPredicate];
+#endif
 	}
 	else
 	{
-		/*
+#ifdef USE_FAST_PATH
 		[sideSearchController setPredicateString:@"WHERE 1 = 0"];
 		[sideSearchController setPredicateParameters:[NSArray array]];
-		*/
-		
+#else		
 		[sideSearchController setPredicate:[NSPredicate predicateWithValue:NO]];
+#endif
 	}
 	
 	sideSearchController.vipObject = nil;

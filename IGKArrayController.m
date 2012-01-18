@@ -59,9 +59,10 @@ const NSTimeInterval timeoutInterval = 0.15;
 		
 		if (predicateString && predicateParameters && !predicate)
 		{
-			 
+            NSLog(@"Fast path");            
+            
 			int limit = maxRows > 0 && maxRows < 500 ? maxRows : 500;
-			NSString *sqlq = [NSString stringWithFormat:@"SELECT * FROM ZDOCRECORD %@ ORDER BY ZPRIORITY LIMIT %d", predicateString, limit];
+			NSString *sqlq = [NSString stringWithFormat:@"SELECT * FROM ZDOCRECORD %@ ORDER BY ZPRIORITY DESC LIMIT %d", predicateString, limit];
 			id fu = [ctx fffffffuuuuuuuuuuuu];
 			
 			// Replace predicateString with a WHERE clause and predicateParameters with the values of the ? placeholders in it
@@ -69,14 +70,14 @@ const NSTimeInterval timeoutInterval = 0.15;
 			id objects = [fu magicObjectsForResultSet:rset];
 			[rset close];
 			
-			
 			BOOL containsVIP = NO;
+			/*
 			for (NSManagedObject *obj in objects)
 			{
-				if (!containsVIP && [vipObjectID isEqual:[obj valueForKey:@"_pk"]])
+				if (!containsVIP && [vipObjectID isEqual:[obj valueForKey:@"_pk"]])//[vipObjectID isEqual:[obj valueForKey:@"_pk"]])
 					containsVIP = YES;
 			}
-			
+			*/
 			dispatch_async(dispatch_get_main_queue(), ^{
 				
 				isSearching = NO;
@@ -86,10 +87,10 @@ const NSTimeInterval timeoutInterval = 0.15;
 				
 				completionBlock(objects, containsVIP);
 			});
+            
 		}
 		else
 		{
-			
 			
 			NSFetchRequest *request = [[NSFetchRequest alloc] init];
 			[request setEntity:[NSEntityDescription entityForName:entityToFetch inManagedObjectContext:ctx]];

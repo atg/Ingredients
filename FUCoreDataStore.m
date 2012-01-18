@@ -87,6 +87,13 @@
 }
 - (id)magicObjectForResultSet:(FMResultSet *)resultSet
 {
+    NSFetchRequest* pkfetch = [[NSFetchRequest alloc] init];
+    [pkfetch setEntity:[NSEntityDescription entityForName:@"DocRecord" inManagedObjectContext:context]];
+    [pkfetch setPredicate:[NSPredicate predicateWithFormat:@"_pk = %@", [NSNumber numberWithInt:[resultSet intForColumn:@"Z_PK"]]]];
+    NSArray* arr = [context executeFetchRequest:pkfetch error:NULL];
+    return [arr lastObject];
+    
+    
 	NSDictionary *resultDict = [resultSet resultDict];
 	
 	FUCoreDataMagicObject *obj = [self emptyMagicObject];
