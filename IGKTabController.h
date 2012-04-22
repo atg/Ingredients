@@ -35,7 +35,7 @@ typedef enum {
 	CHDocumentationBrowserFilterGroupByKind = 2
 } CHDocumentationBrowserFilterGroupByMode;
 
-@interface IGKTabController : IGKTabContents<IGKTableOfContentsDelegate>
+@interface IGKTabController : IGKTabContents<IGKTableOfContentsDelegate, NSWindowDelegate>
 {
 	
 	
