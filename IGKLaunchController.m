@@ -27,10 +27,12 @@
 
 - (NSString *)checkForOrSetDeveloperDirectory
 {
+	NSString *checkPath = @"/Applications/Xcode.app/Contents/Developer";
+	
 	//Check /Developer exists
-	BOOL rootDevExists = [[NSFileManager defaultManager] fileExistsAtPath:@"/Developer"];
+	BOOL rootDevExists = [[NSFileManager defaultManager] fileExistsAtPath:checkPath];
 	if (rootDevExists)
-		return @"/Developer";
+		return checkPath;
 	
 	//Otherwise, ask the user to point us to their developer directory
 	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
